@@ -17,5 +17,9 @@ namespace workshop.wwwapi.Models
         [Column("patient_id")]
         public int PatientId { get; set; }
         public Patient Patient { get; set; }
+
+        [Column("prescription_id")]
+        public int PrescriptionId { get; set; }
+        public Prescription Prescription { get; set; }
     }
 }

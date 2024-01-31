@@ -8,6 +8,7 @@ namespace workshop.wwwapi.Endpoints
     public record PatientPostPayload(string fullName);
     public record DoctorPostPayload(string fullName);
     public record AppointmentPostPayload(string booking, int patientId, int doctorId);
+    public record PrescriptionPostPayload(string name);
 
     public static class SurgeryEndpoint
     {
@@ -27,6 +28,10 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointments", GetAppointments);
             surgeryGroup.MapGet("/appointments/{booking}", GetAppointment);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
+
+            surgeryGroup.MapGet("/prescription", GetPrescriptions);
+            surgeryGroup.MapGet("/prescription/{id}", GetPrescription);
+            surgeryGroup.MapPost("/prescription", CreatePrescription);
 
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
@@ -145,6 +150,33 @@ namespace workshop.wwwapi.Endpoints
                 return Results.NotFound("Id out of scope");
 
             return TypedResults.Ok(AppointmentResponseDTO.FromRepository(await repository.GetAppointmentsByPatient(id)));
+        }
+
+        // PRESCRIPTIONS
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            return TypedResults.Ok(PrescriptionResponseDTO.FromRepository(await repository.GetPrescriptions()));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescription(IRepository repository, int id)
+        {
+            Prescription? prescription = await repository.GetPrescription(id);
+            if (prescription == null)
+                return Results.NotFound("Id out of scope");
+
+            return TypedResults.Ok(PrescriptionResponseDTO.FromARepository(prescription));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, PrescriptionPostPayload payload)
+        {
+            if (payload.name == null || payload.name == "")
+                return Results.BadRequest("Must have name");
+
+            Prescription prescription = await repository.CreatePrescription(payload.name);
+            return TypedResults.Ok(PrescriptionResponseDTO.FromARepository(prescription));
         }
     }
 }

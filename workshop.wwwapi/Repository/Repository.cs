@@ -60,12 +60,12 @@ namespace workshop.wwwapi.Repository
 
         public async Task<IEnumerable<Appointment>> GetAppointments()
         {
-            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(p => p.Patient).ToListAsync();
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(p => p.Patient).Include(p => p.Prescription).ToListAsync();
         }
 
         public async Task<Appointment?> GetAppointment(string booking)
         {
-            var appointment = await _databaseContext.Appointments.Include(a => a.Doctor).Include(p => p.Patient).FirstOrDefaultAsync(b => b.Booking == booking);
+            var appointment = await _databaseContext.Appointments.Include(a => a.Doctor).Include(p => p.Patient).Include(p => p.Prescription).FirstOrDefaultAsync(b => b.Booking == booking);
             return appointment;
         }
 
@@ -85,6 +85,29 @@ namespace workshop.wwwapi.Repository
         public async Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id)
         {
             return await _databaseContext.Appointments.Where(a => a.PatientId == id).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions.Include(a => a.Appointments).ThenInclude(p => p.Patient).Include(a => a.Appointments).ThenInclude(p => p.Doctor).ToListAsync();
+        }
+
+        public async Task<Prescription?> GetPrescription(int id)
+        {
+            var prescription = await _databaseContext.Prescriptions.Include(a => a.Appointments).ThenInclude(p => p.Patient).Include(a => a.Appointments).ThenInclude(p => p.Doctor).FirstOrDefaultAsync(b => b.Id == id);
+            return prescription;
+        }
+
+        public async Task<Prescription> CreatePrescription(string name)
+        {
+            List<Prescription> prescriptions = await _databaseContext.Prescriptions.ToListAsync();
+            int id = prescriptions.Last().Id;
+            id++;
+
+            var newPrescription = new Prescription() { Id = id, Name = name };
+            await _databaseContext.AddAsync(newPrescription);
+            await _databaseContext.SaveChangesAsync();
+            return newPrescription;
         }
     }
 }

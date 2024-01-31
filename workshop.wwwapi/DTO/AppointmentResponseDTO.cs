@@ -10,7 +10,8 @@ namespace workshop.wwwapi.DTO
         public DoctorDTO Doctor { get; set; }
         public int PatientId { get; set; }
         public PatientDTO Patient { get; set; }
-
+        public int PrescriptionId { get; set; }
+        public PrescriptionDTO Prescription { get; set; }
         public AppointmentResponseDTO(Appointment appointment) 
         {
             Booking = appointment.Booking;
@@ -18,6 +19,7 @@ namespace workshop.wwwapi.DTO
             PatientId = appointment.PatientId;
             Doctor = new DoctorDTO(appointment.Doctor);
             Patient = new PatientDTO(appointment.Patient);
+            Prescription = new PrescriptionDTO(appointment.Prescription);
         }
 
         public static List<AppointmentResponseDTO> FromRepository(IEnumerable<Appointment> appointments)
