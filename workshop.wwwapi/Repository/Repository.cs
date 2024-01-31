@@ -12,13 +12,28 @@ namespace workshop.wwwapi.Repository
         {
             _databaseContext = db;
         }
-        public async Task<IEnumerable<Patient>> GetPatients()
-        {
-            return await _databaseContext.Patients.ToListAsync();
-        }
+
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
             return await _databaseContext.Doctors.ToListAsync();
+        }
+        public async Task<DoctorDTO?> GetDoctorById(int id)
+        {
+            var doctor = await _databaseContext.Doctors.FirstOrDefaultAsync(p => p.Id.Equals(id));
+            if (doctor == null) { return null; }
+            return new DoctorDTO(doctor);
+        }
+
+        public async Task<Doctor?> AddDoctor(string fullname)
+        {
+            if (string.IsNullOrWhiteSpace(fullname)) { return null; }
+
+            var newDoctor = _databaseContext.Doctors.AddAsync(new Doctor { FullName = fullname });
+
+            if (newDoctor.IsFaulted) { return null; }
+            await _databaseContext.SaveChangesAsync();
+
+            return newDoctor.Result.Entity;
         }
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
         {
@@ -30,6 +45,10 @@ namespace workshop.wwwapi.Repository
             var patient = await _databaseContext.Patients.FirstOrDefaultAsync(p => p.Id.Equals(id));
             if (patient == null) { return null; }
             return new PatientDTO(patient);
+        }
+        public async Task<IEnumerable<Patient>> GetPatients()
+        {
+            return await _databaseContext.Patients.ToListAsync();
         }
 
         public async Task<Patient?> AddPatient(string fullname)

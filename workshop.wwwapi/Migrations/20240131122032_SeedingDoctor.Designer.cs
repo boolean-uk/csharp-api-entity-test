@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240131122032_SeedingDoctor")]
+    partial class SeedingDoctor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,32 +44,6 @@ namespace workshop.wwwapi.Migrations
                     b.HasIndex("DoctorId");
 
                     b.ToTable("appointment");
-
-                    b.HasData(
-                        new
-                        {
-                            PatientId = 1,
-                            DoctorId = 1,
-                            Booking = new DateTime(2024, 1, 31, 12, 26, 16, 98, DateTimeKind.Utc).AddTicks(4269)
-                        },
-                        new
-                        {
-                            PatientId = 2,
-                            DoctorId = 1,
-                            Booking = new DateTime(2024, 1, 31, 12, 26, 16, 98, DateTimeKind.Utc).AddTicks(4271)
-                        },
-                        new
-                        {
-                            PatientId = 1,
-                            DoctorId = 2,
-                            Booking = new DateTime(2024, 1, 31, 12, 26, 16, 98, DateTimeKind.Utc).AddTicks(4272)
-                        },
-                        new
-                        {
-                            PatientId = 2,
-                            DoctorId = 2,
-                            Booking = new DateTime(2024, 1, 31, 12, 26, 16, 98, DateTimeKind.Utc).AddTicks(4272)
-                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>

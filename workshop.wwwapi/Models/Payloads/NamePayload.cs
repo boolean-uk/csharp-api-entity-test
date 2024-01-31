@@ -1,6 +1,6 @@
 ﻿namespace workshop.wwwapi.Models.Payloads
 {
-    public record PatientPayload
+    public record NamePayload
     {
         public required string fullname;
     }
