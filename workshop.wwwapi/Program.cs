@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.AddScoped<IRepository, Repository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
