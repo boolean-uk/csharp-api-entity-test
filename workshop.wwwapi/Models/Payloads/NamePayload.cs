@@ -2,6 +2,6 @@
 {
     public record NamePayload
     {
-        public required string fullname;
+        public required string Fullname { get; set; }
     }
 }

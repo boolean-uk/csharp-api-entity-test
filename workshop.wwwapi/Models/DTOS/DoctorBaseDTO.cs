@@ -1,11 +1,13 @@
 ﻿namespace workshop.wwwapi.Models.DTOS
 {
-    public class DoctorDTO
+    public class DoctorBaseDTO
     {
+        public int Id { get; set; }
         public string FullName { get; set; }
 
-        public DoctorDTO(Doctor doctor)
+        public DoctorBaseDTO(Doctor doctor)
         {
+            Id = doctor.Id;
             FullName = doctor.FullName;
         }
     }
