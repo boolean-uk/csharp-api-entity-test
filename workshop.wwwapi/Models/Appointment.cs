@@ -3,11 +3,16 @@
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly
+    [Table("appointments")]
     public class Appointment
     {
+        [Column("bookings")]
+        public string Booking { get; set; }
         
-        public DateTime Booking { get; set; }
+
+        // in memoty!!! No not add column
         public int DoctorId { get; set; }
+        
         public int PatientId { get; set; }
 
     }
