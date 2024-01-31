@@ -489,3 +489,6 @@ $RECYCLE.BIN/
 */**/bin/Release   
 */**/obj/Debug   
 */**/obj/Release   
+
+#Migration Files
+/workshop.wwwapi/Migrations/
