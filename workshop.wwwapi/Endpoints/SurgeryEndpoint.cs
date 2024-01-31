@@ -6,6 +6,8 @@ using workshop.wwwapi.Repository;
 namespace workshop.wwwapi.Endpoints
 {
     public record PatientPostPayload(string fullName);
+    public record DoctorPostPayload(string fullName);
+    public record AppointmentPostPayload(string booking, int patientId, int doctorId);
 
     public static class SurgeryEndpoint
     {
@@ -17,10 +19,20 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients/{id}", GetPatient);
             surgeryGroup.MapPost("/patients", CreatePatient);
+
             surgeryGroup.MapGet("/doctors", GetDoctors);
+            surgeryGroup.MapGet("/doctors/{id}", GetDoctor);
+            surgeryGroup.MapPost("/doctors", CreateDoctor);
+
+            surgeryGroup.MapGet("/appointments", GetAppointments);
+            surgeryGroup.MapGet("/appointments/{booking}", GetAppointment);
+            surgeryGroup.MapPost("/appointments", CreateAppointment);
+
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
         }
 
+        // PATIENTS
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
         {
@@ -47,16 +59,92 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(PatientResponseDTO.FromARepository(patient));
         }
 
+
+        // DOCTORS
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            return TypedResults.Ok(DoctorResponseDTO.FromRepository(await repository.GetDoctors()));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetDoctor(IRepository repository, int id)
+        {
+            Doctor? doctor = await repository.GetDoctor(id);
+            if (doctor == null)
+                return Results.NotFound("Id out of scope");
+
+            return TypedResults.Ok(DoctorResponseDTO.FromARepository(doctor));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> CreateDoctor(IRepository repository, DoctorPostPayload payload)
+        {
+            if (payload.fullName == null || payload.fullName == "")
+                return Results.BadRequest("Must have name");
+
+            Doctor doctor = await repository.CreateDoctor(payload.fullName);
+            return TypedResults.Ok(DoctorResponseDTO.FromARepository(doctor));
+        }
+
+
+        // APPOINTMENTS
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointments(IRepository repository)
+        {
+            return TypedResults.Ok(AppointmentResponseDTO.FromRepository(await repository.GetAppointments()));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointment(IRepository repository, string booking)
+        {
+            Appointment? appointment = await repository.GetAppointment(booking);
+            if (appointment == null)
+                return Results.NotFound("Id out of scope");
+
+            return TypedResults.Ok(AppointmentResponseDTO.FromARepository(appointment));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> CreateAppointment(IRepository repository, AppointmentPostPayload payload)
+        {
+            //Checking booking
+            if (payload.booking == null || payload.booking == "")
+                return Results.BadRequest("Must have booking name");
+
+            Patient? patient = await repository.GetPatient(payload.patientId);
+            if (patient == null)
+                return Results.NotFound("Id out of scope");
+
+            Doctor? doctor = await repository.GetDoctor(payload.doctorId);
+            if (doctor == null)
+                return Results.NotFound("Id out of scope");
+
+            //Creates the appointment
+            Appointment appointment = await repository.CreateAppointment(payload.booking, payload.patientId, payload.doctorId);
+            return TypedResults.Ok(AppointmentResponseDTO.FromARepository(appointment));
+        }
+
+
+        //Extra appointment functions
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+            Doctor? doctor = await repository.GetDoctor(id);
+            if (doctor == null)
+                return Results.NotFound("Id out of scope");
+
+            return TypedResults.Ok(AppointmentResponseDTO.FromRepository(await repository.GetAppointmentsByDoctor(id)));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
+        {
+            Patient? patient = await repository.GetPatient(id);
+            if (patient == null)
+                return Results.NotFound("Id out of scope");
+
+            return TypedResults.Ok(AppointmentResponseDTO.FromRepository(await repository.GetAppointmentsByPatient(id)));
         }
     }
 }

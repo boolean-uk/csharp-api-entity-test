@@ -8,14 +8,14 @@ namespace workshop.wwwapi.DTO
         public int Id { get; set; }
         public string FullName { get; set; }
 
-        public ICollection<AppointmentDTO> appointments { get; set; } = new List<AppointmentDTO>();
+        public ICollection<AppointmentDTO> Appointments { get; set; } = new List<AppointmentDTO>();
 
         public PatientResponseDTO(Patient patient)
         {
             Id = patient.Id;
             FullName = patient.FullName;
             foreach (var appointment in patient.Appointments)
-                appointments.Add(new AppointmentDTO(appointment));
+                Appointments.Add(new AppointmentDTO(appointment));
         }
 
         public static List<PatientResponseDTO> FromRepository(IEnumerable<Patient> patients)
