@@ -19,7 +19,6 @@ namespace workshop.wwwapi.Repository
         public async Task<Patient?> GetPatientById(int id)
         {
             return await _databaseContext.Patients.FindAsync(id);
-            throw new NotImplementedException();
         }
 
         public async Task<Patient?> AddPatient(string name)
@@ -35,6 +34,20 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Doctors.ToListAsync();
         }
+
+        public async Task<Doctor?> GetDoctorById(int id)
+        {
+            return await _databaseContext.Doctors.FindAsync(id);
+        }
+
+
+        public async Task<IEnumerable<Appointment>> GetAllAppointments()
+        {
+            return await _databaseContext.Appointments.ToListAsync();
+
+            //throw new NotImplementedException();    
+        }
+
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
         {
             return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();

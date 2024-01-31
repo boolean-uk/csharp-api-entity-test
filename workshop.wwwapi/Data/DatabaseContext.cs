@@ -41,14 +41,14 @@ namespace workshop.wwwapi.Data
 
             List<Appointment> listOfAppointments =
             [
-                new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 1, PatientId = 1 },
+                new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 1 },
                 new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 1, PatientId = 4 },
-                new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 2, PatientId = 2 },
+                new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 2 },
                 new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 2, PatientId = 6 },
                 new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 3 },
                 new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 5 },
-                new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 7 },
-                new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 8 },
+                new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 2, PatientId = 7 },
+                new Appointment { Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 1, PatientId = 8 },
             ];
 
             modelBuilder.Entity<Appointment>().HasData( listOfAppointments );

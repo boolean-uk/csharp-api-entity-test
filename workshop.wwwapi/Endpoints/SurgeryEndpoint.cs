@@ -20,6 +20,9 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patient/[{id}", GetPatientById);
             surgeryGroup.MapPost("/patients", AddPatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
+            surgeryGroup.MapGet("/doctor/{id}", GetDoctorById);
+
+            surgeryGroup.MapGet("/appointments", GetAllAppointments);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -62,7 +65,35 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            var doctors = await repository.GetDoctors();
+            var doctorOnlyDTO = new List<DoctorsOnlyDTO>();
+            foreach (var doctor in doctors)
+            {
+                doctorOnlyDTO.Add(new DoctorsOnlyDTO(doctor));
+            }
+            return TypedResults.Ok(doctorOnlyDTO);
+        }
+
+        public static async Task<IResult> GetDoctorById(int id, IRepository repository)
+        {
+            var doctor = await repository.GetDoctorById(id);
+            if (doctor == null)
+            {
+                return TypedResults.NotFound($"Doctor with id {id} could not be found");
+            }
+            return TypedResults.Ok(new DoctorsOnlyDTO(doctor));
+        }
+
+        public static async Task<IResult> GetAllAppointments(IRepository repository)
+        {
+            var appointments = await repository.GetAllAppointments();
+            var appointmentsPatientDoctorDTO = new List<AppointmentsPatientDoctorDTO>();
+            foreach (var appointment in appointments)
+            {
+                appointmentsPatientDoctorDTO.Add(new AppointmentsPatientDoctorDTO(appointment));
+            }
+
+            return TypedResults.Ok(appointmentsPatientDoctorDTO);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
