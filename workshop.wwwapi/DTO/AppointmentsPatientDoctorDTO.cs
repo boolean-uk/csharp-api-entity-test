@@ -6,23 +6,17 @@ namespace workshop.wwwapi.DTO
     {
         public int Id { get; set; }
         public string Booking { get; set; }
+        public PatientOnlyDTO Patient { get; set; }
+        public List<DoctorsOnlyDTO> DoctorAppointments { get; set; }
 
-
-        public List<DoctorAppointmentDTO> doctorAppointments { get; set; }
-    }
-
-    public class DoctorAppointmentDTO
-    {
-        public int Id { get; set; }
-        public string doc_name { get; set; }
-        public PatientOnlyDTO patientOnly { get; set; }
-
-        public DoctorAppointmentDTO(Doctor doc)
+        public AppointmentsPatientDoctorDTO(Appointment appointment)
         {
-            Id = doc.Id;
-            doc_name = doc.FullName;
+            Id = appointment.Id;
+            Booking = appointment.Booking;
+            Patient = new PatientOnlyDTO(appointment.Patient);
+            DoctorAppointments = appointment.Doctor != null
+                ? new List<DoctorsOnlyDTO> { new DoctorsOnlyDTO(appointment.Doctor) }
+                : new List<DoctorsOnlyDTO>();
         }
-
-        
     }
 }

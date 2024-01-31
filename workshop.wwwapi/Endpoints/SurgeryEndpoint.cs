@@ -20,10 +20,13 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patient/[{id}", GetPatientById);
             surgeryGroup.MapPost("/patients", AddPatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
+            
             surgeryGroup.MapGet("/doctor/{id}", GetDoctorById);
 
             surgeryGroup.MapGet("/appointments", GetAllAppointments);
-            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointment/{id}", GetAppointmentById);
+
+            surgeryGroup.MapGet("/appointmentsbydoctor/{doctorId}", GetAppointmentsByDoctor);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -95,10 +98,58 @@ namespace workshop.wwwapi.Endpoints
 
             return TypedResults.Ok(appointmentsPatientDoctorDTO);
         }
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
+
+        public static async Task<IResult> GetAppointmentById(int id, IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+            var appointment = await repository.GetAppointmentWithDetailsById(id);
+
+            if (appointment == null)
+            {
+                return TypedResults.NotFound($"Appointment with id {id} could not be found");
+            }
+
+            var appointmentDTO = new AppointmentDTO
+            {
+                Id = appointment.Id,
+                Booking = appointment.Booking,
+                Patient = new PatientOnlyDTO(appointment.Patient),
+                Doctor = new DoctorsOnlyDTO(appointment.Doctor)
+               
+            };
+
+            return TypedResults.Ok(appointmentDTO);
         }
+
+        public static async Task<IResult> GetAppointmentsByDoctor(int doctorId, IRepository repository)
+        {
+            var appointments = await repository.GetAppointmentsByDoctorId(doctorId);
+
+            if (appointments == null || !appointments.Any())
+            {
+                return TypedResults.NotFound($"Appointments for doctor with id {doctorId} could not be found");
+            }
+
+            var appointmentDTOs = appointments.Select(appointment =>
+                new AppointmentDTO
+                {
+                    Id = appointment.Id,
+                    Booking = appointment.Booking,
+                    Patient = new PatientOnlyDTO(appointment.Patient),
+                    
+                    Doctor = new DoctorsOnlyDTO(appointment.Doctor)
+                    
+                }
+            ).ToList();
+
+            var appointmentsByDoctorDTO = new AppointmentsByDoctorDTO
+            {
+                Appointments = appointmentDTOs
+            };
+
+            return TypedResults.Ok(appointmentsByDoctorDTO);
+        }
+
+
+        
     }
 }

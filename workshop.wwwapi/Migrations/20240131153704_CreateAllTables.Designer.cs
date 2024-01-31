@@ -11,8 +11,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240131102201_CreateTables")]
-    partial class CreateTables
+    [Migration("20240131153704_CreateAllTables")]
+    partial class CreateAllTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,10 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
                     b.HasKey("Booking", "DoctorId", "PatientId");
 
                     b.HasIndex("DoctorId");
@@ -48,50 +52,58 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Booking = "2024-01-31",
-                            DoctorId = 1,
-                            PatientId = 1
+                            DoctorId = 3,
+                            PatientId = 1,
+                            Id = 1
                         },
                         new
                         {
                             Booking = "2024-01-31",
                             DoctorId = 1,
-                            PatientId = 4
+                            PatientId = 4,
+                            Id = 2
+                        },
+                        new
+                        {
+                            Booking = "2024-01-31",
+                            DoctorId = 3,
+                            PatientId = 2,
+                            Id = 3
                         },
                         new
                         {
                             Booking = "2024-01-31",
                             DoctorId = 2,
-                            PatientId = 2
+                            PatientId = 6,
+                            Id = 4
+                        },
+                        new
+                        {
+                            Booking = "2024-01-31",
+                            DoctorId = 3,
+                            PatientId = 3,
+                            Id = 5
+                        },
+                        new
+                        {
+                            Booking = "2024-01-31",
+                            DoctorId = 3,
+                            PatientId = 5,
+                            Id = 6
                         },
                         new
                         {
                             Booking = "2024-01-31",
                             DoctorId = 2,
-                            PatientId = 6
+                            PatientId = 7,
+                            Id = 7
                         },
                         new
                         {
                             Booking = "2024-01-31",
-                            DoctorId = 3,
-                            PatientId = 3
-                        },
-                        new
-                        {
-                            Booking = "2024-01-31",
-                            DoctorId = 3,
-                            PatientId = 5
-                        },
-                        new
-                        {
-                            Booking = "2024-01-31",
-                            DoctorId = 3,
-                            PatientId = 7
-                        },
-                        new
-                        {
-                            Booking = "2024-01-31",
-                            DoctorId = 3,
-                            PatientId = 8
+                            DoctorId = 1,
+                            PatientId = 8,
+                            Id = 8
                         });
                 });
 
@@ -194,17 +206,21 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.HasOne("workshop.wwwapi.Models.Doctor", null)
+                    b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workshop.wwwapi.Models.Patient", null)
+                    b.HasOne("workshop.wwwapi.Models.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
