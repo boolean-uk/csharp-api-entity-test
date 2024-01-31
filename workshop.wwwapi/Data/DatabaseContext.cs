@@ -17,7 +17,7 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Appointment>().HasKey(e => new  { e.Booking, e.DoctorId, e.PatientId });
+            modelBuilder.Entity<Appointment>().HasKey(e => new  { e.DoctorId, e.PatientId });
 
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(
@@ -32,8 +32,13 @@ namespace workshop.wwwapi.Data
                 new Doctor { Id = 3, FullName = "Doctor 3" }
                 );
 
+
+            // one line
+            DateTime utc = DateTime.Now.ToUniversalTime();
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { Booking = new System.DateTime(), DoctorId = 1, PatientId = 1 }
+                new Appointment { Booking = utc, DoctorId = 1, PatientId = 1 },
+                new Appointment { Booking = utc, DoctorId = 1, PatientId = 2 },
+                new Appointment { Booking = utc, DoctorId = 2, PatientId = 3 }
                 );
 
     }

@@ -25,18 +25,46 @@ namespace workshop.wwwapi.Repository
         {
             _databaseContext.Patients.AddAsync(newPatient);
             await _databaseContext.SaveChangesAsync();
-            return newPatient; // Assuming your Patient class has an Id property
+            return newPatient; 
         }
 
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
             return await _databaseContext.Doctors.ToListAsync();
         }
+
+        public async Task<Doctor?> GetDoctor(int doctorId)
+        {
+            return await _databaseContext.Doctors.FirstOrDefaultAsync(d => d.Id == doctorId);
+        }
+
+        public async Task<Doctor?> CreateDoctor(Doctor newDoctor)
+        {
+            _databaseContext.Doctors.AddAsync(newDoctor);
+            await _databaseContext.SaveChangesAsync();
+            return newDoctor;
+        }
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
         {
             return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
         }
 
+        public async Task<IEnumerable<Appointment>> GetAppointments()
+        {
+            return await _databaseContext.Appointments.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id)
+        {
+            return await _databaseContext.Appointments.Where(a => a.PatientId == id).ToListAsync();
+        }
+
+        public async Task<Appointment?> CreateAppointment(Appointment newAppointment)
+        {
+            _databaseContext.Appointments.AddAsync(newAppointment);
+            await _databaseContext.SaveChangesAsync();
+            return newAppointment; 
+        }
 
     }
 }

@@ -25,6 +25,7 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(IResult))]
         private static async Task<IResult> GetAPatient(int patientid, IRepository repository)
         {
             var patient = await repository.GetPatient(patientid);
@@ -36,7 +37,7 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(patient);
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(IResult))]
         public static async Task<IResult> CreateAPatient(Patient patient, IRepository repository)
         {
@@ -46,7 +47,7 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound();
             }
 
-            return TypedResults.Ok(patient);
+            return TypedResults.Created();
         }
 
 
@@ -55,6 +56,35 @@ namespace workshop.wwwapi.Endpoints
         {
             return TypedResults.Ok(await repository.GetPatients());
         }
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(IResult))]
+        private static async Task<IResult> GetADoctor(int doctorid, IRepository repository)
+        {
+            var doctor = await repository.GetDoctor(doctorid);
+            if (doctor == null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.Ok(doctor);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IResult))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(IResult))]
+        public static async Task<IResult> CreateADoctor(Doctor doctor, IRepository repository)
+        {
+            var newDoctor = await repository.CreateDoctor(doctor);
+            if (doctor == null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.Created();
+        }
+
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
