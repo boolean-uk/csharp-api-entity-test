@@ -80,6 +80,8 @@ namespace workshop.wwwapi.Endpoints
                 return Results.BadRequest("Failed to create student.");
             }
 
+            repository.SaveChanges();
+
             return TypedResults.Ok(new PatientDTO(patient));
         }
 
@@ -135,6 +137,8 @@ namespace workshop.wwwapi.Endpoints
             {
                 return Results.BadRequest("Failed to create doctor.");
             }
+
+            repository.SaveChanges();
 
             return TypedResults.Ok(new DoctorDTO(d));
         }
@@ -217,10 +221,13 @@ namespace workshop.wwwapi.Endpoints
             }
 
             Appointment? a = await repository.CreateAppointment(payload.doctorId, payload.patientId);
+
             if (a == null)
             {
                 return Results.BadRequest("Failed to create appointment.");
             }
+
+            repository.SaveChanges();
 
             return TypedResults.Ok(new AppointmentDTO(a));
         }

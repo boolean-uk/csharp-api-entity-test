@@ -27,6 +27,6 @@ namespace workshop.wwwapi.Repository
         Task<Appointment?> GetAppointment(int doctorId, int patientid, PreloadPolicy preloadPolicy = PreloadPolicy.DoNotPreloadRelations);
         Task<Appointment?> CreateAppointment(int doctorId, int patientId);
 
-
+        public void SaveChanges();
     }
 }

@@ -117,5 +117,10 @@ namespace workshop.wwwapi.Repository
             return appo;
         }
 
+        public void SaveChanges()
+        {
+            _databaseContext.SaveChanges();
+        }
+
     }
 }
