@@ -13,13 +13,8 @@ namespace workshop.wwwapi.Models
         [Column("doctor_id")]
         public int DoctorId { get; set; }
 
-        //public Doctor Doctor { get; set; } 
-
         [ForeignKey("PatientId")]
         [Column("patient_id")]
         public int PatientId { get; set; }
-
-        //public Patient Patient { get; set; }
-
     }
 }

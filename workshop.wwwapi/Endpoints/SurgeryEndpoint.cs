@@ -20,10 +20,10 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapPost("/patients/{id}", AddPatient);
 
             surgeryGroup.MapGet("/appointments", GetAppointments);
-            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
-            surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
-            surgeryGroup.MapGet("/appointments/{id}", GetAppointmentById);
-            surgeryGroup.MapPost("/appointments/{id}", AddAppointment);
+            surgeryGroup.MapGet("/appointmentsbydoctor/{doctorId}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointmentsbypatient/{patientId}", GetAppointmentsByPatient);
+            surgeryGroup.MapGet("/appointments/{doctorId}/{patientId}", GetAppointmentById);
+            surgeryGroup.MapPost("/appointments/{doctorId}/{patientId}", AddAppointment);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

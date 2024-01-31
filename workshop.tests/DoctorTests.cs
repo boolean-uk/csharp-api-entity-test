@@ -4,40 +4,40 @@ using workshop.wwwapi.Models;
 
 namespace workshop.tests;
 
-public class PatientTests
+public class DoctorTests
 {
 
     [Test]
-    public async Task PatientEndpointStatus()
+    public async Task DoctorEndpointStatus()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/surgery/patients");
+        var response = await client.GetAsync("/surgery/doctors");
 
         // Assert
         Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
     }
 
     [Test]
-    public async Task GetPatientsResponse()
+    public async Task GetDoctorsResponse()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
-        var expectedPayload = new List<Patient>()
+        var expectedPayload = new List<Doctor>()
             {
-                new Patient { Id = 1, FullName = "Klas Bengtsson" },
-                new Patient { Id = 2, FullName = "Kerstin Gunnarsson" }
+                new Doctor { Id = 1, FullName = "Dr.Johanna" },
+                new Doctor { Id = 2, FullName = "Dr.Jon" }
             };
 
         // Act
-        var response = await client.GetAsync("/surgery/patients");
+        var response = await client.GetAsync("/surgery/doctors");
 
-        var responsePayload = await response.Content.ReadFromJsonAsync<IEnumerable<Patient>>();
+        var responsePayload = await response.Content.ReadFromJsonAsync<IEnumerable<Doctor>>();
 
         // Assert
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
