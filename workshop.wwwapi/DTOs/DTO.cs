@@ -79,6 +79,7 @@ namespace SurgeryEndpoints.DTOs
             Booking = appointment.Booking;
             patient = new PatientDTO(appointment.Patient);
             doctor = new DoctorDTO(appointment.Doctor);
+           
         }
     }
 

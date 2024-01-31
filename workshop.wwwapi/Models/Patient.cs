@@ -13,6 +13,6 @@ namespace workshop.wwwapi.Models
         [Column("name")]
         public string FullName { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; }
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }
