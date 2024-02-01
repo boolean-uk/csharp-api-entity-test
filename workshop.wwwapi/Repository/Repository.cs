@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using workshop.wwwapi.Data;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.PureModels;
 
 namespace workshop.wwwapi.Repository
 {
@@ -15,6 +16,19 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Patients.ToListAsync();
         }
+
+        public async Task<Patient?> GetPatientById(int id) 
+        {
+            return await _databaseContext.Patients.FindAsync(id);
+        }
+
+        public async Task<Patient> PostPatient(Patient patient) 
+        {
+            await _databaseContext.Patients.AddAsync(patient);
+            await _databaseContext.SaveChangesAsync();
+            return patient;
+        }
+
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
             return await _databaseContext.Doctors.ToListAsync();

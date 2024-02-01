@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.PureModels;
 
 namespace workshop.wwwapi.Data
 {
@@ -17,9 +17,11 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Appointment>().HasKey(app => app.Booking);
 
             //TODO: Seed Data Here
+            modelBuilder.Entity<Patient>().HasData(new Patient() { Id = 5, FullName = "John Doe" });
+            modelBuilder.Entity<Patient>().HasData(new Patient() { Id = 1, FullName = "Jimmy Bob" });
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

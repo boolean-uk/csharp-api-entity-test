@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace workshop.wwwapi.Models
+namespace workshop.wwwapi.Models.PureModels
 {
     //TODO: decorate class/columns accordingly
     [Table("appointments")]
