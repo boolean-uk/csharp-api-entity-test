@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace workshop.wwwapi.Models
-{ 
-    [Table("doctors")]
-    public class Doctor
+namespace workshop.wwwapi.Models.DTO
+{
+    public class OutputPatient
     {
-        [Column("id")]
         public int Id { get; set; }
-        [Column("full_name")]
+
         public string FullName { get; set; }
     }
 }
