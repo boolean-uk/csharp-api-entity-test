@@ -3,9 +3,16 @@
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
+    [Table("doctor")]
     public class Doctor
-    {        
-        public int Id { get; set; }        
-        public string FullName { get; set; }
+    {
+        [Column("doctor_id")]
+        public int Id { get; set; }
+
+        [Column("doctor_fullName")]
+        public required string FullName { get; set; }
+
+        public ICollection<Appointment> Appointments { get; set; } = [];
     }
 }
+

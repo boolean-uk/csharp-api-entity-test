@@ -3,10 +3,15 @@ using System.Data;
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly    
+    //TODO: decorate class/columns accordingly
+    [Table("patient")]
     public class Patient
-    {        
-        public int Id { get; set; }        
-        public string FullName { get; set; }
+    {
+        [Column("patient_id")]
+        public int Id { get; set; }
+        [Column("patient_full_name")]
+        public required string FullName { get; set; }
+
+        public ICollection<Appointment> Appointments { get; set; } = [];
     }
 }
