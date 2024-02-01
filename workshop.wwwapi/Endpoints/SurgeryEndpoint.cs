@@ -15,8 +15,9 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients/{id}", GetPatient);
             surgeryGroup.MapPost("/patients", AddPatient);
-            //surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
         }
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
         {
@@ -74,10 +75,11 @@ namespace workshop.wwwapi.Endpoints
         {
             return TypedResults.Ok(await repository.GetPatients());
         }
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
-        //{
-        //    return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
-        //}
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
+        {
+            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+        }
     }
 }

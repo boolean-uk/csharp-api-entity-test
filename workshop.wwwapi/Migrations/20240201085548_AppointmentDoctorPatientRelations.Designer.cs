@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240201085548_AppointmentDoctorPatientRelations")]
+    partial class AppointmentDoctorPatientRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,28 +36,12 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnName("doctor_id");
 
                     b.Property<DateTime>("AppointmentDate")
-                        .HasColumnType("date")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("appointment_date");
 
                     b.HasKey("PatientId", "DoctorId");
 
-                    b.HasIndex("DoctorId");
-
                     b.ToTable("appointments");
-
-                    b.HasData(
-                        new
-                        {
-                            PatientId = 1,
-                            DoctorId = 1,
-                            AppointmentDate = new DateTime(2024, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            PatientId = 2,
-                            DoctorId = 2,
-                            AppointmentDate = new DateTime(2024, 10, 12, 16, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
@@ -74,18 +61,6 @@ namespace workshop.wwwapi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("doctors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Dr. House"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Dr. Phil"
-                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
@@ -124,25 +99,6 @@ namespace workshop.wwwapi.Migrations
                             FirstName = "Axl",
                             LastName = "Rose"
                         });
-                });
-
-            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
-                {
-                    b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("workshop.wwwapi.Models.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Patient");
                 });
 #pragma warning restore 612, 618
         }

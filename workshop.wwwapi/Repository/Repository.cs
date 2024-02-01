@@ -36,13 +36,13 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.SaveChangesAsync();
             return patient;
         }
-        //public async Task<IEnumerable<Doctor>> GetDoctors()
-        //{
-        //    return await _databaseContext.Doctors.ToListAsync();
-        //}
-        //public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
-        //{
-        //    return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
-        //}
+        public async Task<IEnumerable<Doctor>> GetDoctors()
+        {
+            return await _databaseContext.Doctors.ToListAsync();
+        }
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
+        {
+            return await _databaseContext.Appointments.Where(a => a.DoctorId == id).ToListAsync();
+        }
     }
 }
