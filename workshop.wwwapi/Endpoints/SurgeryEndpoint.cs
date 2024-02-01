@@ -4,14 +4,32 @@ using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
 {
+    public class AppointmentDTO
+    {
+        public DateTime Booking { get; set; }
+        public int DoctorId { get; set; }
+        public int PatientId { get; set; }
+        public AppointmentDTO(Appointment appointment)
+        {
+            Booking = appointment.Booking;
+            PatientId = appointment.PatientId;
+            DoctorId = appointment.DoctorId;
+        }
+    }
     public class GetPatientDTO
     {
         public int Id { get; set; }
         public string FullName { get; set; }
+        public List<AppointmentDTO> Appointments { get; set; } = new List<AppointmentDTO>();
         public GetPatientDTO(Patient patient)
         {
             Id = patient.Id;
             FullName = patient.FullName;
+            Appointments = new List<AppointmentDTO>();
+            foreach(var appointment in patient.Appointments)
+            {
+                Appointments.Add(new AppointmentDTO(appointment));
+            }
         }
         public static List<GetPatientDTO> FromRepository(IEnumerable<Patient> patients)
         {
@@ -39,7 +57,7 @@ namespace workshop.wwwapi.Endpoints
         
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
-        { 
+        {
             var patient = GetPatientDTO.FromRepository(await repository.GetPatients());
             return TypedResults.Ok(patient);
         }
@@ -66,7 +84,7 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            return TypedResults.Ok(await repository.GetDoctors());
         }
         
         [ProducesResponseType(StatusCodes.Status200OK)]
