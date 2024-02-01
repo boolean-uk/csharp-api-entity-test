@@ -12,14 +12,18 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            // this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+
 
             //TODO: Seed Data Here
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient() { Id=1, FirstName="Saul", LastName="Hudson" },
+                new Patient() { Id=2, FirstName="Axl", LastName="Rose" }
+            );
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -32,7 +36,7 @@ namespace workshop.wwwapi.Data
 
 
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<Appointment> Appointments { get; set; }
+        //public DbSet<Doctor> Doctors { get; set; }
+        //public DbSet<Appointment> Appointments { get; set; }
     }
 }
