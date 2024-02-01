@@ -1,12 +1,11 @@
-﻿using workshop.wwwapi.Models;
+﻿using workshop.wwwapi.Models.DTOs;
 
 namespace workshop.wwwapi.Repository
 {
     public interface IRepository
     {
-        Task<IEnumerable<Patient>> GetPatients();
-        Task<IEnumerable<Doctor>> GetDoctors();
-        Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
+        Task<IEnumerable<PatientDTO>> GetPatients();
+        Task<PatientDTO?> GetPatientById(int id);
 
 
     }
