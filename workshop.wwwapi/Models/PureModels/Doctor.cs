@@ -15,5 +15,7 @@ namespace workshop.wwwapi.Models.PureModels
         [MaxLength(123)]
         [Column("full_name")]
         public string FullName { get; set; }
+
+        public List<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

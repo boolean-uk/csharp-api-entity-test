@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240201140507_2ndMigration")]
-    partial class _2ndMigration
+    [Migration("20240201152745_part2Update")]
+    partial class part2Update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,12 +25,8 @@ namespace workshop.wwwapi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Appointment", b =>
                 {
-                    b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("booking_time");
-
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
@@ -39,12 +35,38 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("patient_id");
 
-                    b.HasKey("Booking");
+                    b.Property<DateTime>("Booking")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("booking_time");
+
+                    b.HasKey("DoctorId", "PatientId");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            DoctorId = 1,
+                            PatientId = 1,
+                            Booking = new DateTime(2010, 3, 5, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            DoctorId = 1,
+                            PatientId = 5,
+                            Booking = new DateTime(2005, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            DoctorId = 3,
+                            PatientId = 5,
+                            Booking = new DateTime(1995, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Doctor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,9 +84,21 @@ namespace workshop.wwwapi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("doctors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FullName = "Jan Itor"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FullName = "Dr. Acula"
+                        });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,6 +128,35 @@ namespace workshop.wwwapi.Migrations
                             Id = 1,
                             FullName = "Jimmy Bob"
                         });
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Appointment", b =>
+                {
+                    b.HasOne("workshop.wwwapi.Models.PureModels.Doctor", "Doctor")
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workshop.wwwapi.Models.PureModels.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Patient", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }
