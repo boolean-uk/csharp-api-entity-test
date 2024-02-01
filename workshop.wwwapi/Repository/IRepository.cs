@@ -9,8 +9,12 @@ namespace workshop.wwwapi.Repository
         Task<Patient> GetPatientById(int id);
         Task<IEnumerable<Patient>> GetPatients();
         Task<IEnumerable<Doctor>> GetDoctors();
+        Task<Doctor> GetDoctorById(int id);
+        Task<Doctor> AddDoctor(GetDoctorDTO dto);
         Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
-
-
+        Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id);
+        Task<Appointment> GetAppointmentById(int patientId, int doctorId);
+        Task<IEnumerable<Appointment>> GetAllAppointments();
+        Task<Appointment> AddAppointment(AddAppointmentDTO dto);
     }
 }
