@@ -85,7 +85,7 @@ namespace workshop.wwwapi.Endpoints
                     DoctorName = appointment.Doctor.Name,
                     PatientFullName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}"
                 };
-                return TypedResults.Ok(getDTO);
+                return TypedResults.Created(nameof(AddAppointment), getDTO);
             } catch (Exception ex)
             {
                 return TypedResults.NotFound(ex.Message);

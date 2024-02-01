@@ -10,7 +10,12 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            var doctors = await repository.GetDoctors();
+            var dtos = doctors.Select(x => new GetDoctorDTO()
+            {
+                Name = x.Name
+            });
+            return TypedResults.Ok(dtos);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,7 +37,7 @@ namespace workshop.wwwapi.Endpoints
             try
             {
                 Doctor doctor = await repository.AddDoctor(dto);
-                return TypedResults.Ok(dto);
+                return TypedResults.Created(nameof(AddDoctor), dto);
             }
             catch (Exception ex)
             {

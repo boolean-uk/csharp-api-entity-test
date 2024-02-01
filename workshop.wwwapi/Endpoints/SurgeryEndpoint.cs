@@ -23,8 +23,8 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", AppointmentsEndpoint.GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", AppointmentsEndpoint.GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointmentbyid", AppointmentsEndpoint.GetAppointmentByIds);
-            surgeryGroup.MapPost("/appointment", AppointmentsEndpoint.AddAppointment);
-            surgeryGroup.MapGet("/appointment", AppointmentsEndpoint.GetAll);
+            surgeryGroup.MapPost("/appointments", AppointmentsEndpoint.AddAppointment);
+            surgeryGroup.MapGet("/appointments", AppointmentsEndpoint.GetAll);
         }
     }
 }

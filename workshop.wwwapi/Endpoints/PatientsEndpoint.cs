@@ -51,7 +51,7 @@ namespace workshop.wwwapi.Endpoints
                     FirstName = patient.FirstName,
                     LastName = patient.LastName,
                 };
-                return TypedResults.Ok(getDTO);
+                return TypedResults.Created(nameof(AddPatient), getDTO);
             }
             catch (Exception ex)
             {
