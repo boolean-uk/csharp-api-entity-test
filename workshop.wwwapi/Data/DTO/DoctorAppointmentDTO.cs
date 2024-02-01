@@ -4,6 +4,7 @@ namespace workshop.wwwapi.Data.DTO
 {
     public class DoctorAppointmentDTO
     {
+        
         public int Id { get; set; }
         public DateTime Booking { get; set; }
 

@@ -27,6 +27,10 @@ namespace workshop.wwwapi.Repository
              .ThenInclude(p => p.Patient)
              .ToListAsync();
         }
+        public async Task<IEnumerable<Appointment>> GetAppointments()
+        {
+            return await _databaseContext.Appointments.Include(x => x.Patient).Include(x => x.Doctor).ToListAsync();
+        }
         public async Task<IEnumerable<Doctor>> GetDoctorById(int id)
         {
             return await _databaseContext.Doctors.Where(a => a.Id == id).ToListAsync();
@@ -52,6 +56,6 @@ namespace workshop.wwwapi.Repository
             .Where(a => a.PatientId == id).ToListAsync();
         }
 
-        
+       
     }
 }

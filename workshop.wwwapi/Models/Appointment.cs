@@ -2,6 +2,7 @@
 
 namespace workshop.wwwapi.Models
 {
+    
     //TODO: decorate class/columns accordingly
     [Table("appointment")]
     public class Appointment
@@ -22,4 +23,6 @@ namespace workshop.wwwapi.Models
         public Patient Patient { get; set; } = null!;
 
     }
+  
+   
 }

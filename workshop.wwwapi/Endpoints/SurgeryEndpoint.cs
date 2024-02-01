@@ -7,17 +7,32 @@ namespace workshop.wwwapi.Endpoints
 {
     public static class SurgeryEndpoint
     {
+
         //TODO:  add additional endpoints in here according to the requirements in the README.md 
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
+
             var surgeryGroup = app.MapGroup("surgery");
 
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/doctors", GetDoctors);
+            surgeryGroup.MapGet("/appointments", GetAppointments);
             surgeryGroup.MapGet("/doctors/{id}", GetDoctorById);
             surgeryGroup.MapGet("/patients/{id}", GetPatientById);
             surgeryGroup.MapGet("/doctors/appointments/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/patients/appointments/{id}", GetAppointmentsByPatient);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointments(IRepository repository)
+        {
+            var appointments = await repository.GetAppointments();
+            var results = new List<AppointmentResponseDTO>();
+            foreach (var appointment in appointments)
+            {
+                results.Add(new AppointmentResponseDTO(appointment));
+            }
+            return TypedResults.Ok(results);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -91,5 +106,6 @@ namespace workshop.wwwapi.Endpoints
             }
             return TypedResults.Ok(PatientAppointmentDTO.FromRepository(appointment));
         }
+
     }
 }

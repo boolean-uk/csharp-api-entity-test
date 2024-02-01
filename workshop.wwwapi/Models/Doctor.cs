@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Data.DTO;
 
 namespace workshop.wwwapi.Models
 {
+   
     //TODO: decorate class/columns accordingly    
     [Table("doctor")]
     public class Doctor
@@ -14,5 +16,7 @@ namespace workshop.wwwapi.Models
 
         public ICollection<Appointment> Appointments { get; set; } = [];
     }
+    
+   
 }
 

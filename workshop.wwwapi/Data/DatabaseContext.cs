@@ -5,8 +5,10 @@ using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Data
 {
+    
     public class DatabaseContext : DbContext
     {
+
         private string _connectionString;
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
@@ -73,4 +75,6 @@ namespace workshop.wwwapi.Data
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
     }
+    
+   
 }
