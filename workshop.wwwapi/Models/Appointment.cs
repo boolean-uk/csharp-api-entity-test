@@ -6,12 +6,13 @@ namespace workshop.wwwapi.Models
     [Table("appointments")]
     public class Appointment
     {
-        
+        [Column("booking_time")]
         public DateTime Booking { get; set; }
+        [Column("doctor_id")]
         public int DoctorId { get; set; }
-        public int PatientId { get; set; }
-
         public Doctor Doctor { get; set; }
+        [Column("patient_id")]
+        public int PatientId { get; set; }
         public Patient Patient { get; set; }
 
     }

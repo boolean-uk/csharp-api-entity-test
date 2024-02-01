@@ -22,12 +22,13 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.DoctorId==id).ToListAsync();
         }
         public async Task<Patient?> GetPatient(int patientId)
         {
-            return await _databaseContext.Patients.FirstOrDefaultAsync(p => p.Id == patientId);
+             return await _databaseContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).FirstOrDefaultAsync(p => p.Id==patientId);
         }
+
         public async Task<Patient?> CreatePatient(string fullName)
         {
             if (fullName == "") return null;
@@ -50,6 +51,8 @@ namespace workshop.wwwapi.Repository
             try
             {
                 await _databaseContext.Appointments.AddAsync(appointment);
+                patient.Appointments.Add(appointment);
+                doctor.Appointments.Add(appointment);
             }
             catch (Exception ex)
             {
@@ -60,7 +63,23 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<Doctor?> GetDoctor(int doctorId)
         {
-            return await _databaseContext.Doctors.FirstOrDefaultAsync(d => d.Id  == doctorId);
+            return await _databaseContext.Doctors.Include(d => d.Appointments).ThenInclude(a => a.Patient).FirstOrDefaultAsync(d => d.Id == doctorId);
+        }
+        public async Task<Doctor?> CreateDoctor(string fullName)
+        {
+            if (fullName == "") return null;
+            Doctor doctor = new Doctor { FullName = fullName };
+
+            try
+            {
+                await _databaseContext.Doctors.AddAsync(doctor);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            _databaseContext.SaveChanges();
+            return doctor;
         }
     }
 }

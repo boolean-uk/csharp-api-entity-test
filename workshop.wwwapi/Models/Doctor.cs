@@ -6,9 +6,10 @@ namespace workshop.wwwapi.Models
     [Table("doctors")]
     public class Doctor
     {
-        [Column("id")]
+        [Column("doctor_id")]
         public int Id { get; set; }
         [Column("fullname")]
         public string FullName { get; set; }
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

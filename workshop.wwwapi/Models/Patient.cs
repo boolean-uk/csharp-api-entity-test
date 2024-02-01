@@ -8,9 +8,10 @@ namespace workshop.wwwapi.Models
     [Table("patients")]
     public class Patient
     {
-        [Column("id")]
+        [Column("patient_id")]
         public int Id { get; set; }
         [Column("fullname")]
         public string FullName { get; set; }
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

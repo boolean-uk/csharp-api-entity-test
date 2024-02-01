@@ -2,6 +2,7 @@
 
 namespace workshop.wwwapi.Repository
 {
+
     public interface IRepository
     {
         Task<IEnumerable<Patient>> GetPatients();
@@ -11,6 +12,7 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
         Task<Appointment?> AddAppointment(Patient patient, Doctor doctor, DateTime appointmentDate);
         Task<Doctor?> GetDoctor(int doctorId);
+        Task<Doctor?> CreateDoctor(string fullName);
 
     }
 }

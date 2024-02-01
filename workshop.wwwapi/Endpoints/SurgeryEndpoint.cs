@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.DTOs;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
+using static workshop.wwwapi.DTOs.Payloads;
 
 namespace workshop.wwwapi.Endpoints
 {
@@ -18,44 +20,75 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patients/{id}", GetPatient);
             surgeryGroup.MapPost("/appointments", AddAppointment);
             surgeryGroup.MapGet("/doctors/{id}", GetDoctor);
+            surgeryGroup.MapPost("/doctors", CreateDoctor);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
-        { 
-            return TypedResults.Ok(await repository.GetPatients());
+        {
+            var patients = await repository.GetPatients();
+            var patientsDTO = new List<PatientResponseDTO>();
+            foreach(var patient in patients)
+            {
+                patientsDTO.Add(new PatientResponseDTO(patient));
+            }
+            return TypedResults.Ok(patientsDTO);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetDoctors());
+            var doctors = await repository.GetDoctors();
+            var doctorsDTO = new List<DoctorResponseDTO>();
+            foreach(var doctor in doctors)
+            {
+                doctorsDTO.Add(new DoctorResponseDTO(doctor));
+            }
+            return TypedResults.Ok(doctorsDTO);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+            var appointments = await repository.GetAppointmentsByDoctor(id);
+            var appointmentsDTO = new List<AppointmentDTO>();
+            foreach(var appointment in appointments)
+            {
+                appointmentsDTO.Add(new AppointmentDTO(appointment));
+            }
+            return TypedResults.Ok(appointmentsDTO);
         }
         public static async Task<IResult> GetPatient(IRepository repository, int patientId)
         {
-            return TypedResults.Ok(await repository.GetPatient(patientId));
+            var patient = await repository.GetPatient(patientId);
+            if (patient == null) { return TypedResults.NotFound(); }
+            return TypedResults.Ok(new PatientResponseDTO(patient));
         }
-        public static async Task<IResult> CreatePatient(IRepository repository, string fullName)
+        public static async Task<IResult> CreatePatient(IRepository repository, CreatePatientPayload payload)
         {
-            return TypedResults.Ok(await repository.CreatePatient(fullName));
+            return TypedResults.Ok(await repository.CreatePatient(payload.fullName));
         }
-        public static async Task<IResult> GetDoctor(IRepository repository, int patientId)
+        public static async Task<IResult> GetDoctor(IRepository repository, int doctorId)
         {
-            return TypedResults.Ok(await repository.GetDoctor(patientId));
+            var doctor = await repository.GetDoctor(doctorId);
+            if(doctor == null) { return TypedResults.NotFound(); }
+            return TypedResults.Ok(new DoctorResponseDTO(doctor));
         }
-        public static async Task<IResult> AddAppointment(IRepository repository, int patientId, int doctorId, DateTime appointmentDate)
+        public static async Task<IResult> CreateDoctor(IRepository repository, CreateDoctorPayload payload)
+        {
+            return TypedResults.Ok(await repository.CreateDoctor(payload.fullName));
+        }
+        public static async Task<IResult> AddAppointment(IRepository repository, AddAppointmentPayload payload)
         {
 
-            Patient? patient = await repository.GetPatient(patientId);
+            Patient? patient = await repository.GetPatient(payload.patientId);
             if(patient == null) { return TypedResults.NotFound(); }
 
-            Doctor? doctor = await repository.GetDoctor(doctorId);
+            Doctor? doctor = await repository.GetDoctor(payload.doctorId);
             if (doctor == null) { return TypedResults.NotFound(); }
-
-            return TypedResults.Ok(await repository.AddAppointment(patient, doctor, appointmentDate.ToUniversalTime()));
+            var status = await repository.AddAppointment(patient, doctor, payload.appointmentDate.ToUniversalTime());
+            if (status == null)
+            {
+                return TypedResults.NotFound();
+            }
+            return TypedResults.Ok(new AppointmentDTO(status));
         }
     }
 }

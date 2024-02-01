@@ -30,7 +30,6 @@ namespace workshop.wwwapi.Data
                 new Doctor { Id = 2, FullName = "Doctor Jane"}
             );
 
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
