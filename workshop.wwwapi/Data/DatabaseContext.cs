@@ -20,7 +20,45 @@ namespace workshop.wwwapi.Data
             
 
             //TODO: Seed Data Here
+             modelBuilder.Entity<Patient>().HasData(
+            new Patient
+            {
+                Id = 1,
+                FullName = "John Doe"
+            },
+            new Patient
+            {
+                Id = 2,
+                FullName = "Jane Doe"
+            });
 
+            modelBuilder.Entity<Doctor>().HasData(
+            new Doctor
+            {
+                Id = 1,
+                FullName = "Doctor Doe"
+            },
+            new Doctor
+            {
+                Id = 2,
+                FullName = "Doctor Doe"
+            });
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment
+                {
+                    Id = 1,
+                    Booking = DateTime.UtcNow, 
+                    DoctorId = 1,       
+                    PatientId = 1           
+                },
+                new Appointment
+                {
+                    Id = 2,
+                    Booking = DateTime.UtcNow.AddHours(1),
+                    DoctorId = 2,                       
+                    PatientId = 2                       
+                });
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
