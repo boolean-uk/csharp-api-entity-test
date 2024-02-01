@@ -8,9 +8,9 @@ namespace workshop.wwwapi.Endpoints
     public static class PatientsEndpoint
     {
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetPatients(IRepository repository)
+        public static async Task<IResult> GetPatients(IGeneralRepository<Patient> repository)
         {
-            var patients = await repository.GetPatients();
+            var patients = await repository.GetAll();
             List<GetPatientDTO> dtos = patients
                 .Select(p => new GetPatientDTO()
                 {
@@ -23,11 +23,11 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetPatient(IRepository repository, int id)
+        public static async Task<IResult> GetPatient(IGeneralRepository<Patient> repository, int id)
         {
             try
             {
-                Patient patient = await repository.GetPatientById(id);
+                Patient patient = await repository.GetById(id);
                 GetPatientDTO dto = new()
                 {
                     FirstName = patient.FirstName,
@@ -41,11 +41,16 @@ namespace workshop.wwwapi.Endpoints
             }
         }
 
-        public static async Task<IResult> AddPatient(IRepository repository, AddPatientDTO dto)
+        public static async Task<IResult> AddPatient(IGeneralRepository<Patient> repository, AddPatientDTO dto)
         {
             try
             {
-                Patient patient = await repository.AddPatient(dto);
+                Patient patient = new()
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                };
+                await repository.Add(patient);
                 GetPatientDTO getDTO = new()
                 {
                     FirstName = patient.FirstName,

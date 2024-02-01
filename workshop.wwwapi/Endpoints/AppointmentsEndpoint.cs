@@ -9,7 +9,7 @@ namespace workshop.wwwapi.Endpoints
     {
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
+        public static async Task<IResult> GetAppointmentsByDoctor(IAppointmentRepository repository, int id)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
+        public static async Task<IResult> GetAppointmentsByPatient(IAppointmentRepository repository, int id)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetAppointmentByIds(IRepository repository, int patientId, int doctorId)
+        public static async Task<IResult> GetAppointmentByIds(IAppointmentRepository repository, int patientId, int doctorId)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> AddAppointment(IRepository repository, AddAppointmentDTO dto)
+        public static async Task<IResult> AddAppointment(IAppointmentRepository repository, AddAppointmentDTO dto)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace workshop.wwwapi.Endpoints
 
         }
 
-        public static async Task<IResult> GetAll(IRepository repository)
+        public static async Task<IResult> GetAll(IAppointmentRepository repository)
         {
             IEnumerable<Appointment> appointments = await repository.GetAllAppointments();
             List<GetAppointmentDTO> dtos = appointments.Select(a => new GetAppointmentDTO()

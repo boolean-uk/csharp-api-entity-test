@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace workshop.wwwapi.Models
 {
     [Table("doctors")]
-    public class Doctor
+    public class Doctor : IEntity
     {
         [Key]
         [Column("id")]

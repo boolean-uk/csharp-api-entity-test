@@ -6,7 +6,7 @@ namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
     [Table("patients")]
-    public class Patient
+    public class Patient : IEntity
     {
         [Key]
         [Column("id")]

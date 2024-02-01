@@ -8,9 +8,9 @@ namespace workshop.wwwapi.Endpoints
     public static class DoctorsEndpoint
     {
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetDoctors(IRepository repository)
+        public static async Task<IResult> GetDoctors(IGeneralRepository<Doctor> repository)
         {
-            var doctors = await repository.GetDoctors();
+            var doctors = await repository.GetAll();
             var dtos = doctors.Select(x => new GetDoctorDTO()
             {
                 Name = x.Name
@@ -20,11 +20,11 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetDoctor(IRepository repository, int id)
+        public static async Task<IResult> GetDoctor(IGeneralRepository<Doctor> repository, int id)
         {
             try
             {
-                return TypedResults.Ok(await repository.GetDoctorById(id));
+                return TypedResults.Ok(await repository.GetById(id));
             }
             catch (Exception ex)
             {
@@ -32,11 +32,15 @@ namespace workshop.wwwapi.Endpoints
             }
         }
 
-        public static async Task<IResult> AddDoctor(IRepository repository, GetDoctorDTO dto)
+        public static async Task<IResult> AddDoctor(IGeneralRepository<Doctor> repository, GetDoctorDTO dto)
         {
             try
             {
-                Doctor doctor = await repository.AddDoctor(dto);
+                Doctor doctor = new()
+                {
+                    Name = dto.Name,
+                };
+                await repository.Add(doctor);
                 return TypedResults.Created(nameof(AddDoctor), dto);
             }
             catch (Exception ex)
