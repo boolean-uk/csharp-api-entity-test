@@ -23,6 +23,16 @@ namespace workshop.wwwapi.Data
                 new Patient() { Id = 1, FullName = "Java Script" },
                 new Patient() { Id = 2, FullName = "C Sharp" }
             );
+
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor() { Id = 1, FullName = "Doctor Who" },
+                new Doctor() { Id = 2, FullName = "Doctor Why" }
+            );
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 1, PatientId = 1 },
+                new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 2, PatientId = 2 }
+            );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

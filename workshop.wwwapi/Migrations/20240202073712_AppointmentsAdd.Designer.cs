@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240202073712_AppointmentsAdd")]
+    partial class AppointmentsAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +35,7 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("doctorid");
 
-                    b.Property<DateTime>("BookingTime")
+                    b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking_time");
 
@@ -41,20 +44,6 @@ namespace workshop.wwwapi.Migrations
                     b.HasIndex("DoctorId");
 
                     b.ToTable("appointments");
-
-                    b.HasData(
-                        new
-                        {
-                            PatientId = 1,
-                            DoctorId = 1,
-                            BookingTime = new DateTime(2024, 2, 2, 7, 43, 28, 696, DateTimeKind.Utc).AddTicks(3365)
-                        },
-                        new
-                        {
-                            PatientId = 2,
-                            DoctorId = 2,
-                            BookingTime = new DateTime(2024, 2, 2, 7, 43, 28, 696, DateTimeKind.Utc).AddTicks(3366)
-                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
@@ -74,18 +63,6 @@ namespace workshop.wwwapi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("doctors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FullName = "Doctor Who"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FullName = "Doctor Why"
-                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
