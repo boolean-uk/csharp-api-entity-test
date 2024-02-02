@@ -14,12 +14,19 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            return await _databaseContext.Patients.ToListAsync();
+            return await _databaseContext.Patients
+                .Include(p => p.Appointments)
+                    .ThenInclude(a => a.Doctor)
+                .ToListAsync();
         }
 
         public async Task<Patient?> GetPatientById(int id) 
         {
-            return await _databaseContext.Patients.FindAsync(id);
+            return await _databaseContext.Patients
+                .Include(p => p.Appointments)
+                    .ThenInclude(a => a.Doctor)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Patient> PostPatient(Patient patient) 
@@ -80,9 +87,20 @@ namespace workshop.wwwapi.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByIds(int doctorId, int patientId)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            return await _databaseContext.Appointments
+                .Include(a => a.Patient)
+                .Include(a => a.Doctor)
+                .Where(a => a.DoctorId == doctorId && a.PatientId == patientId)
+                .ToListAsync();
+        }
+
+        public async Task<Appointment> PostAppointment(Appointment appointment) 
+        {
+            await _databaseContext.Appointments.AddAsync(appointment);
+            await _databaseContext.SaveChangesAsync();
+            return appointment;
         }
     }
 }

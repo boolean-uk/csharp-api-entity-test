@@ -2,9 +2,11 @@
 
 namespace workshop.wwwapi.Models.TransferModels
 {
-    public class AppointmentWithPasientDTO(DateTime Time, Patient patient)
+    public class AppointmentWithPasientDTO(DateTime Time, int patientId, Patient patient)
     {
         public DateTime Time { get; set; } = Time;
+
+        public int PatientId { get; set; } = patientId;
 
         public string Patient { get; set; } = patient.FullName;
     }
