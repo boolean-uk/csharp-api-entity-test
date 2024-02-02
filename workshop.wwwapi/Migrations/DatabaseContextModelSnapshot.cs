@@ -24,21 +24,49 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("integer")
-                        .HasColumnName("doctor_id");
-
                     b.Property<int>("PatientId")
                         .HasColumnType("integer")
                         .HasColumnName("patient_id");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("integer")
+                        .HasColumnName("doctor_id");
 
                     b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking");
 
-                    b.HasKey("DoctorId", "PatientId");
+                    b.HasKey("PatientId", "DoctorId");
+
+                    b.HasIndex("DoctorId");
 
                     b.ToTable("Appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            PatientId = 1,
+                            DoctorId = 1,
+                            Booking = new DateTime(2023, 5, 7, 8, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 2,
+                            DoctorId = 1,
+                            Booking = new DateTime(2023, 5, 7, 9, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 2,
+                            DoctorId = 2,
+                            Booking = new DateTime(2023, 5, 7, 8, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 1,
+                            DoctorId = 2,
+                            Booking = new DateTime(2023, 5, 7, 9, 30, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
@@ -63,6 +91,20 @@ namespace workshop.wwwapi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Doctors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Empty",
+                            LastName = "Reflections"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Containing",
+                            LastName = "Thoughlessness"
+                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
@@ -101,6 +143,35 @@ namespace workshop.wwwapi.Migrations
                             FirstName = "Bøystein",
                             LastName = "Baugen"
                         });
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
+                {
+                    b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workshop.wwwapi.Models.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }
