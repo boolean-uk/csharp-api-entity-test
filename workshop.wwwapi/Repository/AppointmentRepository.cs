@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
-using workshop.wwwapi.DTOs;
+using workshop.wwwapi.DTOs.Appointments;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository

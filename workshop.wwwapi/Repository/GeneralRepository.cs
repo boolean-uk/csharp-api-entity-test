@@ -6,20 +6,20 @@ namespace workshop.wwwapi.Repository
 {
     public class GeneralRepository<T> : IGeneralRepository<T> where T : class, IEntity
     {
-        private readonly DatabaseContext _context;
+        protected readonly DatabaseContext _context;
         public GeneralRepository(DatabaseContext context) 
         {
             _context = context;
         }
 
-        public async Task<T> Add(T entity)
+        public virtual async Task<T> Add(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task<T> GetById(int id)
+        public virtual async Task<T> GetById(int id)
         {
             T entity = await _context.Set<T>()
                 .FirstOrDefaultAsync(x => x.Id == id)
@@ -27,7 +27,7 @@ namespace workshop.wwwapi.Repository
             return entity;
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
             return await _context.Set<T>().ToListAsync();
         }

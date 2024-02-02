@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using workshop.wwwapi.Models;
 
-namespace workshop.wwwapi.DTOs
+namespace workshop.wwwapi.DTOs.Appointments
 {
     public class AddAppointmentDTO
     {

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
-using Newtonsoft.Json;
 using System.Net.Http.Json;
 using workshop.wwwapi.DTOs;
+using workshop.wwwapi.DTOs.Appointments;
+using workshop.wwwapi.DTOs.Patients;
 
 namespace workshop.tests;
 
@@ -53,7 +53,7 @@ public class Tests
     }
 
     [Test]
-    public async Task GetAllPatients() 
+    public async Task GetAllPatients()
     {
         var response = await client.GetFromJsonAsync<List<GetPatientDTO>>("/surgery/patients");
         Assert.That(response.Any(x => x.FirstName == "Test"), Is.True);

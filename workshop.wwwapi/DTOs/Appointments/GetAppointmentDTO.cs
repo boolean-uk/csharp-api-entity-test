@@ -1,4 +1,4 @@
-﻿namespace workshop.wwwapi.DTOs
+﻿namespace workshop.wwwapi.DTOs.Appointments
 {
     public class GetAppointmentDTO
     {

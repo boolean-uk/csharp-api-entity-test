@@ -20,6 +20,11 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>()
                 .HasKey(a => new { a.PatientId, a.DoctorId });
 
+            modelBuilder.Entity<Prescription>()
+                .HasMany(e => e.Medicines)
+                .WithMany(e => e.Prescriptions)
+                .UsingEntity<MedicinePrescription>();
+
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(
                 new Patient() { Id = 1, FirstName = "Saul", LastName = "Hudson" },
@@ -31,25 +36,41 @@ namespace workshop.wwwapi.Data
                 new Doctor() { Id = 2, Name = "Dr. Phil" }
             );
 
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine() { Id = 1, Name = "Paracetamol", Instruction = "1-2 pills maximum every day", Quantity = 10 },
+                new Medicine() { Id = 2, Name = "Ibuprofen", Instruction = "2 pills maximum every day", Quantity = 5 }
+            );
+
+            modelBuilder.Entity<Prescription>().HasData(
+                new Prescription() { Id = 1 },
+                new Prescription() { Id = 2 }
+            );
+
+            modelBuilder.Entity<MedicinePrescription>().HasData(
+                new MedicinePrescription() { MedicineId = 2, PrescriptionId = 1 },
+                new MedicinePrescription() { MedicineId = 1, PrescriptionId = 1 },
+                new MedicinePrescription() { MedicineId = 1, PrescriptionId = 2 }
+            );
+
             modelBuilder.Entity<Appointment>().HasData(
                 new Appointment()
                 {
-                    AppointmentDate = DateTime.Parse("2024/10/12 12:00:00"),
+                    AppointmentDate = DateTime.Parse("2024/10/12"),
                     DoctorId = 1,
-                    PatientId = 1
+                    PatientId = 1,
+                    PrescriptionId = 1,
                 },
                 new Appointment()
                 {
-                    AppointmentDate = DateTime.Parse("2024/10/12 16:00:00"),
+                    AppointmentDate = DateTime.Parse("2024/10/14"),
                     DoctorId = 2,
-                    PatientId = 2
+                    PatientId = 2,
+                    PrescriptionId = 2,
                 }
             );
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
 
@@ -58,5 +79,8 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<MedicinePrescription> MedicinePrescriptions { get; set; }
     }
 }

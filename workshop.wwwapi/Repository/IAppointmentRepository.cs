@@ -1,4 +1,4 @@
-﻿using workshop.wwwapi.DTOs;
+﻿using workshop.wwwapi.DTOs.Appointments;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository

@@ -13,6 +13,7 @@ builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IGeneralRepository<Doctor>, GeneralRepository<Doctor>>();
 builder.Services.AddScoped<IGeneralRepository<Patient>, GeneralRepository<Patient>>();
+builder.Services.AddScoped<PrescriptionRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

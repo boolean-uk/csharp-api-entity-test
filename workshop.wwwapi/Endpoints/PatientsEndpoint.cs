@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using workshop.wwwapi.DTOs;
+using workshop.wwwapi.DTOs.Patients;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 

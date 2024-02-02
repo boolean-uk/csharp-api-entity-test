@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using workshop.wwwapi.DTOs;
-using workshop.wwwapi.Models;
-using workshop.wwwapi.Repository;
-
-namespace workshop.wwwapi.Endpoints
+﻿namespace workshop.wwwapi.Endpoints
 {
     public static class SurgeryEndpoint
     {
@@ -25,6 +20,10 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentbyid", AppointmentsEndpoint.GetAppointmentByIds);
             surgeryGroup.MapPost("/appointments", AppointmentsEndpoint.AddAppointment);
             surgeryGroup.MapGet("/appointments", AppointmentsEndpoint.GetAll);
+
+            surgeryGroup.MapGet("/prescriptions", PrescriptionEndpoint.GetAll);
+            surgeryGroup.MapGet("/prescriptions/{id}", PrescriptionEndpoint.Get);
+            surgeryGroup.MapPost("/prescriptions", PrescriptionEndpoint.Add);
         }
     }
 }
