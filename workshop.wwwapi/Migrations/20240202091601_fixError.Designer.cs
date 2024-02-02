@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240202081445_FixDoctor")]
-    partial class FixDoctor
+    [Migration("20240202091601_fixError")]
+    partial class fixError
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,7 +51,19 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTimeOffset(new DateTime(2024, 2, 3, 9, 14, 43, 492, DateTimeKind.Unspecified).AddTicks(4798), new TimeSpan(0, 1, 0, 0, 0))
+                            Booking = new DateTimeOffset(new DateTime(2024, 2, 3, 10, 16, 1, 692, DateTimeKind.Unspecified).AddTicks(5896), new TimeSpan(0, 1, 0, 0, 0))
+                        },
+                        new
+                        {
+                            DoctorId = 1,
+                            PatientId = 2,
+                            Booking = new DateTimeOffset(new DateTime(2024, 2, 7, 10, 16, 1, 692, DateTimeKind.Unspecified).AddTicks(5959), new TimeSpan(0, 1, 0, 0, 0))
+                        },
+                        new
+                        {
+                            DoctorId = 2,
+                            PatientId = 1,
+                            Booking = new DateTimeOffset(new DateTime(2024, 5, 2, 10, 16, 1, 692, DateTimeKind.Unspecified).AddTicks(5963), new TimeSpan(0, 2, 0, 0, 0))
                         });
                 });
 

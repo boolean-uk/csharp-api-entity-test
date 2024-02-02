@@ -13,7 +13,7 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,18 @@ namespace workshop.wwwapi.Data
                 {
                     Booking = new DateTimeOffset(DateTime.Now.AddDays(1)),  // Example date for the first appointment
                     DoctorId = 1,  // Assign the doctor's Id
+                    PatientId = 1   // Assign the patient's Id
+                },
+                new Appointment
+                {
+                    Booking = new DateTimeOffset(DateTime.Now.AddDays(5)),  // Example date for the first appointment
+                    DoctorId = 1,  // Assign the doctor's Id
+                    PatientId = 2   // Assign the patient's Id
+                },
+                new Appointment
+                {
+                    Booking = new DateTimeOffset(DateTime.Now.AddMonths(3)),  // Example date for the first appointment
+                    DoctorId = 2,  // Assign the doctor's Id
                     PatientId = 1   // Assign the patient's Id
                 }
             );

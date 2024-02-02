@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class FixDoctor : Migration
+    public partial class fixError : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -86,7 +86,12 @@ namespace workshop.wwwapi.Migrations
             migrationBuilder.InsertData(
                 table: "Appointments",
                 columns: new[] { "fk_doctor_id", "fk_patient_id", "booking" },
-                values: new object[] { 1, 1, new DateTimeOffset(new DateTime(2024, 2, 3, 9, 14, 43, 492, DateTimeKind.Unspecified).AddTicks(4798), new TimeSpan(0, 1, 0, 0, 0)) });
+                values: new object[,]
+                {
+                    { 1, 1, new DateTimeOffset(new DateTime(2024, 2, 3, 10, 16, 1, 692, DateTimeKind.Unspecified).AddTicks(5896), new TimeSpan(0, 1, 0, 0, 0)) },
+                    { 1, 2, new DateTimeOffset(new DateTime(2024, 2, 7, 10, 16, 1, 692, DateTimeKind.Unspecified).AddTicks(5959), new TimeSpan(0, 1, 0, 0, 0)) },
+                    { 2, 1, new DateTimeOffset(new DateTime(2024, 5, 2, 10, 16, 1, 692, DateTimeKind.Unspecified).AddTicks(5963), new TimeSpan(0, 2, 0, 0, 0)) }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_fk_patient_id",
