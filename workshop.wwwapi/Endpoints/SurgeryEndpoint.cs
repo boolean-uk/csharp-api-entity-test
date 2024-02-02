@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 
@@ -41,6 +42,31 @@ namespace workshop.wwwapi.Endpoints
             return results;
         }
     }
+    public class GetDoctorDTO
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; }
+        public List<AppointmentDTO> Appointments { get; set; } = new List<AppointmentDTO>();
+        public GetDoctorDTO(Doctor doctor)
+        {
+            Id = doctor.Id;
+            FullName = doctor.FullName;
+            Appointments = new List<AppointmentDTO>();
+            foreach (var appointment in doctor.Appointments)
+            {
+                Appointments.Add(new AppointmentDTO(appointment));
+            }
+        }
+        public static List<GetDoctorDTO> FromRepository(IEnumerable<Doctor> doctors)
+        {
+            var results = new List<GetDoctorDTO>();
+            foreach (var doctor in doctors)
+            {
+                results.Add(new GetDoctorDTO(doctor));
+            }
+            return results;
+        }
+    }
     public static class SurgeryEndpoint
     {
         //TODO:  add additional endpoints in here according to the requirements in the README.md 
@@ -49,8 +75,8 @@ namespace workshop.wwwapi.Endpoints
             var surgeryGroup = app.MapGroup("surgery");
 
             surgeryGroup.MapGet("/patients", GetPatients);
-            surgeryGroup.MapGet("/patient", GetPatient);
-            surgeryGroup.MapPost("/patient", CreatePatient);
+            surgeryGroup.MapGet("/patients/{id}", GetPatient);
+            surgeryGroup.MapPost("/patients", CreatePatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
         }
@@ -65,6 +91,10 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetPatient(IRepository repository, int id)
         {
             var patient = new GetPatientDTO(await repository.GetPatient(id));
+            if(patient == null)
+            {
+                return TypedResults.NotFound();
+            }
             return TypedResults.Ok(patient);
         }
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -84,13 +114,18 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetDoctors());
+            var doctor = GetDoctorDTO.FromRepository(await repository.GetDoctors());
+            if(doctor == null)
+            { 
+                return TypedResults.NotFound(); 
+            }
+            return TypedResults.Ok(doctor);
         }
         
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
+        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int doctorId)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(doctorId));
         }
     }
 }
