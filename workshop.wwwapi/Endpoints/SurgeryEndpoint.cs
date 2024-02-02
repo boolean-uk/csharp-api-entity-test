@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.Enums;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.DTOs;
 using workshop.wwwapi.Models.Post;
@@ -17,17 +18,17 @@ namespace workshop.wwwapi.Endpoints
 
             patients.MapGet("", GetPatients);
             patients.MapGet("/{id}", GetPatient);
-            patients.MapPut("/{id}", AddPatient);
+            patients.MapPost("/{id}", AddPatient);
 
             doctors.MapGet("", GetDoctors);
             doctors.MapGet("/{id}", GetDoctor);
-            doctors.MapPut("/{id}", AddDoctor)
+            doctors.MapPost("/{id}", AddDoctor)
                 ;
             appointments.MapGet("", GetAppointments);
             appointments.MapGet("/{doctorId}&{patientId}", GetAppointment);
             appointments.MapGet("bydoctor/{id}", GetAppointmentsByDoctor);
             appointments.MapGet("bypatient/{id}", GetAppointmentsByPatient);
-            appointments.MapPut("/{id}", AddAppointment);
+            appointments.MapPost("/{id}", AddAppointment);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -202,6 +203,10 @@ namespace workshop.wwwapi.Endpoints
             if (!DateTime.TryParse(appointmentPost.BookingTime.ToString(), out DateTime time))
             {
                 return TypedResults.BadRequest("Invalid datetime input!");
+            }
+
+            if (!Enum.IsDefined(typeof(AppointmentType), appointmentPost.AppointmentType)) {
+                return TypedResults.BadRequest("Invalid appointment type! Use 0 for an online appointment and 1 for an in person appointment");
             }
 
             var appointment = await repository.AddAppointment(appointmentPost);
