@@ -20,7 +20,10 @@ namespace workshop.wwwapi.Data
             
 
             //TODO: Seed Data Here
+            Seeder seeder = new Seeder();
+            modelBuilder.Entity<Patient>().HasData(seeder.Patients);
 
+            
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
