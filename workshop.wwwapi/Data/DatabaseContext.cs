@@ -11,13 +11,11 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Patient>().HasMany(p => p.Appointments).WithOne(a => a.Patient).HasForeignKey(a => a.PatientId);
-            modelBuilder.Entity<Doctor>().HasMany(d => d.Appointments).WithOne(a => a.Doctor).HasForeignKey(a => a.DoctorId);
             modelBuilder.Entity<Appointment>().HasKey(a => new { a.PatientId, a.DoctorId });
 
             //TODO: Seed Data Here
