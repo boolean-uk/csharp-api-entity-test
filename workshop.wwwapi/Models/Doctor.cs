@@ -15,5 +15,9 @@ namespace workshop.wwwapi.Models
 
         [Column("last_name")]
         public string LastName { get; set; }
+
+        [Column("appointments")]
+        [ForeignKey("appointments")]
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

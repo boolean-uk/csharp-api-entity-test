@@ -1,4 +1,5 @@
 ﻿using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.DTOs;
 
 namespace workshop.wwwapi.Repository
 {
