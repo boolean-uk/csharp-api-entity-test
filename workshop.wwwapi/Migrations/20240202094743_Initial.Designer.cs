@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240201105126_initial")]
-    partial class initial
+    [Migration("20240202094743_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,18 +29,15 @@ namespace workshop.wwwapi.Migrations
                 {
                     b.Property<int>("PatientId")
                         .HasColumnType("integer")
-                        .HasColumnName("Patientid");
+                        .HasColumnName("Patient_id");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
 
                     b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("Booking");
 
                     b.HasKey("PatientId", "DoctorId");
 
@@ -53,22 +50,19 @@ namespace workshop.wwwapi.Migrations
                         {
                             PatientId = 1,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 2, 10, 51, 26, 38, DateTimeKind.Utc).AddTicks(9943),
-                            Id = 0
+                            Booking = new DateTime(2024, 2, 3, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6972)
                         },
                         new
                         {
                             PatientId = 2,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 3, 10, 51, 26, 38, DateTimeKind.Utc).AddTicks(9952),
-                            Id = 0
+                            Booking = new DateTime(2024, 2, 4, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6984)
                         },
                         new
                         {
                             PatientId = 1,
                             DoctorId = 2,
-                            Booking = new DateTime(2024, 2, 4, 10, 51, 26, 38, DateTimeKind.Utc).AddTicks(9953),
-                            Id = 0
+                            Booking = new DateTime(2024, 2, 5, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6985)
                         });
                 });
 

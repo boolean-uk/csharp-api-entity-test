@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,13 +45,12 @@ namespace workshop.wwwapi.Migrations
                 columns: table => new
                 {
                     doctor_id = table.Column<int>(type: "integer", nullable: false),
-                    Patientid = table.Column<int>(type: "integer", nullable: false),
-                    id = table.Column<int>(type: "integer", nullable: false),
+                    Patient_id = table.Column<int>(type: "integer", nullable: false),
                     Booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Appointments", x => new { x.Patientid, x.doctor_id });
+                    table.PrimaryKey("PK_Appointments", x => new { x.Patient_id, x.doctor_id });
                     table.ForeignKey(
                         name: "FK_Appointments_Doctors_doctor_id",
                         column: x => x.doctor_id,
@@ -59,8 +58,8 @@ namespace workshop.wwwapi.Migrations
                         principalColumn: "doctor_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Appointments_Patients_Patientid",
-                        column: x => x.Patientid,
+                        name: "FK_Appointments_Patients_Patient_id",
+                        column: x => x.Patient_id,
                         principalTable: "Patients",
                         principalColumn: "patient_id",
                         onDelete: ReferentialAction.Cascade);
@@ -86,12 +85,12 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "Appointments",
-                columns: new[] { "doctor_id", "Patientid", "Booking", "id" },
+                columns: new[] { "doctor_id", "Patient_id", "Booking" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 2, 2, 10, 51, 26, 38, DateTimeKind.Utc).AddTicks(9943), 0 },
-                    { 2, 1, new DateTime(2024, 2, 4, 10, 51, 26, 38, DateTimeKind.Utc).AddTicks(9953), 0 },
-                    { 1, 2, new DateTime(2024, 2, 3, 10, 51, 26, 38, DateTimeKind.Utc).AddTicks(9952), 0 }
+                    { 1, 1, new DateTime(2024, 2, 3, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6972) },
+                    { 2, 1, new DateTime(2024, 2, 5, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6985) },
+                    { 1, 2, new DateTime(2024, 2, 4, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6984) }
                 });
 
             migrationBuilder.CreateIndex(
