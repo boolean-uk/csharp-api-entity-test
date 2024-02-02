@@ -1,4 +1,5 @@
-﻿using workshop.wwwapi.Models.PureModels;
+﻿using workshop.wwwapi.Models.JunctionTable;
+using workshop.wwwapi.Models.PureModels;
 
 namespace workshop.wwwapi.Repository
 {
@@ -25,5 +26,14 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<Appointment>> GetAppointmentsByIds(int doctorId, int patientId);
 
         Task<Appointment> PostAppointment(Appointment appointment);
+
+        Task<IEnumerable<Prescription>> GetPrescriptions();
+
+        Task<Prescription?> GetSpecificPrescription(int id);
+
+        Task<IEnumerable<Medicine>> GetMedicines();
+
+        Task<Prescription> PostPrescription(Prescription prescription);
+        Task<PrescriptionMedicine> PostPrescriptionMedicine(PrescriptionMedicine pm);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using workshop.wwwapi.Data;
+using workshop.wwwapi.Models.JunctionTable;
 using workshop.wwwapi.Models.PureModels;
 
 namespace workshop.wwwapi.Repository
@@ -20,7 +21,7 @@ namespace workshop.wwwapi.Repository
                 .ToListAsync();
         }
 
-        public async Task<Patient?> GetPatientById(int id) 
+        public async Task<Patient?> GetPatientById(int id)
         {
             return await _databaseContext.Patients
                 .Include(p => p.Appointments)
@@ -29,7 +30,7 @@ namespace workshop.wwwapi.Repository
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Patient> PostPatient(Patient patient) 
+        public async Task<Patient> PostPatient(Patient patient)
         {
             await _databaseContext.Patients.AddAsync(patient);
             await _databaseContext.SaveChangesAsync();
@@ -45,7 +46,7 @@ namespace workshop.wwwapi.Repository
                 .ToListAsync();
         }
 
-        public async Task<Doctor?> GetSpecificDoctor(int id) 
+        public async Task<Doctor?> GetSpecificDoctor(int id)
         {
             return await _databaseContext.Doctors
                 .Include(d => d.Appointments)
@@ -54,14 +55,14 @@ namespace workshop.wwwapi.Repository
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Doctor> PostDoctor(Doctor doctorInput) 
+        public async Task<Doctor> PostDoctor(Doctor doctorInput)
         {
             await _databaseContext.Doctors.AddAsync(doctorInput);
             await _databaseContext.SaveChangesAsync();
             return doctorInput;
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointments() 
+        public async Task<IEnumerable<Appointment>> GetAppointments()
         {
             return await _databaseContext.Appointments
                 .Include(a => a.Patient)
@@ -69,7 +70,7 @@ namespace workshop.wwwapi.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsForDoctors(int id) 
+        public async Task<IEnumerable<Appointment>> GetAppointmentsForDoctors(int id)
         {
             return await _databaseContext.Appointments
                 .Include(a => a.Patient)
@@ -78,7 +79,7 @@ namespace workshop.wwwapi.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsForPatients(int id) 
+        public async Task<IEnumerable<Appointment>> GetAppointmentsForPatients(int id)
         {
             return await _databaseContext.Appointments
                 .Include(a => a.Patient)
@@ -96,11 +97,58 @@ namespace workshop.wwwapi.Repository
                 .ToListAsync();
         }
 
-        public async Task<Appointment> PostAppointment(Appointment appointment) 
+        public async Task<Appointment> PostAppointment(Appointment appointment)
         {
             await _databaseContext.Appointments.AddAsync(appointment);
             await _databaseContext.SaveChangesAsync();
             return appointment;
+        }
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions
+                .Include(p => p.PrescriptionMedicine)
+                    .ThenInclude(pm => pm.Medicine)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                .ToListAsync();
+        }
+
+        public async Task<Prescription?> GetSpecificPrescription(int id) 
+        {
+            return await _databaseContext.Prescriptions
+                .Include(p => p.PrescriptionMedicine)
+                    .ThenInclude(pm => pm.Medicine)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Medicine>> GetMedicines() 
+        {
+            return await _databaseContext.Medicines
+                .Include(m => m.PrescriptionMedicine)
+                    .ThenInclude(pm => pm.Prescription)
+                .ToListAsync();
+        }
+
+        public async Task<Prescription> PostPrescription(Prescription prescription) 
+        {
+            await _databaseContext.Prescriptions.AddAsync(prescription);
+            await _databaseContext.SaveChangesAsync();
+            return prescription;
+        }
+
+        public async Task<PrescriptionMedicine> PostPrescriptionMedicine(PrescriptionMedicine pm)
+        {
+            await _databaseContext.PrescriptionMedicines.AddAsync(pm);
+            await _databaseContext.SaveChangesAsync();
+            return pm;
         }
     }
 }

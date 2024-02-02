@@ -1,6 +1,6 @@
 ﻿using workshop.wwwapi.Models.PureModels;
 
-namespace workshop.wwwapi.Models.TransferModels
+namespace workshop.wwwapi.Models.TransferModels.Appointments
 {
     public class AppointmentWithPasientDTO(DateTime Time, int patientId, Patient patient)
     {
