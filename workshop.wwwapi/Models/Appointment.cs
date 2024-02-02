@@ -1,14 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace workshop.wwwapi.Models
+namespace workshop.wwwapi.Models;
+
+[Table("appointment")]
+public class Appointment
 {
-    //TODO: decorate class/columns accordingly
-    public class Appointment
-    {
-        
-        public DateTime Booking { get; set; }
-        public int DoctorId { get; set; }
-        public int PatientId { get; set; }
-
-    }
+    [Column("booking")]
+    public DateTime Booking { get; set; }
+    [Column("ppk_doctor_id")]
+    [Key]
+    public int DoctorId { get; set; }
+    public Doctor Doctor { get; set; }
+    [Column("ppk_patient_id")]
+    [Key]
+    public int PatientId { get; set; }
+    public Patient Patient { get; set; }
 }

@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace workshop.wwwapi.Models
+namespace workshop.wwwapi.Models;
+
+[Table("doctor")]
+public class Doctor
 {
-    //TODO: decorate class/columns accordingly    
-    public class Doctor
-    {        
-        public int Id { get; set; }        
-        public string FullName { get; set; }
-    }
+    [Column("id")]
+    public int Id { get; set; }
+    [Column("full_name")]
+    public string FullName { get; set; }
+    public ICollection<Appointment> Appointments { get; set; }
 }
