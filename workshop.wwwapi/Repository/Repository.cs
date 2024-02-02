@@ -128,14 +128,15 @@ namespace workshop.wwwapi.Repository
         {
             var appointments = await _databaseContext.Appointments.Include(a => a.Patient).Include(a => a.Doctor).ToListAsync();
 
-            var Appointmentsdtos = appointments.Select(A => new AppointmentDto
+            var Appointmentsdtos = appointments.Select(a => new AppointmentDto
             {
               
-                PatientId = A.PatientId,
-                DoctorId = A.DoctorId,
-                PatientFullName = A.Patient.FullName,
-                DoctorFullName = A.Doctor.FullName,
-                AppointmentDate = A.Booking
+                PatientId = a.PatientId,
+                DoctorId = a.DoctorId,
+                PatientFullName = a.Patient.FullName,
+                DoctorFullName = a.Doctor.FullName,
+                AppointmentDate = a.Booking,
+                Type = a.Type
 
             });
 
@@ -153,7 +154,8 @@ namespace workshop.wwwapi.Repository
                 PatientFullName = a.Patient.FullName,
                 DoctorFullName = a.Doctor.FullName,
                 AppointmentDate = a.Booking,
-            
+                Type = a.Type
+
             });
 
             return appointmentDtos;
@@ -170,6 +172,7 @@ namespace workshop.wwwapi.Repository
                 PatientFullName = a.Patient.FullName,
                 DoctorFullName = a.Doctor.FullName,
                 AppointmentDate = a.Booking,
+                Type = a.Type
 
             });
 
@@ -189,7 +192,8 @@ namespace workshop.wwwapi.Repository
                     DoctorId = appointment.DoctorId,
                     PatientFullName = appointment.Patient.FullName,
                     DoctorFullName = appointment.Doctor.FullName,
-                    AppointmentDate = appointment.Booking
+                    AppointmentDate = appointment.Booking,
+                    Type = appointment.Type
                 }
                 : null;
         }
@@ -200,8 +204,9 @@ namespace workshop.wwwapi.Repository
                 {
                     PatientId = createAppointmentDto.PatientId,
                     DoctorId = createAppointmentDto.DoctorId,
-                    Booking = createAppointmentDto.AppointmentDate
-                    
+                    Booking = createAppointmentDto.AppointmentDate,
+                    Type = createAppointmentDto.Type
+
                 };
 
                 _databaseContext.Appointments.Add(appointment);
@@ -215,8 +220,9 @@ namespace workshop.wwwapi.Repository
                     DoctorId = appointment.DoctorId,
                     PatientFullName = appointment.Patient.FullName,
                     DoctorFullName = appointment.Doctor.FullName,
-                    AppointmentDate = appointment.Booking
-                };
+                    AppointmentDate = appointment.Booking,
+                    Type = appointment.Type
+            };
         }
 
 

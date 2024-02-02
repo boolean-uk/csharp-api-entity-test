@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240202094743_Initial")]
-    partial class Initial
+    [Migration("20240202125255_AppointmentType")]
+    partial class AppointmentType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,10 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("Booking");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("Appointment_type");
+
                     b.HasKey("PatientId", "DoctorId");
 
                     b.HasIndex("DoctorId");
@@ -50,19 +54,22 @@ namespace workshop.wwwapi.Migrations
                         {
                             PatientId = 1,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 3, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6972)
+                            Booking = new DateTime(2024, 2, 3, 12, 52, 54, 184, DateTimeKind.Utc).AddTicks(8754),
+                            Type = 0
                         },
                         new
                         {
                             PatientId = 2,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 4, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6984)
+                            Booking = new DateTime(2024, 2, 4, 12, 52, 54, 184, DateTimeKind.Utc).AddTicks(8764),
+                            Type = 1
                         },
                         new
                         {
                             PatientId = 1,
                             DoctorId = 2,
-                            Booking = new DateTime(2024, 2, 5, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6985)
+                            Booking = new DateTime(2024, 2, 5, 12, 52, 54, 184, DateTimeKind.Utc).AddTicks(8765),
+                            Type = 0
                         });
                 });
 

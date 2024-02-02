@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using workshop.wwwapi.Enum;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Data
@@ -42,9 +43,9 @@ namespace workshop.wwwapi.Data
 
             
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { PatientId = 1, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(1) },
-                new Appointment { PatientId = 2, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(2) },
-                new Appointment { PatientId = 1, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(3) }
+                new Appointment { PatientId = 1, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(1), Type = AppointmentType.InPerson },
+                new Appointment { PatientId = 2, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(2), Type = AppointmentType.Online },
+                new Appointment { PatientId = 1, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(3), Type = AppointmentType.InPerson }
            
             );
         }

@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class AppointmentType : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,7 +46,8 @@ namespace workshop.wwwapi.Migrations
                 {
                     doctor_id = table.Column<int>(type: "integer", nullable: false),
                     Patient_id = table.Column<int>(type: "integer", nullable: false),
-                    Booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Appointment_type = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,12 +86,12 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "Appointments",
-                columns: new[] { "doctor_id", "Patient_id", "Booking" },
+                columns: new[] { "doctor_id", "Patient_id", "Booking", "Appointment_type" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 2, 3, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6972) },
-                    { 2, 1, new DateTime(2024, 2, 5, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6985) },
-                    { 1, 2, new DateTime(2024, 2, 4, 9, 47, 42, 848, DateTimeKind.Utc).AddTicks(6984) }
+                    { 1, 1, new DateTime(2024, 2, 3, 12, 52, 54, 184, DateTimeKind.Utc).AddTicks(8754), 0 },
+                    { 2, 1, new DateTime(2024, 2, 5, 12, 52, 54, 184, DateTimeKind.Utc).AddTicks(8765), 0 },
+                    { 1, 2, new DateTime(2024, 2, 4, 12, 52, 54, 184, DateTimeKind.Utc).AddTicks(8764), 1 }
                 });
 
             migrationBuilder.CreateIndex(
