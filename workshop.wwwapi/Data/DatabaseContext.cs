@@ -17,9 +17,11 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+
 
             //TODO: Seed Data Here
+            Seeder seeder = new();
+            modelBuilder.Entity<Patient>().HasData(seeder.Patients);
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -11,19 +11,37 @@ namespace workshop.wwwapi.Endpoints
             var surgeryGroup = app.MapGroup("surgery");
 
             surgeryGroup.MapGet("/patients", GetPatients);
+            surgeryGroup.MapGet("/patients/{id}", GetPatientById);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
         }
+
+
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> GetPatients(IRepository repository)
         { 
             return TypedResults.Ok(await repository.GetPatients());
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPatientById(IRepository repository, int id)
+        {
+            if (await repository.PatientIdExists(id))
+            {
+                return TypedResults.Ok(await repository.GetPatientById(id));
+            }
+            return TypedResults.NotFound($"Couldn't find patient of id: {id}");
+        }
+
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
             return TypedResults.Ok(await repository.GetPatients());
         }
+
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
