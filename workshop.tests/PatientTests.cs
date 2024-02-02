@@ -20,3 +20,9 @@ public class Tests
         Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
     }
 }
+
+
+public class Alpha<T> where T : class
+{
+    List<class> myTest;
+}
