@@ -12,15 +12,59 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Doctor>()
+                .HasMany(x => x.Appointments)
+                .WithOne(x => x.Doctor)
+                .HasForeignKey(x => x.DoctorId);
+
+            modelBuilder.Entity<Patient>()
+                .HasMany(x => x.Appointments)
+                .WithOne(x => x.Patient)
+                .HasForeignKey(x => x.PatientId);
+
+            modelBuilder.Entity<Appointment>()
+                .HasKey(x => new { x.PatientId, x.DoctorId });
 
             //TODO: Seed Data Here
+            Patient firstPatient = new Patient { 
+                Id = 1, 
+                FullName = "Georgy George" };
 
+            Patient secondPatient = new Patient { 
+                Id = 2, 
+                FullName = "Bobby Bob" };
+
+            Doctor firstDoctor = new Doctor { 
+                Id = 1, 
+                FullName = "Doctor Good" };
+
+            Doctor secondDoctor = new Doctor { 
+                Id = 2, 
+                FullName = "Doctor Bad" };
+
+            Appointment firstAppointment = new Appointment { 
+                DoctorId = 1, 
+                PatientId = 2, 
+                Booking = DateTime.UtcNow.AddDays(1) };
+
+            Appointment secondAppointment = new Appointment { 
+                DoctorId = 2, 
+                PatientId = 1, 
+                Booking = DateTime.UtcNow.AddDays(2) };
+
+            modelBuilder.Entity<Patient>()
+                .HasData(firstPatient, secondPatient);
+
+            modelBuilder.Entity<Doctor>()
+                .HasData(firstDoctor, secondDoctor);
+
+            modelBuilder.Entity<Appointment>()
+                .HasData(firstAppointment, secondAppointment);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -29,7 +73,6 @@ namespace workshop.wwwapi.Data
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
             
         }
-
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
