@@ -1,8 +1,10 @@
 # Instructions
 
-We are going to model the API for a doctor's clinic. The Clinic has Doctors, Patients and we need an Appointment system for patients to book appointments with doctors.
+We are going to model the API for a doctor's clinic. The Clinic has Doctors, 
+Patients and we need an Appointment system for patients to book appointments with doctors.
 
-The focus of the exercise is on: connecting to an external database; defining models, relations and migrations; writing some basic tests and implementing DTOs. 
+The focus of the exercise is on: connecting to an external database; defining models, 
+relations and migrations; writing some basic tests and implementing DTOs. 
 
 We have provided some basic scaffolding for you to get started.
 
