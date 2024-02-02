@@ -13,6 +13,7 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<AppointmentDTO>> GetAppointments();
         Task<IEnumerable<AppointmentDTO>> GetAppointmentsByPatientId(int id);
         Task<IEnumerable<AppointmentDTO>> GetAppointmentsByDoctorId(int id);
+        Task<AppointmentDTO?> GetAppointmentByIds(int doctorid, int patientid);
 
     }
 }

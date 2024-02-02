@@ -56,5 +56,20 @@ namespace workshop.tests
             Assert.That(response[0].DoctorName, Is.EqualTo("Doctor Who"));
             Assert.That(response[0].BookingTime, Is.LessThan(DateTime.UtcNow));
         }
+
+        [Test]
+        public async Task GetAppointmentByIds()
+        {
+
+            // Act
+            var response = await _httpClient.GetFromJsonAsync<AppointmentDTO>("/appointments/1/1");
+
+            // Assert
+            Assert.That(response.DoctorId, Is.EqualTo(1));
+            Assert.That(response.DoctorName, Is.EqualTo("Doctor Who"));
+            Assert.That(response.PatientId, Is.EqualTo(1));
+            Assert.That(response.PatientName, Is.EqualTo("Java Script"));
+            Assert.That(response.BookingTime, Is.LessThan(DateTime.UtcNow));
+        }
     }
 }

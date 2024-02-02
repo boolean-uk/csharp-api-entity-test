@@ -172,5 +172,26 @@ namespace workshop.wwwapi.Repository
                       })
                 .ToListAsync();
         }
+
+        public async Task<AppointmentDTO?> GetAppointmentByIds(int doctorid, int patientid)
+        {
+            return await _databaseContext.Appointments
+                .Where(x => x.PatientId == patientid && x.DoctorId == doctorid)
+                .Join(_databaseContext.Doctors,
+                      appointment => appointment.DoctorId,
+                      doctor => doctor.Id,
+                      (appointment, doctor) => new { Appointment = appointment, DoctorName = doctor.FullName })
+                .Join(_databaseContext.Patients,
+                      combined => combined.Appointment.PatientId,
+                      patient => patient.Id,
+                      (combined, patient) => new AppointmentDTO()
+                      {
+                          DoctorId = combined.Appointment.DoctorId,
+                          DoctorName = combined.DoctorName,
+                          PatientId = combined.Appointment.PatientId,
+                          PatientName = patient.FullName
+                      })
+                .FirstOrDefaultAsync();
+        }
     }
 }

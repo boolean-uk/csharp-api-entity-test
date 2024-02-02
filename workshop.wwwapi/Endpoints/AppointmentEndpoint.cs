@@ -13,6 +13,7 @@ namespace workshop.wwwapi.Endpoints
             appointmentGroup.MapGet("/", GetAppointments);
             appointmentGroup.MapGet("/patient/{id}", GetAppointmentsByPatientId);
             appointmentGroup.MapGet("/doctor/{id}", GetAppointmentsByDoctorId);
+            appointmentGroup.MapGet("/{doctorid}/{patientid}", GetAppointmentByIds);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointments(IRepository repository)
@@ -34,6 +35,15 @@ namespace workshop.wwwapi.Endpoints
         {
             IEnumerable<AppointmentDTO> result = await repository.GetAppointmentsByDoctorId(id);
             if (!result.Any()) { return TypedResults.NotFound($"Appointments for Doctor with id: {id} was not found"); }
+            return TypedResults.Ok(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetAppointmentByIds(int doctorid, int patientid, IRepository repository)
+        {
+            AppointmentDTO result = await repository.GetAppointmentByIds(doctorid, patientid);
+            if (result == null) { return TypedResults.NotFound($"Appointment with doctor id: {doctorid}, patient id: {patientid} was not found"); }
             return TypedResults.Ok(result);
         }
     }
