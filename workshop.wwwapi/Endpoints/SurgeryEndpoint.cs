@@ -16,10 +16,10 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients/{id}", GetAPatient);
-            surgeryGroup.MapPost("/patients/{id}", CreatePatient);
+            surgeryGroup.MapPost("/patients/", CreatePatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/doctors/{Id}", GetADoctor);
-            surgeryGroup.MapPost("/doctors/{Id}", CreateDoctor);
+            surgeryGroup.MapPost("/doctors/", CreateDoctor);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbyPatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointment", GetAppointments);
