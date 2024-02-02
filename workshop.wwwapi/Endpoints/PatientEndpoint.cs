@@ -6,13 +6,11 @@ namespace workshop.wwwapi.Endpoints
 {
     public static class PatientEndpoint
     {
-        //TODO:  add additional endpoints in here according to the requirements in the README.md 
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
             var patientGroup = app.MapGroup("patients");
             patientGroup.MapGet("/patients", GetPatients);
             patientGroup.MapGet("/patients/{id}", GetPatientById);
-            //surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)

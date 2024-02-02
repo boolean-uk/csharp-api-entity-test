@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly    
     [Table("patients")]
     public class Patient
     {
