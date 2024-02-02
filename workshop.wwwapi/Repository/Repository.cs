@@ -39,7 +39,7 @@ namespace workshop.wwwapi.Repository
             {
                 await _databaseContext.Patients.AddAsync(patient);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -55,7 +55,7 @@ namespace workshop.wwwapi.Repository
                 patient.Appointments.Add(appointment);
                 doctor.Appointments.Add(appointment);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -75,7 +75,7 @@ namespace workshop.wwwapi.Repository
             {
                 await _databaseContext.Doctors.AddAsync(doctor);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }

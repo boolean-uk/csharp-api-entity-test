@@ -98,6 +98,7 @@ namespace workshop.wwwapi.DTO
         public PatientDTO Patient { get; set; }
         public int DoctorId { get; set; }
         public DoctorDTO Doctor { get; set; }
+        public AppointmentType Type { get; set; }
         public AppointmentDTO(Appointment appointment)
         {
             Booking = appointment.Booking;
@@ -105,6 +106,7 @@ namespace workshop.wwwapi.DTO
             Patient = new PatientDTO(appointment.Patient);
             DoctorId = appointment.DoctorId;
             Doctor = new DoctorDTO(appointment.Doctor);
+            Type = appointment.Type;
         }
     }
 }

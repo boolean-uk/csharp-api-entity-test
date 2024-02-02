@@ -30,16 +30,16 @@ namespace workshop.wwwapi.Data
                 new Patient {Id = 2, FullName = "Lionel Messi"},
                 new Patient {Id = 3, FullName = "Erling Braut Haaland"});
 
-            /* List<Appointment> appointments = new List<Appointment>();
+          /*  List<Appointment> appointments = new List<Appointment>();
 
-                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 1, DoctorId = 1 });
-                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 2, DoctorId = 1 });
-                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 3, DoctorId = 2 });*/
-
-            /* modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 1, DoctorId = 1 },
-                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 2, DoctorId = 1 },
-                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 3, DoctorId = 2 });*/
+                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 1, DoctorId = 1, Type = AppointmentType.Online});
+                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 2, DoctorId = 1, Type = AppointmentType.InPerson});
+                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 3, DoctorId = 2, Type = AppointmentType.Online});
+          */
+             modelBuilder.Entity<Appointment>().HasData(
+                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 1, DoctorId = 1, Type = AppointmentType.Online },
+                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 2, DoctorId = 1, Type = AppointmentType.InPerson },
+                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 3, DoctorId = 2, Type = AppointmentType.Online });
         }
 
 

@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Repository;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 

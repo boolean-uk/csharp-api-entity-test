@@ -79,7 +79,7 @@ namespace workshop.wwwapi.Endpoints
             [ProducesResponseType(StatusCodes.Status201Created)]
             public static async Task<IResult> CreatePatient(IRepository repository, CreatePatientPayload payload)
             {
-                return TypedResults.Ok(await repository.CreatePatient(payload.fullName));
+                return TypedResults.Ok(await repository.CreatePatient(payload.FullName));
             }
             public static async Task<IResult> GetDoctor(IRepository repository, int doctorId)
             {
@@ -93,7 +93,7 @@ namespace workshop.wwwapi.Endpoints
             [ProducesResponseType(StatusCodes.Status201Created)]
         public static async Task<IResult> CreateDoctor(IRepository repository, CreateDoctorPayload payload)
             {
-                return TypedResults.Ok(await repository.CreateDoctor(payload.fullName));
+                return TypedResults.Ok(await repository.CreateDoctor(payload.FullName));
             }
             public static async Task<IResult> AddAppointment(IRepository repository, AddAppointmentPayload payload)
             {

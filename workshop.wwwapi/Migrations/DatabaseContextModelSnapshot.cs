@@ -24,6 +24,10 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
+                    b.Property<DateTime>("Booking")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("booking");
+
                     b.Property<int>("PatientId")
                         .HasColumnType("integer")
                         .HasColumnName("patient_id");
@@ -32,34 +36,39 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
 
-                    b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("booking");
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
 
-                    b.HasKey("PatientId", "DoctorId");
+                    b.HasKey("Booking", "PatientId", "DoctorId");
 
                     b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("appointment");
 
                     b.HasData(
                         new
                         {
+                            Booking = new DateTime(2024, 2, 2, 13, 48, 12, 367, DateTimeKind.Utc).AddTicks(1137),
                             PatientId = 1,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 2, 8, 39, 39, 440, DateTimeKind.Utc).AddTicks(1241)
+                            Type = 1
                         },
                         new
                         {
+                            Booking = new DateTime(2024, 2, 2, 13, 48, 12, 367, DateTimeKind.Utc).AddTicks(1233),
                             PatientId = 2,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 2, 8, 39, 39, 440, DateTimeKind.Utc).AddTicks(1342)
+                            Type = 0
                         },
                         new
                         {
+                            Booking = new DateTime(2024, 2, 2, 13, 48, 12, 367, DateTimeKind.Utc).AddTicks(1237),
                             PatientId = 3,
                             DoctorId = 2,
-                            Booking = new DateTime(2024, 2, 2, 8, 39, 39, 440, DateTimeKind.Utc).AddTicks(1346)
+                            Type = 1
                         });
                 });
 
@@ -137,21 +146,21 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.HasOne("workshop.wwwapi.Models.Doctor", "doctor")
+                    b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workshop.wwwapi.Models.Patient", "patient")
+                    b.HasOne("workshop.wwwapi.Models.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("doctor");
+                    b.Navigation("Doctor");
 
-                    b.Navigation("patient");
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>

@@ -20,5 +20,9 @@ namespace workshop.wwwapi.Models
 
         // Navigation property for Patient
         public Patient Patient { get; set; }
+
+        // Type  of appointment
+        [Column("type")]
+        public AppointmentType Type { get; set; }
     }
 }
