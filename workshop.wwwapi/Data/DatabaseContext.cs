@@ -12,14 +12,23 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();      
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            /* THIS IS ONLY IF YOU WANT TO use fluent API.. For instance:
+             modelBuilder.Entity<Band>().HasMany(x => x.Members).WithOne(x => x.Band).HasForeignKey(x => x.BandId);
+             modelBuilder.Entity<BandMemberInstrument>().HasKey(e => new { e.BandMemberId, e.InstrumentId });*/
 
             //TODO: Seed Data Here
+            // Our collection..
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient() { Id = 1, FullName = "GoogleP" },
+                new Patient() { Id = 2, FullName = "WIKIP" }
+                //new Patient() { Id = 3, FullName = "AMOZP" },
+                //new Patient() { Id = 4, FullName = "FaceP" }
+                );
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
