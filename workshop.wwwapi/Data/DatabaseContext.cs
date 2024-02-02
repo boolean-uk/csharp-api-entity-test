@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using workshop.wwwapi.Enums;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Data
@@ -50,12 +51,14 @@ namespace workshop.wwwapi.Data
             Appointment firstAppointment = new Appointment { 
                 DoctorId = 1, 
                 PatientId = 2, 
-                Booking = DateTime.UtcNow.AddDays(1) };
+                Booking = DateTime.UtcNow.AddDays(1),
+                AppointmentType = AppointmentType.Online };
 
             Appointment secondAppointment = new Appointment { 
                 DoctorId = 2, 
                 PatientId = 1, 
-                Booking = DateTime.UtcNow.AddDays(2) };
+                Booking = DateTime.UtcNow.AddDays(2),
+                AppointmentType = AppointmentType.InPerson };
 
             modelBuilder.Entity<Patient>()
                 .HasData(firstPatient, secondPatient);

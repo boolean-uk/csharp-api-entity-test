@@ -107,7 +107,8 @@ namespace workshop.wwwapi.Repository
                 Doctor = doctor, 
                 PatientId = patient.Id, 
                 Patient = patient, 
-                Booking = appointment.BookingTime };
+                Booking = appointment.BookingTime,
+                AppointmentType = appointment.AppointmentType };
 
             await _databaseContext.Appointments.AddAsync(newAppointment);
             _databaseContext.SaveChanges();

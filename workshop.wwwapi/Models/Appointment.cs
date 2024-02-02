@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Enums;
 using workshop.wwwapi.Models.DTOs;
 
 namespace workshop.wwwapi.Models
@@ -10,33 +11,33 @@ namespace workshop.wwwapi.Models
     [PrimaryKey(nameof(DoctorId), nameof(PatientId))]
     public class Appointment
     {
-        [ForeignKey("doctor_id")]
         [Column("doctor_id")]
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
-        [ForeignKey("patient_id")]
         [Column("patient_id")]
         public int PatientId { get; set; }
         public Patient Patient { get; set; }
         [Column("booking_date")]
         public DateTime Booking { get; set; }
+        [Column("appointment_type")]
+        public AppointmentType AppointmentType { get; set; }
 
         public AppointmentDoctorDTO ToDoctorDTO()
         {
             return new AppointmentDoctorDTO { 
                 PatientId = PatientId, 
                 PatientName = Patient.FullName, 
-                Booking = Booking };
+                Booking = Booking,
+                AppointmentType = AppointmentType.ToString() };
         }
 
         public AppointmentPatientDTO ToPatientDTO()
         {
-            return new AppointmentPatientDTO
-            {
+            return new AppointmentPatientDTO {
                 DoctorId = DoctorId,
                 DoctorName = Doctor.FullName,
-                Booking = Booking
-            };
+                Booking = Booking,
+                AppointmentType = AppointmentType.ToString() };
         }
 
         public AppointmentResponseDTO ToResponseDTO()
@@ -46,7 +47,8 @@ namespace workshop.wwwapi.Models
                 PatientName = Patient.FullName,
                 DoctorId = DoctorId,
                 DoctorName = Doctor.FullName,
-                Booking = Booking };
+                Booking = Booking,
+                AppointmentType = AppointmentType.ToString() };
         }
     }
 }
