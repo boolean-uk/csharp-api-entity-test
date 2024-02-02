@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AppointmentType : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,7 +75,8 @@ namespace workshop.wwwapi.Migrations
                     patient_id = table.Column<int>(type: "integer", nullable: false),
                     doctor_id = table.Column<int>(type: "integer", nullable: false),
                     prescription_id = table.Column<int>(type: "integer", nullable: false),
-                    appointment_date = table.Column<DateTime>(type: "date", nullable: false)
+                    appointment_date = table.Column<DateTime>(type: "date", nullable: false),
+                    appointment_type = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -162,11 +163,11 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "appointments",
-                columns: new[] { "doctor_id", "patient_id", "appointment_date", "prescription_id" },
+                columns: new[] { "doctor_id", "patient_id", "appointment_date", "appointment_type", "prescription_id" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { 2, 2, new DateTime(2024, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 }
+                    { 1, 1, new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 },
+                    { 2, 2, new DateTime(2024, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, 2 }
                 });
 
             migrationBuilder.InsertData(

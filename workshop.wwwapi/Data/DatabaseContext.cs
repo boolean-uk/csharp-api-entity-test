@@ -59,6 +59,7 @@ namespace workshop.wwwapi.Data
                     DoctorId = 1,
                     PatientId = 1,
                     PrescriptionId = 1,
+                    AppointmentType = AppointmentType.Digital
                 },
                 new Appointment()
                 {
@@ -66,6 +67,7 @@ namespace workshop.wwwapi.Data
                     DoctorId = 2,
                     PatientId = 2,
                     PrescriptionId = 2,
+                    AppointmentType = AppointmentType.Physical
                 }
             );
         }

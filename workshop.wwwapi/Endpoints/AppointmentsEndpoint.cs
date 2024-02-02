@@ -18,7 +18,8 @@ namespace workshop.wwwapi.Endpoints
                 {
                     AppointmentDate = a.AppointmentDate,
                     DoctorName = a.Doctor.Name,
-                    PatientFullName = $"{a.Patient.FirstName} {a.Patient.LastName}"
+                    PatientFullName = $"{a.Patient.FirstName} {a.Patient.LastName}",
+                    AppointmentType = a.AppointmentType.ToString()
                 }).ToList();
                 return TypedResults.Ok(dtos);
             }
@@ -40,7 +41,8 @@ namespace workshop.wwwapi.Endpoints
                 {
                     AppointmentDate = a.AppointmentDate,
                     DoctorName = a.Doctor.Name,
-                    PatientFullName = $"{a.Patient.FirstName} {a.Patient.LastName}"
+                    PatientFullName = $"{a.Patient.FirstName} {a.Patient.LastName}",
+                    AppointmentType = a.AppointmentType.ToString()
                 }).ToList();
                 return TypedResults.Ok(dtos);
             }
@@ -62,7 +64,8 @@ namespace workshop.wwwapi.Endpoints
                 {
                     AppointmentDate = appointment.AppointmentDate,
                     DoctorName = appointment.Doctor.Name,
-                    PatientFullName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}"
+                    PatientFullName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}",
+                    AppointmentType = appointment.AppointmentType.ToString()
                 };
                 return TypedResults.Ok(dto);
             }
@@ -83,7 +86,8 @@ namespace workshop.wwwapi.Endpoints
                 {
                     AppointmentDate = appointment.AppointmentDate,
                     DoctorName = appointment.Doctor.Name,
-                    PatientFullName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}"
+                    PatientFullName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}",
+                    AppointmentType = appointment.AppointmentType.ToString()
                 };
                 return TypedResults.Created(nameof(AddAppointment), getDTO);
             } catch (Exception ex)
@@ -100,7 +104,8 @@ namespace workshop.wwwapi.Endpoints
             {
                 AppointmentDate = a.AppointmentDate,
                 DoctorName = a.Doctor.Name,
-                PatientFullName = $"{a.Patient.FirstName} {a.Patient.LastName}"
+                PatientFullName = $"{a.Patient.FirstName} {a.Patient.LastName}",
+                AppointmentType = a.AppointmentType.ToString()
             }).ToList();
             return TypedResults.Ok(dtos);
         }

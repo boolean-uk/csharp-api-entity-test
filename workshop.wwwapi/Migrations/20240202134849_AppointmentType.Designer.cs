@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240202121325_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240202134849_AppointmentType")]
+    partial class AppointmentType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,10 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("date")
                         .HasColumnName("appointment_date");
 
+                    b.Property<int>("AppointmentType")
+                        .HasColumnType("integer")
+                        .HasColumnName("appointment_type");
+
                     b.Property<int>("PrescriptionId")
                         .HasColumnType("integer")
                         .HasColumnName("prescription_id");
@@ -57,6 +61,7 @@ namespace workshop.wwwapi.Migrations
                             PatientId = 1,
                             DoctorId = 1,
                             AppointmentDate = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            AppointmentType = 1,
                             PrescriptionId = 1
                         },
                         new
@@ -64,6 +69,7 @@ namespace workshop.wwwapi.Migrations
                             PatientId = 2,
                             DoctorId = 2,
                             AppointmentDate = new DateTime(2024, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            AppointmentType = 0,
                             PrescriptionId = 2
                         });
                 });

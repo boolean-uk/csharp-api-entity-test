@@ -34,6 +34,7 @@ namespace workshop.wwwapi.Repository
                 Doctor = doctor,
                 Patient = patient,
                 AppointmentDate = dto.AppointmentDate,
+                AppointmentType = Enum.Parse<AppointmentType>(dto.AppointmentType)
             };
             await _databaseContext.AddAsync(appointment);
             await _databaseContext.SaveChangesAsync();

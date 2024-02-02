@@ -20,5 +20,7 @@ namespace workshop.wwwapi.Models
 
         [Column("appointment_date", TypeName = "date")]
         public DateTime AppointmentDate { get; set; }
+        [Column("appointment_type")]
+        public AppointmentType AppointmentType { get; set; }
     }
 }

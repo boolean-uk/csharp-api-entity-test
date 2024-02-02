@@ -8,5 +8,6 @@ namespace workshop.wwwapi.DTOs.Appointments
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
         public DateTime AppointmentDate { get; set; }
+        public string AppointmentType { get; set; }
     }
 }
