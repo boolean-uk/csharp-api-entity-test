@@ -30,6 +30,7 @@ namespace workshop.wwwapi.Endpoints
             doctors.MapPost("/", CreateDoctor);
 
             // Appointments
+            appointments.MapGet("/", GetAllAppointments);
             appointments.MapGet("/{docId}-{patId}", GetAppointmentsById);
             appointments.MapGet("/doctors/{id}", GetAppointmentsForDoctor);
             appointments.MapGet("/patients/{id}", GetAppointmentsForPatients);
@@ -112,6 +113,16 @@ namespace workshop.wwwapi.Endpoints
             DoctorDTO doctorOut = new DoctorDTO(postResult.Id, postResult.FullName, postResult.Appointments);
             Payload<DoctorDTO> payload = new Payload<DoctorDTO>(doctorOut);
             return TypedResults.Created($"/{doctorOut.ID}", payload);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAllAppointments(IRepository repository) 
+        {
+            IEnumerable<Appointment> appointments = await repository.GetAppointments();
+
+            IEnumerable<AppointmentDTO> appOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.Doctor, a.Patient)).ToList();
+            Payload<IEnumerable<AppointmentDTO>> payload = new Payload<IEnumerable<AppointmentDTO>>(appOut);
+            return TypedResults.Ok(payload);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
