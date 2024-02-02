@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using workshop.wwwapi.Repository;
-
-namespace workshop.wwwapi.Endpoints
+﻿namespace workshop.wwwapi.Endpoints
 {
     public static class SurgeryEndpoint
     {
@@ -10,24 +7,23 @@ namespace workshop.wwwapi.Endpoints
         {
             var surgeryGroup = app.MapGroup("surgery");
 
-            surgeryGroup.MapGet("/patients", GetPatients);
-            surgeryGroup.MapGet("/doctors", GetDoctors);
-            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
-        }
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetPatients(IRepository repository)
-        { 
-            return TypedResults.Ok(await repository.GetPatients());
-        }
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetDoctors(IRepository repository)
-        {
-            return TypedResults.Ok(await repository.GetPatients());
-        }
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
-        {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+            surgeryGroup.MapGet("/patients", PatientsEndpoint.GetPatients);
+            surgeryGroup.MapGet("/patients/{id}", PatientsEndpoint.GetPatient);
+            surgeryGroup.MapPost("/patients", PatientsEndpoint.AddPatient);
+
+            surgeryGroup.MapGet("/doctors", DoctorsEndpoint.GetDoctors);
+            surgeryGroup.MapGet("/doctors/{id}", DoctorsEndpoint.GetDoctor);
+            surgeryGroup.MapPost("/doctors", DoctorsEndpoint.AddDoctor);
+
+            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", AppointmentsEndpoint.GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointmentsbypatient/{id}", AppointmentsEndpoint.GetAppointmentsByPatient);
+            surgeryGroup.MapGet("/appointmentbyid", AppointmentsEndpoint.GetAppointmentByIds);
+            surgeryGroup.MapPost("/appointments", AppointmentsEndpoint.AddAppointment);
+            surgeryGroup.MapGet("/appointments", AppointmentsEndpoint.GetAll);
+
+            surgeryGroup.MapGet("/prescriptions", PrescriptionEndpoint.GetAll);
+            surgeryGroup.MapGet("/prescriptions/{id}", PrescriptionEndpoint.Get);
+            surgeryGroup.MapPost("/prescriptions", PrescriptionEndpoint.Add);
         }
     }
 }
