@@ -10,9 +10,9 @@ namespace workshop.wwwapi.Endpoints
         public static void ConfigureAppointmentEndpoint(this WebApplication app)
         {
             var appointmentGroup = app.MapGroup("appointments");
-            appointmentGroup.MapGet("/appointments", GetAppointments);
-            appointmentGroup.MapGet("/appointments/patient/{id}", GetAppointmentsByPatientId);
-            appointmentGroup.MapGet("/appointments/doctor/{id}", GetAppointmentsByDoctorId);
+            appointmentGroup.MapGet("/", GetAppointments);
+            appointmentGroup.MapGet("/patient/{id}", GetAppointmentsByPatientId);
+            appointmentGroup.MapGet("/doctor/{id}", GetAppointmentsByDoctorId);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointments(IRepository repository)

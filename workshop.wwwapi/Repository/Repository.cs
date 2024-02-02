@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.DTOs;
 
 namespace workshop.wwwapi.Repository
@@ -51,6 +52,16 @@ namespace workshop.wwwapi.Repository
             }).FirstOrDefaultAsync();
         }
 
+        public async Task<PatientDTO?> CreatePatient(CreatePatientDTO cDTO)
+        {
+            Patient? dbPatient = await _databaseContext.Patients.Where(x => x.Id == cDTO.PatientId).FirstOrDefaultAsync();
+            if (dbPatient != null) { return null; }
+            Patient d = new() { Id = cDTO.PatientId, FullName = cDTO.PatientName, Appointments = [] };
+            _databaseContext.Patients.Add(d);
+            await _databaseContext.SaveChangesAsync();
+            return new PatientDTO() { PatientId = d.Id, PatientName = d.FullName, Appointments = [] };
+        }
+
         public async Task<IEnumerable<DoctorDTO>> GetDoctors()
         {
             return await _databaseContext.Doctors.Select(x => new DoctorDTO()
@@ -89,6 +100,15 @@ namespace workshop.wwwapi.Repository
                       })
                 .ToList()
             }).FirstOrDefaultAsync();
+        }
+        public async Task<DoctorDTO?> CreateDoctor(CreateDoctorDTO cDTO)
+        {
+            Doctor? dbDoctor = await _databaseContext.Doctors.Where(x => x.Id == cDTO.DoctorId).FirstOrDefaultAsync();
+            if (dbDoctor != null) { return null; }
+            Doctor d = new() { Id = cDTO.DoctorId, FullName = cDTO.DoctorName, Appointments = [] };
+            _databaseContext.Doctors.Add(d);
+            await _databaseContext.SaveChangesAsync();
+            return new DoctorDTO() { DoctorId = d.Id, DoctorName = d.FullName, Appointments = [] };
         }
 
         public async Task<IEnumerable<AppointmentDTO>> GetAppointments()
