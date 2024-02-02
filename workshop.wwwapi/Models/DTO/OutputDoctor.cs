@@ -2,16 +2,15 @@
 
 namespace workshop.wwwapi.Models.DTO
 {
-    public class OutputPatient
+    public class OutputDoctor
     {
         public int Id { get; set; }
-
         public string FullName { get; set; }
 
-        public IEnumerable<AppointmentWhithoutPatient> Appointments { get; set; }
+        public IEnumerable<AppointmentWhithoutDoctor> Appointments { get; set; }
     }
 
-    public class DoctorWhithoutAppointment
+    public class PatientWhithoutAppointment
     {
         public int Id { get; set; }
 

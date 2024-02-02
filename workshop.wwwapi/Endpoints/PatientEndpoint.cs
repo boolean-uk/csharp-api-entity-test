@@ -25,7 +25,7 @@ namespace workshop.wwwapi.Endpoints
             if (patient == null) 
                 return TypedResults.NotFound();
 
-            OutputPatient outputPatient = DtoManager.Convert(patient);
+            OutputPatient outputPatient = PatientDtoManager.Convert(patient);
             return TypedResults.Ok(outputPatient);
         }
 
@@ -37,7 +37,7 @@ namespace workshop.wwwapi.Endpoints
             if (patients.Count() == 0)
                 return TypedResults.NotFound();
 
-            IEnumerable<OutputPatient> outputPatient = DtoManager.Convert(patients);
+            IEnumerable<OutputPatient> outputPatient = PatientDtoManager.Convert(patients);
             return TypedResults.Ok(outputPatient);
         }
 
@@ -54,7 +54,7 @@ namespace workshop.wwwapi.Endpoints
             if (result == null)
                 return TypedResults.BadRequest();
 
-            OutputPatient outputPatient = DtoManager.Convert(result);
+            OutputPatient outputPatient = PatientDtoManager.Convert(result);
             return TypedResults.Created("url", outputPatient);
         }
     }

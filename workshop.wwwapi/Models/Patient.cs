@@ -10,5 +10,8 @@ namespace workshop.wwwapi.Models
 
         [Column("full_name")]
         public string FullName { get; set; }
+
+        [Column("appointments")]
+        public IEnumerable<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

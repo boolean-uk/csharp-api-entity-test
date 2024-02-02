@@ -7,23 +7,30 @@ namespace workshop.wwwapi.Repository
 {
     public class PatientRepository : IPatientRepository
     {
-        private DatabaseContext _databaseContext;
+        private DatabaseContext _db;
         public PatientRepository(DatabaseContext db)
         {
-            _databaseContext = db;
+            _db = db;
         }
         public async Task<IEnumerable<Patient>> Get()
         {
-            return await _databaseContext.Patients.ToListAsync();
+            return await _db.Patients
+                .Include(p => p.Appointments)
+                    .ThenInclude(a => a.Doctor)
+                .ToListAsync();
         }
+
         public async Task<Patient?> Get(int id)
         {
-            return await _databaseContext.Patients.FirstOrDefaultAsync(p => p.Id == id);
+            return await _db.Patients
+                .Include(p => p.Appointments)
+                    .ThenInclude(a => a.Doctor)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
         public async Task<Patient?> Create(Patient patient)
         {
-            _databaseContext.Patients.Add(patient);
-            await _databaseContext.SaveChangesAsync();
+            _db.Patients.Add(patient);
+            await _db.SaveChangesAsync();
             return patient;
         }
     }
