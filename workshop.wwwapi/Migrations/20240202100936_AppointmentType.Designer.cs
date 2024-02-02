@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240202100936_AppointmentType")]
+    partial class AppointmentType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,9 +39,8 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking_time");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
                         .HasColumnName("type");
 
                     b.HasKey("PatientId", "DoctorId");
@@ -52,15 +54,15 @@ namespace workshop.wwwapi.Migrations
                         {
                             PatientId = 1,
                             DoctorId = 1,
-                            BookingTime = new DateTime(2024, 2, 2, 10, 16, 58, 440, DateTimeKind.Utc).AddTicks(5826),
-                            Type = "Online"
+                            BookingTime = new DateTime(2024, 2, 2, 10, 9, 36, 527, DateTimeKind.Utc).AddTicks(100),
+                            Type = 0
                         },
                         new
                         {
                             PatientId = 2,
                             DoctorId = 2,
-                            BookingTime = new DateTime(2024, 2, 2, 10, 16, 58, 440, DateTimeKind.Utc).AddTicks(5828),
-                            Type = "InPerson"
+                            BookingTime = new DateTime(2024, 2, 2, 10, 9, 36, 527, DateTimeKind.Utc).AddTicks(102),
+                            Type = 1
                         });
                 });
 

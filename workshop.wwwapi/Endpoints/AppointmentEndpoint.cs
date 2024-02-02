@@ -42,7 +42,7 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> GetAppointmentByIds(int doctorid, int patientid, IRepository repository)
         {
-            AppointmentDTO result = await repository.GetAppointmentByIds(doctorid, patientid);
+            AppointmentDTO? result = await repository.GetAppointmentByIds(doctorid, patientid);
             if (result == null) { return TypedResults.NotFound($"Appointment with doctor id: {doctorid}, patient id: {patientid} was not found"); }
             return TypedResults.Ok(result);
         }

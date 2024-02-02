@@ -30,9 +30,16 @@ namespace workshop.wwwapi.Data
             );
 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 1, PatientId = 1 },
+                new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 1, PatientId = 1, Type = AppointmentType.Online },
                 new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 2, PatientId = 2 }
             );
+            modelBuilder
+                .Entity<Appointment>()
+                .Property(e => e.Type)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (AppointmentType)Enum.Parse(typeof(AppointmentType), v)
+                );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

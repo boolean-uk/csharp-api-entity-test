@@ -26,7 +26,8 @@ namespace workshop.wwwapi.Repository
                       {
                           BookingTime = appointment.BookingTime,
                           DoctorId = appointment.DoctorId,
-                          DoctorName = doctor.FullName
+                          DoctorName = doctor.FullName,
+                          AppointmentType = appointment.Type
                       })
                 .ToList()
             }).ToListAsync();
@@ -46,7 +47,8 @@ namespace workshop.wwwapi.Repository
                       {
                           BookingTime = appointment.BookingTime,
                           DoctorId = appointment.DoctorId,
-                          DoctorName = doctor.FullName
+                          DoctorName = doctor.FullName,
+                          AppointmentType = appointment.Type
                       })
                 .ToList()
             }).FirstOrDefaultAsync();
@@ -76,7 +78,8 @@ namespace workshop.wwwapi.Repository
                       {
                           BookingTime = appointment.BookingTime,
                           PatientId = appointment.PatientId,
-                          PatientName = patient.FullName
+                          PatientName = patient.FullName,
+                          AppointmentType = appointment.Type
                       })
                 .ToList()
             }).ToListAsync();
@@ -96,7 +99,8 @@ namespace workshop.wwwapi.Repository
                       {
                           BookingTime = appointment.BookingTime,
                           PatientId = appointment.PatientId,
-                          PatientName = patient.FullName
+                          PatientName = patient.FullName,
+                          AppointmentType = appointment.Type
                       })
                 .ToList()
             }).FirstOrDefaultAsync();
@@ -126,7 +130,8 @@ namespace workshop.wwwapi.Repository
                           DoctorId = combined.Appointment.DoctorId,
                           DoctorName = combined.DoctorName,
                           PatientId = combined.Appointment.PatientId,
-                          PatientName = patient.FullName
+                          PatientName = patient.FullName,
+                          AppointmentType = combined.Appointment.Type
                       })
                 .ToListAsync();
         }
@@ -147,7 +152,8 @@ namespace workshop.wwwapi.Repository
                           DoctorId = combined.Appointment.DoctorId,
                           DoctorName = combined.DoctorName,
                           PatientId = combined.Appointment.PatientId,
-                          PatientName = patient.FullName
+                          PatientName = patient.FullName,
+                          AppointmentType = combined.Appointment.Type
                       })
                 .ToListAsync();
         }
@@ -168,7 +174,8 @@ namespace workshop.wwwapi.Repository
                           DoctorId = combined.Appointment.DoctorId,
                           DoctorName = combined.DoctorName,
                           PatientId = combined.Appointment.PatientId,
-                          PatientName = patient.FullName
+                          PatientName = patient.FullName,
+                          AppointmentType = combined.Appointment.Type
                       })
                 .ToListAsync();
         }
@@ -189,7 +196,8 @@ namespace workshop.wwwapi.Repository
                           DoctorId = combined.Appointment.DoctorId,
                           DoctorName = combined.DoctorName,
                           PatientId = combined.Appointment.PatientId,
-                          PatientName = patient.FullName
+                          PatientName = patient.FullName,
+                          AppointmentType = combined.Appointment.Type
                       })
                 .FirstOrDefaultAsync();
         }
