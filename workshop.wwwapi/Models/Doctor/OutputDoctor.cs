@@ -1,4 +1,4 @@
-﻿namespace workshop.wwwapi.Models.DTO
+﻿namespace workshop.wwwapi.Models
 {
     public class OutputDoctor
     {

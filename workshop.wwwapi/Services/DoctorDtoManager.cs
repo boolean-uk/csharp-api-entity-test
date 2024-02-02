@@ -1,5 +1,4 @@
-﻿using workshop.wwwapi.Models.DTO;
-using workshop.wwwapi.Models;
+﻿using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Services
 {

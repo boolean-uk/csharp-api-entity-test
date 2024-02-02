@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using System.Text;
-using workshop.wwwapi.Models.DTO;
+using workshop.wwwapi.Models;
 
 namespace workshop.tests;
 

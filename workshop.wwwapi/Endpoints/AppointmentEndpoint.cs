@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using workshop.wwwapi.Models;
-using workshop.wwwapi.Models.DTO;
 using workshop.wwwapi.Repository;
 using workshop.wwwapi.Services;
 
