@@ -17,20 +17,21 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Doctor entity with primary key
-            //modelBuilder.Entity<Doctor>()
-            //    .HasKey(b => b.Id)
-            //    .HasName("PK_doctor_id");
-
-            //// Patient entity with primary key
-            //modelBuilder.Entity<Patient>()
-            //    .HasKey(b => b.Id)
-            //    .HasName("PK_patient_id");
-
             // Appointment entity with composite key
             modelBuilder.Entity<Appointment>()
                 .HasKey(a => new { a.DoctorId, a.PatientId })
                 .HasName("PK_appointment_doctor_patient");
+
+            // MedicinePrescription entity with composite key
+            modelBuilder.Entity<MedicinePrescription>()
+                .HasKey(a => new { a.PrescriptionId, a.MedicineId })
+                .HasName("PK_medicineprescription_prescription_medicine");
+
+            // Define foreign key relationship between Appointment and Prescription using Appointment.PrescriptionId
+            modelBuilder.Entity<Appointment>()
+                .HasOne<Prescription>()
+                .WithMany()
+                .HasForeignKey(a => a.PrescriptionId);
 
             // Seeded data
             modelBuilder.Entity<Patient>().HasData(
@@ -42,25 +43,52 @@ namespace workshop.wwwapi.Data
                 new Doctor { Id = 1, FullName = "Dr. Heinz Doofenshmirtz" },
                 new Doctor { Id = 2, FullName = "Dr Johnny" }
             );
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine {Id = 1, Name = "Paracetamol" },
+                new Medicine {Id = 2, Name = "SleepEase Xtra" },
+                new Medicine {Id = 3, Name = "Energix Boost" },
+                new Medicine {Id = 4, Name = "FocusPlus Capsules" },
+                new Medicine { Id = 5, Name = "Calmify Syrup",  },
+                new Medicine { Id = 6, Name = "JointFlex Gel",}
+            );
+
+            modelBuilder.Entity<Prescription>().HasData(
+                new Prescription { Id = 1 },
+                new Prescription { Id = 2 },
+                new Prescription { Id = 3 }
+            
+                );
+            modelBuilder.Entity<MedicinePrescription>().HasData(
+                new MedicinePrescription { MedicineId = 1, PrescriptionId = 1, Notes = "two a day", Quantity = 8 },
+                new MedicinePrescription { MedicineId = 2, PrescriptionId = 1, Notes = "before bedtime", Quantity = 15 },
+                new MedicinePrescription { MedicineId = 3, PrescriptionId = 2, Notes = "one tablet daily", Quantity = 30 },
+                new MedicinePrescription { MedicineId = 4, PrescriptionId = 2, Notes = "morning with water", Quantity = 20 },
+                new MedicinePrescription { MedicineId = 5, PrescriptionId = 3, Notes = "5ml twice daily", Quantity = 25 },
+                new MedicinePrescription { MedicineId = 6, PrescriptionId = 3, Notes = "apply to joints as needed", Quantity = 40 }
+            );
+
 
             modelBuilder.Entity<Appointment>().HasData(
                 new Appointment
                 {
                     Booking = new DateTimeOffset(DateTime.Now.AddDays(1)),  // Example date for the first appointment
                     DoctorId = 1,  // Assign the doctor's Id
-                    PatientId = 1   // Assign the patient's Id
+                    PatientId = 1,   // Assign the patient's Id
+                    PrescriptionId= 1 // Assign the Prescription Id
                 },
                 new Appointment
                 {
                     Booking = new DateTimeOffset(DateTime.Now.AddDays(5)),  // Example date for the first appointment
                     DoctorId = 1,  // Assign the doctor's Id
-                    PatientId = 2   // Assign the patient's Id
+                    PatientId = 2,   // Assign the patient's Id
+                    PrescriptionId = 2 // Assign the Prescription Id
                 },
                 new Appointment
                 {
                     Booking = new DateTimeOffset(DateTime.Now.AddMonths(3)),  // Example date for the first appointment
                     DoctorId = 2,  // Assign the doctor's Id
-                    PatientId = 1   // Assign the patient's Id
+                    PatientId = 1,   // Assign the patient's Id
+                    PrescriptionId = 3 // Assign the Prescription Id
                 }
             );
 
