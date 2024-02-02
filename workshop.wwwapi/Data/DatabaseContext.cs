@@ -17,44 +17,32 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Appointment>().HasKey(e => new { e.PatientId, e.DoctorId });
+            modelBuilder.Entity<Appointment>().HasKey(e => new { e.Booking, e.PatientId, e.DoctorId });
 
             //TODO: Seed Data Here
             modelBuilder.Entity<Doctor>().HasData(
-                new Doctor
-                {
-                    Id = 1, FullName = "Anette Mari Rosenkilde"
-                },
-                new Doctor
-                {
-                    Id = 2, FullName = "Henrik Rosenkilde"
-                },
-                new Doctor
-                {
-                    Id = 3, FullName = "Johannes Svale Rosenkilde"
-                });
+                new Doctor {Id = 1, FullName = "Bruno Fernandes"},
+                new Doctor {Id = 2, FullName = "Henrik Rosenkilde"},
+                new Doctor {Id = 3, FullName = "Ada Hegerberg"});
 
             modelBuilder.Entity<Patient>().HasData(
-                new Patient
-                {
-                    Id = 1, FullName = "Cristiano Ronaldo"
-                },
-                new Patient
-                {
-                    Id = 2, FullName = "Lionel Messi"
-                },
-                new Patient
-                {
-                    Id = 3, FullName = "Erling Braut Haaland"
-                });
+                new Patient {Id = 1, FullName = "Cristiano Ronaldo"},
+                new Patient {Id = 2, FullName = "Lionel Messi"},
+                new Patient {Id = 3, FullName = "Erling Braut Haaland"});
 
-            List<Appointment> appointments = new List<Appointment>();
-            modelBuilder.Entity<Appointment>().HasData(appointments);
+            /* List<Appointment> appointments = new List<Appointment>();
 
-            appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 1, DoctorId = 1 });
-            appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 2, DoctorId = 2 });
-            appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 3, DoctorId = 3 });
+                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 1, DoctorId = 1 });
+                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 2, DoctorId = 1 });
+                appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 3, DoctorId = 2 });*/
+
+            /* modelBuilder.Entity<Appointment>().HasData(
+                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 1, DoctorId = 1 },
+                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 2, DoctorId = 1 },
+                new Appointment { Booking = DateTime.Now.ToUniversalTime(), PatientId = 3, DoctorId = 2 });*/
         }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
