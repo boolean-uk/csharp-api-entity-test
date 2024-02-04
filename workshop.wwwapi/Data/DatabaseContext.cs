@@ -21,7 +21,10 @@ namespace workshop.wwwapi.Data
              modelBuilder.Entity<Band>().HasMany(x => x.Members).WithOne(x => x.Band).HasForeignKey(x => x.BandId);
              modelBuilder.Entity<BandMemberInstrument>().HasKey(e => new { e.BandMemberId, e.InstrumentId });*/
 
-            //TODO: Seed Data Here
+            //Need to specify a composite primary key consisting of "DoctorId" and "PatientId" and "Booking"
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId, a.Booking });
+
+
             // Our collection..
             modelBuilder.Entity<Patient>().HasData(
                 new Patient() { Id = 1, FullName = "GoogleP" },
@@ -30,13 +33,30 @@ namespace workshop.wwwapi.Data
                 //new Patient() { Id = 4, FullName = "FaceP" }
                 );
 
+            //Seeding Doctor:
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor() { Id = 1, FullName = "TIKOKAS" },
+                new Doctor() { Id = 2, FullName = "INSTRAAS" }
+                );
+
+            //Seeding Appointment:
+            //var sqlFormattedDate = new DateTime().Date.ToString("yyyy-MM-dd HH:mm:ss");
+            //DateTime.SpecifyKind(new DateTime(2024, 5, 7, 8, 30, 0), DateTimeKind.Utc)}
+            //DateTime _dateTime = DateTime.Now;
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment() { DoctorId = 1, PatientId = 2, Booking = DateTime.Parse("1999/10/12 12:00:00"), Appointmenttype = AppointmentType.Local },
+                new Appointment() { DoctorId = 1, PatientId = 1, Booking = DateTime.Parse("1998/10/12 12:00:00"), Appointmenttype = AppointmentType.Online },
+                  new Appointment() { DoctorId = 2, PatientId = 2, Booking = DateTime.Parse("1997/10/12 12:00:00"), Appointmenttype = AppointmentType.Local }
+                );
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
-            
+
         }
 
 

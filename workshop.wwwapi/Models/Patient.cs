@@ -16,5 +16,7 @@ namespace workshop.wwwapi.Models
         
         [Column("fullname")]
         public string FullName { get; set; }
+
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();        //COMMENT: This does not generate a column on the table actually!
     }
 }

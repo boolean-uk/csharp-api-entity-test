@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240204194858_AddAppointmentType")]
+    partial class AddAppointmentType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("Date")
                         .HasColumnName("date");
 
-                    b.Property<int>("Appointmenttype")
+                    b.Property<int>("AppointmentType")
                         .HasColumnType("integer")
                         .HasColumnName("appointment type");
 
@@ -50,21 +53,21 @@ namespace workshop.wwwapi.Migrations
                             DoctorId = 1,
                             PatientId = 2,
                             Booking = new DateTime(1999, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Appointmenttype = 1
+                            AppointmentType = 0
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 1,
                             Booking = new DateTime(1998, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Appointmenttype = 0
+                            AppointmentType = 0
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 2,
                             Booking = new DateTime(1997, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Appointmenttype = 1
+                            AppointmentType = 0
                         });
                 });
 

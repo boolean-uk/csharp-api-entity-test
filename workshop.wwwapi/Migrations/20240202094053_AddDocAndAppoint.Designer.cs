@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240202094053_AddDocAndAppoint")]
+    partial class AddDocAndAppoint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,10 +37,6 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("Date")
                         .HasColumnName("date");
 
-                    b.Property<int>("Appointmenttype")
-                        .HasColumnType("integer")
-                        .HasColumnName("appointment type");
-
                     b.HasKey("DoctorId", "PatientId", "Booking");
 
                     b.HasIndex("PatientId");
@@ -49,22 +48,19 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 2,
-                            Booking = new DateTime(1999, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Appointmenttype = 1
+                            Booking = new DateTime(1999, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTime(1998, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Appointmenttype = 0
+                            Booking = new DateTime(1998, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 2,
-                            Booking = new DateTime(1997, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Appointmenttype = 1
+                            Booking = new DateTime(1997, 10, 12, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -133,13 +129,13 @@ namespace workshop.wwwapi.Migrations
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
                     b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
-                        .WithMany("Appointments")
+                        .WithMany("Doctors")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("workshop.wwwapi.Models.Patient", "Patient")
-                        .WithMany("Appointments")
+                        .WithMany("Doctors")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -151,12 +147,12 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
                 {
-                    b.Navigation("Appointments");
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
                 {
-                    b.Navigation("Appointments");
+                    b.Navigation("Doctors");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,7 +7,7 @@ namespace workshop.wwwapi.Endpoints
     public static class SurgeryEndpoint
     {
         
-        public static void ConfigurePatientEndpoint(this WebApplication app)
+        public static void ConfigurePatientEndpoint_Notuse(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
 

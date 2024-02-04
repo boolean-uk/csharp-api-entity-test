@@ -8,9 +8,9 @@ namespace workshop.wwwapi.Endpoints
     {
 
 
-        public static void ConfigurePatientEndpoint_Notuse(this WebApplication app)
+        public static void ConfigurePatientEndpoint(this WebApplication app)
         {
-            var patientGroup = app.MapGroup("surgery");
+            var patientGroup = app.MapGroup("patients");
 
             patientGroup.MapGet("/", GetAllPatients);
             patientGroup.MapGet("/{id}", GetAPatient);
@@ -24,7 +24,19 @@ namespace workshop.wwwapi.Endpoints
                 var source = await repository.GetPatients();
 
             List<OutPatientDTO> patients = new List<OutPatientDTO>();
-            patients = source.Select(p => new OutPatientDTO() {FullName = p.FullName, Id = p.Id}).ToList();
+            patients = source.Select(p => new OutPatientDTO() {
+                FullName = p.FullName, 
+                Id = p.Id,
+                Appointments = p.Appointments.Select(a => new OutAppointmentDTO { 
+                    Booking = a.Booking,
+                    DoctorId = a.DoctorId,
+                    PatientId = a.PatientId,
+                    Appointmenttype = a.Appointmenttype
+
+
+                }).ToList()
+            
+            }).ToList();
             return TypedResults.Ok(patients);
            
         }
@@ -37,7 +49,11 @@ namespace workshop.wwwapi.Endpoints
             //Soruce:
             var source = await repository.GetPatient(id);
 
-            OutPatientDTO patients = new OutPatientDTO() { FullName = source.FullName, Id = source.Id};
+            OutPatientDTO patients = new OutPatientDTO() {
+                FullName = source.FullName, 
+                Id = source.Id,
+                Appointments = source.Appointments.Select(a => new OutAppointmentDTO { DoctorId = a.DoctorId, Booking = a.Booking, PatientId = a.PatientId, Appointmenttype = a.Appointmenttype }).ToList()
+            };
             
             return TypedResults.Ok(patients);
             } 
