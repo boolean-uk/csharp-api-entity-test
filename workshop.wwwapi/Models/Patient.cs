@@ -9,12 +9,29 @@ namespace workshop.wwwapi.Models
     [Table("patient")]
     public class Patient
     {
-        [Column("patient_id")]
+        [Column("id")]
         public int Id { get; set; }
-        [Column("patient_full_name")]
-        public required string FullName { get; set; }
+        [Column("full_name")]
+        public string FullName { get; set; }
+        [Column("appointments")]
+        public List<Appointment> Appointments { get; set; } = new List<Appointment>();
 
-        public ICollection<Appointment> Appointments { get; set; } = [];
+        public PatientDTO ToPatientDTO()
+        {
+            List<AppointmentPatientDTO> appointmentDTO = new List<AppointmentPatientDTO>();
+
+            foreach (Appointment appointment in Appointments)
+            {
+                appointmentDTO.Add(appointment.ToPatientDTO());
+            }
+
+            return new PatientDTO
+            {
+                PatientId = Id,
+                PatientName = FullName,
+                Appointments = appointmentDTO
+            };
+        }
     }
    
 }

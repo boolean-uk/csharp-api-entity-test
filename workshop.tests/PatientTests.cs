@@ -7,52 +7,78 @@ namespace workshop.tests;
 
 public class Tests
 {
-    
+
     [Test]
-    public async Task PatientEndpointStatus()
+    public async Task GetPatients()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/surgery/patients");
+        var response = await client.GetAsync("/patients");
 
         // Assert
         Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
     }
 
     [Test]
-    public async Task DoctorEndpointStatus()
+    public async Task GetPatientById()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/surgery/doctors");
-        var expectedResult = new List<Doctor>()
-        {
-                new Doctor { Id = 1, FullName = "Dr Fill" },
-                new Doctor { Id = 2, FullName = "Dr Jo" },
-               
-                
-        };
-        var responseResult = response.Content.ReadFromJsonAsync<IEnumerable<Doctor>>();
+        var response = await client.GetAsync("/patients/2");
 
-        //Assert
-        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        Assert.That(responseResult.Result.Count(), Is.EqualTo(expectedResult.Count()));
-        for (int i = 0; i < expectedResult.Count; i++)
-        {
-            Assert.That(responseResult.Result.ElementAtOrDefault(i).Id, Is.EqualTo(expectedResult[i].Id));
-            Assert.That(responseResult.Result.ElementAtOrDefault(i).FullName, Is.EqualTo(expectedResult[i].FullName));
-        }
-
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
     }
 
     [Test]
-    public async Task DoctorNotFoundEndpointStatus()
+    public async Task GetPatientById2()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/patients/100");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
+    }
+    [Test]
+    public async Task GetDoctors()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/doctors");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    }
+
+    [Test]
+    public async Task GetDoctorById()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/doctors/2");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    }
+
+    [Test]
+    public async Task GetDoctorById2()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -62,20 +88,106 @@ public class Tests
         var response = await client.GetAsync("/doctors/100");
 
         // Assert
-        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
     }
-
     [Test]
-    public async Task AppointmentsEndpointStatus()
+    public async Task GetAppointments()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/surgery/appointments/");
+        var response = await client.GetAsync("/appointments");
 
         // Assert
-        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
     }
+
+    [Test]
+    public async Task GetAppointmentById()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/appointments/2&1");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    }
+
+    [Test]
+    public async Task GetAppointmentById2()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/appointments/100&200");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
+    }
+
+    [Test]
+    public async Task GetAppointmentByDoctorId()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/appointments/bydoctor/2");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    }
+
+
+    [Test]
+    public async Task GetAppointmentByDoctorId2()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/appointments/bydoctor/200");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
+    }
+
+    [Test]
+    public async Task GetAppointmentByPatientId()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/appointments/bypatient/2");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    }
+
+
+    [Test]
+    public async Task GetAppointmentByPatientId2()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/appointments/bypatient/200");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
+    }
+
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using workshop.wwwapi.Data.DTO;
 
 namespace workshop.wwwapi.Models
@@ -8,13 +9,30 @@ namespace workshop.wwwapi.Models
     [Table("doctor")]
     public class Doctor
     {
-        [Column("doctor_id")]
+        [Key]
+        [Column("id")]
         public int Id { get; set; }
+        [Column("full_name")]
+        public string FullName { get; set; }
+        [Column("appointments")]
+        public List<Appointment> Appointments { get; set; } = new List<Appointment>();
 
-        [Column("doctor_fullName")]
-        public required string FullName { get; set; }
+        public DoctorDTO ToDTO()
+        {
+            List<AppointmentDoctorDTO> appointmentDTO = new List<AppointmentDoctorDTO>();
 
-        public ICollection<Appointment> Appointments { get; set; } = [];
+            foreach (Appointment appointment in Appointments)
+            {
+                appointmentDTO.Add(appointment.ToDoctorDTO());
+            }
+
+            return new DoctorDTO
+            {
+                DoctorId = Id,
+                DoctorName = FullName,
+                Appointments = appointmentDTO
+            };
+        }
     }
     
    

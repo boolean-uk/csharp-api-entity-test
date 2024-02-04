@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240201114153_My-MIGRATION")]
-    partial class MyMIGRATION
+    [Migration("20240204094824_myMIGRATION")]
+    partial class myMIGRATION
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,47 +27,42 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("PatientId")
                         .HasColumnType("integer")
-                        .HasColumnName("appointment_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("appointment_time");
+                        .HasColumnName("patient_id");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
 
-                    b.Property<int>("PatientId")
+                    b.Property<int>("AppointmentType")
                         .HasColumnType("integer")
-                        .HasColumnName("patient_id");
+                        .HasColumnName("appointment_type");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("Booking")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("booking_date");
+
+                    b.HasKey("PatientId", "DoctorId");
 
                     b.HasIndex("DoctorId");
 
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("appointment");
+                    b.ToTable("appointments");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Booking = new DateTime(2024, 2, 1, 11, 41, 53, 273, DateTimeKind.Utc).AddTicks(7980),
+                            PatientId = 2,
                             DoctorId = 1,
-                            PatientId = 1
+                            AppointmentType = 0,
+                            Booking = new DateTime(2024, 2, 5, 9, 48, 23, 392, DateTimeKind.Utc).AddTicks(1119)
                         },
                         new
                         {
-                            Id = 2,
-                            Booking = new DateTime(2024, 2, 1, 12, 41, 53, 273, DateTimeKind.Utc).AddTicks(7985),
+                            PatientId = 1,
                             DoctorId = 2,
-                            PatientId = 2
+                            AppointmentType = 1,
+                            Booking = new DateTime(2024, 2, 6, 9, 48, 23, 392, DateTimeKind.Utc).AddTicks(1125)
                         });
                 });
 
@@ -76,14 +71,14 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("doctor_id");
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("doctor_fullName");
+                        .HasColumnName("full_name");
 
                     b.HasKey("Id");
 
@@ -107,14 +102,14 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("patient_id");
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("patient_full_name");
+                        .HasColumnName("full_name");
 
                     b.HasKey("Id");
 
@@ -124,12 +119,12 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Jens Ha"
+                            FullName = "Kristian Jo"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Kristian Jo"
+                            FullName = "Jens Anders"
                         });
                 });
 
