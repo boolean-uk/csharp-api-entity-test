@@ -85,6 +85,34 @@ namespace workshop.wwwapi.DTOs
         }
     }
 
+
+    class MedicineDTO
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public MedicineDTO(Medicine medicine)
+        {
+            Id = medicine.Id;
+            Name = medicine.Name;
+        }
+    }
+
+    class PrescriptionDTO
+    {
+        public int Id { get; set; }
+        public int Quantity { get; set; }
+
+        public string Notes {get ; set;}
+
+        public PrescriptionDTO(Prescription prescription)
+        {
+            Id = prescription.Id;
+            Quantity = prescription.Quantity;
+            Notes = prescription.Notes;
+        }
+    }
+
     class DoctorDTO
     {
         public int Id { get; set; }
@@ -101,14 +129,20 @@ namespace workshop.wwwapi.DTOs
     {
         public DateTime Booking { get; set; }
 
+        public string Type { get; set; }
+
         public DoctorDTO Doctor { get; set; }
         public PatientDTO Patient { get; set; }
+
+        public PrescriptionDTO Presctription { get; set; }
 
         public AppointmentDTO(Appointment a)
         {
             Booking = a.Booking;
+            Type = a.Type;
             Doctor = new DoctorDTO(a.Doctor);
             Patient = new PatientDTO(a.Patient);
+            Presctription = new PrescriptionDTO(a.Prescription);
         }
     }
 

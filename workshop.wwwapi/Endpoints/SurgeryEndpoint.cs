@@ -25,6 +25,14 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbypatient/{patientId}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointmentsbydoctor/{doctorId}", GetAppointmentsByDoctor);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
+
+            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptionsbydoctor/{prescriptionId}", GetPrescription);
+            surgeryGroup.MapPost("/prescriptions", CreatePrescription);
+
+            surgeryGroup.MapGet("/medicines", GetMedicines);
+            surgeryGroup.MapGet("/medicines/{medicineId}", GetMedicine);
+            surgeryGroup.MapPost("/medicines", CreateMedicine);
         }
 
 
@@ -220,7 +228,7 @@ namespace workshop.wwwapi.Endpoints
                 return Results.BadRequest("The id needs to be a number");
             }
 
-            Appointment? a = await repository.CreateAppointment(payload.doctorId, payload.patientId);
+            Appointment? a = await repository.CreateAppointment(payload.doctorId, payload.patientId, payload.presId, payload.type);
 
             if (a == null)
             {
@@ -231,5 +239,120 @@ namespace workshop.wwwapi.Endpoints
 
             return TypedResults.Ok(new AppointmentDTO(a));
         }
+
+
+                /// PATIENTS
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetMedicines(IRepository repository)
+        { 
+
+            var med = await repository.GetMedicines();
+
+            var medDTO = new List<MedicineDTO>();
+
+            foreach (Medicine m in med)
+            {
+                medDTO.Add(new MedicineDTO(m));
+            }
+
+            return TypedResults.Ok(medDTO);
+        }
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> GetMedicine(int medId, IRepository repository)
+        {
+
+            Medicine? medicine = await repository.GetMedicine(medId);
+
+            if (medicine == null)
+            {
+                return Results.NotFound("Medicine not found");
+            }
+
+            var medicineDTO = new MedicineDTO(medicine);
+
+            return TypedResults.Ok(medicineDTO);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> CreateMedicine(CreateMedicinePayload payload, IRepository repository)
+        {
+         
+            if (payload.Name == null || payload.Name == "")
+            {
+                return Results.BadRequest("A non-empty Name is required");
+            }
+        
+            Medicine? medicine = await repository.CreateMedicine(payload.Name);
+            if (medicine == null)
+            {
+                return Results.BadRequest("Failed to create medicine.");
+            }
+
+            repository.SaveChanges();
+
+            return TypedResults.Ok(new MedicineDTO(medicine));
+        }
+
+
+        /// PATIENTS
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        { 
+
+            var Prescriptions = await repository.GetPrescriptions();
+
+            var PrescriptionDTO = new List<PrescriptionDTO>();
+
+            foreach (Prescription Prescription in Prescriptions)
+            {
+                PrescriptionDTO.Add(new PrescriptionDTO(Prescription));
+            }
+
+            return TypedResults.Ok(PrescriptionDTO);
+        }
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> GetPrescription(int PrescriptionId, IRepository repository)
+        {
+
+            Prescription? prescription = await repository.GetPrescription(PrescriptionId, PreloadPolicy.PreloadRelations);
+
+            if (prescription == null)
+            {
+                return Results.NotFound("prescription not found");
+            }
+
+            var PrescriptionDTO = new PrescriptionDTO(prescription);
+
+            return TypedResults.Ok(PrescriptionDTO);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> CreatePrescription(int medicineId, CreatePrescriptionPayload payload, IRepository repository)
+        {
+         
+            if (payload.Quantity < 0 || payload.Notes == "")
+            {
+                return Results.BadRequest("Non-empty & numerically positive fields required");
+            }
+        
+            Prescription? prescription = await repository.CreatePrescription(medicineId, payload.Quantity, payload.Notes);
+            if (prescription == null)
+            {
+                return Results.BadRequest("Failed to create student.");
+            }
+
+            repository.SaveChanges();
+
+            return TypedResults.Ok(new PrescriptionDTO(prescription));
+        }
+
     }
 }
