@@ -9,6 +9,6 @@ namespace workshop.wwwapi.Models.TransferModels.People
 
         public string Name { get; set; } = name;
 
-        public ICollection<AppointmentWithDoctorDTO> Appointments { get; set; } = new List<AppointmentWithDoctorDTO>(appointments.Select(a => new AppointmentWithDoctorDTO(a.Booking, a.DoctorId, a.Doctor)));
+        public ICollection<AppointmentWithDoctorDTO> Appointments { get; set; } = new List<AppointmentWithDoctorDTO>(appointments.Select(a => new AppointmentWithDoctorDTO(a.Booking, a.AppointmentType, a.DoctorId, a.Doctor)));
     }
 }

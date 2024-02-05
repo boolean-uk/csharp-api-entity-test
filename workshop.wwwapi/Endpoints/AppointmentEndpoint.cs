@@ -28,7 +28,7 @@ namespace workshop.wwwapi.Endpoints
         {
             IEnumerable<Appointment> appointments = await repository.GetAppointments();
 
-            IEnumerable<AppointmentDTO> appOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.Doctor, a.Patient)).ToList();
+            IEnumerable<AppointmentDTO> appOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.AppointmentType, a.Doctor, a.Patient)).ToList();
             Payload<IEnumerable<AppointmentDTO>> payload = new Payload<IEnumerable<AppointmentDTO>>(appOut);
             return TypedResults.Ok(payload);
         }
@@ -43,7 +43,7 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound($"No appointments for doctor with id {id}.");
             }
 
-            IEnumerable<AppointmentDTO> appointmentsOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.Doctor, a.Patient));
+            IEnumerable<AppointmentDTO> appointmentsOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.AppointmentType, a.Doctor, a.Patient));
             Payload<IEnumerable<AppointmentDTO>> payload = new Payload<IEnumerable<AppointmentDTO>>(appointmentsOut);
             return TypedResults.Ok(payload);
         }
@@ -58,7 +58,7 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound($"No appointments for patient with id {id}.");
             }
 
-            IEnumerable<AppointmentDTO> appointmentsOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.Doctor, a.Patient));
+            IEnumerable<AppointmentDTO> appointmentsOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.AppointmentType, a.Doctor, a.Patient));
             Payload<IEnumerable<AppointmentDTO>> payload = new Payload<IEnumerable<AppointmentDTO>>(appointmentsOut);
             return TypedResults.Ok(payload);
         }
@@ -73,7 +73,7 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound($"No appointments for doctor-patient combination with id {docId} and {patId}.");
             }
 
-            IEnumerable<AppointmentDTO> appointmentsOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.Doctor, a.Patient));
+            IEnumerable<AppointmentDTO> appointmentsOut = appointments.Select(a => new AppointmentDTO(a.Booking, a.PatientId, a.DoctorId, a.AppointmentType, a.Doctor, a.Patient));
             Payload<IEnumerable<AppointmentDTO>> payload = new Payload<IEnumerable<AppointmentDTO>>(appointmentsOut);
             return TypedResults.Ok(payload);
         }
@@ -87,7 +87,7 @@ namespace workshop.wwwapi.Endpoints
             {
                 return TypedResults.NotFound($"No appointment of the provided id {id} could be found.");
             }
-            AppointmentDTO appointmentOut = new AppointmentDTO(appointment.Booking, appointment.PatientId, appointment.DoctorId, appointment.Doctor, appointment.Patient);
+            AppointmentDTO appointmentOut = new AppointmentDTO(appointment.Booking, appointment.PatientId, appointment.DoctorId, appointment.AppointmentType, appointment.Doctor, appointment.Patient);
             Payload<AppointmentDTO> payload = new Payload<AppointmentDTO>(appointmentOut);
             return TypedResults.Ok(payload);
         }
@@ -109,7 +109,7 @@ namespace workshop.wwwapi.Endpoints
 
             Appointment app = await repository.PostAppointment(new Appointment() { Booking = appPost.Booking, DoctorId = appPost.doctorId, PatientId = appPost.patientId });
 
-            AppointmentDTO appOut = new AppointmentDTO(app.Booking, app.PatientId, app.DoctorId, app.Doctor, app.Patient);
+            AppointmentDTO appOut = new AppointmentDTO(app.Booking, app.PatientId, app.DoctorId, app.AppointmentType, app.Doctor, app.Patient);
             Payload<AppointmentDTO> payload = new Payload<AppointmentDTO>(appOut);
             return TypedResults.Created($"/{appOut.doctorId}-{appOut.patientId}", payload);
         }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using workshop.wwwapi.Models.JunctionTable;
 
 namespace workshop.wwwapi.Models.PureModels
@@ -10,6 +11,10 @@ namespace workshop.wwwapi.Models.PureModels
     {
         [Column("appointment_id")]
         public int Id { get; set; }
+
+        [Column("appointment_type")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public AppointmentType AppointmentType {  get; set; }
 
         [Column("booking_time")]
         public DateTime Booking { get; set; }
