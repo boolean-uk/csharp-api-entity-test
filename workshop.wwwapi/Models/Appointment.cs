@@ -6,6 +6,8 @@ namespace workshop.wwwapi.Models
     [Table("appointments")]
     public class Appointment
     {
+        [Column("id")]
+        public int Id { get; set; }
         [Column("booking_time")]
         public DateTime Booking { get; set; }
         [Column("doctor_id")]

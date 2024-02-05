@@ -16,11 +16,13 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/patients", CreatePatient);
             surgeryGroup.MapGet("/patients/{id}", GetPatient);
             surgeryGroup.MapPost("/appointments", AddAppointment);
             surgeryGroup.MapGet("/doctors/{id}", GetDoctor);
             surgeryGroup.MapPost("/doctors", CreateDoctor);
+            surgeryGroup.MapGet("/appointsments/{id}", GetAppointment);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -55,11 +57,27 @@ namespace workshop.wwwapi.Endpoints
             }
             return TypedResults.Ok(appointmentsDTO);
         }
+        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
+        {
+            var appointments = await repository.GetAppointmentsByPatient(id);
+            var appointmentsDTO = new List<AppointmentDTO>();
+            foreach (var appointment in appointments)
+            {
+                appointmentsDTO.Add(new AppointmentDTO(appointment));
+            }
+            return TypedResults.Ok(appointmentsDTO);
+        }
         public static async Task<IResult> GetPatient(IRepository repository, int patientId)
         {
             var patient = await repository.GetPatient(patientId);
             if (patient == null) { return TypedResults.NotFound(); }
             return TypedResults.Ok(new PatientResponseDTO(patient));
+        }
+        public static async Task<IResult> GetAppointment(IRepository repository, int appointmentId)
+        {
+            var appointment = await repository.GetAppointment(appointmentId);
+            if (appointment == null) { return TypedResults.NotFound(); }
+            return TypedResults.Ok(new AppointmentDTO(appointment));
         }
         public static async Task<IResult> CreatePatient(IRepository repository, CreatePatientPayload payload)
         {

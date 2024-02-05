@@ -18,6 +18,7 @@ namespace workshop.wwwapi.Data
         {
             //TODO: Appointment Key etc.. Add Here
             modelBuilder.Entity<Appointment>().HasKey(a => new { a.Booking, a.PatientId, a.DoctorId });
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.Id });
 
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(
