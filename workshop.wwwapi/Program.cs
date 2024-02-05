@@ -20,7 +20,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.ConfigureSurgeryEndpoint();
+app.ConfigureAppointmentEndpoint();
+app.ConfigureDoctorEndpoint();
 app.ConfigurePatientEndpoint();
+app.ConfigurePrescriptionsEndpoint();
+
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore

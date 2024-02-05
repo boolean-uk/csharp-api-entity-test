@@ -5,9 +5,11 @@ using workshop.wwwapi.Models.TransferModels.Items;
 
 namespace workshop.wwwapi.Models.TransferInputModels
 {
-    public class PrescriptionInputDTO(string Name, int DoctorId, int PatientId, IEnumerable<PrescriptionMedisinSetMedisinInputDTO> prescriptionMedicine)
+    public class PrescriptionInputDTO(string Name, int AppointmentId, int DoctorId, int PatientId, IEnumerable<PrescriptionMedisinSetMedisinInputDTO> prescriptionMedicine)
     {
         public string Name { get; set; } = Name;
+
+        public int AppointmentId { get; set; } = AppointmentId;
 
         public int DoctorId { get; set; } = DoctorId;
 
