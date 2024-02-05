@@ -1,14 +1,46 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using workshop.wwwapi.DTOs;
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly
+    /// <summary>
+    /// Basically a joint table of Doctor-Patient
+    /// </summary>
+    [Table("appointment")]
     public class Appointment
     {
-        
+       /* [Column("id")]          //By convention, a property named Id or <type name>Id will be configured as the primary key of an entity.
+        [Key]
+        public int Id { get; set; }*/
+       
+       
+        [Column("date",TypeName = "Date")]
         public DateTime Booking { get; set; }
+
+        //[Column("doctor_id")]
+        [ForeignKey("doctor_id")]
         public int DoctorId { get; set; }
+        public Doctor Doctor { get; set; }
+
+        [ForeignKey("patient_id")]
         public int PatientId { get; set; }
+        public Patient Patient { get; set; }
+
+        [Column("appointment type")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public AppointmentType Appointmenttype { get; set; }
+
+        //Extension test:
+        // public PrescriptionMedicine PrescriptionMed { get; set; }     // NOT CORRECT I THINK!
+
+        [ForeignKey("prescription_id")]
+        public int PrescriptionId { get; set; } 
+        public Prescription Prescription { get; set; }
+     
+        public ICollection<PrescriptionMedicine> PrescriptMed { get; set; } = new List<PrescriptionMedicine>();
+
 
     }
 }

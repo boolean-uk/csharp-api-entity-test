@@ -12,14 +12,84 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();      
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            /* THIS IS ONLY IF YOU WANT TO use fluent API.. For instance:
+             modelBuilder.Entity<Band>().HasMany(x => x.Members).WithOne(x => x.Band).HasForeignKey(x => x.BandId);
+             modelBuilder.Entity<BandMemberInstrument>().HasKey(e => new { e.BandMemberId, e.InstrumentId });*/
 
-            //TODO: Seed Data Here
+            //Need to specify a composite primary key consisting of "DoctorId" and "PatientId" and "Booking"
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId, a.Booking });
+
+            //Extension many to many relationship of medicine & prescription:
+            modelBuilder.Entity<PrescriptionMedicine>().HasKey(a => new { a.MedicineId, a.PrescriptionId });
+
+            //Mapping prescription into appointment, and make prescription as FK in appointment: (BUUUUT! We already using annotation...)
+            /*modelBuilder.Entity<Appointment>().HasOne(a => a.Prescription)
+                .WithOne(p => p.Appointment)
+                .HasForeignKey<Prescription>(p => p.AppointmentId);*/
+
+
+
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine() { Id = 1, Name = "Coke"},
+                new Medicine() { Id = 2, Name = "80%" },
+                new Medicine() { Id = 3, Name = "LOL" }
+
+                );
+
+            modelBuilder.Entity<Prescription>().HasData(
+               new Prescription() { Id = 1 },
+               new Prescription() { Id = 2 },
+               new Prescription() { Id = 3 }
+
+               );
+
+            modelBuilder.Entity<PrescriptionMedicine>().HasData(
+                new PrescriptionMedicine() {MedicineId = 1, PrescriptionId = 1,Quatity = 100, Note = "TAKE THIS WITH CARE"},
+                new PrescriptionMedicine() { MedicineId = 2, PrescriptionId = 2, Quatity = 1000, Note = "OVERDOSE" },
+                new PrescriptionMedicine() { MedicineId = 3, PrescriptionId = 3, Quatity = 1, Note = "TAKE MORE" }
+                );
+
+            // Our collection..
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient() { Id = 1, FullName = "GoogleP" },
+                new Patient() { Id = 2, FullName = "WIKIP" }
+                //new Patient() { Id = 3, FullName = "AMOZP" },
+                //new Patient() { Id = 4, FullName = "FaceP" }
+                );
+
+            //Seeding Doctor:
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor() { Id = 1, FullName = "TIKOKAS" },
+                new Doctor() { Id = 2, FullName = "INSTRAAS" }
+                );
+
+            //Seeding Appointment:
+            //var sqlFormattedDate = new DateTime().Date.ToString("yyyy-MM-dd HH:mm:ss");
+            //DateTime.SpecifyKind(new DateTime(2024, 5, 7, 8, 30, 0), DateTimeKind.Utc)}
+            //DateTime _dateTime = DateTime.Now;
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment() { DoctorId = 1, PatientId = 2, Booking = DateTime.Parse("1999/10/12 12:00:00"), Appointmenttype = AppointmentType.Local,
+                    PrescriptionId = 1
+                },
+                new Appointment() { DoctorId = 1, PatientId = 1, Booking = DateTime.Parse("1998/10/12 12:00:00"), Appointmenttype = AppointmentType.Online,
+                    PrescriptionId = 2
+                    },
+                    
+                  new Appointment()
+                  {
+                      DoctorId = 2,
+                      PatientId = 2,
+                      Booking = DateTime.Parse("1997/10/12 12:00:00"),
+                      Appointmenttype = AppointmentType.Local,
+                      PrescriptionId = 3
+                  }
+                  );
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,12 +97,16 @@ namespace workshop.wwwapi.Data
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
-            
+
         }
 
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionsMedicines { get;set; }
     }
 }
