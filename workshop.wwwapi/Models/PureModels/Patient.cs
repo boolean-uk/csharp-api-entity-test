@@ -17,5 +17,7 @@ namespace workshop.wwwapi.Models.PureModels
         public string FullName { get; set; }
 
         public List<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public List<Prescription> Prescriptions { get; set; } = new List<Prescription>();
+
     }
 }

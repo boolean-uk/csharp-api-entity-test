@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System.Text.Json;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.PureModels;
-using workshop.wwwapi.Models.TransferModels;
+using workshop.wwwapi.Models.TransferModels.People;
 
 namespace workshop.tests;
 

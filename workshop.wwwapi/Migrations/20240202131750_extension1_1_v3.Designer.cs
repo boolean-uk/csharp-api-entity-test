@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240202131750_extension1_1_v3")]
+    partial class extension1_1_v3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,16 +33,6 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("MedicineId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer")
-                        .HasColumnName("amount");
-
-                    b.Property<string>("Instructions")
-                        .IsRequired()
-                        .HasMaxLength(511)
-                        .HasColumnType("character varying(511)")
-                        .HasColumnName("instructions");
-
                     b.HasKey("PrescriptionId", "MedicineId");
 
                     b.HasIndex("MedicineId");
@@ -50,30 +43,22 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             PrescriptionId = 1,
-                            MedicineId = 1,
-                            Amount = 42,
-                            Instructions = "One dose each morning for 3 weeks."
+                            MedicineId = 1
                         },
                         new
                         {
                             PrescriptionId = 1,
-                            MedicineId = 2,
-                            Amount = 28,
-                            Instructions = "2 pills each day for 2 weeks."
+                            MedicineId = 2
                         },
                         new
                         {
                             PrescriptionId = 2,
-                            MedicineId = 3,
-                            Amount = 10,
-                            Instructions = "5 pills each day for 2 days."
+                            MedicineId = 3
                         },
                         new
                         {
-                            PrescriptionId = 4,
-                            MedicineId = 1,
-                            Amount = 10,
-                            Instructions = "One dose each morning for 10 days."
+                            PrescriptionId = 2,
+                            MedicineId = 1
                         });
                 });
 
@@ -159,6 +144,16 @@ namespace workshop.wwwapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer")
+                        .HasColumnName("amount");
+
+                    b.Property<string>("Instructions")
+                        .IsRequired()
+                        .HasMaxLength(511)
+                        .HasColumnType("character varying(511)")
+                        .HasColumnName("instructions");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -172,16 +167,22 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
+                            Amount = 42,
+                            Instructions = "One dose each morning for 3 weeks.",
                             Name = "Vitalysol"
                         },
                         new
                         {
                             Id = 2,
+                            Amount = 28,
+                            Instructions = "2 pills each day for 2 weeks.",
                             Name = "Zypherexa"
                         },
                         new
                         {
                             Id = 3,
+                            Amount = 10,
+                            Instructions = "5 pills each day for 2 days.",
                             Name = "Pheonixal"
                         });
                 });
@@ -227,24 +228,22 @@ namespace workshop.wwwapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("integer")
-                        .HasColumnName("doctor_id");
+                    b.Property<int?>("DoctorId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("integer")
-                        .HasColumnName("patient_id");
+                    b.Property<int?>("PatientId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("DoctorId", "PatientId");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("prescription");
 
@@ -252,30 +251,12 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            DoctorId = 1,
-                            Name = "Preventative care",
-                            PatientId = 1
+                            Name = "Preventative care"
                         },
                         new
                         {
                             Id = 2,
-                            DoctorId = 3,
-                            Name = "Cure Infection",
-                            PatientId = 5
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DoctorId = 1,
-                            Name = "Cure cancer",
-                            PatientId = 5
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DoctorId = 1,
-                            Name = "Cure cancer",
-                            PatientId = 5
+                            Name = "Cure Infection"
                         });
                 });
 
@@ -321,23 +302,11 @@ namespace workshop.wwwapi.Migrations
                 {
                     b.HasOne("workshop.wwwapi.Models.PureModels.Doctor", null)
                         .WithMany("Prescriptions")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DoctorId");
 
                     b.HasOne("workshop.wwwapi.Models.PureModels.Patient", null)
                         .WithMany("Prescriptions")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("workshop.wwwapi.Models.PureModels.Appointment", "Appointment")
-                        .WithMany()
-                        .HasForeignKey("DoctorId", "PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Appointment");
+                        .HasForeignKey("PatientId");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Doctor", b =>

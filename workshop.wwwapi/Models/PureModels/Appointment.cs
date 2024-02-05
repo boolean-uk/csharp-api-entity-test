@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Models.JunctionTable;
 
 namespace workshop.wwwapi.Models.PureModels
 {

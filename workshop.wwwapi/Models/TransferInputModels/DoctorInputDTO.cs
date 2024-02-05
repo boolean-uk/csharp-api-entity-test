@@ -1,4 +1,4 @@
-﻿namespace workshop.wwwapi.Models.TransferModels
+﻿namespace workshop.wwwapi.Models.TransferInputModels
 {
     public class DoctorInputDTO
     {

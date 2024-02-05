@@ -1,6 +1,7 @@
 ﻿using workshop.wwwapi.Models.PureModels;
+using workshop.wwwapi.Models.TransferModels.Appointments;
 
-namespace workshop.wwwapi.Models.TransferModels
+namespace workshop.wwwapi.Models.TransferModels.People
 {
     public class DoctorDTO(int id, string Name, List<Appointment> appointments)
     {
