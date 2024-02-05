@@ -18,7 +18,9 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Appointment>().HasKey(app => new { app.DoctorId, app.PatientId});
+            //modelBuilder.Entity<Appointment>().HasKey(app => new { app.DoctorId, app.PatientId});
+            modelBuilder.Entity<Appointment>().HasKey(app => new { app.Id, app.DoctorId, app.PatientId });
+
 
             modelBuilder.Entity<Appointment>()
                 .HasOne(app => app.Doctor)
@@ -42,16 +44,40 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Doctor>().HasData(d2);
 
             modelBuilder.Entity<Appointment>().HasData(new Appointment() { 
+                Id = 1,
                 DoctorId = 1, 
                 PatientId = 1, 
                 Booking = DateTime.SpecifyKind(new DateTime(2010, 03, 05), DateTimeKind.Utc)
             });
+            modelBuilder.Entity<Appointment>().HasData(new Appointment()
+            {
+                Id = 2,
+                DoctorId = 1,
+                PatientId = 1,
+                Booking = DateTime.SpecifyKind(new DateTime(2012, 03, 05), DateTimeKind.Utc)
+            });
             modelBuilder.Entity<Appointment>().HasData(new Appointment() { 
+                Id = 3,
                 DoctorId = 1, 
                 PatientId = 5, 
                 Booking = DateTime.SpecifyKind(new DateTime(2005, 05, 10), DateTimeKind.Utc)
             });
+            modelBuilder.Entity<Appointment>().HasData(new Appointment()
+            {
+                Id = 4,
+                DoctorId = 1,
+                PatientId = 5,
+                Booking = DateTime.SpecifyKind(new DateTime(2007, 05, 10), DateTimeKind.Utc)
+            });
+            modelBuilder.Entity<Appointment>().HasData(new Appointment()
+            {
+                Id = 5,
+                DoctorId = 1,
+                PatientId = 5,
+                Booking = DateTime.SpecifyKind(new DateTime(2009, 05, 10), DateTimeKind.Utc)
+            });
             modelBuilder.Entity<Appointment>().HasData(new Appointment() { 
+                Id = 6,
                 DoctorId = 3, 
                 PatientId = 5, 
                 Booking = DateTime.SpecifyKind(new DateTime(1995, 05, 10), DateTimeKind.Utc)
@@ -80,6 +106,7 @@ namespace workshop.wwwapi.Data
                 .HasData(new Prescription() { 
                     Id = 1, 
                     Name = "Preventative care",
+                    AppointmentId = 2,
                     DoctorId = 1,
                     PatientId = 1
                 });
@@ -88,6 +115,7 @@ namespace workshop.wwwapi.Data
                 {
                     Id = 2,
                     Name = "Cure Infection",
+                    AppointmentId = 6,
                     DoctorId = 3,
                     PatientId = 5
                 });
@@ -96,6 +124,7 @@ namespace workshop.wwwapi.Data
                 {
                     Id = 3,
                     Name = "Cure cancer",
+                    AppointmentId = 3,
                     DoctorId = 1,
                     PatientId = 5
                 });
@@ -104,6 +133,7 @@ namespace workshop.wwwapi.Data
                 {
                     Id = 4,
                     Name = "Cure cancer",
+                    AppointmentId = 5,
                     DoctorId = 1,
                     PatientId = 5
                 });
@@ -116,6 +146,13 @@ namespace workshop.wwwapi.Data
                 .HasData(new PrescriptionMedicine() { PrescriptionId = 2, MedicineId = 3, Amount = 10, Instructions = "5 pills each day for 2 days." });
             modelBuilder.Entity<PrescriptionMedicine>()
                 .HasData(new PrescriptionMedicine() { PrescriptionId = 4, MedicineId = 1, Amount = 10, Instructions = "One dose each morning for 10 days." });
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasData(new PrescriptionMedicine() { PrescriptionId = 3, MedicineId = 1, Amount = 10, Instructions = "One dose each morning for 10 days." });
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasData(new PrescriptionMedicine() { PrescriptionId = 3, MedicineId = 2, Amount = 28, Instructions = "2 pills each day for 2 weeks." });
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasData(new PrescriptionMedicine() { PrescriptionId = 3, MedicineId = 3, Amount = 10, Instructions = "5 pills each day for 2 days." });
+
 
 
             base.OnModelCreating(modelBuilder);

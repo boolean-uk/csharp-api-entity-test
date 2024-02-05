@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240202130817_extension1_1_v2")]
-    partial class extension1_1_v2
+    [Migration("20240205093007_database_extended")]
+    partial class database_extended
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,16 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("MedicineId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer")
+                        .HasColumnName("amount");
+
+                    b.Property<string>("Instructions")
+                        .IsRequired()
+                        .HasMaxLength(511)
+                        .HasColumnType("character varying(511)")
+                        .HasColumnName("instructions");
+
                     b.HasKey("PrescriptionId", "MedicineId");
 
                     b.HasIndex("MedicineId");
@@ -43,22 +53,39 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             PrescriptionId = 1,
-                            MedicineId = 1
+                            MedicineId = 1,
+                            Amount = 42,
+                            Instructions = "One dose each morning for 3 weeks."
+                        },
+                        new
+                        {
+                            PrescriptionId = 1,
+                            MedicineId = 2,
+                            Amount = 28,
+                            Instructions = "2 pills each day for 2 weeks."
                         },
                         new
                         {
                             PrescriptionId = 2,
-                            MedicineId = 3
+                            MedicineId = 3,
+                            Amount = 10,
+                            Instructions = "5 pills each day for 2 days."
                         },
                         new
                         {
-                            PrescriptionId = 2,
-                            MedicineId = 1
+                            PrescriptionId = 4,
+                            MedicineId = 1,
+                            Amount = 10,
+                            Instructions = "One dose each morning for 10 days."
                         });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Appointment", b =>
                 {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("appointment_id");
+
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
@@ -71,7 +98,9 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking_time");
 
-                    b.HasKey("DoctorId", "PatientId");
+                    b.HasKey("Id", "DoctorId", "PatientId");
+
+                    b.HasIndex("DoctorId");
 
                     b.HasIndex("PatientId");
 
@@ -80,18 +109,42 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 1,
                             DoctorId = 1,
                             PatientId = 1,
                             Booking = new DateTime(2010, 3, 5, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
+                            Id = 2,
+                            DoctorId = 1,
+                            PatientId = 1,
+                            Booking = new DateTime(2012, 3, 5, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 3,
                             DoctorId = 1,
                             PatientId = 5,
                             Booking = new DateTime(2005, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
+                            Id = 4,
+                            DoctorId = 1,
+                            PatientId = 5,
+                            Booking = new DateTime(2007, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DoctorId = 1,
+                            PatientId = 5,
+                            Booking = new DateTime(2009, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 6,
                             DoctorId = 3,
                             PatientId = 5,
                             Booking = new DateTime(1995, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
@@ -207,26 +260,22 @@ namespace workshop.wwwapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Amount")
+                    b.Property<int>("AppointmentId")
                         .HasColumnType("integer")
-                        .HasColumnName("amount");
+                        .HasColumnName("appointment_id");
 
-                    b.Property<int?>("DoctorId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Instructions")
-                        .IsRequired()
-                        .HasMaxLength(511)
-                        .HasColumnType("character varying(511)")
-                        .HasColumnName("instructions");
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("integer")
+                        .HasColumnName("doctor_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int?>("PatientId")
-                        .HasColumnType("integer");
+                    b.Property<int>("PatientId")
+                        .HasColumnType("integer")
+                        .HasColumnName("patient_id");
 
                     b.HasKey("Id");
 
@@ -234,22 +283,42 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasIndex("PatientId");
 
+                    b.HasIndex("AppointmentId", "DoctorId", "PatientId");
+
                     b.ToTable("prescription");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Amount = 42,
-                            Instructions = "One dose each morning for 3 weeks.",
-                            Name = "Preventative care"
+                            AppointmentId = 2,
+                            DoctorId = 1,
+                            Name = "Preventative care",
+                            PatientId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Amount = 28,
-                            Instructions = "2 pills each day for 2 weeks.",
-                            Name = "Cure Infection"
+                            AppointmentId = 6,
+                            DoctorId = 3,
+                            Name = "Cure Infection",
+                            PatientId = 5
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AppointmentId = 3,
+                            DoctorId = 1,
+                            Name = "Cure cancer",
+                            PatientId = 5
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AppointmentId = 5,
+                            DoctorId = 1,
+                            Name = "Cure cancer",
+                            PatientId = 5
                         });
                 });
 
@@ -295,11 +364,23 @@ namespace workshop.wwwapi.Migrations
                 {
                     b.HasOne("workshop.wwwapi.Models.PureModels.Doctor", null)
                         .WithMany("Prescriptions")
-                        .HasForeignKey("DoctorId");
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("workshop.wwwapi.Models.PureModels.Patient", null)
                         .WithMany("Prescriptions")
-                        .HasForeignKey("PatientId");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workshop.wwwapi.Models.PureModels.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId", "DoctorId", "PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Doctor", b =>

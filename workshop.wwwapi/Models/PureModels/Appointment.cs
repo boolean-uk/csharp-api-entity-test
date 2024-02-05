@@ -8,6 +8,9 @@ namespace workshop.wwwapi.Models.PureModels
     [Table("appointments")]
     public class Appointment
     {
+        [Column("appointment_id")]
+        public int Id { get; set; }
+
         [Column("booking_time")]
         public DateTime Booking { get; set; }
 

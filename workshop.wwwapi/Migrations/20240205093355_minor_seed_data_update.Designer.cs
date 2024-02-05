@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240205074038_extension1_1_v5")]
-    partial class extension1_1_v5
+    [Migration("20240205093355_minor_seed_data_update")]
+    partial class minor_seed_data_update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,11 +77,36 @@ namespace workshop.wwwapi.Migrations
                             MedicineId = 1,
                             Amount = 10,
                             Instructions = "One dose each morning for 10 days."
+                        },
+                        new
+                        {
+                            PrescriptionId = 3,
+                            MedicineId = 1,
+                            Amount = 10,
+                            Instructions = "One dose each morning for 10 days."
+                        },
+                        new
+                        {
+                            PrescriptionId = 3,
+                            MedicineId = 2,
+                            Amount = 28,
+                            Instructions = "2 pills each day for 2 weeks."
+                        },
+                        new
+                        {
+                            PrescriptionId = 3,
+                            MedicineId = 3,
+                            Amount = 10,
+                            Instructions = "5 pills each day for 2 days."
                         });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Appointment", b =>
                 {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("appointment_id");
+
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
@@ -94,7 +119,9 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking_time");
 
-                    b.HasKey("DoctorId", "PatientId");
+                    b.HasKey("Id", "DoctorId", "PatientId");
+
+                    b.HasIndex("DoctorId");
 
                     b.HasIndex("PatientId");
 
@@ -103,18 +130,42 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 1,
                             DoctorId = 1,
                             PatientId = 1,
                             Booking = new DateTime(2010, 3, 5, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
+                            Id = 2,
+                            DoctorId = 1,
+                            PatientId = 1,
+                            Booking = new DateTime(2012, 3, 5, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 3,
                             DoctorId = 1,
                             PatientId = 5,
                             Booking = new DateTime(2005, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
+                            Id = 4,
+                            DoctorId = 1,
+                            PatientId = 5,
+                            Booking = new DateTime(2007, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DoctorId = 1,
+                            PatientId = 5,
+                            Booking = new DateTime(2009, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 6,
                             DoctorId = 3,
                             PatientId = 5,
                             Booking = new DateTime(1995, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc)
@@ -230,6 +281,10 @@ namespace workshop.wwwapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("appointment_id");
+
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
@@ -245,9 +300,11 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DoctorId");
+
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("DoctorId", "PatientId");
+                    b.HasIndex("AppointmentId", "DoctorId", "PatientId");
 
                     b.ToTable("prescription");
 
@@ -255,6 +312,7 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
+                            AppointmentId = 2,
                             DoctorId = 1,
                             Name = "Preventative care",
                             PatientId = 1
@@ -262,6 +320,7 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 2,
+                            AppointmentId = 6,
                             DoctorId = 3,
                             Name = "Cure Infection",
                             PatientId = 5
@@ -269,6 +328,7 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 3,
+                            AppointmentId = 3,
                             DoctorId = 1,
                             Name = "Cure cancer",
                             PatientId = 5
@@ -276,6 +336,7 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 4,
+                            AppointmentId = 5,
                             DoctorId = 1,
                             Name = "Cure cancer",
                             PatientId = 5
@@ -336,7 +397,7 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasOne("workshop.wwwapi.Models.PureModels.Appointment", "Appointment")
                         .WithMany()
-                        .HasForeignKey("DoctorId", "PatientId")
+                        .HasForeignKey("AppointmentId", "DoctorId", "PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
