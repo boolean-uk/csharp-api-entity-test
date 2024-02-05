@@ -12,16 +12,17 @@ namespace workshop.wwwapi.Models.Domain
         public int ID { get; set; }
 
         [Column("doctor_id")]
-        public int DoctorID { get; set; }
         [ForeignKey("DoctorID")]
+        public int DoctorID { get; set; }
         public Doctor Doctor { get; set; }
 
         [Column("patient_id")]
-        public int PatientID { get; set; }
         [ForeignKey("PatientID")]
+        public int PatientID { get; set; }
         public Patient Patient { get; set; }
 
         [Column("appointment_time")]
         public DateTime AppointmentTime { get; set; }
+
     }
 }

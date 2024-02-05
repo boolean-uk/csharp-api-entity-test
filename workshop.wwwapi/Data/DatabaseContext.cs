@@ -16,9 +16,10 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            //modelBuilder.Entity<Appointment>().HasKey(a => new {a.PatientID, a.DoctorID});
+            // Since a patient should be able to have multiple appointments with same doctor, it gets its own ID instead
 
-            //TODO: Seed Data Here
+            modelBuilder.SeedDatabase();
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
