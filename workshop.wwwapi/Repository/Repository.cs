@@ -201,5 +201,54 @@ namespace workshop.wwwapi.Repository
                       })
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<PrescriptionDTO>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions.Include(x => x.PrescriptionMedicines).Join(
+                _databaseContext.Appointments,
+                pres => new { pId = pres.AppointmentPatientId, dId = pres.AppointmentDoctorId },
+                app => new { pId = app.PatientId, dId = app.DoctorId },
+                (pres, app) => new PrescriptionDTO()
+                {
+                    Id = pres.Id,
+                    Quantity = pres.Quantity,
+                    MedicineInfo = pres.PrescriptionMedicines
+                        .Join(_databaseContext.Medicines,
+                            presmed => pres.Id,
+                            med => med.Id,
+                            (presmed, med) => new MedicineDTO() { Id = med.Id, Name = med.Name, Notes = med.Notes }
+                        ).ToList(),
+                    AppointmentDoctorId = app.DoctorId,
+                    AppointmentPatientId = app.PatientId,
+                    AppointmentBookingTime = app.BookingTime,
+                    AppointmentType = app.Type
+                })
+                .ToListAsync();
+        }
+
+        public async Task<int> CreatePrescription(CreatePrescriptionDTO cDTO)
+        {
+            Appointment? dbAppointment = await _databaseContext.Appointments.Where(x => x.PatientId == cDTO.AppointmentPatientId && x.DoctorId == cDTO.AppointmentDoctorId).FirstOrDefaultAsync();
+            if (dbAppointment == null) { return -1; }
+            List<int> dbMedicines = await _databaseContext.Medicines.Where(x => cDTO.MedicineIds.Contains(x.Id)).Select(y => y.Id).ToListAsync();
+            if (dbMedicines.Count == 0) { return -2; }
+            Prescription p = new()
+            {
+                AppointmentDoctorId = dbAppointment.DoctorId,
+                AppointmentPatientId = dbAppointment.PatientId,
+                Quantity = cDTO.Quantity,
+            };
+            _databaseContext.Add(p);
+            List<PrescriptionMedicine> presmeds = [];
+            dbMedicines.ForEach(x =>
+            {
+                PrescriptionMedicine pm = new PrescriptionMedicine() { MedicineId = x, PrescriptionId = p.Id };
+                presmeds.Add(pm);
+                _databaseContext.Add(pm);
+            });
+            p.PrescriptionMedicines = presmeds;
+            await _databaseContext.SaveChangesAsync();
+            return 0;
+        }
     }
 }

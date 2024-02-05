@@ -28,10 +28,11 @@ namespace workshop.wwwapi.Data
                 new Doctor() { Id = 1, FullName = "Doctor Who" },
                 new Doctor() { Id = 2, FullName = "Doctor Why" }
             );
-
+            Appointment a1 = new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 1, PatientId = 1, Type = AppointmentType.Online };
+            Appointment a2 = new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 2, PatientId = 2 };
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 1, PatientId = 1, Type = AppointmentType.Online },
-                new Appointment() { BookingTime = DateTime.UtcNow, DoctorId = 2, PatientId = 2 }
+                a1,
+                a2
             );
             modelBuilder
                 .Entity<Appointment>()
@@ -39,6 +40,19 @@ namespace workshop.wwwapi.Data
                 .HasConversion(
                     v => v.ToString(),
                     v => (AppointmentType)Enum.Parse(typeof(AppointmentType), v)
+                );
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine() { Id = 1, Name = "Full revive", Notes = "Eat it or something idk" },
+                new Medicine() { Id = 2, Name = "Max potion", Notes = "Drink it or something idk" }
+                );
+            modelBuilder.Entity<Prescription>().HasData(
+                new Prescription() { Id = 1, Quantity = 2, AppointmentDoctorId = 1, AppointmentPatientId = 1 },
+                new Prescription() { Id = 2, Quantity = 4, AppointmentDoctorId = 2, AppointmentPatientId = 2 }
+                );
+            modelBuilder.Entity<PrescriptionMedicine>().HasData(
+                new PrescriptionMedicine() { MedicineId = 1, PrescriptionId = 1 },
+                new PrescriptionMedicine() { MedicineId = 2, PrescriptionId = 2 },
+                new PrescriptionMedicine() { MedicineId = 2, PrescriptionId = 1 }
                 );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -53,5 +67,8 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionsMedicines { get; set; }
     }
 }
