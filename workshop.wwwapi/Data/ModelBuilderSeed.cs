@@ -38,6 +38,7 @@ namespace workshop.wwwapi.Data
             "Julian",
             "Leopold",
             "Chawton",
+            "Gregory",
             "Xavier",
             "Sebastian",
             "Maximilian",
@@ -87,37 +88,18 @@ namespace workshop.wwwapi.Data
         };
         private static List<string> doctorSurnames = new List<string>
         {
-            "Montague-Smythe",
-            "Beaumont-Cavendish",
-            "St. Clair-Winthrop",
-            "Vanderbilt-Astor",
-            "Archibald-Wellesley",
-            "Hawthorne-Devereux",
-            "Sterling-Montgomery",
-            "Sinclair-Fitzgerald",
-            "Pembroke-Ellington",
-            "Langford-Salisbury",
-            "Carrington-Leigh",
-            "Kensington-Rowe",
-            "Hargrave-Chamberlain",
-            "Sterling-Goldsmith",
-            "Ravenswood-Grantham",
-            "Fairbanks-Crowley",
-            "Blackwood-Mornington",
-            "Fitzroy-Davenport",
-            "Huntington-Whitely",
-            "Westminster-Finchley",
-            "Stratford-Belgravia",
-            "Kingsley-Harrington",
-            "Wentworth-Fitzwilliam",
-            "Ashford-Lexington",
-            "Blenheim-Sterling",
-            "Clarendon-Marlborough",
-            "Derbyshire-Langford",
-            "Eddington-Hawthorne",
-            "Falmouth-Pennington",
-            "Grantham-Leighton",
-            "Jones"
+            "Jones",
+            "Chocofix",
+            "Carbcrave",
+            "Sugarlove",
+            "Snackwell",
+            "Sodamore",
+            "Sugarmore",
+            "Chocomore",
+            "Snackmore",
+            "Colamore",
+            "Snackright",
+            "Butterbliss"
         };
         public static List<string> doctorTitles = new List<string>
         {
@@ -128,7 +110,9 @@ namespace workshop.wwwapi.Data
             "Professor",
             "Prof. Dr.",
             "PhD Dr.",
-            "Supreme Dr."
+            "Supreme Dr.",
+            "Specialist",
+            "Master Dr."
         };
 
         private static Random random = new Random();
@@ -136,7 +120,7 @@ namespace workshop.wwwapi.Data
         public static void SeedDatabase(this ModelBuilder modelBuilder)
         {
             int numPatients = 200;
-            int numDoctors = 15;
+            int numDoctors = 20;
             int numApppintments = 100;
             var patients = Enumerable.Range(1, numPatients).Select(id => new Patient { ID = id, FullName = GeneratePatientName() });
             var doctors = Enumerable.Range(1, numDoctors).Select(id => new Doctor {  ID = id, FullName = GenerateDoctorName() });

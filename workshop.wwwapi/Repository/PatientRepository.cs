@@ -29,8 +29,8 @@ namespace workshop.wwwapi.Repository
 
         public async Task<Patient> Insert(Patient entity)
         {
-            db.AddAsync(entity);
-            db.SaveChangesAsync();
+            await db.AddAsync(entity);
+            await db.SaveChangesAsync();
             return entity;
         }
 

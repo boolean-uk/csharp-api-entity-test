@@ -24,6 +24,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.ConfigureDoctorEndpoint();
+app.ConfigurePatientEndpoint();
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore

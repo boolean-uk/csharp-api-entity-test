@@ -7,7 +7,6 @@ namespace workshop.wwwapi.Models.Domain
     public class Doctor
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int ID { get; set; }
 
