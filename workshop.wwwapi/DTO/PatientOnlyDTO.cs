@@ -7,6 +7,7 @@ namespace workshop.wwwapi.DTO
         public int Id { get; set; }
         public string patient_full_name { get; set; }
 
+        public PatientOnlyDTO() { }
         public PatientOnlyDTO(Patient patient) {
             Id = patient.Id;
             patient_full_name = patient.FullName;
