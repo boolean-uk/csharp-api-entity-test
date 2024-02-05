@@ -16,15 +16,15 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            Seeder seeder = new Seeder();
             //TODO: Appointment Key etc.. Add Here
-            
-
             //TODO: Seed Data Here
+            modelBuilder.Entity<Patient>().HasData(seeder.Patients);
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
+            //optionsBuilder.UseInMemmoryDatabase(databaseName: "_connectionString");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
             
