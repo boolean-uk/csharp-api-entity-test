@@ -20,17 +20,8 @@ namespace workshop.wwwapi.Services
                     Id = appointment.Patient.Id,
                     FullName = appointment.Patient.FullName
                 },
-                Prescription = appointment.Prescription != null ? new PrescriptionWhitoutAppointment
-                {
-                    Id = appointment.Prescription.Id,
-                    Medicines = appointment.Prescription.Medicines.Select(medicine => new MedicineWhitoutPrescription
-                    {
-                        Id = medicine.Id,
-                        Name = medicine.Name,
-                        Quantity = medicine.Quantity,
-                        Notes = medicine.Notes
-                    }).ToList()
-                } : null
+                Prescription = PrescriptionDtoManager.ConvertRemoveAppointment(appointment.Prescription),
+                Type = appointment.Type.ToString()
             };
         }
 
@@ -54,7 +45,8 @@ namespace workshop.wwwapi.Services
                 {
                     Id = appointment.Patient.Id,
                     FullName = appointment.Patient.FullName
-                }
+                },
+                Type = appointment.Type.ToString()
             };
         }
 
@@ -68,7 +60,8 @@ namespace workshop.wwwapi.Services
                     Id = appointment.Doctor.Id,
                     FullName = appointment.Doctor.FullName
                 },
-                Prescription = PrescriptionDtoManager.ConvertRemoveAppointment(appointment.Prescription)
+                Prescription = PrescriptionDtoManager.ConvertRemoveAppointment(appointment.Prescription),
+                Type = appointment.Type.ToString()
             };
         }
 
@@ -87,7 +80,8 @@ namespace workshop.wwwapi.Services
                     Id = appointment.Patient.Id,
                     FullName = appointment.Patient.FullName
                 },
-                Prescription = PrescriptionDtoManager.ConvertRemoveAppointment(appointment.Prescription)
+                Prescription = PrescriptionDtoManager.ConvertRemoveAppointment(appointment.Prescription),
+                Type = appointment.Type.ToString()
             };
         }
 

@@ -4,7 +4,7 @@
     {
         public DateTime Booking { get; set; }
 
-        //public AppointmentType Type { get; set; }
+        public string Type { get; set; }
 
         public PrescriptionWhitoutAppointment Prescription { get; set; }
 

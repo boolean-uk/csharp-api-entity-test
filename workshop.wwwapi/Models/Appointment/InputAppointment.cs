@@ -6,6 +6,6 @@
         public int PatientId { get; set; }
         public DateTime Booking { get; set; }
 
-        //public AppointmentType Type { get; set; }
+        public AppointmentType Type { get; set; }
     }
 }

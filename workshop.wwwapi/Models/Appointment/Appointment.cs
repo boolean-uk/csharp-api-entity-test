@@ -17,8 +17,8 @@ namespace workshop.wwwapi.Models
         [Column("booking")]
         public DateTime Booking { get; set; }
 
-        //[Column("type")]
-        //public AppointmentType Type { get; set; }
+        [Column("type")]
+        public AppointmentType Type { get; set; }
 
         [Column("doctor_id")]
         public int DoctorId { get; set; }

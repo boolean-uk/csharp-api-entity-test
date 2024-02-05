@@ -28,10 +28,10 @@ namespace workshop.wwwapi.Data
             );
 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { Id = 1, PatientId = 1, DoctorId = 1, Booking = DateTime.UtcNow },
-                new Appointment { Id = 2, PatientId = 2, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(1) },
-                new Appointment { Id = 3, PatientId = 1, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(2) },
-                new Appointment { Id = 4, PatientId = 2, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(3) }
+                new Appointment { Id = 1, PatientId = 1, DoctorId = 1, Booking = DateTime.UtcNow, Type=AppointmentType.Online },
+                new Appointment { Id = 2, PatientId = 2, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(1), Type = AppointmentType.Online },
+                new Appointment { Id = 3, PatientId = 1, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(2), Type = AppointmentType.InPerson },
+                new Appointment { Id = 4, PatientId = 2, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(3), Type = AppointmentType.InPerson }
             );
 
             // Prescription and Medication

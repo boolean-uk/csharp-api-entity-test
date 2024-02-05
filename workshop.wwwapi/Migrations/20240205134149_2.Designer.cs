@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240205134149_2")]
+    partial class _2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,23 +77,23 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            Booking = new DateTime(2024, 2, 5, 13, 43, 7, 266, DateTimeKind.Utc).AddTicks(1839),
+                            Booking = new DateTime(2024, 2, 5, 13, 41, 48, 952, DateTimeKind.Utc).AddTicks(4123),
                             DoctorId = 1,
                             PatientId = 1,
-                            Type = 1
+                            Type = 0
                         },
                         new
                         {
                             Id = 2,
-                            Booking = new DateTime(2024, 2, 6, 13, 43, 7, 266, DateTimeKind.Utc).AddTicks(1841),
+                            Booking = new DateTime(2024, 2, 6, 13, 41, 48, 952, DateTimeKind.Utc).AddTicks(4126),
                             DoctorId = 1,
                             PatientId = 2,
-                            Type = 1
+                            Type = 0
                         },
                         new
                         {
                             Id = 3,
-                            Booking = new DateTime(2024, 2, 7, 13, 43, 7, 266, DateTimeKind.Utc).AddTicks(1851),
+                            Booking = new DateTime(2024, 2, 7, 13, 41, 48, 952, DateTimeKind.Utc).AddTicks(4134),
                             DoctorId = 2,
                             PatientId = 1,
                             Type = 0
@@ -98,7 +101,7 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 4,
-                            Booking = new DateTime(2024, 2, 8, 13, 43, 7, 266, DateTimeKind.Utc).AddTicks(1854),
+                            Booking = new DateTime(2024, 2, 8, 13, 41, 48, 952, DateTimeKind.Utc).AddTicks(4166),
                             DoctorId = 2,
                             PatientId = 2,
                             Type = 0

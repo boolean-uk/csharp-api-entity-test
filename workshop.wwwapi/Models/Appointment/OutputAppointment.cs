@@ -7,6 +7,6 @@
         public DoctorWhithoutAppointment Doctor { get; set; }
         public PatientWhithoutAppointment Patient { get; set; }
         public PrescriptionWhitoutAppointment? Prescription { get; set; }
-        //public AppointmentType Type { get; set; }
+        public string Type { get; set; }
     }
 }

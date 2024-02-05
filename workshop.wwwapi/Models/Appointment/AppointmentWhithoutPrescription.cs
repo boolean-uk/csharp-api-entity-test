@@ -6,7 +6,7 @@
 
         public DateTime Booking { get; set; }
 
-        //public AppointmentType Type { get; set; }
+        public string Type { get; set; }
 
         public DoctorWhithoutAppointment Doctor { get; set; }
 
