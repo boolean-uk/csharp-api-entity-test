@@ -1,4 +1,4 @@
-﻿using workshop.wwwapi.Models;
+﻿using workshop.wwwapi.Models.Domain;
 
 namespace workshop.wwwapi.Repository
 {

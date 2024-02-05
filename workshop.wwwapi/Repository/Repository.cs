@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Domain;
 
 namespace workshop.wwwapi.Repository
 {
@@ -21,7 +21,7 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            return await _databaseContext.Appointments.Where(a => a.DoctorID==id).ToListAsync();
         }
     }
 }

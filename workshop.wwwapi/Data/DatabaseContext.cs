@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Domain;
 
 namespace workshop.wwwapi.Data
 {
@@ -16,7 +16,6 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
             
 
             //TODO: Seed Data Here
