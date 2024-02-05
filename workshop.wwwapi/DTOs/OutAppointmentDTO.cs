@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.DTOs
@@ -12,6 +13,7 @@ namespace workshop.wwwapi.DTOs
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public AppointmentType Appointmenttype { get; set; }
     }
 }

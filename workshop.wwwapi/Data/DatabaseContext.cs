@@ -24,6 +24,32 @@ namespace workshop.wwwapi.Data
             //Need to specify a composite primary key consisting of "DoctorId" and "PatientId" and "Booking"
             modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId, a.Booking });
 
+            //Extension many to many relationship of medicine & prescription:
+            modelBuilder.Entity<PrescriptionMedicine>().HasKey(a => new { a.MedicineId, a.PrescriptionId });
+
+            //modelBuilder.Entity<Appointment>().HasKey(a => new { a.PrescriptionMed});
+
+
+
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine() { Id = 1, Name = "Coke"},
+                new Medicine() { Id = 2, Name = "80%" },
+                new Medicine() { Id = 3, Name = "LOL" }
+
+                );
+
+            modelBuilder.Entity<Prescription>().HasData(
+               new Prescription() { Id = 1 },
+               new Prescription() { Id = 2 },
+               new Prescription() { Id = 3 }
+
+               );
+
+            modelBuilder.Entity<PrescriptionMedicine>().HasData(
+                new PrescriptionMedicine() {MedicineId = 1, PrescriptionId = 1,Quatity = 100, Note = "TAKE THIS WITH CARE"},
+                new PrescriptionMedicine() { MedicineId = 2, PrescriptionId = 2, Quatity = 1000, Note = "OVERDOSE" },
+                new PrescriptionMedicine() { MedicineId = 3, PrescriptionId = 3, Quatity = 1, Note = "TAKE MORE" }
+                );
 
             // Our collection..
             modelBuilder.Entity<Patient>().HasData(
@@ -45,10 +71,37 @@ namespace workshop.wwwapi.Data
             //DateTime _dateTime = DateTime.Now;
 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment() { DoctorId = 1, PatientId = 2, Booking = DateTime.Parse("1999/10/12 12:00:00"), Appointmenttype = AppointmentType.Local },
-                new Appointment() { DoctorId = 1, PatientId = 1, Booking = DateTime.Parse("1998/10/12 12:00:00"), Appointmenttype = AppointmentType.Online },
-                  new Appointment() { DoctorId = 2, PatientId = 2, Booking = DateTime.Parse("1997/10/12 12:00:00"), Appointmenttype = AppointmentType.Local }
-                );
+                new Appointment() { DoctorId = 1, PatientId = 2, Booking = DateTime.Parse("1999/10/12 12:00:00"), Appointmenttype = AppointmentType.Local/*,
+                    PrescriptionMed = new PrescriptionMedicine() {
+                        MedicineId = 1, 
+                        PrescriptionId = 1, 
+                        Quatity = 100, 
+                        Note = "TAKE THIS WITH CARE" }*/
+                },
+                new Appointment() { DoctorId = 1, PatientId = 1, Booking = DateTime.Parse("1998/10/12 12:00:00"), Appointmenttype = AppointmentType.Online/*,
+                    PrescriptionMed = new PrescriptionMedicine()
+                    {   
+                        MedicineId = 2,
+                        PrescriptionId = 2,
+                        Quatity = 1000,
+                        Note = "OVERDOSE"
+                   
+                    }*/
+                    },
+                  new Appointment()
+                  {
+                      DoctorId = 2,
+                      PatientId = 2,
+                      Booking = DateTime.Parse("1997/10/12 12:00:00"),
+                      Appointmenttype = AppointmentType.Local /*,
+                      PrescriptionMed = new PrescriptionMedicine() {
+                          MedicineId = 3, 
+                          PrescriptionId = 3, 
+                          Quatity = 1, 
+                          Note = "TAKE MORE" }
+                  }*/
+                  }
+                  );
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -63,5 +116,9 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionsMedicines { get;set; }
     }
 }

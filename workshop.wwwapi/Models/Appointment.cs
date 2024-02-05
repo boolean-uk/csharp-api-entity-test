@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace workshop.wwwapi.Models
 {
@@ -27,7 +28,11 @@ namespace workshop.wwwapi.Models
         public Patient Patient { get; set; }
 
         [Column("appointment type")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public AppointmentType Appointmenttype { get; set; }    
+
+        //Extension test:
+       // public PrescriptionMedicine PrescriptionMed { get; set; }
 
     }
 }
