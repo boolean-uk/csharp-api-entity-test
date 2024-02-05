@@ -1,4 +1,4 @@
-namespace workshop.wwwapi.Models
+namespace workshop.wwwapi.Endpoints
 {
     public record CreatePatientPayload(string FullName);
     public record CreateDoctorPayload(string FullName);

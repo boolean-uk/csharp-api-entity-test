@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using workshop.wwwapi.Models;
 
@@ -52,7 +51,6 @@ namespace workshop.wwwapi.Data
 
             modelBuilder.Entity<Appointment>().HasData(appointments);
         }
-
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }

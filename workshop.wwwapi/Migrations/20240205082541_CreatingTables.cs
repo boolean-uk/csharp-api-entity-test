@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class CREATINGTABLES : Migration
+    public partial class CreatingTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,21 +45,21 @@ namespace workshop.wwwapi.Migrations
                 columns: table => new
                 {
                     booking_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DoctorId = table.Column<int>(type: "integer", nullable: false),
-                    PatientId = table.Column<int>(type: "integer", nullable: false)
+                    doctor_id = table.Column<int>(type: "integer", nullable: false),
+                    patient_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_appointments", x => new { x.booking_date, x.DoctorId, x.PatientId });
+                    table.PrimaryKey("PK_appointments", x => new { x.booking_date, x.doctor_id, x.patient_id });
                     table.ForeignKey(
-                        name: "FK_appointments_doctors_DoctorId",
-                        column: x => x.DoctorId,
+                        name: "FK_appointments_doctors_doctor_id",
+                        column: x => x.doctor_id,
                         principalTable: "doctors",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_appointments_patients_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_appointments_patients_patient_id",
+                        column: x => x.patient_id,
                         principalTable: "patients",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -85,24 +85,24 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "appointments",
-                columns: new[] { "booking_date", "DoctorId", "PatientId" },
+                columns: new[] { "booking_date", "doctor_id", "patient_id" },
                 values: new object[,]
                 {
-                    { new DateTime(2024, 1, 31, 14, 21, 19, 325, DateTimeKind.Utc).AddTicks(1236), 1, 1 },
-                    { new DateTime(2024, 1, 31, 14, 21, 19, 325, DateTimeKind.Utc).AddTicks(1236), 1, 2 },
-                    { new DateTime(2024, 1, 31, 14, 21, 19, 325, DateTimeKind.Utc).AddTicks(1236), 2, 1 },
-                    { new DateTime(2024, 1, 31, 14, 21, 19, 325, DateTimeKind.Utc).AddTicks(1236), 2, 2 }
+                    { new DateTime(2024, 2, 5, 8, 25, 40, 306, DateTimeKind.Utc).AddTicks(7252), 1, 1 },
+                    { new DateTime(2024, 2, 5, 8, 25, 40, 306, DateTimeKind.Utc).AddTicks(7252), 1, 2 },
+                    { new DateTime(2024, 2, 5, 8, 25, 40, 306, DateTimeKind.Utc).AddTicks(7252), 2, 1 },
+                    { new DateTime(2024, 2, 5, 8, 25, 40, 306, DateTimeKind.Utc).AddTicks(7252), 2, 2 }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_appointments_DoctorId",
+                name: "IX_appointments_doctor_id",
                 table: "appointments",
-                column: "DoctorId");
+                column: "doctor_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_appointments_PatientId",
+                name: "IX_appointments_patient_id",
                 table: "appointments",
-                column: "PatientId");
+                column: "patient_id");
         }
 
         /// <inheritdoc />
