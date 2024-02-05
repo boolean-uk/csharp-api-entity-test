@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using workshop.wwwapi.Models;
-using workshop.wwwapi.Models.Intermediaries;
 
 namespace workshop.wwwapi.Data
 {
@@ -28,44 +27,39 @@ namespace workshop.wwwapi.Data
                 new Doctor { Id = 2, FullName = "Dr. Johnson" }
             );
 
-            // Appointment
-            modelBuilder.Entity<Appointment>().HasKey(a => new { a.PatientId, a.DoctorId });
-
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { PatientId = 1, DoctorId = 1, Booking = DateTime.UtcNow },
-                new Appointment { PatientId = 2, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(1) },
-                new Appointment { PatientId = 1, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(2) },
-                new Appointment { PatientId = 2, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(3) }
+                new Appointment { Id = 1, PatientId = 1, DoctorId = 1, Booking = DateTime.UtcNow },
+                new Appointment { Id = 2, PatientId = 2, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(1) },
+                new Appointment { Id = 3, PatientId = 1, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(2) },
+                new Appointment { Id = 4, PatientId = 2, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(3) }
             );
 
             // Prescription and Medication
-            modelBuilder.Entity<PrescriptionMedicine>()
-                .HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
+            modelBuilder.Entity<Medicine>()
+                .HasMany(m => m.Prescriptions)
+                .WithMany(p => p.Medicines);
+                
+            modelBuilder.Entity<Prescription>()
+                .HasMany(p => p.Medicines)
+                .WithMany(m => m.Prescriptions);
 
-            modelBuilder.Entity<PrescriptionMedicine>()
-                .HasOne(pm => pm.Prescription)
-                .WithMany(p => p.PrescriptionMedicines)
-                .HasForeignKey(pm => pm.PrescriptionId);
+            modelBuilder.Entity<Appointment>()
+                .HasKey(a => a.Id);
 
-            modelBuilder.Entity<PrescriptionMedicine>()
-                .HasOne(pm => pm.Medicine)
-                .WithMany(m => m.PrescriptionMedicines)
-                .HasForeignKey(pm => pm.MedicineId);
+            modelBuilder.Entity<Prescription>()
+                .HasOne(p => p.Appointment)
+                .WithOne(a => a.Prescription)
+                .HasForeignKey<Prescription>(p => p.AppointmentId);
+
 
             modelBuilder.Entity<Medicine>().HasData(
-                new Medicine { Id = 1, Name = "Medicine A", Quantity = 10, Notes = "Take once daily" },
-                new Medicine { Id = 2, Name = "Medicine B", Quantity = 20, Notes = "Take twice daily" }
+                new Medicine { Id = 1, Name = "Aspirin", Quantity = 100, Notes = "For pain relief" },
+                new Medicine { Id = 2, Name = "Penicillin", Quantity = 50, Notes = "Antibiotic" }
             );
 
             modelBuilder.Entity<Prescription>().HasData(
                 new Prescription { Id = 1, AppointmentId = 1 },
                 new Prescription { Id = 2, AppointmentId = 2 }
-            );
-
-            modelBuilder.Entity<PrescriptionMedicine>().HasData(
-                new PrescriptionMedicine { PrescriptionId = 1, MedicineId = 1 },
-                new PrescriptionMedicine { PrescriptionId = 1, MedicineId = 2 },
-                new PrescriptionMedicine { PrescriptionId = 2, MedicineId = 1 }
             );
 
             base.OnModelCreating(modelBuilder);
@@ -80,5 +74,7 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
     }
 }

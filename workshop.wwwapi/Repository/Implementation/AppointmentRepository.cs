@@ -2,7 +2,7 @@
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
-namespace workshop.wwwapi.Repository
+namespace workshop.wwwapi.Repository.Implementation
 {
     public class AppointmentRepository : IAppointmentRepository
     {
@@ -12,6 +12,16 @@ namespace workshop.wwwapi.Repository
             _db = db;
         }
 
+        public Task<Appointment?> Get(int id)
+        {
+            return _db.Appointments
+                .Include(a => a.Doctor)
+                    .ThenInclude(d => d.Appointments)
+                .Include(a => a.Patient)
+                    .ThenInclude(p => p.Appointments)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task<IEnumerable<Appointment>> Get()
         {
             return await _db.Appointments
@@ -19,6 +29,8 @@ namespace workshop.wwwapi.Repository
                     .ThenInclude(d => d.Appointments)
                 .Include(a => a.Patient)
                     .ThenInclude(p => p.Appointments)
+                .Include(a => a.Prescription)
+                    .ThenInclude(p => p.Medicines)
                 .ToListAsync();
         }
 
@@ -29,6 +41,8 @@ namespace workshop.wwwapi.Repository
                     .ThenInclude(d => d.Appointments)
                 .Include(a => a.Patient)
                     .ThenInclude(p => p.Appointments)
+                .Include(a => a.Prescription)
+                    .ThenInclude(p => p.Medicines)
                 .Where(a => a.DoctorId == id)
                 .ToListAsync();
         }
@@ -53,6 +67,13 @@ namespace workshop.wwwapi.Repository
                     .ThenInclude(p => p.Appointments)
                 .Where(a => a.DoctorId == doctorId && a.PatientId == patientId)
                 .ToListAsync();
+        }
+
+        public async Task<Appointment?> Create(Appointment appointment)
+        {
+            _db.Appointments.Add(appointment);
+            await _db.SaveChangesAsync();
+            return appointment;
         }
     }
 }

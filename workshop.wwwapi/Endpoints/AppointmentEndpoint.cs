@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 using workshop.wwwapi.Services;
@@ -17,6 +16,7 @@ namespace workshop.wwwapi.Endpoints
             group.MapGet("/doctors/{id}", GetByDoctor);
             group.MapGet("/doctors/{doctorId}/patients/{patientId}", GetByDoctorAndPatient);
             group.MapGet("/patients/{patientId}/doctors/{doctorId}", GetByDoctorAndPatient);
+            group.MapPost("/", Create);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -77,6 +77,34 @@ namespace workshop.wwwapi.Endpoints
 
             IEnumerable<OutputAppointment> outputAppointment = AppointmentDtoManager.Convert(appointments);
             return TypedResults.Ok(outputAppointment);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> Create(IAppointmentRepository appointmentRepository, IDoctorRepository doctorRepository, IPatientRepository patientRepository, InputAppointment inputAppointment)
+        {
+            Doctor doctor = await doctorRepository.Get(inputAppointment.DoctorId);
+            if (doctor == null)
+                return TypedResults.BadRequest("Doctor not found");
+
+            Patient patient = await patientRepository.Get(inputAppointment.PatientId);
+            if (patient == null)
+                return TypedResults.BadRequest("Patient not found");
+
+            Appointment appointment = new Appointment
+            {
+                DoctorId = inputAppointment.DoctorId,
+                Doctor = doctor,
+                PatientId = inputAppointment.PatientId,
+                Patient = patient,
+                Booking = inputAppointment.Booking
+            };
+
+            Appointment? result = await appointmentRepository.Create(appointment);
+            if (result == null)
+                return TypedResults.BadRequest();
+
+            OutputAppointment outputAppointment = AppointmentDtoManager.Convert(result);
+            return TypedResults.Created("url", outputAppointment);
         }
     }
 }

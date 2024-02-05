@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using workshop.wwwapi.Models.Intermediaries;
 
 namespace workshop.wwwapi.Models
 {
@@ -13,6 +12,6 @@ namespace workshop.wwwapi.Models
 
         [Column("appointment_id")]
         public int AppointmentId { get; set; }
-        public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; }
+        public Appointment Appointment { get; set; }
     }
 }

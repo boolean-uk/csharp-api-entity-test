@@ -1,6 +1,7 @@
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Repository;
+using workshop.wwwapi.Repository.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 
 var app = builder.Build();
 
@@ -28,6 +30,7 @@ app.UseHttpsRedirection();
 app.ConfigurePatientEndpoint();
 app.ConfigureDoctorEndpoint();
 app.ConfigureAppointmentEndpoint();
+app.ConfigurePrescriptionEndpoint();
 
 app.Run();
 

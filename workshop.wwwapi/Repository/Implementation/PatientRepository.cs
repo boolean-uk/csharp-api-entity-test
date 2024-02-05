@@ -2,7 +2,7 @@
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
-namespace workshop.wwwapi.Repository
+namespace workshop.wwwapi.Repository.Implementation
 {
     public class PatientRepository : IPatientRepository
     {
