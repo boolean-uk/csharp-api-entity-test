@@ -1,32 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using workshop.wwwapi.Repository;
 using workshop.wwwapi.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace workshop.wwwapi.Endpoints
 {
     public static class SurgeryEndpoint
     {
-        //TODO:  add additional endpoints in here according to the requirements in the README.md 
-        public class PatientResponseDTO
-        {
-            public int ID {  get; set; }
-            public string name { get; set; }
-
-            public PatientResponseDTO(Patient patient)
-            {
-                name = patient.FullName;
-                ID = patient.Id;
-            }
-        }
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
 
-            surgeryGroup.MapGet("/patients", GetPatients);
-            surgeryGroup.MapGet("/getPatientByID", GetPatientByID);
-            surgeryGroup.MapGet("/doctors", GetDoctors);
-            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            //patients
+            surgeryGroup.MapGet("/patients/", GetPatients);
+            surgeryGroup.MapGet("/patient/{id}/", GetPatientByID);
+            surgeryGroup.MapPost("/patients/", CreatePatient);
+
+            //doctors
+            surgeryGroup.MapGet("/doctors/", GetDoctors);
+            surgeryGroup.MapGet("/doctor/{id}/", GetDoctorByID);
+            surgeryGroup.MapPost("/doctors/", CreateDoctor);
+            
+            //appointments
+            surgeryGroup.MapGet("/appointments/", GetAppointments);
+            surgeryGroup.MapGet("/appointment/doctor/{id}/", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointment/patient/{id}", GetAppointmentsByPatient);
+            surgeryGroup.MapPost("/appointments/", CreateAppointment);
         }
+
+        //get all patients
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
         {
@@ -39,23 +41,123 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(results);
         }
 
+        //get patient by ID
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatientByID(IRepository repository, int id)
         {
             var patient = await repository.GetPatientByID(id);
+            if (patient == null)
+            {
+                return TypedResults.NotFound(id);
+            }
             PatientResponseDTO patientToReturn = new PatientResponseDTO(patient); 
             return TypedResults.Ok(patientToReturn);
         }
 
+        //create patient
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Patient))]
+        public static async Task<IResult> CreatePatient(IRepository repository, string name)
+        {
+            var patient = await repository.CreatePatient(name);
+            PatientResponseDTO patientToReturn = new PatientResponseDTO(patient);
+            return TypedResults.Created("created", patientToReturn);
+        }
+
+        //get all doctors
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            var doctor = await repository.GetDoctors();
+            var results = new List<DoctorsResponseDTO>();
+            foreach (var doc in doctor)
+            {
+                DoctorsResponseDTO doctorToReturn = new DoctorsResponseDTO(doc);
+                results.Add(doctorToReturn);
+            }
+            return TypedResults.Ok(results);
         }
+
+        //get doctor by ID
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
+        public static async Task<IResult> GetDoctorByID(IRepository repository, int id)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+            var doctor = await repository.GetDoctorByID(id);
+            if (doctor == null)
+            {
+                return TypedResults.NotFound(id);
+            }
+
+            DoctorsResponseDTO doctorToReturn = new DoctorsResponseDTO(doctor);
+            return TypedResults.Ok(doctorToReturn);
+        }
+
+        //create doctor
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Doctor))]
+        public static async Task<IResult> CreateDoctor(IRepository repository, string name)
+        {
+            var doctor = await repository.CreateDoctor(name);
+            DoctorsResponseDTO doctorToReturn = new DoctorsResponseDTO(doctor);
+            return TypedResults.Created("created", doctorToReturn);
+        }
+
+        //get all appointments
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointments(IRepository repository)
+        {
+            var appointments = await repository.GetAppointments();
+            var results = new List<AppointmentsResponseDTO>();
+            foreach (var appo in appointments)
+            {
+                AppointmentsResponseDTO appointmentsToReturn = new AppointmentsResponseDTO(appo);
+                results.Add(appointmentsToReturn);
+            }
+            return TypedResults.Ok(results);
+        }
+
+        //get appointment by doctorID
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int doctorId)
+        {
+            var appointments = await repository.GetAppointmentsByDoctorID(doctorId);
+            if (appointments == null)
+            {
+                return TypedResults.NotFound(doctorId);
+            }
+            List<AppointmentsResponseDTO> appointmentsToReturn = new List<AppointmentsResponseDTO>();
+            foreach (var appointment in appointments)
+            {
+                AppointmentsResponseDTO appointmentToReturn = new AppointmentsResponseDTO(appointment);
+                appointmentsToReturn.Add(appointmentToReturn);
+            }
+            return TypedResults.Ok(appointmentsToReturn);
+        }
+
+        //get appointment by patientID
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int patientId)
+        {
+            var appointments = await repository.GetAppointmentsByPatientID(patientId);
+            if (appointments == null)
+            {
+                return TypedResults.NotFound(patientId);
+            }
+            List<AppointmentsResponseDTO> appointmentsToReturn = new List<AppointmentsResponseDTO>();
+            foreach (var appointment in appointments)
+            {
+                AppointmentsResponseDTO appointmentToReturn = new AppointmentsResponseDTO(appointment);
+                appointmentsToReturn.Add(appointmentToReturn);
+            }
+            return TypedResults.Ok(appointmentsToReturn);
+        }
+
+        //create appointment
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Appointment))]
+        public static async Task<IResult> CreateAppointment(IRepository repository, 
+            int doctorId, int patientId, DateTime appointmentTime)
+        {
+            var appointment = await repository.CreateAppointment(doctorId, patientId, appointmentTime);
+            AppointmentsResponseDTO appointmentToReturn = new AppointmentsResponseDTO(appointment);
+            return TypedResults.Created("created", appointmentToReturn);
         }
     }
 }

@@ -1,22 +1,44 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly
-
+    //appointments class
     [Table("appointments")]
     public class Appointment
     {
-        [Column("booking")]
-        public DateTime Booking { get; set; }
-
-        [Column("doctorid")]
+        [Column("doctor_id")]
         public int DoctorId { get; set; }
 
-        [Column("patientid")]
+        [Column("patient_id")]
         public int PatientId { get; set; }
 
-        public List<Appointment> Appointments { get; set; }
+        [Column("appointment_date")]
+        public DateTime AppointmentDate { get; set; }
 
+        public Patient Patient { get; set; }
+
+        public Doctor Doctor { get; set; }
+
+    }
+
+    //DTO appointments
+    public class AppointmentsResponseDTO
+    {
+        public int DoctorId { get; set; }
+        public string DoctorName { get; set; }
+        public int PatientId { get; set; }
+        public string PatientName { get; set; }
+        public DateTime AppointmentDate { get; set; }
+
+        public AppointmentsResponseDTO(Appointment appointment)
+        {
+            DoctorId = appointment.DoctorId;
+            DoctorName = appointment.Doctor?.FullName;
+            PatientId = appointment.PatientId;
+            PatientName = appointment.Patient?.FullName;
+            AppointmentDate = appointment.AppointmentDate;
+        }
     }
 }
