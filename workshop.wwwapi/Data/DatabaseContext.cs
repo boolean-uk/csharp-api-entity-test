@@ -27,7 +27,10 @@ namespace workshop.wwwapi.Data
             //Extension many to many relationship of medicine & prescription:
             modelBuilder.Entity<PrescriptionMedicine>().HasKey(a => new { a.MedicineId, a.PrescriptionId });
 
-            //modelBuilder.Entity<Appointment>().HasKey(a => new { a.PrescriptionMed});
+            //Mapping prescription into appointment, and make prescription as FK in appointment: (BUUUUT! We already using annotation...)
+            /*modelBuilder.Entity<Appointment>().HasOne(a => a.Prescription)
+                .WithOne(p => p.Appointment)
+                .HasForeignKey<Prescription>(p => p.AppointmentId);*/
 
 
 
@@ -71,35 +74,20 @@ namespace workshop.wwwapi.Data
             //DateTime _dateTime = DateTime.Now;
 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment() { DoctorId = 1, PatientId = 2, Booking = DateTime.Parse("1999/10/12 12:00:00"), Appointmenttype = AppointmentType.Local/*,
-                    PrescriptionMed = new PrescriptionMedicine() {
-                        MedicineId = 1, 
-                        PrescriptionId = 1, 
-                        Quatity = 100, 
-                        Note = "TAKE THIS WITH CARE" }*/
+                new Appointment() { DoctorId = 1, PatientId = 2, Booking = DateTime.Parse("1999/10/12 12:00:00"), Appointmenttype = AppointmentType.Local,
+                    PrescriptionId = 1
                 },
-                new Appointment() { DoctorId = 1, PatientId = 1, Booking = DateTime.Parse("1998/10/12 12:00:00"), Appointmenttype = AppointmentType.Online/*,
-                    PrescriptionMed = new PrescriptionMedicine()
-                    {   
-                        MedicineId = 2,
-                        PrescriptionId = 2,
-                        Quatity = 1000,
-                        Note = "OVERDOSE"
-                   
-                    }*/
+                new Appointment() { DoctorId = 1, PatientId = 1, Booking = DateTime.Parse("1998/10/12 12:00:00"), Appointmenttype = AppointmentType.Online,
+                    PrescriptionId = 2
                     },
+                    
                   new Appointment()
                   {
                       DoctorId = 2,
                       PatientId = 2,
                       Booking = DateTime.Parse("1997/10/12 12:00:00"),
-                      Appointmenttype = AppointmentType.Local /*,
-                      PrescriptionMed = new PrescriptionMedicine() {
-                          MedicineId = 3, 
-                          PrescriptionId = 3, 
-                          Quatity = 1, 
-                          Note = "TAKE MORE" }
-                  }*/
+                      Appointmenttype = AppointmentType.Local,
+                      PrescriptionId = 3
                   }
                   );
 

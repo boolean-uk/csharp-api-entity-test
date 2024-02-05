@@ -12,8 +12,13 @@ namespace workshop.wwwapi.DTOs
 
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
+        public int PrescriptionId { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public AppointmentType Appointmenttype { get; set; }
+        public OutPrescriptionDTO Prescription { get; set; }
+        //public ICollection<OutPrescriptionMedicineDTO> PrescriptMed { get; set; } = new List<OutPrescriptionMedicineDTO>();
+
+
     }
 }

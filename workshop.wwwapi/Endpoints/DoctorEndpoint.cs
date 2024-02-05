@@ -33,7 +33,21 @@ namespace workshop.wwwapi.Endpoints
                 {
                     FullName = doctor.FullName,
                     Id = doctor.Id,
-                    Appointments = doctor.Appointments.Select(a => new OutAppointmentDTO { DoctorId = a.DoctorId, Booking = a.Booking, PatientId = a.PatientId,Appointmenttype = a.Appointmenttype }).ToList()
+                    Appointments = doctor.Appointments.Select(a => new OutAppointmentDTO { DoctorId = a.DoctorId,
+                        Booking = a.Booking, 
+                        PatientId = a.PatientId,
+                        Appointmenttype = a.Appointmenttype,
+                        Prescription = new OutPrescriptionDTO
+                        {
+                            PrescriptMed = a.Prescription.PrescriptMed.Select(p => new OutPrescriptionMedicineDTO
+                            {
+                                MedicineId = p.MedicineId,
+                                Note = p.Note,
+                                Quatity = p.Quatity
+                            }).ToList()
+                        }
+
+                    }).ToList()
                 };
 
                 doctors.Add(outDoctor);
@@ -71,7 +85,20 @@ namespace workshop.wwwapi.Endpoints
                 {
                     FullName = source.FullName,
                     Id = source.Id,
-                    Appointments = source.Appointments.Select(a => new OutAppointmentDTO { DoctorId = a.DoctorId, Booking = a.Booking, PatientId = a.PatientId, Appointmenttype = a.Appointmenttype }).ToList()
+                    Appointments = source.Appointments.Select(a => new OutAppointmentDTO { DoctorId = a.DoctorId,
+                        Booking = a.Booking, 
+                        PatientId = a.PatientId, 
+                        Appointmenttype = a.Appointmenttype,
+                        Prescription = new OutPrescriptionDTO
+                        {
+                            PrescriptMed = a.Prescription.PrescriptMed.Select(p => new OutPrescriptionMedicineDTO
+                            {
+                                MedicineId = p.MedicineId,
+                                Note = p.Note,
+                                Quatity = p.Quatity
+                            }).ToList()
+                        }
+                    }).ToList()
                 };
                 return TypedResults.Ok(doctor);
             }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240205083526_AddPredMed3")]
+    partial class AddPredMed3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,15 +213,6 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("PrescriptionId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("AppointmentBooking")
-                        .HasColumnType("Date");
-
-                    b.Property<int?>("AppointmentDoctorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("AppointmentPatientId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Note")
                         .IsRequired()
                         .HasColumnType("text");
@@ -229,8 +223,6 @@ namespace workshop.wwwapi.Migrations
                     b.HasKey("MedicineId", "PrescriptionId");
 
                     b.HasIndex("PrescriptionId");
-
-                    b.HasIndex("AppointmentDoctorId", "AppointmentPatientId", "AppointmentBooking");
 
                     b.ToTable("prescript");
 
@@ -299,18 +291,9 @@ namespace workshop.wwwapi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workshop.wwwapi.Models.Appointment", null)
-                        .WithMany("PrescriptMed")
-                        .HasForeignKey("AppointmentDoctorId", "AppointmentPatientId", "AppointmentBooking");
-
                     b.Navigation("Medicine");
 
                     b.Navigation("Prescription");
-                });
-
-            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
-                {
-                    b.Navigation("PrescriptMed");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>

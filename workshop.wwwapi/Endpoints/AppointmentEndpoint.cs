@@ -32,7 +32,15 @@ namespace workshop.wwwapi.Endpoints
                 Booking = a.Booking,
                 DoctorId = a.DoctorId,
                 PatientId = a.PatientId,
-                Appointmenttype = a.Appointmenttype
+                Appointmenttype = a.Appointmenttype,
+                PrescriptionId = a.PrescriptionId,
+                Prescription = new OutPrescriptionDTO {  PrescriptMed = a.Prescription.PrescriptMed.Select(p => new OutPrescriptionMedicineDTO {
+                    MedicineId = p.MedicineId,
+                    Note = p.Note,
+                    Quatity = p.Quatity
+                }).ToList()}
+
+            
                 
             }).ToList();
 
@@ -52,7 +60,19 @@ namespace workshop.wwwapi.Endpoints
                     Booking = source.Booking,
                     DoctorId = source.DoctorId,
                     PatientId = source.PatientId,
-                    Appointmenttype=source.Appointmenttype
+                    Appointmenttype=source.Appointmenttype,
+                    PrescriptionId =  source.PrescriptionId,
+
+                    Prescription = new OutPrescriptionDTO
+                    {
+                        PrescriptMed = source.Prescription.PrescriptMed.Select(p => new OutPrescriptionMedicineDTO
+                        {
+                            MedicineId = p.MedicineId,
+                            Note = p.Note,
+                            Quatity = p.Quatity
+                        }).ToList()
+                    }
+
                 };
                 return TypedResults.Ok(appointment);
             }
@@ -75,7 +95,17 @@ namespace workshop.wwwapi.Endpoints
                     Booking = a.Booking,
                     DoctorId = a.DoctorId,
                     PatientId = a.PatientId,
-                    Appointmenttype = a.Appointmenttype
+                    Appointmenttype = a.Appointmenttype,
+                    PrescriptionId = a.PrescriptionId,
+                    Prescription = new OutPrescriptionDTO
+                    {
+                        PrescriptMed = a.Prescription.PrescriptMed.Select(p => new OutPrescriptionMedicineDTO
+                        {
+                            MedicineId = p.MedicineId,
+                            Note = p.Note,
+                            Quatity = p.Quatity
+                        }).ToList()
+                    }
                 }).ToList();
 
                 return TypedResults.Ok(_appointments);
@@ -100,8 +130,19 @@ namespace workshop.wwwapi.Endpoints
                     Booking = a.Booking,
                     DoctorId = a.DoctorId,
                     PatientId = a.PatientId,
-                    Appointmenttype = a.Appointmenttype
-                    
+                    Appointmenttype = a.Appointmenttype,
+                    PrescriptionId = a.PrescriptionId,
+
+                    Prescription = new OutPrescriptionDTO
+                    {
+                        PrescriptMed = a.Prescription.PrescriptMed.Select(p => new OutPrescriptionMedicineDTO
+                        {
+                            MedicineId = p.MedicineId,
+                            Note = p.Note,
+                            Quatity = p.Quatity
+                        }).ToList()
+                    }
+
                 }).ToList();
 
                 return TypedResults.Ok(_appointments);

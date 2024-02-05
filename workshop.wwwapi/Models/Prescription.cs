@@ -12,7 +12,7 @@ namespace workshop.wwwapi.Models
             public int Id { get; set; }
 
 
-            public ICollection<PrescriptionMedicine> PrescriptMed { get; set; } = new List<PrescriptionMedicine>();        //COMMENT: This does not generate a column on the table actually!
+            public ICollection<PrescriptionMedicine> PrescriptMed { get; set; } = new List<PrescriptionMedicine>();       
 
         
     }

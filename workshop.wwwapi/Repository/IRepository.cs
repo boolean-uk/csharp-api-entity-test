@@ -14,5 +14,7 @@ namespace workshop.wwwapi.Repository
         Task<Patient> GetPatient(int? id);
         Task<Doctor> GetADoctor(int? id);
         Task<Doctor> AddDoctor(InnDoctorDTO newDoctor);
+        Task<IEnumerable<Prescription>> Getprescriptions();
+        Task<Prescription> AddPrescription(InPrescriptionDTO newPrescription);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using workshop.wwwapi.DTOs;
 
 namespace workshop.wwwapi.Models
 {
@@ -29,10 +30,17 @@ namespace workshop.wwwapi.Models
 
         [Column("appointment type")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public AppointmentType Appointmenttype { get; set; }    
+        public AppointmentType Appointmenttype { get; set; }
 
         //Extension test:
-       // public PrescriptionMedicine PrescriptionMed { get; set; }
+        // public PrescriptionMedicine PrescriptionMed { get; set; }     // NOT CORRECT I THINK!
+
+        [ForeignKey("prescription_id")]
+        public int PrescriptionId { get; set; } 
+        public Prescription Prescription { get; set; }
+     
+        public ICollection<PrescriptionMedicine> PrescriptMed { get; set; } = new List<PrescriptionMedicine>();
+
 
     }
 }
