@@ -139,8 +139,10 @@ namespace workshop.wwwapi.Repository
 
         public async Task<Prescription> PostPrescription(Prescription prescription) 
         {
+            prescription.Appointment = GetAppointmentsByIds(prescription.DoctorId, prescription.PatientId).Result.FirstOrDefault();
             await _databaseContext.Prescriptions.AddAsync(prescription);
             await _databaseContext.SaveChangesAsync();
+            var res = prescription;
             return prescription;
         }
 
@@ -148,6 +150,7 @@ namespace workshop.wwwapi.Repository
         {
             await _databaseContext.PrescriptionMedicines.AddAsync(pm);
             await _databaseContext.SaveChangesAsync();
+            var res = pm;
             return pm;
         }
     }

@@ -12,6 +12,6 @@ namespace workshop.wwwapi.Models.TransferModels.Items
 
         public AppointmentDTO appointment { get; set; } = new AppointmentDTO(app.Booking, app.PatientId, app.DoctorId, app.Doctor, app.Patient);
 
-        public ICollection<PrescriptionMedicineGetMedicinesDTO> Medicines { get; set; } = medicines.Select(m => new PrescriptionMedicineGetMedicinesDTO(m.MedicineId, m.Medicine)).ToList();
+        public ICollection<PrescriptionMedicineGetMedicinesDTO> Medicines { get; set; } = medicines.Select(m => new PrescriptionMedicineGetMedicinesDTO(m.Amount, m.Instructions, m.Medicine)).ToList();
     }
 }

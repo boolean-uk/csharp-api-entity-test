@@ -4,10 +4,9 @@ using workshop.wwwapi.Models.JunctionTable;
 
 namespace workshop.wwwapi.Models.TransferInputModels
 {
-    public class MedicineInputDTO(int id, string Name)
+    public class MedicineInputDTO(int id)
     {
         public int Id { get; set; } = id;
-        public string Name { get; set; } = Name;
 
     }
 }

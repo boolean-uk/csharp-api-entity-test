@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.JunctionTable;
 using workshop.wwwapi.Models.PureModels;
@@ -42,6 +43,7 @@ namespace workshop.wwwapi.Endpoints
 
             // Prescriptions
             app.MapGet("prescriptions/", GetPrescriptions);
+            app.MapGet("prescriptions/{id}", GetSpecificPrescription);
             app.MapPost("prescriptions/", PostPrescription);
         }
 
@@ -233,28 +235,35 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> PostPrescription(IRepository repository, PrescriptionInputDTO scriptPost) 
         {
             IEnumerable<Medicine> meds = await repository.GetMedicines();
-            bool validMedicineId = meds.Any(m => m.Id == scriptPost.PrescriptionMedicine.MedicineId);
+            bool validMedicineId = scriptPost.prescriptionMedicine.All(m => meds.Any(n => n.Id == m.MedicineId));
             if (!validMedicineId) 
             {
-                return TypedResults.NotFound($"Could not find medicine with provided id of {scriptPost.PrescriptionMedicine.MedicineId}.");
+                return TypedResults.NotFound($"Could not find medicines with provided ids of {string.Join(", ", scriptPost.prescriptionMedicine.Select(m => m.MedicineId))}.");
             }
 
             Prescription prescription = new Prescription() { Name = scriptPost.Name, DoctorId = scriptPost.DoctorId, PatientId = scriptPost.PatientId};
             Prescription scriptReturn = await repository.PostPrescription(prescription);
 
-            PrescriptionMedicine scriptJunction = new PrescriptionMedicine() { 
-                PrescriptionId = scriptReturn.Id, 
-                MedicineId = scriptPost.PrescriptionMedicine.MedicineId, 
-                Amount = scriptPost.PrescriptionMedicine.Amount, 
-                Instructions = scriptPost.PrescriptionMedicine.Instructions
-            };
+            IEnumerable<PrescriptionMedicine> prescriptions = scriptPost
+                .prescriptionMedicine
+                .Select(pm => new PrescriptionMedicine() 
+                {
+                    PrescriptionId = scriptReturn.Id,
+                    MedicineId = pm.MedicineId,
+                    Amount = pm.Amount,
+                    Instructions = pm.Instructions
+                });
 
-            PrescriptionMedicine scriptJunctionReturn = await repository.PostPrescriptionMedicine(scriptJunction);
-            scriptReturn.PrescriptionMedicine = (ICollection<PrescriptionMedicine>)scriptJunctionReturn;
+            List<PrescriptionMedicine> postPrescriptionReturn = new List<PrescriptionMedicine>();
+            foreach (PrescriptionMedicine pm in prescriptions) 
+            {
+                postPrescriptionReturn.Add(await repository.PostPrescriptionMedicine(pm));
+            }
+            
 
-            //PrescriptionDTO scriptOut = new PrescriptionDTO(scriptReturn.Id, scriptReturn.Name, scriptReturn.Appointment, scriptReturn.PrescriptionMedicine.Medicine);
-
-            return TypedResults.Ok();
+            PrescriptionDTO scriptOut = new PrescriptionDTO(scriptReturn.Id, scriptReturn.Name, scriptReturn.Appointment, postPrescriptionReturn);
+            Payload<PrescriptionDTO> payload = new Payload<PrescriptionDTO>(scriptOut);
+            return TypedResults.Created($"prescriptions/{payload.Data.Id}", payload);
         }
     }
 }

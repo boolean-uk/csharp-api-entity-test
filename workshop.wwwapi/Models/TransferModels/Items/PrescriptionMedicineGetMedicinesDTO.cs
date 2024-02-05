@@ -2,9 +2,11 @@
 
 namespace workshop.wwwapi.Models.TransferModels.Items
 {
-    public class PrescriptionMedicineGetMedicinesDTO(int Id, Medicine medicines)
+    public class PrescriptionMedicineGetMedicinesDTO(int Amount, string Instructions, Medicine medicines)
     {
-        public int MedicineId { get; set; } = Id;
+        public int Amount { get; set; } = Amount;
+
+        public string Instructions { get; set; } = Instructions;
 
         public MedicineDTO Medicine { get; set; } = new MedicineDTO(medicines.Id, medicines.Name);
         //public MedicineDTO Medicine { get; set; } = new MedicineDTO(medicines.Id, medicines.Name, medicines.Amount, medicines.Instructions);
