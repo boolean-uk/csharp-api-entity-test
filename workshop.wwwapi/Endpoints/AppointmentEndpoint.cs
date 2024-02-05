@@ -14,6 +14,7 @@ namespace workshop.wwwapi.Endpoints
             appointmentGroup.MapGet("/patient/{id}", GetAppointmentsByPatientId);
             appointmentGroup.MapGet("/doctor/{id}", GetAppointmentsByDoctorId);
             appointmentGroup.MapGet("/{doctorid}/{patientid}", GetAppointmentByIds);
+            appointmentGroup.MapPost("/", CreateAppointment);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointments(IRepository repository)
@@ -45,6 +46,16 @@ namespace workshop.wwwapi.Endpoints
             AppointmentDTO? result = await repository.GetAppointmentByIds(doctorid, patientid);
             if (result == null) { return TypedResults.NotFound($"Appointment with doctor id: {doctorid}, patient id: {patientid} was not found"); }
             return TypedResults.Ok(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreateAppointment(CreateAppointmentDTO cDTO, IRepository repository)
+        {
+            if (cDTO.BookingTime < DateTime.UtcNow) { return TypedResults.BadRequest("Appointment time cannot be in the past"); }
+            int result = await repository.CreateAppointment(cDTO);
+            if (result == -1) { return TypedResults.BadRequest($"No doctor with id {cDTO.DoctorId} found."); }
+            if (result == -2) { return TypedResults.BadRequest($"No patient with id {cDTO.PatientId} found."); }
+            return TypedResults.Ok();
         }
     }
 }

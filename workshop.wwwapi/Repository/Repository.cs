@@ -250,5 +250,17 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.SaveChangesAsync();
             return 0;
         }
+
+        public async Task<int> CreateAppointment(CreateAppointmentDTO cDTO)
+        {
+            Doctor? dbDoctor = _databaseContext.Doctors.Where(x => x.Id == cDTO.DoctorId).FirstOrDefault();
+            if (dbDoctor == null) return -1;
+            Patient? dbPatient = _databaseContext.Patients.Where(x => x.Id == cDTO.PatientId).FirstOrDefault();
+            if (dbPatient == null) return -2;
+            Appointment a = new() { PatientId = cDTO.PatientId, DoctorId = cDTO.DoctorId, BookingTime = cDTO.BookingTime, Type = cDTO.Type };
+            _databaseContext.Add(a);
+            await _databaseContext.SaveChangesAsync();
+            return 0;
+        }
     }
 }
