@@ -16,6 +16,9 @@ namespace workshop.wwwapi.Repository.Implementation
             return await _db.Patients
                 .Include(p => p.Appointments)
                     .ThenInclude(a => a.Doctor)
+                .Include(p => p.Appointments)
+                    .ThenInclude(a => a.Prescription)
+                        .ThenInclude(p => p.Medicines)
                 .ToListAsync();
         }
 
@@ -24,6 +27,9 @@ namespace workshop.wwwapi.Repository.Implementation
             return await _db.Patients
                 .Include(p => p.Appointments)
                     .ThenInclude(a => a.Doctor)
+                .Include(p => p.Appointments)
+                    .ThenInclude(a => a.Prescription)
+                        .ThenInclude(pr => pr.Medicines)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
         public async Task<Patient?> Create(Patient patient)

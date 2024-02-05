@@ -3,6 +3,6 @@
     public class PrescriptionWhitoutAppointment
     {
         public int Id { get; set; }
-        public ICollection<MedicineWhitoutPrescription> Medicines { get; set; }
+        public IEnumerable<MedicineWhitoutPrescription> Medicines { get; set; }
     }
 }

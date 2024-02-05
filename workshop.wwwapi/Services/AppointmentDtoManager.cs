@@ -39,9 +39,9 @@ namespace workshop.wwwapi.Services
             return appointments.Select(appointment => Convert(appointment));
         }
 
-        public static AppointmentWhitoutPrescription ConvertRemovePrescription(Appointment appointment)
+        public static AppointmentWhithoutPrescription ConvertRemovePrescription(Appointment appointment)
         {
-            return new AppointmentWhitoutPrescription
+            return new AppointmentWhithoutPrescription
             {
                 Id = appointment.Id,
                 Booking = appointment.Booking,
@@ -56,6 +56,44 @@ namespace workshop.wwwapi.Services
                     FullName = appointment.Patient.FullName
                 }
             };
+        }
+
+        public static AppointmentWhithoutPatient ConvertRemovePatient(Appointment appointment)
+        {
+            return new AppointmentWhithoutPatient
+            {
+                Booking = appointment.Booking,
+                Doctor = new DoctorWhithoutAppointment
+                {
+                    Id = appointment.Doctor.Id,
+                    FullName = appointment.Doctor.FullName
+                },
+                Prescription = PrescriptionDtoManager.ConvertRemoveAppointment(appointment.Prescription)
+            };
+        }
+
+        public static IEnumerable<AppointmentWhithoutPatient> ConvertRemovePatient(IEnumerable<Appointment> appointments)
+        {
+            return appointments.Select(appointment => ConvertRemovePatient(appointment));
+        }
+
+        public static AppointmentWhithoutDoctor ConvertRemoveDoctor(Appointment appointment)
+        {
+            return new AppointmentWhithoutDoctor
+            {
+                Booking = appointment.Booking,
+                Patient = new PatientWhithoutAppointment
+                {
+                    Id = appointment.Patient.Id,
+                    FullName = appointment.Patient.FullName
+                },
+                Prescription = PrescriptionDtoManager.ConvertRemoveAppointment(appointment.Prescription)
+            };
+        }
+
+        public static IEnumerable<AppointmentWhithoutDoctor> ConvertRemoveDoctor(IEnumerable<Appointment> appointments)
+        {
+            return appointments.Select(appointment => ConvertRemoveDoctor(appointment));
         }
     }
 }

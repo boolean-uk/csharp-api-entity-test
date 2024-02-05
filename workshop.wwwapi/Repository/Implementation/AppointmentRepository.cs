@@ -16,9 +16,9 @@ namespace workshop.wwwapi.Repository.Implementation
         {
             return _db.Appointments
                 .Include(a => a.Doctor)
-                    .ThenInclude(d => d.Appointments)
                 .Include(a => a.Patient)
-                    .ThenInclude(p => p.Appointments)
+                .Include(a => a.Prescription)
+                    .ThenInclude(p => p.Medicines)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
@@ -26,9 +26,7 @@ namespace workshop.wwwapi.Repository.Implementation
         {
             return await _db.Appointments
                 .Include(a => a.Doctor)
-                    .ThenInclude(d => d.Appointments)
                 .Include(a => a.Patient)
-                    .ThenInclude(p => p.Appointments)
                 .Include(a => a.Prescription)
                     .ThenInclude(p => p.Medicines)
                 .ToListAsync();
@@ -38,9 +36,7 @@ namespace workshop.wwwapi.Repository.Implementation
         {
             return await _db.Appointments
                 .Include(a => a.Doctor)
-                    .ThenInclude(d => d.Appointments)
                 .Include(a => a.Patient)
-                    .ThenInclude(p => p.Appointments)
                 .Include(a => a.Prescription)
                     .ThenInclude(p => p.Medicines)
                 .Where(a => a.DoctorId == id)
@@ -51,9 +47,9 @@ namespace workshop.wwwapi.Repository.Implementation
         {
             return await _db.Appointments
                 .Include(a => a.Doctor)
-                    .ThenInclude(d => d.Appointments)
                 .Include(a => a.Patient)
-                    .ThenInclude(p => p.Appointments)
+                .Include(a => a.Prescription)
+                    .ThenInclude(p => p.Medicines)
                 .Where(a => a.PatientId == id)
                 .ToListAsync();
         }
@@ -62,9 +58,9 @@ namespace workshop.wwwapi.Repository.Implementation
         {
             return await _db.Appointments
                 .Include(a => a.Doctor)
-                    .ThenInclude(d => d.Appointments)
                 .Include(a => a.Patient)
-                    .ThenInclude(p => p.Appointments)
+                .Include(a => a.Prescription)
+                    .ThenInclude(p => p.Medicines)
                 .Where(a => a.DoctorId == doctorId && a.PatientId == patientId)
                 .ToListAsync();
         }

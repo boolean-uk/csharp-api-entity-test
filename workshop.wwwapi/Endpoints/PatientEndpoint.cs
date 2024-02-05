@@ -17,18 +17,6 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> Get(IPatientRepository repository, int id)
-        {
-            Patient? patient = await repository.Get(id);
-
-            if (patient == null) 
-                return TypedResults.NotFound();
-
-            OutputPatient outputPatient = PatientDtoManager.Convert(patient);
-            return TypedResults.Ok(outputPatient);
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAll(IPatientRepository repository)
         {
             IEnumerable<Patient> patients = await repository.Get();
@@ -37,6 +25,18 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound();
 
             IEnumerable<OutputPatient> outputPatient = PatientDtoManager.Convert(patients);
+            return TypedResults.Ok(outputPatient);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> Get(IPatientRepository repository, int id)
+        {
+            Patient? patient = await repository.Get(id);
+
+            if (patient == null) 
+                return TypedResults.NotFound();
+
+            OutputPatient outputPatient = PatientDtoManager.Convert(patient);
             return TypedResults.Ok(outputPatient);
         }
 

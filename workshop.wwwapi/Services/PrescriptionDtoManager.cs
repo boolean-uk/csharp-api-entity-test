@@ -6,6 +6,9 @@ namespace workshop.wwwapi.Services
     {
         public static OutputPrescription Convert(Prescription prescription)
         {
+            if (prescription == null)
+                return null;
+
             return new OutputPrescription
             {
                 Id = prescription.Id,
@@ -17,6 +20,18 @@ namespace workshop.wwwapi.Services
         public static IEnumerable<OutputPrescription> Convert(IEnumerable<Prescription> prescription)
         {
             return prescription.Select(prescription => Convert(prescription));
+        }
+
+        public static PrescriptionWhitoutAppointment ConvertRemoveAppointment(Prescription prescription)
+        {
+            if (prescription == null)
+                return null;
+
+            return new PrescriptionWhitoutAppointment
+            {
+                Id = prescription.Id,
+                Medicines = MedicineDtoManager.ConvertRemovePrescription(prescription.Medicines),
+            };
         }
     }
 }

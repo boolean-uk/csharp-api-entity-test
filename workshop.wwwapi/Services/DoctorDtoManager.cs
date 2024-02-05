@@ -10,7 +10,7 @@ namespace workshop.wwwapi.Services
             {
                 Id = doctor.Id,
                 FullName = doctor.FullName,
-                Appointments = Convert(doctor.Appointments)
+                Appointments = AppointmentDtoManager.ConvertRemoveDoctor(doctor.Appointments)
             };
         }
 
@@ -25,24 +25,6 @@ namespace workshop.wwwapi.Services
             {
                 FullName = inputDoctor.FullName
             };
-        }
-
-        public static AppointmentWhithoutDoctor Convert(Appointment appointment)
-        {
-            return new AppointmentWhithoutDoctor
-            {
-                Booking = appointment.Booking,
-                Patient = new PatientWhithoutAppointment
-                {
-                    Id = appointment.Patient.Id,
-                    FullName = appointment.Patient.FullName
-                }
-            };
-        }
-
-        public static IEnumerable<AppointmentWhithoutDoctor> Convert(IEnumerable<Appointment> appointments)
-        {
-            return appointments.Select(appointment => Convert(appointment));
         }
     }
 }

@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public IEnumerable<MedicineWhitoutPrescription> Medicines { get; set; }
-        public AppointmentWhitoutPrescription Appointment { get; set; }
+        public AppointmentWhithoutPrescription Appointment { get; set; }
     }
 }
