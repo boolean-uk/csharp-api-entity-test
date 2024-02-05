@@ -26,7 +26,6 @@ namespace workshop.wwwapi.Models.PureModels
         public int AppointmentId { get; set; }
 
         [ForeignKey("AppointmentId, DoctorId, PatientId")]
-        //[ForeignKey("DoctorId, PatientId")]
         public Appointment Appointment { get; set; }
 
         public ICollection<PrescriptionMedicine> PrescriptionMedicine { get; set; } = new List<PrescriptionMedicine>();
