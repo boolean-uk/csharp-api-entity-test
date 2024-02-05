@@ -23,6 +23,8 @@ namespace workshop.wwwapi.Repository
 
         Task<IEnumerable<Prescription>> GetPrescriptions();
         Task<Prescription?> GetPrescription(int id);
-        Task<Prescription> CreatePrescription(string name);
+        Task<Prescription> CreatePrescription(string name, int quantity, string notes);
+
+        Task<IEnumerable<Medicine>> GetMedicines();
     }
 }

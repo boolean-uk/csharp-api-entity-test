@@ -9,6 +9,7 @@ namespace workshop.wwwapi.DTO
         public string Name { get; set; }
 
         public ICollection<AppointmentDTO> Appointments { get; set; } = new List<AppointmentDTO>();
+        public ICollection<PrepMedicineDTO> Medicines { get; set; } = new List<PrepMedicineDTO>();
 
         public PrescriptionResponseDTO(Prescription prescription)
         {
@@ -16,6 +17,9 @@ namespace workshop.wwwapi.DTO
             Name = prescription.Name;
             foreach (var appointment in prescription.Appointments)
                 Appointments.Add(new AppointmentDTO(appointment));
+
+            foreach (var medicine in prescription.Medicines)
+                Medicines.Add(new PrepMedicineDTO(medicine));
         }
 
         public static List<PrescriptionResponseDTO> FromRepository(IEnumerable<Prescription> prescriptions)

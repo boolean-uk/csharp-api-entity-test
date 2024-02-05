@@ -2,7 +2,7 @@
 
 namespace workshop.wwwapi.Models
 {
-    [Table("prescription")]
+    [Table("prescriptions")]
     public class Prescription
     {
         [Column("id")]
@@ -12,5 +12,6 @@ namespace workshop.wwwapi.Models
         public string Name { get; set; }
 
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public ICollection<PrepMedicines> Medicines { get; set; } = new List<PrepMedicines>();
     }
 }

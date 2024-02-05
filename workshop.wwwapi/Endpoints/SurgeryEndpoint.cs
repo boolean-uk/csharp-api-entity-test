@@ -8,7 +8,7 @@ namespace workshop.wwwapi.Endpoints
     public record PatientPostPayload(string fullName);
     public record DoctorPostPayload(string fullName);
     public record AppointmentPostPayload(string booking, int patientId, int doctorId);
-    public record PrescriptionPostPayload(string name);
+    public record PrescriptionPostPayload(string name, int quantity, string notes);
 
     public static class SurgeryEndpoint
     {
@@ -30,6 +30,7 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapPost("/appointments", CreateAppointment);
 
             surgeryGroup.MapGet("/prescription", GetPrescriptions);
+            surgeryGroup.MapGet("/medicine", GetMedicines);
             surgeryGroup.MapGet("/prescription/{id}", GetPrescription);
             surgeryGroup.MapPost("/prescription", CreatePrescription);
 
@@ -175,8 +176,15 @@ namespace workshop.wwwapi.Endpoints
             if (payload.name == null || payload.name == "")
                 return Results.BadRequest("Must have name");
 
-            Prescription prescription = await repository.CreatePrescription(payload.name);
+            Prescription prescription = await repository.CreatePrescription(payload.name, payload.quantity, payload.notes);
             return TypedResults.Ok(PrescriptionResponseDTO.FromARepository(prescription));
+        }
+
+        // MEDICINE
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetMedicines(IRepository repository)
+        {
+            return TypedResults.Ok(MedicineResponseDTO.FromRepository(await repository.GetMedicines()));
         }
     }
 }
