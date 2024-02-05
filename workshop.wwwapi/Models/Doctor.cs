@@ -12,5 +12,11 @@ namespace workshop.wwwapi.Models
         public string FullName { get; set; }
 
         public IEnumerable<Appointment> Appointments { get; set; }
+
+        public Doctor()
+        {
+            Appointments = new List<Appointment>(); 
+        }
+
     }
 }

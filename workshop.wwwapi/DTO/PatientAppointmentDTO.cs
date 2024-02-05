@@ -2,20 +2,20 @@
 
 namespace workshop.wwwapi.DTO
 {
-    public class PAppointmentDTO
+    public class PatientAppointmentDTO
     {
         public DateTime Booking {  get; set; }
 
         public int DoctorId { get; set; }
-        public PDoctorDTO Doctor { get; set; }
+        public PatientDoctorDTO Doctor { get; set; }
 
         public int PatientId { get; set; }
 
-        public PAppointmentDTO(Appointment appointment) 
+        public PatientAppointmentDTO(Appointment appointment) 
         {
-            Booking = appointment.Booking;
+            Booking = appointment.appointmentDate;
             DoctorId = appointment.DoctorId;
-            Doctor = new PDoctorDTO(appointment.Doctor);
+            Doctor = new PatientDoctorDTO(appointment.Doctor);
             PatientId = appointment.PatientId;
             
         }

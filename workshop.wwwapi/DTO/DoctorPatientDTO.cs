@@ -2,15 +2,15 @@
 
 namespace workshop.wwwapi.DTO
 {
-    public class PDoctorDTO
+    public class DoctorPatientDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public PDoctorDTO(Doctor doctor) 
+        public DoctorPatientDTO(Patient patient) 
         {
-            Id = doctor.Id;
-            Name = doctor.FullName;
+            Id = patient.Id;
+            Name = patient.FullName;
         }
     }
 }

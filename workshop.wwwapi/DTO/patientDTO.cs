@@ -7,7 +7,7 @@ namespace workshop.wwwapi.DTO
         public int id {  get; set; }
         public string name { get; set; }
 
-        public List<PAppointmentDTO> pAppointmentDTOs { get; set; }
+        public List<PatientAppointmentDTO> pAppointmentDTOs { get; set; }
         public patientDTO(Patient patient) 
         {
             id = patient.Id;
@@ -15,12 +15,12 @@ namespace workshop.wwwapi.DTO
 
             //more later
 
-            pAppointmentDTOs = new List<PAppointmentDTO>();
+            pAppointmentDTOs = new List<PatientAppointmentDTO>();
 
             var list = patient.Appointments;
             foreach (var item in list)
             {
-                PAppointmentDTO pAppointmentDTO = new PAppointmentDTO(item);
+                PatientAppointmentDTO pAppointmentDTO = new PatientAppointmentDTO(item);
                 pAppointmentDTOs.Add(pAppointmentDTO);
             }
 

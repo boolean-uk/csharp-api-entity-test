@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240205075926_updatedTheDataInTables")]
+    partial class updatedTheDataInTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,10 +27,6 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.Property<int>("id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
@@ -40,9 +39,7 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking");
 
-                    b.HasKey("id", "DoctorId", "PatientId");
-
-                    b.HasIndex("DoctorId");
+                    b.HasKey("DoctorId", "PatientId");
 
                     b.HasIndex("PatientId");
 
@@ -51,45 +48,9 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            id = 1,
-                            DoctorId = 1,
-                            PatientId = 1,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
-                        },
-                        new
-                        {
-                            id = 2,
-                            DoctorId = 1,
-                            PatientId = 2,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
-                        },
-                        new
-                        {
-                            id = 3,
-                            DoctorId = 2,
-                            PatientId = 3,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
-                        },
-                        new
-                        {
-                            id = 4,
                             DoctorId = 2,
                             PatientId = 1,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
-                        },
-                        new
-                        {
-                            id = 5,
-                            DoctorId = 3,
-                            PatientId = 2,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
-                        },
-                        new
-                        {
-                            id = 6,
-                            DoctorId = 3,
-                            PatientId = 3,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
+                            appointmentDate = new DateTime(2024, 2, 5, 7, 59, 25, 813, DateTimeKind.Utc).AddTicks(5087)
                         });
                 });
 

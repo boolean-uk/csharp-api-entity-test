@@ -14,7 +14,7 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            var patients = await _databaseContext.Patients.ToListAsync();
+            var patients = await _databaseContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).ToListAsync();
             
             _databaseContext.SaveChanges();
             return patients;
@@ -41,12 +41,56 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Doctors.ToListAsync();
         }
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
+        public async Task<Doctor> GetDoctorsByID(int id)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            var doctor = await _databaseContext.Doctors.FindAsync(id);
+
+            return doctor;
         }
 
-        
+        public async Task<IEnumerable<Appointment>> GetAppointments()
+        {
+            return await _databaseContext.Appointments.ToListAsync();
+        }
 
+        public async Task<Appointment> GetAppointmentsByID(int id)
+        {
+            var appointment = await _databaseContext.Appointments.FindAsync(id);
+            return appointment;
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int doctorId)
+        {
+            return await _databaseContext.Appointments.Where(a => a.DoctorId==doctorId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatientID(int patientId)
+        {
+            return await _databaseContext.Appointments.Where(a => a.PatientId == patientId).ToListAsync();
+        }
+
+        public async Task<Appointment?> CreateAppointment(DateTime date, int patientId, int doctorId)
+        {
+            Appointment appointment = new Appointment();
+            appointment.PatientId = patientId;
+            appointment.DoctorId = doctorId;
+            appointment.appointmentDate = date;
+
+            appointment.Patient = await _databaseContext.Patients.FindAsync(patientId);
+            appointment.Doctor = await _databaseContext.Doctors.FindAsync(doctorId);
+
+            if (appointment.Doctor != null || appointment.Patient != null)
+            {
+                _databaseContext.Appointments.Add(appointment);
+                _databaseContext.SaveChanges();
+                return appointment;
+            }
+            else
+            {
+                return null;
+            }
+
+            
+        }
     }
 }
