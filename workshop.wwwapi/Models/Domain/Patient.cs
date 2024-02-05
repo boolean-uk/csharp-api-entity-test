@@ -14,5 +14,7 @@ namespace workshop.wwwapi.Models.Domain
 
         [Column("full_name")]
         public string FullName { get; set; }
+
+        public List<Appointment> Appointments { get; set; }
     }
 }

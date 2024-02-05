@@ -24,7 +24,6 @@ namespace workshop.wwwapi.Data
             "Julia",
             "Grace"
         };
-
         private static List<string> doctorFirstnames = new List<string>
         {
             "Alexander",
@@ -32,16 +31,21 @@ namespace workshop.wwwapi.Data
             "Charles",
             "Dorian",
             "Edmund",
+            "Montgomery",
             "Frederick",
             "Geoffrey",
             "Harrison",
             "Julian",
             "Leopold",
+            "Chawton",
+            "Xavier",
+            "Sebastian",
             "Maximilian",
             "Nathaniel",
             "Oliver",
             "Percival",
             "Quentin",
+            "Indiana",
             "Anastasia",
             "Beatrice",
             "Charlotte",
@@ -52,11 +56,12 @@ namespace workshop.wwwapi.Data
             "Henrietta",
             "Isabella",
             "Josephine",
+            "Jaqueline",
             "Katherine",
             "Lavinia",
             "Miranda",
             "Ophelia",
-            "Penelope"
+            "Penelope",
         };
         private static List<string> patientSurnames = new List<string>
         {
@@ -119,19 +124,20 @@ namespace workshop.wwwapi.Data
             "Doctor",
             "Dr.",
             "Doc.",
+            "M.D.",
+            "Professor",
             "Prof. Dr.",
-            "Dr. PhD",
-            "Master Dr.",
-            "Dr. Master"
+            "PhD Dr.",
+            "Supreme Dr."
         };
 
         private static Random random = new Random();
 
         public static void SeedDatabase(this ModelBuilder modelBuilder)
         {
-            int numPatients = 1000;
+            int numPatients = 200;
             int numDoctors = 15;
-            int numApppintments = 200;
+            int numApppintments = 100;
             var patients = Enumerable.Range(1, numPatients).Select(id => new Patient { ID = id, FullName = GeneratePatientName() });
             var doctors = Enumerable.Range(1, numDoctors).Select(id => new Doctor {  ID = id, FullName = GenerateDoctorName() });
             var appointments = new List<Appointment>();
@@ -169,7 +175,7 @@ namespace workshop.wwwapi.Data
             TimeSpan timeSpan = endDate - startDate;
             int totalDays = timeSpan.Days;
             int randomDaysToAdd = random.Next(totalDays + 1);
-            DateTime randomDate = startDate.AddDays(randomDaysToAdd);
+            DateTime randomDate = startDate.AddDays(randomDaysToAdd).AddHours(random.Next(6,20));
             return DateTime.SpecifyKind(randomDate, DateTimeKind.Utc);
         }
     }

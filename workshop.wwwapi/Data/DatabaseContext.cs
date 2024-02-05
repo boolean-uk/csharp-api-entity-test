@@ -20,7 +20,6 @@ namespace workshop.wwwapi.Data
             // Since a patient should be able to have multiple appointments with same doctor, it gets its own ID instead
 
             modelBuilder.SeedDatabase();
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
