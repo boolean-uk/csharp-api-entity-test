@@ -1,4 +1,4 @@
-@workshop.wwwapi_HostAddress = http://localhost:5045
+@workshop.wwwapi_HostAddress = https://localhost:7235
 
 GET {{workshop.wwwapi_HostAddress}}/patients/
 Accept: application/json
