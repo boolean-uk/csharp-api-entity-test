@@ -15,6 +15,7 @@ namespace workshop.tests
     {
 
         [Test]
+        [Order(1)]
         public async Task DoctorEndpointStatus()
         {
             // Arrange
@@ -29,6 +30,7 @@ namespace workshop.tests
         }
 
         [Test]
+        [Order(2)]
         public async Task GetAllDoctors()
         {
             // Arrange
@@ -38,7 +40,7 @@ namespace workshop.tests
             // Act
             var response = await client.GetAsync("surgery/doctors");
             var content = await response.Content.ReadAsStringAsync();
-            var doctors = JsonConvert.DeserializeObject<List<DoctorDTO>>(content);
+            var doctors = JsonConvert.DeserializeObject<List<DoctorDTO_L2>>(content);
 
             var expectedResult = 2; // Replace with the expected number of doctors
             var actualResult = doctors.Count;
@@ -47,6 +49,7 @@ namespace workshop.tests
         }
 
         [Test]
+        [Order(3)]
         public async Task GetDoctorById_Success()
         {
             // Arrange
@@ -56,7 +59,7 @@ namespace workshop.tests
             // Act
             var response = await client.GetAsync("surgery/doctors/1");
             var content = await response.Content.ReadAsStringAsync();
-            var patient = JsonConvert.DeserializeObject<DoctorDTO>(content);
+            var patient = JsonConvert.DeserializeObject<DoctorDTO_L2>(content);
 
             var expectedResult = "Justin Chancellor"; // Replace with the expected patient name
             var actualResult = patient.FullName;
@@ -65,6 +68,7 @@ namespace workshop.tests
         }
 
         [Test]
+        [Order(4)]
         public async Task GetDoctorById_Fail()
         {
             // Arrange
@@ -81,6 +85,7 @@ namespace workshop.tests
 
 
         [Test]
+        [Order(5)]
         public async Task CreateDoctor_Success()
         {
             // Arrange
@@ -105,6 +110,7 @@ namespace workshop.tests
         }
 
         [Test]
+        [Order(6)]
         public async Task CreateDoctor_Fail()
         {
             // Arrange

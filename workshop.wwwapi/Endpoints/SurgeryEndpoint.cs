@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.DTOs;
 using workshop.wwwapi.Models;
@@ -32,15 +33,11 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetPatients(IRepository repository)
         {
             var patientClasses = await repository.GetPatients();
-            List<PatientDTO> patientDTOs = new List<PatientDTO>();
+            List<PatientDTO_L2> patientDTOs = new List<PatientDTO_L2>();
 
             foreach (var patient in patientClasses)
             {
-                var patientDTO = new PatientDTO
-                {
-                    Id = patient.Id,
-                    FullName = patient.FullName
-                };
+                var patientDTO = DTOHelper.CreatePatientDTO(patient);
                 patientDTOs.Add(patientDTO);
             }
 
@@ -57,11 +54,7 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound("Patient not found");
             }
 
-            var patientDTO = new PatientDTO
-            {
-                Id = patientClass.Id,
-                FullName = patientClass.FullName
-            };
+            var patientDTO = DTOHelper.CreatePatientDTO(patientClass);
 
             return TypedResults.Ok(patientDTO);
         }
@@ -84,15 +77,11 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
             var doctorClasses = await repository.GetDoctors();
-            List<DoctorDTO> doctorDTOs = new List<DoctorDTO>();
+            List<DoctorDTO_L2> doctorDTOs = new List<DoctorDTO_L2>();
 
             foreach (var doctor in doctorClasses)
             {
-                var doctorDTO = new DoctorDTO
-                {
-                    Id = doctor.Id,
-                    FullName = doctor.FullName
-                };
+                var doctorDTO = DTOHelper.CreateDoctortDTO(doctor);
                 doctorDTOs.Add(doctorDTO);
             }
 
@@ -109,11 +98,7 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound("Doctor not found");
             }
 
-            var doctorDTO = new DoctorDTO
-            {
-                Id = doctorClass.Id,
-                FullName = doctorClass.FullName
-            };
+            var doctorDTO = DTOHelper.CreateDoctortDTO(doctorClass);
 
             return TypedResults.Ok(doctorDTO);
         }
@@ -132,42 +117,11 @@ namespace workshop.wwwapi.Endpoints
 
 
         //APPOINTMENTS
-
-        //Method reduce code duplication.
-        public static List<AppointmentDTO> AppointmentDTOListReturner(IEnumerable<Appointment> appointments)
-        {
-            List<AppointmentDTO> appointmentDTOs = new List<AppointmentDTO>();
-
-            foreach (var appointment in appointments)
-            {
-                AppointmentDTO appointmentDTO = new AppointmentDTO
-                {
-                    Id = appointment.Id,
-                    DoctorId = appointment.DoctorId,
-                    Doctor = new DoctorDTO
-                    {
-                        Id = appointment.Doctor.Id,
-                        FullName = appointment.Doctor.FullName
-                    },
-                    PatientId = appointment.PatientId,
-                    Patient = new PatientDTO
-                    {
-                        Id = appointment.Patient.Id,
-                        FullName = appointment.Patient.FullName
-                    },
-                    Booking = appointment.Booking
-                };
-                appointmentDTOs.Add(appointmentDTO);
-            }
-
-            return appointmentDTOs;
-        }
-
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointments(IRepository repository)
         {
             var appointments = await repository.GetAppointments();
-            var appointmentDTOs = AppointmentDTOListReturner(appointments);
+            var appointmentDTOs = DTOHelper.AppointmentDTOListReturner(appointments);
 
             if (appointmentDTOs.Count == 0)
             {
@@ -177,10 +131,10 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int docId)
+        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
-            var appointments = await repository.GetAppointmentsByDoctor(docId);
-            var appointmentDTOs = AppointmentDTOListReturner(appointments);
+            var appointments = await repository.GetAppointmentsByDoctor(id);
+            var appointmentDTOs = DTOHelper.AppointmentDTOListReturner(appointments);
 
             if (appointmentDTOs.Count == 0)
             {
@@ -190,10 +144,10 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int patId)
+        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
         {
-            var appointments = await repository.GetAppointmentsByPatient(patId);
-            var appointmentDTOs = AppointmentDTOListReturner(appointments);
+            var appointments = await repository.GetAppointmentsByPatient(id);
+            var appointmentDTOs = DTOHelper.AppointmentDTOListReturner(appointments);
 
             if (appointmentDTOs.Count == 0)
             {
@@ -208,34 +162,19 @@ namespace workshop.wwwapi.Endpoints
             var patient = await repository.GetPatientById(model.PatientId);
             if (patient == null)
             {
-                return TypedResults.NotFound("Patient does not exist");
+                return TypedResults.BadRequest("Patient does not exist");
             }
 
             var doctor = await repository.GetDoctorById(model.DoctorId);
             if (doctor == null)
             {
-                return TypedResults.NotFound("Doctor does not exist");
+                return TypedResults.BadRequest("Doctor does not exist");
             }
 
             var appointmentClass = await repository.CreateAppointment(model);
 
-            var apointmentDTO = new AppointmentDTO
-            {
-                Id = appointmentClass.Id,
-                DoctorId = appointmentClass.DoctorId,
-                Doctor = new DoctorDTO
-                {
-                    Id = appointmentClass.Doctor.Id,
-                    FullName = appointmentClass.Doctor.FullName
-                },
-                PatientId = appointmentClass.PatientId,
-                Patient = new PatientDTO
-                {
-                    Id = appointmentClass.Patient.Id,
-                    FullName = appointmentClass.Patient.FullName
-                },
-                Booking = appointmentClass.Booking
-            };
+            var apointmentDTO = DTOHelper.CreateAppointmentDTO(appointmentClass);
+
             return TypedResults.Created($"/{apointmentDTO.Id}", apointmentDTO);
         }
     }

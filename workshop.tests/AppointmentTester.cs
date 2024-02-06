@@ -63,6 +63,7 @@ namespace workshop.tests
             var content = await response.Content.ReadAsStringAsync();
             var appointments = JsonConvert.DeserializeObject<List<AppointmentDTO>>(content);
 
+
             var expectedResult = 2;
             var actualResult = appointments.Count;
             // Assert

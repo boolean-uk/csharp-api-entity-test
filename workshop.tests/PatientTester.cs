@@ -36,7 +36,7 @@ public class PatientTester
         // Act
         var response = await client.GetAsync("surgery/patients");
         var content = await response.Content.ReadAsStringAsync();
-        var patients = JsonConvert.DeserializeObject<List<PatientDTO>>(content);
+        var patients = JsonConvert.DeserializeObject<List<PatientDTO_L2>>(content);
 
         // Replace with the expected number of patients. The seed data has 2 patients, so the expected number should be 2,
         // but must be manually edited after each test run because the test creates a new patient.
@@ -58,7 +58,7 @@ public class PatientTester
         // Act
         var response = await client.GetAsync("surgery/patients/1");
         var content = await response.Content.ReadAsStringAsync();
-        var patient = JsonConvert.DeserializeObject<PatientDTO>(content);
+        var patient = JsonConvert.DeserializeObject<PatientDTO_L2>(content);
 
         var expectedResult = "Maynard James Keenan"; // Replace with the expected patient name
         var actualResult = patient.FullName;
