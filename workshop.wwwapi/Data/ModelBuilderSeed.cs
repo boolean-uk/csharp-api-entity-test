@@ -98,7 +98,6 @@ namespace workshop.wwwapi.Data
             "Chocomore",
             "Snackmore",
             "Colamore",
-            "Morecola",
             "Snackright",
             "Colagood",
             "Candycraze",
@@ -129,9 +128,9 @@ namespace workshop.wwwapi.Data
             int numPatients = 200;
             int numDoctors = 20;
             int numApppintments = 100;
-            var patients = Enumerable.Range(1, numPatients).Select(id => new Patient { ID = id, FullName = GeneratePatientName() });
-            var doctors = Enumerable.Range(1, numDoctors).Select(id => new Doctor {  ID = id, FullName = GenerateDoctorName() });
-            var appointments = new List<Appointment>();
+            List<Patient> patients = Enumerable.Range(1, numPatients).Select(id => new Patient { ID = id, FullName = GeneratePatientName() }).ToList();
+            List<Doctor> doctors = Enumerable.Range(1, numDoctors).Select(id => new Doctor {  ID = id, FullName = GenerateDoctorName() }).ToList();
+            List<Appointment> appointments = new List<Appointment>();
             for (int i = 0; i < numApppintments; i++)
             {
                 int doctorID = random.Next(1, numDoctors + 1);
@@ -139,6 +138,11 @@ namespace workshop.wwwapi.Data
                 Appointment appointment = new Appointment() { ID = i + 1, DoctorID = doctorID, PatientID = patientID, AppointmentTime = GenerateRandomDate()};
                 appointments.Add(appointment);
             }
+            patients[0].FullName = "Anna Smith";
+            doctors[0].FullName = "Specialist Doctor Joseph Morecola";
+            appointments[0].AppointmentTime = new DateTime(2024, 2, 17, 16, 30, 0, DateTimeKind.Utc);
+            appointments[0].DoctorID = 1;
+            appointments[0].PatientID = 1;
             modelBuilder.Entity<Patient>().HasData(patients);
             modelBuilder.Entity<Doctor>().HasData(doctors);
             modelBuilder.Entity<Appointment>().HasData(appointments);

@@ -12,7 +12,7 @@ namespace workshop.wwwapi.Endpoints
     {
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
-            var group = app.MapGroup("patient");
+            var group = app.MapGroup("patients");
             group.MapGet("/", GetAll);
             group.MapGet("/{id}", Get);
             group.MapPost("/", Create);

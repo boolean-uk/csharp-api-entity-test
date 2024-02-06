@@ -9,7 +9,7 @@ namespace workshop.wwwapi.Endpoints
     {
         public static void ConfigureDoctorEndpoint(this WebApplication app)
         {
-            var group = app.MapGroup("doctor");
+            var group = app.MapGroup("doctors");
             group.MapGet("/", GetAll);
             group.MapGet("/{id}", Get);
             group.MapPost("/", Create);
