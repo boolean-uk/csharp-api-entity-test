@@ -96,13 +96,13 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> PostAppointment(IRepository repository, AppointmentInputDTO appPost)
         {
-            bool validDoctorId = repository.GetDoctors().Result.Any(d => d.Id == appPost.doctorId);
-            if (!validDoctorId)
+            bool invalidDoctorId = await repository.GetSpecificDoctor(appPost.doctorId) == null;
+            bool invalidPatientId = await repository.GetPatientById(appPost.patientId) == null;
+            if (invalidDoctorId)
             {
                 return TypedResults.NotFound($"No doctor with the provided id {appPost.doctorId} found.");
             }
-            bool validPatientId = repository.GetPatients().Result.Any(p => p.Id == appPost.patientId);
-            if (!validPatientId)
+            if (invalidPatientId)
             {
                 return TypedResults.NotFound($"No patient with the provided id {appPost.patientId} found.");
             }
