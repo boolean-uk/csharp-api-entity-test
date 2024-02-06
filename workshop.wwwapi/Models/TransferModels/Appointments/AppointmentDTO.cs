@@ -9,11 +9,11 @@ namespace workshop.wwwapi.Models.TransferModels.Appointments
         public DateTime time { get; set; } = time;
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public AppointmentType AppointmentType { get; set; } = type;
+        public AppointmentType appointmentType { get; set; } = type;
 
-        public string Doctor { get; set; } = doctor.FullName;
+        public string doctor { get; set; } = doctor.FullName;
         public int doctorId { get; set; } = doctorId;
-        public string Patient { get; set; } = patient.FullName;
+        public string patient { get; set; } = patient.FullName;
         public int patientId { get; set; } = patientId;
 
     }

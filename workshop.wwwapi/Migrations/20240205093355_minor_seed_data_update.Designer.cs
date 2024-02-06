@@ -172,7 +172,7 @@ namespace workshop.wwwapi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Doctor", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.doctor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -240,7 +240,7 @@ namespace workshop.wwwapi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Patient", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -364,32 +364,32 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Appointment", b =>
                 {
-                    b.HasOne("workshop.wwwapi.Models.PureModels.Doctor", "Doctor")
+                    b.HasOne("workshop.wwwapi.Models.PureModels.doctor", "doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workshop.wwwapi.Models.PureModels.Patient", "Patient")
+                    b.HasOne("workshop.wwwapi.Models.PureModels.patient", "patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Doctor");
+                    b.Navigation("doctor");
 
-                    b.Navigation("Patient");
+                    b.Navigation("patient");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Prescription", b =>
                 {
-                    b.HasOne("workshop.wwwapi.Models.PureModels.Doctor", null)
+                    b.HasOne("workshop.wwwapi.Models.PureModels.doctor", null)
                         .WithMany("Prescriptions")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workshop.wwwapi.Models.PureModels.Patient", null)
+                    b.HasOne("workshop.wwwapi.Models.PureModels.patient", null)
                         .WithMany("Prescriptions")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -404,7 +404,7 @@ namespace workshop.wwwapi.Migrations
                     b.Navigation("Appointment");
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Doctor", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.doctor", b =>
                 {
                     b.Navigation("Appointments");
 
@@ -416,7 +416,7 @@ namespace workshop.wwwapi.Migrations
                     b.Navigation("PrescriptionMedicine");
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.Patient", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PureModels.patient", b =>
                 {
                     b.Navigation("Appointments");
 

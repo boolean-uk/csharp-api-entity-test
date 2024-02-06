@@ -20,7 +20,7 @@ namespace workshop.tests
             var client = factory.CreateClient();
 
             // Act
-            var response = await client.GetAsync("/surgery/doctors");
+            var response = await client.GetAsync("/doctors");
             var resAsString = await response.Content.ReadAsStringAsync();
             Payload<IEnumerable<PatientDTO>> deserialized = JsonSerializer.Deserialize<Payload<IEnumerable<PatientDTO>>>(resAsString);
 
@@ -38,14 +38,14 @@ namespace workshop.tests
         [Test]
         [TestCase(1, "Jan Itor")]
         [TestCase(3, "Dr. Acula")]
-        public async Task RetrieveSpecificPatientById(int id, string expectedName)
+        public async Task RetrieveSpecificDoctorById(int id, string expectedName)
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
             var client = factory.CreateClient();
 
             // Act
-            var response = await client.GetAsync($"/surgery/doctors/{id}");
+            var response = await client.GetAsync($"/doctors/{id}");
             var resAsString = await response.Content.ReadAsStringAsync();
             Payload<PatientDTO> deserialized = JsonSerializer.Deserialize<Payload<PatientDTO>>(resAsString);
 

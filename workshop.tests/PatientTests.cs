@@ -7,7 +7,7 @@ using workshop.wwwapi.Models.TransferModels.People;
 
 namespace workshop.tests;
 
-public class Tests
+public class PatientTests
 {
 
     [Test]
@@ -18,7 +18,7 @@ public class Tests
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/surgery/patients");
+        var response = await client.GetAsync("/patients");
         var resAsString = await response.Content.ReadAsStringAsync();
         Payload<IEnumerable<PatientDTO>> deserialized = JsonSerializer.Deserialize<Payload<IEnumerable<PatientDTO>>>(resAsString);
 
@@ -43,7 +43,7 @@ public class Tests
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync($"/surgery/patients/{id}");
+        var response = await client.GetAsync($"/patients/{id}");
         var resAsString = await response.Content.ReadAsStringAsync();
         Payload<PatientDTO> deserialized = JsonSerializer.Deserialize<Payload<PatientDTO>>(resAsString);
 
