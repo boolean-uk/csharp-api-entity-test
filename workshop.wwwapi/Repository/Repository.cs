@@ -109,7 +109,7 @@ namespace workshop.wwwapi.Repository
         }
 
         /// <inheritdoc/>
-        public async Task<Appointment?> GetAppointmentByAppointmentId(int id) 
+        public async Task<Appointment?> GetAppointmentByAppointmentId(int id)
         {
             return await _databaseContext.Appointments
                 .Include(a => a.Patient)
@@ -140,7 +140,7 @@ namespace workshop.wwwapi.Repository
         }
 
         /// <inheritdoc/>
-        public async Task<Prescription?> GetSpecificPrescription(int id) 
+        public async Task<Prescription?> GetSpecificPrescription(int id)
         {
             return await _databaseContext.Prescriptions
                 .Include(p => p.PrescriptionMedicine)
@@ -154,12 +154,18 @@ namespace workshop.wwwapi.Repository
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<Medicine>> GetMedicines() 
+        public async Task<IEnumerable<Medicine>> GetMedicines()
         {
             return await _databaseContext.Medicines
                 .Include(m => m.PrescriptionMedicine)
                     .ThenInclude(pm => pm.Prescription)
                 .ToListAsync();
+        }
+
+        /// <inheritdoc/>
+        public async Task<Medicine?> GetMedicine(int id) 
+        {
+            return await _databaseContext.Medicines.Where(m => m.Id == id).FirstOrDefaultAsync();
         }
 
         /// <inheritdoc/>

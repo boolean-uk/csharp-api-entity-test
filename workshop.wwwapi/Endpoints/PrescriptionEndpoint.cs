@@ -50,20 +50,35 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status201Created)]
         private static async Task<IResult> PostPrescription(IRepository repository, PrescriptionInputDTO scriptPost)
         {
-            IEnumerable<Medicine> meds = await repository.GetMedicines();
-            bool validMedicineId = scriptPost.prescriptionMedicine.All(m => meds.Any(n => n.Id == m.MedicineId));
+            bool validMedicineId = true;
+            foreach (int id in scriptPost.prescriptionMedicine.Select(pm => pm.MedicineId).ToList())
+            { 
+                Medicine? res = await repository.GetMedicine(id);
+                if (res == null) 
+                {
+                    validMedicineId = false;
+                }
+            }
+
             if (!validMedicineId)
             {
-                return TypedResults.NotFound($"Could not find medicines with provided ids of {string.Join(", ", scriptPost.prescriptionMedicine.Select(m => m.MedicineId))}.");
+                return TypedResults.NotFound($"Could not find medicines with provided ids of {string.Join(", ", scriptPost.prescriptionMedicine.Select(m => m.MedicineId))}. One or several of the provided Ids are invalid.");
             }
-            IEnumerable<Appointment> apps = await repository.GetAppointments();
-            bool validAppointmentId = apps.Any(a => a.Id == scriptPost.AppointmentId);
+
+            bool validAppointmentId = repository.GetAppointmentByAppointmentId(scriptPost.AppointmentId) != null;
             if (!validAppointmentId)
             {
                 return TypedResults.NotFound($"Could not find appointment with provided id of {validAppointmentId}.");
             }
 
-            Prescription prescription = new Prescription() { Name = scriptPost.Name, AppointmentId = scriptPost.AppointmentId, DoctorId = scriptPost.DoctorId, PatientId = scriptPost.PatientId };
+            Prescription prescription = new Prescription() 
+            { 
+                Name = scriptPost.Name, 
+                AppointmentId = scriptPost.AppointmentId, 
+                DoctorId = scriptPost.DoctorId, 
+                PatientId = scriptPost.PatientId 
+            };
+
             Prescription scriptReturn = await repository.PostPrescription(prescription);
 
             IEnumerable<PrescriptionMedicine> prescriptions = scriptPost
@@ -83,7 +98,12 @@ namespace workshop.wwwapi.Endpoints
             }
 
 
-            PrescriptionDTO scriptOut = new PrescriptionDTO(scriptReturn.Id, scriptReturn.Name, scriptReturn.Appointment, postPrescriptionReturn);
+            PrescriptionDTO scriptOut = new PrescriptionDTO(
+                scriptReturn.Id, 
+                scriptReturn.Name, 
+                scriptReturn.Appointment, 
+                postPrescriptionReturn
+                );
             Payload<PrescriptionDTO> payload = new Payload<PrescriptionDTO>(scriptOut);
             return TypedResults.Created($"/{payload.Data.Id}", payload);
         }

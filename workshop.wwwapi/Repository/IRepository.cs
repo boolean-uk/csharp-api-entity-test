@@ -107,6 +107,13 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<Medicine>> GetMedicines();
 
         /// <summary>
+        /// Retrieve a specific Medicine object from the database
+        /// </summary>
+        /// <param name="id">int - the id of the medicine to retrieve</param>
+        /// <returns>The Medicine object with corresponding id, null if no medicine of the provided id was found</returns>
+        Task<Medicine?> GetMedicine(int id);
+
+        /// <summary>
         /// Create a new Prescription object in the database
         /// </summary>
         /// <param name="prescription">The prescription to add to the database</param>
