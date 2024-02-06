@@ -1,9 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json.Converters;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
-public enum AppointmentType 
-{ 
-    InPerson,
-    Online
+public enum AppointmentType
+{
+    [EnumMember(Value = "Online")]
+    [Description("Online")]
+    Online = 0,
+
+    [EnumMember(Value = "InPerson")]
+    [Description("In Person")]
+    InPerson = 1
 }
 
 namespace workshop.wwwapi.Models

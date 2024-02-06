@@ -17,6 +17,6 @@ namespace workshop.wwwapi.Models
         [Column("notes")]
         public string Notes { get; set; }
 
-        public ICollection<Prescription> Prescriptions { get; set; }
+        public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
     }
 }

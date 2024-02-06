@@ -47,5 +47,12 @@ namespace workshop.wwwapi.Repository.Implementation
                     .ThenInclude(a => a.Patient)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        public async Task<Prescription> Update(Prescription prescription)
+        {
+            _db.Prescriptions.Update(prescription);
+            await _db.SaveChangesAsync();
+            return prescription;
+        }
     }
 }

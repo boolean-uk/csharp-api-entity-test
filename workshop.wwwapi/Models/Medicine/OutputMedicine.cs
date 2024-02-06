@@ -11,6 +11,6 @@ namespace workshop.wwwapi.Models
 
         public string Notes { get; set; }
 
-        public ICollection<Prescription> Prescriptions { get; set; }
+        public IEnumerable<PrescriptionWhitoutMedicine> Prescriptions { get; set; }
     }
 }

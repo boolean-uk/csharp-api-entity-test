@@ -11,7 +11,8 @@ namespace workshop.wwwapi.Services
                 Id = medicine.Id,
                 Name = medicine.Name,
                 Quantity = medicine.Quantity,
-                Notes = medicine.Notes
+                Notes = medicine.Notes,
+                Prescriptions = PrescriptionDtoManager.ConvertRemoveMedicine(medicine.Prescriptions)
             };
         }
         public static IEnumerable<OutputMedicine> Convert(IEnumerable<Medicine> medicines)

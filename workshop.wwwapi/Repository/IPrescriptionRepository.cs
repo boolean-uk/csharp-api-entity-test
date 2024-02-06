@@ -7,5 +7,6 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<Prescription>> Get();
         Task<Prescription?> Get(int id);
         Task<Prescription?> Create(Prescription prescription);
+        Task<Prescription> Update(Prescription prescription);
     }
 }

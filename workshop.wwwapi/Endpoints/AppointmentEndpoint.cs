@@ -96,7 +96,8 @@ namespace workshop.wwwapi.Endpoints
                 Doctor = doctor,
                 PatientId = inputAppointment.PatientId,
                 Patient = patient,
-                Booking = inputAppointment.Booking
+                Booking = inputAppointment.Booking,
+                Type = inputAppointment.Type
             };
 
             Appointment? result = await appointmentRepository.Create(appointment);
