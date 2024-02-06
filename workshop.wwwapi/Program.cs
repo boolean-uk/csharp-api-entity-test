@@ -15,6 +15,7 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
 
 var app = builder.Build();
 
@@ -31,6 +32,7 @@ app.ConfigurePatientEndpoint();
 app.ConfigureDoctorEndpoint();
 app.ConfigureAppointmentEndpoint();
 app.ConfigurePrescriptionEndpoint();
+app.ConfigureMedicineEndpoint();
 
 app.Run();
 

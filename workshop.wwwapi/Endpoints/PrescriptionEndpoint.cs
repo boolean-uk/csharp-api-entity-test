@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
+using workshop.wwwapi.Repository.Implementation;
 using workshop.wwwapi.Services;
 
 namespace workshop.wwwapi.Endpoints
@@ -14,6 +15,7 @@ namespace workshop.wwwapi.Endpoints
             group.MapGet("/", GetAll);
             group.MapGet("/{id}", Get);
             group.MapPost("/", Create);
+            group.MapPut("/{id}/medicines", AddMedicines);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,22 +43,27 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public static async Task<IResult> Create(IPrescriptionRepository repository, IAppointmentRepository appointmentRepository, InputPrescription inputPrescription)
+        public static async Task<IResult> Create(IPrescriptionRepository repository, IAppointmentRepository appointmentRepository, IMedicineRepository medicineRepository, InputPrescription inputPrescription)
         {
             Appointment? appointment = await appointmentRepository.Get(inputPrescription.AppointmentId);
 
             if (appointment == null)
                 return TypedResults.BadRequest();
 
+            List<Medicine> medicines = new List<Medicine>();
+            foreach (var id in inputPrescription.MedicineIds)
+            {
+                var medicine = await medicineRepository.Get(id);
+                if (medicine == null)
+                {
+                    return TypedResults.BadRequest($"Medicine with ID {id} not found");
+                }
+                medicines.Add(medicine);
+            }
+
             Prescription prescription = new Prescription
             {
-                Medicines = inputPrescription.Medicines.Select(medicine => new Medicine
-                {
-                    Name = medicine.Name,
-                    Quantity = medicine.Quantity,
-                    Notes = medicine.Notes
-                }).ToList(),
-
+                Medicines = medicines,
                 AppointmentId = inputPrescription.AppointmentId,
                 Appointment = appointment
             };
@@ -67,7 +74,34 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.BadRequest();
 
             OutputPrescription outputPrescription = PrescriptionDtoManager.Convert(result);
-            return TypedResults.Created();
+            return TypedResults.Created("url", outputPrescription);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> AddMedicines(int id, IPrescriptionRepository prescriptionRepository, IMedicineRepository medicineRepository, List<int> medicinesIds)
+        {
+            Prescription? prescription = await prescriptionRepository.Get(id);
+
+            if (prescription == null)
+                return TypedResults.NotFound();
+
+            foreach (int medicineId in medicinesIds)
+            {
+                Medicine? medicine = await medicineRepository.Get(medicineId);
+                if (medicine == null)
+                    return TypedResults.BadRequest($"Medicine with ID {medicineId} not found");
+            }
+
+            foreach (int medicineId in medicinesIds)
+            {
+                Medicine? medicine = await medicineRepository.Get(medicineId);
+                prescription.Medicines.Add(medicine);
+            }
+
+            Prescription? result = await prescriptionRepository.Update(prescription);
+
+            OutputPrescription outputPrescription = PrescriptionDtoManager.Convert(result);
+            return TypedResults.Ok(outputPrescription);
         }
     }
 }

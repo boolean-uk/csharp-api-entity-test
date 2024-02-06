@@ -8,10 +8,10 @@ namespace workshop.wwwapi.Models
         [Column("id")]
         public int Id { get; set; }
 
-        public IEnumerable<Medicine> Medicines { get; set; }
-
         [Column("appointment_id")]
         public int AppointmentId { get; set; }
         public Appointment Appointment { get; set; }
+
+        public ICollection<Medicine> Medicines { get; set; } = new List<Medicine>();
     }
 }

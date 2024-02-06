@@ -2,7 +2,7 @@
 {
     public class InputPrescription
     {
-        public ICollection<InputMedicine> Medicines { get; set; }
+        public List<int> MedicineIds { get; set; }
 
         public int AppointmentId { get; set; }
     }
