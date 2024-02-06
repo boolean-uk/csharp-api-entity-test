@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using workshop.wwwapi.Data;
-using workshop.wwwapi.DTOs;
+using workshop.wwwapi.DTOs.Core;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Post;
 
 namespace workshop.tests
 {
@@ -45,7 +46,7 @@ namespace workshop.tests
             var expectedResult = 2; // Replace with the expected number of doctors
             var actualResult = doctors.Count;
             // Assert
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.That(expectedResult, Is.EqualTo(actualResult));
         }
 
         [Test]
@@ -64,7 +65,7 @@ namespace workshop.tests
             var expectedResult = "Justin Chancellor"; // Replace with the expected patient name
             var actualResult = patient.FullName;
             // Assert
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.That(expectedResult, Is.EqualTo(actualResult));
         }
 
         [Test]
@@ -105,8 +106,8 @@ namespace workshop.tests
             var responseBody = await response.Content.ReadAsStringAsync();
             var createdDoctor = JsonConvert.DeserializeObject<Doctor>(responseBody);
 
-            Assert.AreEqual(System.Net.HttpStatusCode.Created, response.StatusCode);
-            Assert.AreEqual(patientPost.FullName, createdDoctor.FullName);
+            Assert.That(System.Net.HttpStatusCode.Created, Is.EqualTo(response.StatusCode));
+            Assert.That(patientPost.FullName, Is.EqualTo(createdDoctor.FullName));
         }
 
         [Test]
@@ -133,8 +134,8 @@ namespace workshop.tests
             var responseString = await client.PostAsync("surgery/doctors", contentEmpty);
 
             // Assert
-            Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, responseEmpty.StatusCode);
-            Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, responseString.StatusCode);
+            Assert.That(System.Net.HttpStatusCode.BadRequest, Is.EqualTo(responseEmpty.StatusCode));
+            Assert.That(System.Net.HttpStatusCode.BadRequest, Is.EqualTo(responseString.StatusCode));
         }
     }
 }

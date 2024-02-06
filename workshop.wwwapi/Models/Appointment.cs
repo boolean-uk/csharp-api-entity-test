@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly
-
-    //The assignment has a weakness. A composite key of a_fk_doctor_id and a_fk_patient_id makes it so a doctor can only treat a patient once. I added a primary key to the table
-    //instead of having three composites. That seems like overkill.
     [Table("appointments")]
     [PrimaryKey("Id")]
     public class Appointment
@@ -26,5 +23,9 @@ namespace workshop.wwwapi.Models
 
         [Column("a_booking")]
         public DateTime Booking { get; set; }
+
+        [Column("a_appointment_type")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public AppointmentType AppointmentType { get; set; }
     }
 }

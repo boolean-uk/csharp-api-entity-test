@@ -1,4 +1,6 @@
-﻿using workshop.wwwapi.Models;
+﻿using workshop.wwwapi.DTOs.Extension;
+using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Post;
 
 namespace workshop.wwwapi.Repository
 {
@@ -22,5 +24,15 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id);
         Task<Appointment> CreateAppointment(AppointmentPost model);
 
+
+        //MEDICINEPRESCRIPTIONS
+        Task<IEnumerable<MedicinePrescription>> GetMedicinePrescriptions();
+        Task<MedicinePrescription> GetMedicinePrescriptionsById(int id);
+        Task<MedicinePrescription> CreateMedicinePrescription(MedicinePrescriptionPost model);
+
+        //NEEDED FOR MEDICINEPRESCRIPTIONS TO WORK PROPERLY
+        Task<Medicine> GetMedicineById(int id);
+        Task<Prescription> GetPrescriptionById(int id);
+        Task<Appointment> GetAppointmentById(int id);
     }
 }

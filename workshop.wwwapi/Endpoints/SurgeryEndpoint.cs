@@ -2,7 +2,8 @@
 using System.Numerics;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.DTOs;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.DTOs.Core;
+using workshop.wwwapi.Models.Post;
 using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
@@ -14,21 +15,26 @@ namespace workshop.wwwapi.Endpoints
         {
             var surgeryGroup = app.MapGroup("surgery");
 
-            surgeryGroup.MapGet("/patients", GetPatients);
-            surgeryGroup.MapGet("/patients/{id}", GetPatientById);
+            surgeryGroup.MapGet ("/patients", GetPatients);
+            surgeryGroup.MapGet ("/patients/{id}", GetPatientById);
             surgeryGroup.MapPost("/patients", CreatePatient);
 
-            surgeryGroup.MapGet("/doctors", GetDoctors);
-            surgeryGroup.MapGet("/doctors/{id}", GetDoctorById);
+            surgeryGroup.MapGet ("/doctors", GetDoctors);
+            surgeryGroup.MapGet ("/doctors/{id}", GetDoctorById);
             surgeryGroup.MapPost("/doctors", CreateDoctor);
 
-            surgeryGroup.MapGet("/appointments", GetAppointments);
-            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
-            surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
+            surgeryGroup.MapGet ("/appointments", GetAppointments)
+            surgeryGroup.MapGet ("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet ("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
+
+            surgeryGroup.MapGet ("/MedicinePrescription", GetMedicinePrescription);
+            surgeryGroup.MapGet ("/MedicinePrescription/{id}", GetMedicinePrescriptionById);
+            surgeryGroup.MapPost("/MedicinePrescription", CreateMedicinePrescription);
         }
 
         //PATIENTS
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
         {
@@ -73,6 +79,7 @@ namespace workshop.wwwapi.Endpoints
 
 
         //DOCTORS
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
@@ -117,6 +124,7 @@ namespace workshop.wwwapi.Endpoints
 
 
         //APPOINTMENTS
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointments(IRepository repository)
         {
@@ -176,6 +184,64 @@ namespace workshop.wwwapi.Endpoints
             var apointmentDTO = DTOHelper.CreateAppointmentDTO(appointmentClass);
 
             return TypedResults.Created($"/{apointmentDTO.Id}", apointmentDTO);
+        }
+
+
+        //MEDICINEPRESCRIPTION
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        private static async Task<IResult> GetMedicinePrescription(IRepository repository)
+        {
+            var medicinePrescriptions = await repository.GetMedicinePrescriptions();
+            var medicinePrescriptionDTOs = DTOHelper.MedicinePrescriptionDTOListReturner(medicinePrescriptions);
+
+            if (medicinePrescriptionDTOs.Count == 0)
+            {
+                return TypedResults.NotFound("No medicine prescriptions found");
+            }
+
+            return TypedResults.Ok(medicinePrescriptionDTOs);
+        }
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        private static async Task<IResult> GetMedicinePrescriptionById(IRepository repository, int id)
+        {
+            var MedicinePrescriptionClass = await repository.GetMedicinePrescriptionsById(id);
+
+            if (MedicinePrescriptionClass == null)
+            {
+                return TypedResults.NotFound("Medicine prescription does not exist");
+            }
+
+            var medicinePrescriptionDTOs = DTOHelper.CreateMedicinePrescriptionDTO(MedicinePrescriptionClass);
+
+            return TypedResults.Ok(medicinePrescriptionDTOs);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        private static async Task<IResult> CreateMedicinePrescription(IRepository repository, MedicinePrescriptionPost model)
+        {
+            var medicine = await repository.GetMedicineById(model.MedicineId);
+            if (medicine == null)
+            {
+                return TypedResults.BadRequest("Medicine does not exist");
+            }
+            var prescription = await repository.GetPrescriptionById(model.PrescriptionId);
+            if (prescription == null)
+            {
+                return TypedResults.BadRequest("Prescription does not exist");
+            }
+            var appointment = await repository.GetAppointmentById(model.AppointmentId);
+            if (appointment == null)
+            {
+                return TypedResults.BadRequest("Appointment does not exist");
+            }
+
+            var medicineAppointmentClass = await repository.CreateMedicinePrescription(model);
+            var medicineAppointmentDTO = DTOHelper.CreateMedicinePrescriptionDTO(medicineAppointmentClass);
+
+            return TypedResults.Created($"/{medicineAppointmentDTO.Id}", medicineAppointmentDTO);
         }
     }
 }

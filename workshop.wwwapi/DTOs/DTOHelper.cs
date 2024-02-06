@@ -1,4 +1,7 @@
-﻿using workshop.wwwapi.Models;
+﻿using workshop.wwwapi.DTOs.Core;
+using workshop.wwwapi.DTOs.Extension;
+using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Post;
 
 namespace workshop.wwwapi.DTOs
 {
@@ -27,7 +30,7 @@ namespace workshop.wwwapi.DTOs
             {
                 FullName = doctor.FullName,
                 Appointments = doctor.Appointments.Select(a => new AppointmentDTO_D1
-                { 
+                {
                     Patient = new PatientDTO_L1
                     {
                         Id = a.Patient.Id,
@@ -71,5 +74,42 @@ namespace workshop.wwwapi.DTOs
                 Booking = appointment.Booking
             };
         }
+
+
+        public static List<MedicinePrescriptionDTO> MedicinePrescriptionDTOListReturner(IEnumerable<MedicinePrescription> mps)
+        {
+            List<MedicinePrescriptionDTO> mpDTOs = new List<MedicinePrescriptionDTO>();
+
+            foreach (var mp in mps)
+            {
+                var mpDTO = CreateMedicinePrescriptionDTO(mp);
+                mpDTOs.Add(mpDTO);
+            }
+            return mpDTOs;
+        }
+
+        public static MedicinePrescriptionDTO CreateMedicinePrescriptionDTO(MedicinePrescription mp)
+        {
+            return new MedicinePrescriptionDTO
+            {
+                Id = mp.Id,
+                MedicineId = mp.MedicineId,
+                Medicine = new MedicineDTO_L1
+                {
+                    Id = mp.Medicine.Id,
+                    Name = mp.Medicine.Name,
+                    Quantity = mp.Medicine.Quantity,
+                    Instruction = mp.Medicine.Instruction
+                },
+                PrescriptionId = mp.PrescriptionId,
+                Prescription = new PrescriptionDTO_L1
+                {
+                    Id = mp.Prescription.Id,
+                    DoctorsNote = mp.Prescription.DoctorsNote
+                },
+                AppointmentId = mp.AppointmentId,
+                Appointment = CreateAppointmentDTO(mp.Appointment)
+            };
+}
     }
 }

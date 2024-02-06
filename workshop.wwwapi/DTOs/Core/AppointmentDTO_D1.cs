@@ -1,6 +1,6 @@
 ﻿using workshop.wwwapi.Models;
 
-namespace workshop.wwwapi.DTOs
+namespace workshop.wwwapi.DTOs.Core
 {
     public class AppointmentDTO_D1
     {

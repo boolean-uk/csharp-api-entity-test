@@ -22,7 +22,8 @@
             "Keith",
             "Charlie",
             "Brian",
-            "Roger"
+            "Roger",
+            "Ginger"
         };
         private static List<string> _lastnames = new List<string>()
         {
@@ -44,7 +45,8 @@
             "Moon",
             "Watts",
             "May",
-            "Daltrey"
+            "Daltrey",
+            "Baker"
         };
 
         public static string GetRandomName()

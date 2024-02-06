@@ -3,8 +3,9 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Newtonsoft.Json;
 using System.Text;
 using workshop.wwwapi.Data;
-using workshop.wwwapi.DTOs;
+using workshop.wwwapi.DTOs.Core;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Post;
 
 namespace workshop.tests;
 
@@ -44,7 +45,7 @@ public class PatientTester
         var actualResult = patients.Count;
         // Assert
 
-        Assert.AreEqual(expectedResult, actualResult);
+        Assert.That(actualResult, Is.EqualTo(expectedResult));
     }
 
     [Test]
@@ -63,7 +64,7 @@ public class PatientTester
         var expectedResult = "Maynard James Keenan"; // Replace with the expected patient name
         var actualResult = patient.FullName;
         // Assert
-        Assert.AreEqual(expectedResult, actualResult);
+        Assert.That(actualResult, Is.EqualTo(expectedResult));
     }
 
     [Test]
@@ -104,8 +105,8 @@ public class PatientTester
         var responseBody = await response.Content.ReadAsStringAsync();
         var createdPatient = JsonConvert.DeserializeObject<Patient>(responseBody);
 
-        Assert.AreEqual(System.Net.HttpStatusCode.Created, response.StatusCode);
-        Assert.AreEqual(patientPost.FullName, createdPatient.FullName);
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.Created));
+        Assert.That(createdPatient.FullName, Is.EqualTo(patientPost.FullName));
     }
 
     [Test]
@@ -132,7 +133,7 @@ public class PatientTester
         var responseString = await client.PostAsync("surgery/patients", contentEmpty);
 
         // Assert
-        Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, responseEmpty.StatusCode);
-        Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, responseString.StatusCode);
+        Assert.That(responseEmpty.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.BadRequest));
+        Assert.That(responseString.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.BadRequest));
     }
 }

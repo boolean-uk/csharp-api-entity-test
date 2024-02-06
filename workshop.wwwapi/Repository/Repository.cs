@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Numerics;
 using workshop.wwwapi.Data;
+using workshop.wwwapi.DTOs.Extension;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Post;
 
 namespace workshop.wwwapi.Repository
 {
@@ -131,6 +134,88 @@ namespace workshop.wwwapi.Repository
             };
             _databaseContext.Appointments.Add(appointment);
             await _databaseContext.SaveChangesAsync();
+            return appointment;
+        }
+
+
+        //MEDICINEPRESCRIPTIONS
+
+        public async Task<IEnumerable<MedicinePrescription>> GetMedicinePrescriptions()
+        {
+            return await _databaseContext.MedicinePrescriptions
+                .Include(m=>m.Medicine)
+                .Include(m=>m.Prescription)
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a.Doctor)
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a.Patient)
+                .OrderBy(m => m.Id)
+                .ToListAsync();
+        }
+
+        public async Task<MedicinePrescription?> GetMedicinePrescriptionsById(int id)
+        {
+            var mp = await _databaseContext.MedicinePrescriptions
+                .Include(m => m.Medicine)
+                .Include(m => m.Prescription)
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a.Doctor)
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a.Patient)
+                .Where(m => m.Id == id)
+                .FirstOrDefaultAsync();
+            return mp;
+        }
+
+        public async Task<MedicinePrescription> CreateMedicinePrescription(MedicinePrescriptionPost model)
+        {
+            var medicine =      await _databaseContext.Medicines.FindAsync(model.MedicineId);
+            var prescription =  await _databaseContext.Prescriptions.FindAsync(model.PrescriptionId);
+            var appointment =   await _databaseContext.Appointments.FindAsync(model.AppointmentId);
+
+            int newId = _databaseContext.MedicinePrescriptions.Any() ? _databaseContext.MedicinePrescriptions.Max(a => a.Id) + 1 : 1;
+            var mp = new MedicinePrescription
+            {
+                Id = newId,
+                MedicineId = model.MedicineId,
+                Medicine = medicine,
+                PrescriptionId = model.PrescriptionId,
+                Prescription = prescription,
+                AppointmentId = model.AppointmentId,
+                Appointment = appointment
+            };
+            _databaseContext.MedicinePrescriptions.Add(mp);
+            await _databaseContext.SaveChangesAsync();
+            return mp;
+        }
+
+        public async Task<Medicine?> GetMedicineById(int id)
+        {
+            var medicine = await _databaseContext.Medicines
+                .Include(m=>m.MedicinePrescriptions)
+                .ThenInclude(mp=>mp.Prescription)
+                .Where(m=>m.Id == id)
+                .FirstOrDefaultAsync();
+            return medicine;
+        }
+
+        public async Task<Prescription?> GetPrescriptionById(int id)
+        {
+            var prescription = await _databaseContext.Prescriptions   
+                .Include(p=>p.MedicinePrescriptions)
+                .ThenInclude(mp=>mp.Medicine)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
+            return prescription;
+        }
+
+        public async Task<Appointment?> GetAppointmentById(int id)
+        {
+            var appointment = await _databaseContext.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .Where(a => a.Id == id)
+                .FirstOrDefaultAsync();
             return appointment;
         }
     }

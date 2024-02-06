@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using workshop.wwwapi.Data;
-using workshop.wwwapi.DTOs;
+using workshop.wwwapi.DTOs.Core;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Post;
 
 namespace workshop.tests
 {
@@ -47,7 +48,7 @@ namespace workshop.tests
             var actualResult = appointments.Count;
             // Assert
 
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.That(expectedResult, Is.EqualTo(actualResult));
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace workshop.tests
             var expectedResult = 2;
             var actualResult = appointments.Count;
             // Assert
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.That(expectedResult, Is.EqualTo(actualResult));
         }
 
         [Test]
@@ -103,7 +104,7 @@ namespace workshop.tests
             var expectedResult = 2;
             var actualResult = appointments.Count;
             // Assert
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.That(actualResult, Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -145,8 +146,8 @@ namespace workshop.tests
             var createdAppointment = JsonConvert.DeserializeObject<Appointment>(responseBody);
             
             // Assert
-            Assert.AreEqual(System.Net.HttpStatusCode.Created, response.StatusCode);
-            Assert.AreEqual(appointmentPost.Booking, createdAppointment.Booking);
+            Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.Created));
+            Assert.That(createdAppointment.Booking, Is.EqualTo(appointmentPost.Booking));
         }
 
         [Test]
@@ -177,8 +178,8 @@ namespace workshop.tests
             var responseString = await client.PostAsync("surgery/appointments", contentEmpty);
 
             // Assert
-            Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, responseEmpty.StatusCode);
-            Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, responseString.StatusCode);
+            Assert.That(responseEmpty.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.BadRequest));
+            Assert.That(responseString.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.BadRequest));
         }
     }
 }

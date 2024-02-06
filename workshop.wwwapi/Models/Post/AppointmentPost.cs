@@ -1,4 +1,4 @@
-﻿namespace workshop.wwwapi.Models
+﻿namespace workshop.wwwapi.Models.Post
 {
     public class AppointmentPost
     {
