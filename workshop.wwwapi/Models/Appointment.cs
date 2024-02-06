@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Models.DTOs;
 
 namespace workshop.wwwapi.Models
 {
@@ -21,6 +22,8 @@ namespace workshop.wwwapi.Models
         [Column("patient_id")]
         public int PatientId { get; set; }
         public Patient Patient { get; set; }
+
+        
 
     }
 }

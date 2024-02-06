@@ -20,7 +20,7 @@ namespace workshop.wwwapi.Repository
             //Create the patient
             var patient = new Patient();
             patient.FullName = fullName;
-            patient.Id = _databaseContext.Patients.Count()+1;
+            patient.Id = _databaseContext.Patients.Count() + 1;
             _databaseContext.Patients.Add(patient);
             await _databaseContext.SaveChangesAsync();
             return patient;
@@ -87,5 +87,24 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.SaveChangesAsync();
             return appointment;
         }
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            IEnumerable<Prescription> prescriptions = await _databaseContext.Prescriptions.Include(x => x.Medicine).ToListAsync();
+            return prescriptions;
+        }
+
+
+        public async Task<Prescription> CreatePrescription(CreateMedicinePrescriptionDto dto)
+        {
+            Prescription prescription = new Prescription();
+            List<Medicine> medicines = await _databaseContext.Medicines.Where(x => dto.MedicineId.Contains(x.Id)).ToListAsync();
+            prescription.Medicine = medicines;
+            await _databaseContext.Prescriptions.AddAsync(prescription);
+            await _databaseContext.SaveChangesAsync();
+            return prescription;
+        }
     }
+
 }
+

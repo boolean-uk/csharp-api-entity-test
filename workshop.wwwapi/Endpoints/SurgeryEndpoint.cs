@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Xml.Linq;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.DTOs;
@@ -23,6 +24,8 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointments/doctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointments/patient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointments/post", CreateAppointment);
+            surgeryGroup.MapGet("/Prescriptions/get", GetPrescriptions);
+            surgeryGroup.MapPost("/Presciptions/post", CreatePrescriptions);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -225,9 +228,45 @@ namespace workshop.wwwapi.Endpoints
                 AppointmentTime = appointment.Booking
             };
 
-            return TypedResults.Ok(createdAppointmentDto);
+            return TypedResults.Created(nameof(CreateAppointment),createdAppointmentDto);
         }
 
-    
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            IEnumerable<Prescription> ogPrescritpions = await repository.GetPrescriptions();
+            IEnumerable<GetPrescriptionDto> prescriptionDto = ogPrescritpions.Select(x => new GetPrescriptionDto()
+            {
+               Medicines = x.Medicine.Select(m => new GetMedicineDto()
+               {
+                   Instruction = m.Instructions,
+                   Name = m.Name,
+                   Quantity = m.Quantity
+               }).ToList()
+            });
+            return TypedResults.Ok(prescriptionDto);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreatePrescriptions(IRepository repository, CreateMedicinePrescriptionDto medpre)
+        {
+            try
+            {
+                Prescription prescription = await repository.CreatePrescription(medpre);
+                GetPrescriptionDto getPrescriptionDto = new GetPrescriptionDto()
+                {
+                    Medicines = prescription.Medicine.Select(x => new GetMedicineDto()
+                    {
+                        Name = x.Name,
+                        Quantity = x.Quantity,
+                        Instruction = x.Instructions
+                    }).ToList()
+                };
+             return TypedResults.Created(nameof(CreatePrescriptions), getPrescriptionDto);
+            } catch (Exception ex)
+            {
+                return TypedResults.BadRequest(ex.Message);
+            }
+        }
     }
 }

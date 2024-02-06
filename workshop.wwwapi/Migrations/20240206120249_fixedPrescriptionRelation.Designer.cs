@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240206120249_fixedPrescriptionRelation")]
+    partial class fixedPrescriptionRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,19 +50,19 @@ namespace workshop.wwwapi.Migrations
                         {
                             PatientId = 1,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 7, 13, 17, 7, 234, DateTimeKind.Utc).AddTicks(8190)
+                            Booking = new DateTime(2024, 2, 7, 12, 2, 49, 160, DateTimeKind.Utc).AddTicks(8751)
                         },
                         new
                         {
                             PatientId = 2,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 8, 13, 17, 7, 234, DateTimeKind.Utc).AddTicks(8201)
+                            Booking = new DateTime(2024, 2, 8, 12, 2, 49, 160, DateTimeKind.Utc).AddTicks(8760)
                         },
                         new
                         {
                             PatientId = 3,
                             DoctorId = 2,
-                            Booking = new DateTime(2024, 2, 9, 13, 17, 7, 234, DateTimeKind.Utc).AddTicks(8202)
+                            Booking = new DateTime(2024, 2, 9, 12, 2, 49, 160, DateTimeKind.Utc).AddTicks(8761)
                         });
                 });
 
@@ -130,11 +133,6 @@ namespace workshop.wwwapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Instructions")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("instructions");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -142,7 +140,7 @@ namespace workshop.wwwapi.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
-                        .HasColumnName("quantity");
+                        .HasColumnName("quantiy");
 
                     b.HasKey("Id");
 
@@ -152,14 +150,12 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            Instructions = "Take one each morning, avoid swallowing for 1 minute and drinking for 5 minutes.",
                             Name = "Acarizax",
                             Quantity = 90
                         },
                         new
                         {
                             Id = 2,
-                            Instructions = "Take as many as u like, avoid alcohol while taking these, or dont, I am not liable anyway.",
                             Name = "Ibuprofen",
                             Quantity = 16
                         });
@@ -210,6 +206,11 @@ namespace workshop.wwwapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Instructions")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("instructions");
+
                     b.HasKey("Id");
 
                     b.ToTable("prescription");
@@ -217,11 +218,13 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1
+                            Id = 1,
+                            Instructions = "Take one each morning, avoid swallowing for 1 minute and drinking for 5 minutes."
                         },
                         new
                         {
-                            Id = 2
+                            Id = 2,
+                            Instructions = "Take as many as u like, avoid alcohol while taking these, or dont, I am not liable anyway."
                         });
                 });
 
