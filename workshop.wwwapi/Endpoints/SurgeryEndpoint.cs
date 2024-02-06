@@ -11,22 +11,22 @@ namespace workshop.wwwapi.Endpoints
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
-            surgeryGroup.MapGet("/appointments/{id}/doctor", GetAppointmentsByDoctor);
-            surgeryGroup.MapGet("/appointments/{id}/patient", GetAppointmentsByPatient);
-            surgeryGroup.MapGet("/appointments/", GetAppointments);
-            surgeryGroup.MapPost("/appointments/", CreateAppointment);
-            surgeryGroup.MapGet("/appointments/{id}", GetAppointment);
+            surgeryGroup.MapGet("surgery/appointments/{id}/doctor", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("surgery/appointments/{id}/patient", GetAppointmentsByPatient);
+            surgeryGroup.MapGet("surgery/appointments/", GetAppointments);
+            surgeryGroup.MapPost("surgery/appointments/", CreateAppointment);
+            surgeryGroup.MapGet("surgery/appointments/{id}", GetAppointment);
 
 
            // var patientGroup = app.MapGroup("patients");
-            surgeryGroup.MapGet("/patients/", GetPatients);
-            surgeryGroup.MapGet("/patients/{id}", GetAPatient);
-            surgeryGroup.MapPost("/patients/", CreatePatient);
+            surgeryGroup.MapGet("surgery/patients/", GetPatients);
+            surgeryGroup.MapGet("surgery/patients/{id}", GetAPatient);
+            surgeryGroup.MapPost("surgery/patients/", CreatePatient);
 
             //var doctorGroup = app.MapGroup("doctors");
-            surgeryGroup.MapGet("/doctors/", GetDoctors);
-            surgeryGroup.MapGet("/doctors/{id}", GetDoctorById);
-            surgeryGroup.MapPost("/doctors/", CreateDoctor);
+            surgeryGroup.MapGet("surgery/doctors/", GetDoctors);
+            surgeryGroup.MapGet("surgery/doctors/{id}", GetDoctorById);
+            surgeryGroup.MapPost("surgery/doctors/", CreateDoctor);
         }
 
         //GET Patient

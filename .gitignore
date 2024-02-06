@@ -489,3 +489,4 @@ $RECYCLE.BIN/
 */**/bin/Release   
 */**/obj/Debug   
 */**/obj/Release  
+/workshop.wwwapi/appsettings.json
