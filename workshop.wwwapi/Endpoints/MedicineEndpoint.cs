@@ -14,6 +14,7 @@ namespace workshop.wwwapi.Endpoints
             group.MapGet("/{id}", Get);
             group.MapPost("/", Post);
             group.MapPut("/{id}/prescriptions", AddPrescriptions);
+            group.MapDelete("/{id}/prescriptions", RemovePrescriptions);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -80,6 +81,35 @@ namespace workshop.wwwapi.Endpoints
             {
                 Prescription? prescription = await prescriptionRespository.Get(prescriptionId);
                 medicine.Prescriptions.Add(prescription);
+            }
+
+            var result = await medicineRepository.Update(medicine);
+
+            OutputMedicine outputMedicine = MedicineDtoManager.Convert(result);
+            return TypedResults.Ok(outputMedicine);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> RemovePrescriptions(int id,  IMedicineRepository medicineRepository, IPrescriptionRepository prescriptionRespository, [FromBody] List<int> prescriptionsIds)
+        {
+            Medicine? medicine = await medicineRepository.Get(id);
+
+            if (medicine == null)
+                return TypedResults.NotFound("Medicine not found");
+
+            // Check if all prescriptions exist
+            foreach (int prescriptionId in prescriptionsIds)
+            {
+                Prescription? prescription = await prescriptionRespository.Get(prescriptionId);
+                if (prescription == null)
+                    return TypedResults.BadRequest($"Prescription with ID {prescriptionId} not found");
+            }
+
+            // Remove prescriptions from medicine
+            foreach (int prescriptionId in prescriptionsIds)
+            {
+                Prescription? prescription = await prescriptionRespository.Get(prescriptionId);
+                medicine.Prescriptions.Remove(prescription);
             }
 
             var result = await medicineRepository.Update(medicine);
