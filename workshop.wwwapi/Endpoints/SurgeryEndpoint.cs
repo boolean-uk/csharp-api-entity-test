@@ -8,26 +8,35 @@ namespace workshop.wwwapi.Endpoints
 {
     public static class SurgeryEndpoint
     {
-        public static void ConfigurePatientEndpoint(this WebApplication app)
+        public static void ConfigureSurgeryEndpoint(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
-            surgeryGroup.MapGet("surgery/appointments/{id}/doctor", GetAppointmentsByDoctor);
-            surgeryGroup.MapGet("surgery/appointments/{id}/patient", GetAppointmentsByPatient);
-            surgeryGroup.MapGet("surgery/appointments/", GetAppointments);
-            surgeryGroup.MapPost("surgery/appointments/", CreateAppointment);
-            surgeryGroup.MapGet("surgery/appointments/{id}", GetAppointment);
+            surgeryGroup.MapGet("appointments/{id}/doctor", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("appointments/{id}/patient", GetAppointmentsByPatient);
+            surgeryGroup.MapGet("appointments/", GetAppointments);
+            surgeryGroup.MapPost("appointments/", CreateAppointment);
+            surgeryGroup.MapGet("appointments/{id}", GetAppointment);
 
-
-           // var patientGroup = app.MapGroup("patients");
-            surgeryGroup.MapGet("surgery/patients/", GetPatients);
-            surgeryGroup.MapGet("surgery/patients/{id}", GetAPatient);
-            surgeryGroup.MapPost("surgery/patients/", CreatePatient);
-
-            //var doctorGroup = app.MapGroup("doctors");
-            surgeryGroup.MapGet("surgery/doctors/", GetDoctors);
-            surgeryGroup.MapGet("surgery/doctors/{id}", GetDoctorById);
-            surgeryGroup.MapPost("surgery/doctors/", CreateDoctor);
         }
+        public static void ConfigurePatientEndpoint(this WebApplication app)
+        {
+            var patientGroup = app.MapGroup("surgery/patients");
+            patientGroup.MapGet("/", GetPatients);
+            patientGroup.MapGet("/{id}", GetAPatient);
+            patientGroup.MapPost("/", CreatePatient);
+        }
+        public static void ConfigureDoctorEndpoint(this WebApplication app)
+        {
+            var doctorGroup = app.MapGroup("surgery/doctors");
+            doctorGroup.MapGet("/", GetDoctors);
+            doctorGroup.MapGet("/{id}", GetDoctorById);
+            doctorGroup.MapPost("/", CreateDoctor);
+
+        }
+
+
+
+
 
         //GET Patient
         [ProducesResponseType(StatusCodes.Status200OK)]

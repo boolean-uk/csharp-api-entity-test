@@ -50,7 +50,6 @@ Write some basic tests for the get all and create one for each of the controller
   - Create an endpoint controller to get prescriptions, to create prescriptions and attach to an appointment, etc
 - Extend appointments to include the type of appointment: eg if it was in person or online; bonus: use enumerations for the appointment type
 
-
 ## Configure Json
 
 Create a new appsettings.json / appsettings.Development.json (see appsettings.Example.json) add the following json and update credentials
