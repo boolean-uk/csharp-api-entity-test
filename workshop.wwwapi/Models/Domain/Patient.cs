@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
@@ -14,6 +15,6 @@ namespace workshop.wwwapi.Models.Domain
         [Column("full_name")]
         public string FullName { get; set; }
 
-        public List<Appointment> Appointments { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }
