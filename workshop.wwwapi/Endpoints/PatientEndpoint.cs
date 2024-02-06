@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.Models.DataTransfer.Appointment;
 using workshop.wwwapi.Models.DataTransfer.Doctor;
 using workshop.wwwapi.Models.DataTransfer.Patient;
 using workshop.wwwapi.Models.Domain;
@@ -11,10 +13,10 @@ namespace workshop.wwwapi.Endpoints
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
             var group = app.MapGroup("patient");
-
             group.MapGet("/", GetAll);
             group.MapGet("/{id}", Get);
             group.MapPost("/", Create);
+            group.MapGet("{id}/appointments", GetAppointments);
         }
         private static async Task<IResult> GetAll(IRepository<Patient> patientRepository)
         {
@@ -38,6 +40,16 @@ namespace workshop.wwwapi.Endpoints
             string fullName = $"{patientInput.Firstname} {patientInput.Surname}";
             var result = await patientRepository.Insert(new Patient() { FullName = fullName });
             return TypedResults.Created(result.ID.ToString(), new PatientDTO(result));
+        }
+        private static async Task<IResult> GetAppointments(IAppointmentRepository appointmentRepository, int id)
+        {
+            var appointments = await appointmentRepository.GetByPatientID(id);
+            List<AppointmentWithDoctorAndPatientDTO> results = new List<AppointmentWithDoctorAndPatientDTO>();
+            foreach (var appointment in appointments)
+            {
+                results.Add(new AppointmentWithDoctorAndPatientDTO(appointment));
+            }
+            return TypedResults.Ok(results);
         }
     }
 }

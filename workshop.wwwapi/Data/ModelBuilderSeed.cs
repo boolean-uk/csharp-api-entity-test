@@ -98,8 +98,15 @@ namespace workshop.wwwapi.Data
             "Chocomore",
             "Snackmore",
             "Colamore",
+            "Morecola",
             "Snackright",
-            "Butterbliss"
+            "Colagood",
+            "Candycraze",
+            "Sugargood",
+            "Candygood",
+            "Eatmore",
+            "Sodagood",
+            "Snackgood"
         };
         public static List<string> doctorTitles = new List<string>
         {

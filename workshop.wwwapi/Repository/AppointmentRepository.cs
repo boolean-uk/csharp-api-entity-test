@@ -4,7 +4,7 @@ using workshop.wwwapi.Models.Domain;
 
 namespace workshop.wwwapi.Repository
 {
-    public class AppointmentRepository : IRepository<Appointment>
+    public class AppointmentRepository : IAppointmentRepository
     {
         DatabaseContext db;
         public AppointmentRepository(DatabaseContext db)
@@ -21,14 +21,14 @@ namespace workshop.wwwapi.Repository
             return await db.Appointments.Include(a => a.Patient).Include(a => a.Doctor).FirstOrDefaultAsync(a => a.ID == (int)id);
         }
 
-        public async Task<Appointment> GetByDoctorID(object id)
+        public async Task<IEnumerable<Appointment>> GetByDoctorID(object id)
         {
-            return await db.Appointments.Include(a => a.Patient).Include(a => a.Doctor).FirstOrDefaultAsync(a => a.DoctorID == (int)id);
+            return await db.Appointments.Include(a => a.Patient).Include(a => a.Doctor).Where(a => a.DoctorID == (int)id).ToListAsync();
         }
 
-        public async Task<Appointment> GetByPatientID(object id)
+        public async Task<IEnumerable<Appointment>> GetByPatientID(object id)
         {
-            return await db.Appointments.Include(a => a.Patient).Include(a => a.Doctor).FirstOrDefaultAsync(a => a.PatientID == (int)id);
+            return await db.Appointments.Include(a => a.Patient).Include(a => a.Doctor).Where(a => a.PatientID == (int)id).ToListAsync();
         }
 
         public async Task<IEnumerable<Appointment>> GetAll()
@@ -40,7 +40,8 @@ namespace workshop.wwwapi.Repository
         {
             await db.AddAsync(entity);
             await db.SaveChangesAsync();
-            return entity;
+            var result =  await Get(entity.ID);
+            return result;
         }
 
         public Task<Appointment> Update(Appointment entity)
