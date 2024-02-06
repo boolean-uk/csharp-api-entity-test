@@ -18,7 +18,7 @@ namespace workshop.wwwapi.Data
         {
             //modelBuilder.Entity<Appointment>().HasKey(a => new {a.PatientID, a.DoctorID});
             // Since a patient should be able to have multiple appointments with same doctor, it gets its own ID instead
-
+            modelBuilder.Entity<PrescriptionMedicine>().HasKey(pm => new {pm.PrescriptionID, pm.MedicineID});
             modelBuilder.SeedDatabase();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -26,12 +26,12 @@ namespace workshop.wwwapi.Data
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
-            
         }
-
-
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionMedicines { get; set; }
     }
 }

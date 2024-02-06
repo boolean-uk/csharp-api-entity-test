@@ -22,6 +22,7 @@ namespace workshop.wwwapi.Models.Domain
 
         [Column("appointment_time")]
         public DateTime AppointmentTime { get; set; }
+        public Prescription pescription { get; set; }
 
     }
 }
