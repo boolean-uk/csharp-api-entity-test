@@ -16,7 +16,7 @@ namespace workshop.wwwapi.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<Appointment> Get(object id)
+        public async Task<Appointment?> Get(object id)
         {
             return await db.Appointments.Include(a => a.Patient).Include(a => a.Doctor).FirstOrDefaultAsync(a => a.ID == (int)id);
         }
