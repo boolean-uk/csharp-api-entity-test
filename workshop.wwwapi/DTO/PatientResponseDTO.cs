@@ -21,8 +21,6 @@ namespace workshop.wwwapi.Models
                     Appointments.Add(new PatientAppointmentDTO(appointment));
                 }
             }
-
-
         }
 
         public static List<PatientResponseDTO> FromRepository(IEnumerable<Patient> patients)
