@@ -37,6 +37,10 @@ namespace workshop.wwwapi.Data
         private List<Patient> _patients = new List<Patient>();
         private List<Doctor> _doctors = new List<Doctor>();
         private List<Appointment> _appointments = new List<Appointment>();
+        private List<Medicine> _medicines = new List<Medicine>();
+        private List<Prescription> _prescriptions = new List<Prescription>();
+        private List<MedicinePrescription> _medPre = new List<MedicinePrescription>();
+
 
         public Seeder()
         {
@@ -44,6 +48,7 @@ namespace workshop.wwwapi.Data
             Random patientRandom = new Random();
             Random doctorRandom = new Random();
             Random appointmentRandom = new Random();
+            Random medicineRandom = new Random();
 
 
 
@@ -79,10 +84,33 @@ namespace workshop.wwwapi.Data
                 _appointments.Add(app);
             }
 
+            _medicines.Add(new Medicine() { MedName = "Paracetamol", Id = 1});
+            _medicines.Add(new Medicine() { MedName = "Zyrtec", Id = 2 });
+            _medicines.Add(new Medicine() { MedName = "Hyrimoz", Id = 3 });
+
+
+            for (int v = 1; v < 6; v++)
+            {
+                Prescription pre = new Prescription();
+                pre.Id = v;
+                pre.DoctorId = v;
+                pre.PatientId = v;
+                MedicinePrescription preMed = new MedicinePrescription();
+                preMed.PrescriptionId = v;
+                preMed.MedId = medicineRandom.Next(1, _medicines.Count + 1);
+                preMed.MedAmount = medicineRandom.Next(0, 10);
+
+                _prescriptions.Add(pre);
+                _medPre.Add(preMed);
+            }
+
 
         }
         public List<Patient> Patients { get { return _patients; } }
         public List<Doctor> Doctors { get { return _doctors; } }
         public List<Appointment> Appointments { get { return _appointments; } }
+        public List<Medicine> Medicines { get { return _medicines; }}
+        public List<Prescription> Prescriptions { get { return _prescriptions; }}
+        public List<MedicinePrescription> MedicinePrescriptions { get { return _medPre; } }
     }
 }

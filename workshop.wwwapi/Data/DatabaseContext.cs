@@ -30,6 +30,11 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>().HasData(seed.Appointments);
 
 
+            modelBuilder.Entity<Medicine>().HasData(seed.Medicines);
+            modelBuilder.Entity<Prescription>().HasData(seed.Prescriptions);
+            modelBuilder.Entity<MedicinePrescription>().HasKey(a => new { a.MedId, a.PrescriptionId });
+            modelBuilder.Entity<MedicinePrescription>().HasData(seed.MedicinePrescriptions);
+
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -44,5 +49,8 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<MedicinePrescription> MedPrescription { get; set; }
     }
 }

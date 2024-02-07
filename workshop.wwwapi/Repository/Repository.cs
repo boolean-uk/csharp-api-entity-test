@@ -61,5 +61,20 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Appointments.Where(x => x.PatientId == id).ToListAsync();
         }
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Medicine>> GetMedicines()
+        {
+            return await _databaseContext.Medicines.ToListAsync();
+        }
+
+        public async Task<IEnumerable<MedicinePrescription>> GetMedicinePrescriptions()
+        {
+            return await _databaseContext.MedPrescription.ToListAsync();
+        }
     }
 }

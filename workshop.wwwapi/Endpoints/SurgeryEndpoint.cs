@@ -27,6 +27,8 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointments/by_doctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointments/by_patient/{id}", GetAppointmentsByPatient);
 
+            surgeryGroup.MapGet("/prescription/all", GetPrescriptions);
+
         }
 
 
@@ -49,7 +51,8 @@ namespace workshop.wwwapi.Endpoints
                 {
                     patDTO.Appointments.Add(new AppointmentPatientDTO()
                     {
-                        AppointmentTime = app.Booking, DoctorName = repository.GetDoctorById(app.DoctorId).Result.FullName
+                        AppointmentTime = app.Booking,
+                        DoctorName = repository.GetDoctorById(app.DoctorId).Result.FullName
                     });
                 }
 
@@ -161,6 +164,7 @@ namespace workshop.wwwapi.Endpoints
 
             return TypedResults.Ok(appsDTO);
         }
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
@@ -197,6 +201,41 @@ namespace workshop.wwwapi.Endpoints
             }
 
             return TypedResults.Ok(appsDTO);
+        }
+
+
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository, int id)
+        {
+            var pres = await repository.GetPrescriptions();
+            
+            List<PrescriptionDTO> presDTOs = new List<PrescriptionDTO>();
+
+            foreach (var pre in pres)
+            {
+                Doctor doc = await repository.GetDoctorById(pre.DoctorId);
+                Patient pat = await repository.GetPatientById(pre.PatientId);
+                var meds = await repository.GetMedicinePrescriptions();
+                meds = meds.Where(x => x.PrescriptionId == pre.Id);
+
+                List<MedicineDTO> medsDTO = new List<MedicineDTO>();
+                foreach (var med in meds)
+                {
+                    medsDTO.Add(new MedicineDTO()
+                    {
+                        //TODO GET ALL DATA
+                    });
+                }
+
+                PrescriptionDTO presDTO = new PrescriptionDTO()
+                {
+                    DoctorName = doc.FullName, PatientName = pat.FullName
+                }
+            }
+
+            return TypedResults.Ok(presDTOs);
         }
     }
 }
