@@ -9,6 +9,8 @@ public class Appointment
     public int Id { get; set; }
     [Column("booking")]
     public DateTime Booking { get; set; }
+    [Column("appointment_type")]
+    public AppointmentType AppointmentType { get; set; }
     [Column("fk_doctor_id")]
     public int DoctorId { get; set; }
     public Doctor Doctor { get; set; }

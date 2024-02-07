@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.Types;
 
 namespace workshop.wwwapi.Data
@@ -43,9 +44,9 @@ namespace workshop.wwwapi.Data
             });
             modelBuilder.Entity<Appointment>().HasData(new List<Appointment>()
             {
-                new Appointment() { Id = 1, DoctorId = 1, PatientId = 1, PrescriptionId = null, Booking = DateTime.SpecifyKind(new DateTime(2024, 7, 14, 12, 45, 0), DateTimeKind.Utc)},
-                new Appointment() { Id = 2, DoctorId = 1, PatientId = 2, PrescriptionId = 1, Booking = DateTime.SpecifyKind(new DateTime(2024, 4, 21, 9, 5, 0), DateTimeKind.Utc)},
-                new Appointment() { Id = 3, DoctorId = 1, PatientId = 2, PrescriptionId = 2, Booking = DateTime.SpecifyKind(new DateTime(2024, 3, 15, 8, 30, 0), DateTimeKind.Utc)},
+                new Appointment() { Id = 1, DoctorId = 1, PatientId = 1, PrescriptionId = null, Booking = DateTime.SpecifyKind(new DateTime(2024, 7, 14, 12, 45, 0), DateTimeKind.Utc), AppointmentType = AppointmentType.InPerson},
+                new Appointment() { Id = 2, DoctorId = 1, PatientId = 2, PrescriptionId = 1, Booking = DateTime.SpecifyKind(new DateTime(2024, 4, 21, 9, 5, 0), DateTimeKind.Utc), AppointmentType = AppointmentType.Online},
+                new Appointment() { Id = 3, DoctorId = 1, PatientId = 2, PrescriptionId = 2, Booking = DateTime.SpecifyKind(new DateTime(2024, 3, 15, 8, 30, 0), DateTimeKind.Utc), AppointmentType = AppointmentType.Online},
             });
 
 

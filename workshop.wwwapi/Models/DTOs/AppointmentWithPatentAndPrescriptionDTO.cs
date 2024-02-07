@@ -5,6 +5,7 @@ namespace workshop.wwwapi.Models.DTOs;
 public class AppointmentWithPatentAndPrescriptionDTO
 {
     public DateTime Booking { get; set; }
+    public AppointmentType AppointmentType { get; set; }
     public PatientDTO Patient { get; set; }
     public PrescriptionWithMedicinesDTO? Prescription { get; set; }
 
@@ -18,6 +19,7 @@ public class AppointmentWithPatentAndPrescriptionDTO
         return new AppointmentWithPatentAndPrescriptionDTO
         {
             Booking = appointment.Booking,
+            AppointmentType = appointment.AppointmentType,
             Patient = PatientDTO.ToDTO(appointment.Patient),
             Prescription = prescription,
         };
