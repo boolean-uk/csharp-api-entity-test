@@ -11,6 +11,11 @@ namespace workshop.wwwapi.Models
         public int Id { get; set; }
         [Column("pr_doctors_note")]
         public string DoctorsNote { get; set; }
+
+        [Column("pr_appointment_id")]
+        [ForeignKey("Appointment")]
+        public int AppointmentId { get; set; }
+        public Appointment Appointment { get; set; }
         public ICollection<MedicinePrescription> MedicinePrescriptions { get; set; } = new List<MedicinePrescription>();
     }
 }

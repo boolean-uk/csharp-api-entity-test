@@ -9,6 +9,7 @@ using workshop.wwwapi.Data;
 using workshop.wwwapi.DTOs.Core;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.Post;
+using workshop.wwwapi.Models.Post.Core;
 
 namespace workshop.tests
 {
@@ -16,7 +17,7 @@ namespace workshop.tests
     {
         [Test]
         [Order(1)]
-        public async Task AppointmentEndpointStatus()
+        public async Task Test_01_AppointmentEndpointStatus()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -31,8 +32,8 @@ namespace workshop.tests
 
         [Test]
         [Order(2)]
-        public async Task GetAllAppointments()
-        {
+        public async Task Test_02_GetAllAppointments()
+        { 
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
             var client = factory.CreateClient();
@@ -42,7 +43,6 @@ namespace workshop.tests
             var content = await response.Content.ReadAsStringAsync();
             var appointments = JsonConvert.DeserializeObject<List<AppointmentDTO>>(content);
 
-            // Replace with the expected number of appointments. The seed data has 2 appointments, so the expected number should be 2,
             // but must be manually edited after each test run because the test creates a new appointment.
             var expectedResult = 5;
             var actualResult = appointments.Count;
@@ -53,7 +53,7 @@ namespace workshop.tests
 
         [Test]
         [Order(3)]
-        public async Task GetAppointmentByDoctorId_Success()
+        public async Task Test_03_GetAppointmentByDoctorId_Success()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -73,7 +73,7 @@ namespace workshop.tests
 
         [Test]
         [Order(4)]
-        public async Task GetAppointmentByDoctorId_Fail()
+        public async Task Test_04_GetAppointmentByDoctorId_Fail()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -90,7 +90,7 @@ namespace workshop.tests
 
         [Test]
         [Order(5)]
-        public async Task GetAppointmentByPatientId_Success()
+        public async Task Test_05_GetAppointmentByPatientId_Success()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -109,7 +109,7 @@ namespace workshop.tests
 
         [Test]
         [Order(6)]
-        public async Task GetAppointmentByPatientId_Fail()
+        public async Task Test_06_GetAppointmentByPatientId_Fail()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -126,7 +126,7 @@ namespace workshop.tests
 
         [Test]
         [Order(7)]
-        public async Task CreateAppointment_Success()
+        public async Task Test_07_CreateAppointment_Success()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -136,6 +136,7 @@ namespace workshop.tests
             { 
                 DoctorId = 2, 
                 PatientId = 2, 
+                AppointmentType= AppointmentType.InPerson,
                 Booking = DateTime.UtcNow.AddDays(10) 
             };
 
@@ -152,7 +153,7 @@ namespace workshop.tests
 
         [Test]
         [Order(8)]
-        public async Task CreateAppointment_Fail()
+        public async Task Test_01_CreateAppointment_Fail()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -162,12 +163,14 @@ namespace workshop.tests
             {
                 DoctorId = 9999, // unreachable doctor id
                 PatientId = 2,
+                AppointmentType = AppointmentType.InPerson,
                 Booking = DateTime.UtcNow.AddDays(10)
             };
             var appointmentPostString = new AppointmentPost
             {
                 DoctorId = 2,
                 PatientId = 9999, // unreachable patient id
+                AppointmentType = AppointmentType.InPerson,
                 Booking = DateTime.UtcNow.AddDays(10)
             };
 

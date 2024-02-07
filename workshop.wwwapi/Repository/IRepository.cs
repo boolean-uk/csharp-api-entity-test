@@ -1,6 +1,7 @@
 ﻿using workshop.wwwapi.DTOs.Extension;
 using workshop.wwwapi.Models;
-using workshop.wwwapi.Models.Post;
+using workshop.wwwapi.Models.Post.Core;
+using workshop.wwwapi.Models.Post.Extension;
 
 namespace workshop.wwwapi.Repository
 {
@@ -28,11 +29,15 @@ namespace workshop.wwwapi.Repository
         //MEDICINEPRESCRIPTIONS
         Task<IEnumerable<MedicinePrescription>> GetMedicinePrescriptions();
         Task<MedicinePrescription> GetMedicinePrescriptionsById(int id);
-        Task<MedicinePrescription> CreateMedicinePrescription(MedicinePrescriptionPost model);
+        //Task<MedicinePrescription> CreateMedicinePrescription(MedicinePrescriptionPost model);
 
-        //NEEDED FOR MEDICINEPRESCRIPTIONS TO WORK PROPERLY
+        //NEEDED FOR MEDICINEPRESCRIPTIONS TO WORK PROPERLY. THESE ARE HIDDEN IN THE API.
         Task<Medicine> GetMedicineById(int id);
+        Task<Medicine> CreateMedicine(MedicinePost model);
         Task<Prescription> GetPrescriptionById(int id);
+        Task<IEnumerable<Prescription>> GetPrescriptions();
+        Task<bool> AreMedicineIDsValid(List<int> medicineIds);
+        Task<Prescription> CreatePrescription(PrescriptionPost model);
         Task<Appointment> GetAppointmentById(int id);
     }
 }

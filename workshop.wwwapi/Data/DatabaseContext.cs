@@ -57,7 +57,7 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
             modelBuilder.Entity<Medicine>().HasData(seeder.Medicines);
             modelBuilder.Entity<Prescription>().HasData(seeder.Prescriptions);
-            modelBuilder.Entity<MedicinePrescriptionDTO>().HasData(seeder.MedicinePrescriptions);
+            modelBuilder.Entity<MedicinePrescription>().HasData(seeder.MedicinePrescriptions);
         }
 
         public DbSet<Patient> Patients { get; set; }

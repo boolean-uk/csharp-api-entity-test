@@ -19,10 +19,5 @@ namespace workshop.wwwapi.Models
         [ForeignKey("Prescription")]
         public int PrescriptionId { get; set; }
         public Prescription Prescription { get; set; }
-
-        [Column("mp_appointment_id")]
-        [ForeignKey("Appointment")]
-        public int AppointmentId { get; set; }
-        public Appointment Appointment { get; set; }
     }
 }

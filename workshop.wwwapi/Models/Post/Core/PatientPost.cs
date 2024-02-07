@@ -1,4 +1,4 @@
-﻿namespace workshop.wwwapi.Models.Post
+﻿namespace workshop.wwwapi.Models.Post.Core
 {
     public class PatientPost
     {

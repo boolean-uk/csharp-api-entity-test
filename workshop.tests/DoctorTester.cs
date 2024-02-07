@@ -9,6 +9,7 @@ using workshop.wwwapi.Data;
 using workshop.wwwapi.DTOs.Core;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.Post;
+using workshop.wwwapi.Models.Post.Core;
 
 namespace workshop.tests
 {
@@ -17,7 +18,7 @@ namespace workshop.tests
 
         [Test]
         [Order(1)]
-        public async Task DoctorEndpointStatus()
+        public async Task Test_01_DoctorEndpointStatus()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -32,7 +33,7 @@ namespace workshop.tests
 
         [Test]
         [Order(2)]
-        public async Task GetAllDoctors()
+        public async Task Test_02_GetAllDoctors()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -51,7 +52,7 @@ namespace workshop.tests
 
         [Test]
         [Order(3)]
-        public async Task GetDoctorById_Success()
+        public async Task Test_03_GetDoctorById_Success()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -70,7 +71,7 @@ namespace workshop.tests
 
         [Test]
         [Order(4)]
-        public async Task GetDoctorById_Fail()
+        public async Task Test_04_GetDoctorById_Fail()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -87,7 +88,7 @@ namespace workshop.tests
 
         [Test]
         [Order(5)]
-        public async Task CreateDoctor_Success()
+        public async Task Test_05_CreateDoctor_Success()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -112,7 +113,7 @@ namespace workshop.tests
 
         [Test]
         [Order(6)]
-        public async Task CreateDoctor_Fail()
+        public async Task Test_06_CreateDoctor_Fail()
         {
             // Arrange
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });

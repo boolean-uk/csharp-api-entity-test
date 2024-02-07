@@ -6,6 +6,7 @@ using workshop.wwwapi.Data;
 using workshop.wwwapi.DTOs.Core;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.Post;
+using workshop.wwwapi.Models.Post.Core;
 
 namespace workshop.tests;
 
@@ -13,7 +14,7 @@ public class PatientTester
 {
     [Test]
     [Order(1)]
-    public async Task PatientEndpointStatus()
+    public async Task Test_01_PatientEndpointStatus()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -28,7 +29,7 @@ public class PatientTester
 
     [Test]
     [Order(2)]
-    public async Task GetAllPatients()
+    public async Task Test_02_GetAllPatients()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -50,7 +51,7 @@ public class PatientTester
 
     [Test]
     [Order(3)]
-    public async Task GetPatientById_Success()
+    public async Task Test_03_GetPatientById_Success()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -69,7 +70,7 @@ public class PatientTester
 
     [Test]
     [Order(4)]
-    public async Task GetPatientById_Fail()
+    public async Task Test_04_GetPatientById_Fail()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -86,7 +87,7 @@ public class PatientTester
 
     [Test]
     [Order(5)]
-    public async Task CreatePatient_Success()
+    public async Task Test_05_CreatePatient_Success()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
@@ -111,7 +112,7 @@ public class PatientTester
 
     [Test]
     [Order(6)]
-    public async Task CreatePatient_Fail()
+    public async Task Test_06_CreatePatient_Fail()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });

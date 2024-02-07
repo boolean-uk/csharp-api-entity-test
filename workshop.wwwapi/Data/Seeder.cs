@@ -34,14 +34,18 @@ namespace workshop.wwwapi.Data
             _medicines.Add(new Medicine() { Id = 2, Name = "Morphine", Quantity = 100, Instruction = "Take one pill every 4 hours." });
             _medicines.Add(new Medicine() { Id = 3, Name = "Totally not LSD", Quantity = 200, Instruction = "Consume half the bottle once every day." });
 
-            _prescriptions.Add(new Prescription() { Id = 1, DoctorsNote = "You are very sick. Take double dose." });
-            _prescriptions.Add(new Prescription() { Id = 2, DoctorsNote = "Follow the instructions as is on the medicine." });
-            _prescriptions.Add(new Prescription() { Id = 3, DoctorsNote = "Consume half the dose of what the medicine instructs you."});
-
             Random random = new Random();
-            for (int i = 0; i < 7; i++)
+
+            _prescriptions.Add(new Prescription() { Id = 1, DoctorsNote = "You are very sick. Take double dose.", AppointmentId = random.Next(1, 6) });
+            _prescriptions.Add(new Prescription() { Id = 2, DoctorsNote = "Follow the instructions as is on the medicine.", AppointmentId = random.Next(1, 6) });
+            _prescriptions.Add(new Prescription() { Id = 3, DoctorsNote = "Consume half the dose of what the medicine instructs you.", AppointmentId = random.Next(1, 6) });
+            _prescriptions.Add(new Prescription() { Id = 4, DoctorsNote = "Take the medicine whenevery you feel sick", AppointmentId = random.Next(1, 6) });
+            _prescriptions.Add(new Prescription() { Id = 5, DoctorsNote = "Take quarter of the dose you the medicine states then report back to me", AppointmentId = random.Next(1, 6) });
+            _prescriptions.Add(new Prescription() { Id = 6, DoctorsNote = "Follow the instructions on the medicine package. Report back if you experience schizophrenia or paranoia", AppointmentId = random.Next(1, 6) });
+
+            for (int i = 0; i < 10; i++)
             {
-                _medicinePrescriptions.Add(new MedicinePrescription() { Id = i+1, MedicineId = random.Next(1,4), PrescriptionId = random.Next(1, 4), AppointmentId = random.Next(1,6) });
+                _medicinePrescriptions.Add(new MedicinePrescription() { Id = i+1, MedicineId = random.Next(1,4), PrescriptionId = random.Next(1, 7) });
             }
         }
 
