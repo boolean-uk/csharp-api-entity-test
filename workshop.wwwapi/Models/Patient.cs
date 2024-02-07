@@ -14,10 +14,10 @@ namespace workshop.wwwapi.Models
         public string FullName { get; set; }
 
         [Column("Appointments")]
-        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public IEnumerable<Appointment> Appointments { get; set; } = new List<Appointment>();
 
-        [Column("prescriptionId")]
-        public int prescriptionId { get; set; }
+        //[Column("prescriptionId")]
+        //public int prescriptionId { get; set; }
 
     }
 }

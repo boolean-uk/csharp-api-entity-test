@@ -18,13 +18,13 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patients/{id}", GetPatient);
             surgeryGroup.MapPost("/patients/{id}", CreatedPatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
-            surgeryGroup.MapGet("/doctors/{id1}", GetDoctor);
+            surgeryGroup.MapGet("/doctors/{id}", GetDoctor);
             surgeryGroup.MapPost("/doctors/{id}", CreateDoctor);
             surgeryGroup.MapGet("/appointments", GetAppointments);
             surgeryGroup.MapGet("/appointments/{id}", GetAppointmentsById);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctorId);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatientId);
-            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            //surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -56,9 +56,21 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetPatient(IRepository repository, int id)
         {
             var patient = await repository.GetPatient(id);
-            var appointment = await repository.GetAppointmentsByPatientId(id);
+            var appointments = await repository.GetAppointmentsByPatientId(id);
+            var doctors = await repository.GetDoctors();
 
-            PatientDTO patientDTO = new PatientDTO() { PatientName = patient.FullName, Appointments = (ICollection<AppointmentPasientDto>)appointment };
+            PatientDTO patientDTO = new PatientDTO() 
+            {
+                PatientName = patient.FullName, 
+                Appointments = appointments
+                    .Where(a => a.PatientId == patient.Id)
+                    .Select(a => new AppointmentPasientDto()
+                {
+                Booking = a.Booking,
+                DoctorId = a.DoctorId,
+                Name = doctors.FirstOrDefault(d => d.Id == a.DoctorId).FullName
+                }).ToList(),
+            };
 
             return TypedResults.Ok(patientDTO);
         }
@@ -104,8 +116,22 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetDoctor(IRepository repository, int id)
         {
             var doctor = await repository.GetDoctorById(id);
+            var appointments = await repository.GetAppointmentByDoctorId(id);
+            var patients = await repository.GetPatients();
 
-            DoctorDTO doc = new DoctorDTO() { fullName = doctor.FullName };
+            DoctorDTO doc = new DoctorDTO() 
+            {
+                fullName = doctor.FullName,
+                Appointments = appointments
+                    .Where(a => a.DoctorId ==id)
+                    .Select(a => new AppointmentDoctor()
+                    {
+                        Booking = a.Booking,
+                        PatientId = a.PatientId,
+                        Name = patients.FirstOrDefault(p => p.Id == a.PatientId).FullName
+                    }).ToList(),
+
+            };
             return TypedResults.Ok(doc);
         }
 
@@ -213,27 +239,27 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(appointments);
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetPrescriptions(IRepository repository)
-        {
-            var prescriptions = await repository.GetPrescriptions();
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //public static async Task<IResult> GetPrescriptions(IRepository repository)
+        //{
+        //    var prescriptions = await repository.GetPrescriptions();
 
-            List<PrescriptionDto> preDtos = new List<PrescriptionDto>();
+        //    List<PrescriptionDto> preDtos = new List<PrescriptionDto>();
 
-            foreach (var prescription in prescriptions)
-            {
-                PrescriptionDto script = new PrescriptionDto()
-                {
-                    Instruction = prescription.Instruction,
-                    DocotrId = prescription.DocotrId,
-                    PatientId = prescription.PatientId,
-                    medicineId = prescription.medicineId
-                };
-                preDtos.Add(script);
-            }
+        //    foreach (var prescription in prescriptions)
+        //    {
+        //        PrescriptionDto script = new PrescriptionDto()
+        //        {
+        //            Instruction = prescription.Instruction,
+        //            DocotrId = prescription.DocotrId,
+        //            PatientId = prescription.PatientId,
+        //            medicineId = prescription.medicineId
+        //        };
+        //        preDtos.Add(script);
+        //    }
 
             
-            return TypedResults.Ok(preDtos);
-        }
+        //    return TypedResults.Ok(preDtos);
+        //}
     }
 }

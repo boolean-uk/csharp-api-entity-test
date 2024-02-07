@@ -70,22 +70,22 @@ namespace workshop.wwwapi.Repository
 
 
         //Prescriptions
-        public async Task<IEnumerable<Prescription>> GetPrescriptions()
-        {
-            return await _databaseContext.Prescriptions.ToListAsync();
-        }
+        //public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        //{
+        //    return await _databaseContext.Prescriptions.ToListAsync();
+        //}
 
-        public async Task<Prescription> GetPrescriptionsById(int id)
-        {
-            return await _databaseContext.Prescriptions.FirstAsync(p => p.Id == id);
-        }
+        //public async Task<Prescription> GetPrescriptionsById(int id)
+        //{
+        //    return await _databaseContext.Prescriptions.FirstAsync(p => p.Id == id);
+        //}
 
-        public async Task<Prescription> CreatePrescription(Prescription prep)
-        {
-            _databaseContext.Prescriptions.Add(prep);
-            _databaseContext.SaveChangesAsync();
-            return prep;
-        }
+        //public async Task<Prescription> CreatePrescription(Prescription prep)
+        //{
+        //    _databaseContext.Prescriptions.Add(prep);
+        //    _databaseContext.SaveChangesAsync();
+        //    return prep;
+        //}
 
 
 
