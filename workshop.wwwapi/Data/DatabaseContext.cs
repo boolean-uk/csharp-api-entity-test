@@ -17,11 +17,16 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
+            modelBuilder.Entity<Appointment>().HasKey(x => new { x.PatientId, x.DoctorId });
 
+            modelBuilder.Entity<Patient>().HasMany(x => x.Appointments).WithOne(x => x.Patient).HasForeignKey(x => x.PatientId);
+            modelBuilder.Entity<Doctor>().HasMany(x => x.Appointments).WithOne(x => x.Doctor).HasForeignKey(x => x.DoctorId);
 
             //TODO: Seed Data Here
             Seeder seeder = new();
             modelBuilder.Entity<Patient>().HasData(seeder.Patients);
+            modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
+            modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

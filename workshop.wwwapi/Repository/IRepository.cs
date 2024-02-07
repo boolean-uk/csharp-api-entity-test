@@ -4,11 +4,12 @@ namespace workshop.wwwapi.Repository
 {
     public interface IRepository
     {
-        Task<IEnumerable<Patient>> GetPatients();
-        Task<Patient?> GetPatientById(int id);
+        Task<IEnumerable<PatientDisplayDto>> GetPatients();
+        Task<PatientSpesificDto> GetPatientById(int id);
+        Task<Patient> CreatePatient(PatientCreate patient);
         Task<bool> PatientIdExists(int id);
         Task<IEnumerable<Doctor>> GetDoctors();
-        Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
+        Task<List<DoctorAppointmentDto>> GetAppointmentsByDoctor(int id);
 
 
     }

@@ -6,8 +6,19 @@ namespace workshop.wwwapi.Models
     //TODO: decorate class/columns accordingly    
     public class Doctor
     {
-        [Key]
-        public int Id { get; set; }        
+        
+        [Column("id")]
+        public int Id { get; set; }
+        [Column("name")]
+        public string FullName { get; set; }
+        public List<Appointment> Appointments { get; set; } = new();
+    }
+
+    public class DoctorDisplayDto
+    {
+        public int Id { get; set; }
         public string FullName { get; set; }
     }
+
+    
 }

@@ -13,14 +13,47 @@ namespace workshop.wwwapi.Repository
         }
 
 
-        public async Task<IEnumerable<Patient>> GetPatients()
+        public async Task<IEnumerable<PatientDisplayDto>> GetPatients()
         {
-            return await _db.Patients.ToListAsync();
+            //return await _db.Patients.Include(x => x.Appointments).ToListAsync();
+            return from patient in _db.Patients select new PatientDisplayDto { Id = patient.Id, FullName = patient.FullName };
         }
 
-        public async Task<Patient?> GetPatientById(int id)
+        public async Task<PatientSpesificDto> GetPatientById(int id)
         {
-            return await _db.Patients.FirstOrDefaultAsync(p => p.Id == id);
+            PatientSpesificDto patient = new();
+            Patient getPatient = await _db.Patients.FirstOrDefaultAsync(p => p.Id == id);
+            List<Doctor> doctors = await _db.Doctors.ToListAsync();
+
+            patient.Id = id;
+            patient.FullName = getPatient.FullName;
+            foreach (Appointment getAppointment in await _db.Appointments.Where(a => a.PatientId == id).ToListAsync())
+            {
+                PatientAppointmentDto appointment = new();
+                DoctorDisplayDto doctorDto = new();
+
+
+                appointment.DoctorId = getAppointment.DoctorId;
+                appointment.Booking = getAppointment.Booking;
+
+                Doctor doctor = doctors.FirstOrDefault(d => d.Id == appointment.DoctorId);
+                doctorDto.Id = doctor.Id;
+                doctorDto.FullName = doctor.FullName;
+                appointment.DoctorDto = doctorDto;
+
+                patient.Appointments.Add(appointment);
+            }
+            return patient;
+        }
+
+        public async Task<Patient> CreatePatient(PatientCreate patient)
+        {
+            Patient addPatient = new();
+            addPatient.Id = _db.Patients.ToList().Last().Id + 1;
+            addPatient.FullName = patient.FullName;
+            await _db.Patients.AddAsync(addPatient);
+            _db.SaveChangesAsync();
+            return addPatient;
         }
 
         public async Task<bool> PatientIdExists(int id)
@@ -35,9 +68,34 @@ namespace workshop.wwwapi.Repository
         }
 
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
+        public async Task<List<DoctorAppointmentDto>> GetAppointmentsByDoctor(int id)
         {
-            return await _db.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            //return await _db.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            Doctor getDoctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == id);
+            List<Patient> patients = await _db.Patients.ToListAsync();
+            List<DoctorAppointmentDto> appointments = new();
+
+            DoctorDisplayDto doctor = new();
+            doctor.Id = id;
+            doctor.FullName = getDoctor.FullName;
+
+
+            foreach(Appointment getAppointment in await _db.Appointments.Where(a => a.DoctorId == id).ToListAsync())
+            {
+                DoctorAppointmentDto appointment = new();
+                PatientDisplayDto patientDto = new();
+
+                appointment.Booking = getAppointment.Booking;
+                appointment.Doctor = doctor;
+
+                Patient patient = patients.FirstOrDefault(p => p.Id == getAppointment.PatientId);
+                patientDto.FullName = patient.FullName;
+                patientDto.Id = getAppointment.PatientId;
+                appointment.Patient = patientDto;
+
+                appointments.Add(appointment);
+            }
+            return appointments;
         }
     }
 }

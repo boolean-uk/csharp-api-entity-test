@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
@@ -12,6 +13,7 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients/{id}", GetPatientById);
+            surgeryGroup.MapPost("/patients", CreatePatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
         }
@@ -34,11 +36,17 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.NotFound($"Couldn't find patient of id: {id}");
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreatePatient(IRepository repository, PatientCreate patient)
+        {
+            return TypedResults.Created("New patient created", await repository.CreatePatient(patient));
+        }
+
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            return TypedResults.Ok(await repository.GetDoctors());
         }
 
 
