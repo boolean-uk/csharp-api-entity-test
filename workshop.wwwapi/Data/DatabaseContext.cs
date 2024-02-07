@@ -7,12 +7,12 @@ namespace workshop.wwwapi.Data
 {
     public class DatabaseContext : DbContext
     {
-        private string _connectionString;
+        //n private string _connectionString;
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            //_connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,8 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Prescription>().HasData(
                 new Prescription { Id = 1, Quantity = 1, Notes = "Take 3 per day" },
                 new Prescription { Id = 2, Quantity = 12, Notes = "Twice a week" },
-                new Prescription { Id = 3, Quantity = 3, Notes = "Use when needed" });
+                new Prescription { Id = 3, Quantity = 3, Notes = "Use when needed" },
+                new Prescription { Id = 4, Quantity = 6, Notes = "Avoid if possible" });
 
             List<MedicinePrescription> mps = new List<MedicinePrescription>();
             mps.Add(new MedicinePrescription { Id = 1, MedicineId = 1, PrescriptionId = 1 });
@@ -49,17 +50,19 @@ namespace workshop.wwwapi.Data
             List<Appointment> appointments = new List<Appointment>();
             appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), Type = "online",             PrescriptionId=1, PatientId = 1, DoctorId = 1 });
             appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), Type = "3rd floor room 34",  PrescriptionId=2, PatientId = 2, DoctorId = 2 });
-            appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), Type = "2nd floor, room 12", PrescriptionId=3, PatientId = 3, DoctorId = 2 });
+            appointments.Add(new Appointment { Booking = DateTime.Now.ToUniversalTime(), Type = "2nd floor, room 12", PrescriptionId=4, PatientId = 1, DoctorId = 3 });
             modelBuilder.Entity<Appointment>().HasData(appointments);
            
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
-            optionsBuilder.UseNpgsql(_connectionString);
-            optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
+
+
+      // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+      //  {
+      //      //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
+      //      optionsBuilder.UseNpgsql(_connectionString);
+      //      optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
             
-        }
+      //  }
 
 
         public DbSet<Patient> Patients { get; set; }

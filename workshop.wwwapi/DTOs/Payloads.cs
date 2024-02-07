@@ -6,6 +6,6 @@
     public record CreatePrescriptionPayload(int Quantity, string Notes);
 
     public record CreateMedicinePayload(string Name);
-    public record CreateAppointmentPayload(int doctorId, int patientId, int presId, string type);
+    public record CreateAppointmentPayload(int doctorId, int patientId, int prescriptionId, string type);
 
 }

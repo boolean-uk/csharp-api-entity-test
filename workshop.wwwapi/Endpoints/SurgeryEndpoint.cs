@@ -228,7 +228,7 @@ namespace workshop.wwwapi.Endpoints
                 return Results.BadRequest("The id needs to be a number");
             }
 
-            Appointment? a = await repository.CreateAppointment(payload.doctorId, payload.patientId, payload.presId, payload.type);
+            Appointment? a = await repository.CreateAppointment(payload.doctorId, payload.patientId, payload.prescriptionId, payload.type);
 
             if (a == null)
             {

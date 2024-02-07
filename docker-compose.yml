@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+  workshop.wwwapi:
+    image: ${DOCKER_REGISTRY-}workshopwwwapi
+    build:
+      context: .
+      dockerfile: workshop.wwwapi/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - workshopwwwapi-network
+    depends_on:
+      workshopwwwapi.database:
+        condition: service_healthy
+  workshopwwwapi.database:
+    container_name: "workshopwwwapi.database" # host url for my postgres db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+    networks:
+      - workshopwwwapi-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      interval: 1s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  workshopwwwapi-network:
+    driver: bridge
