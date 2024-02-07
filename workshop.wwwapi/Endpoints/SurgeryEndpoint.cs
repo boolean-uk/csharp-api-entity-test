@@ -8,14 +8,6 @@ namespace workshop.wwwapi.Endpoints
 {
     public static class SurgeryEndpoint
     {
-        //TODO:  add additional endpoints in here according to the requirements in the README.md 
-        //get all appointments []
-        //get appointment by id,
-        //get appointments by doctor id,
-        //get appointments by patient id
-        //create new appointment
-        //Update all dtos for patient, doctor and appointments to include the relevant loaded fields via the relations
-
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
