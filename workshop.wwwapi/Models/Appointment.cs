@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace workshop.wwwapi.Models
 {
@@ -16,7 +17,11 @@ namespace workshop.wwwapi.Models
         [Column("patient_id")]
         [ForeignKey("patients")]
         public int PatientId { get; set; }
+        [JsonInclude]
+
         public virtual Doctor Doctor { get; set; } = null;
+        [JsonInclude]
+
         public virtual Patient Patient { get; set; } = null;
 
     }
