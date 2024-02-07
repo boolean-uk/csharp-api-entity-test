@@ -3,7 +3,10 @@ using workshop.wwwapi.Models.DatabaseModels;
 using workshop.wwwapi.Models.Dto.Appointment;
 using workshop.wwwapi.Models.Dto.Doctor;
 using workshop.wwwapi.Models.Dto.GenericDto;
+using workshop.wwwapi.Models.Dto.Medicine;
 using workshop.wwwapi.Models.Dto.Patient;
+using workshop.wwwapi.Models.Dto.Prescription;
+using workshop.wwwapi.Models.Dto.PrescriptionMedicine;
 using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
@@ -18,14 +21,24 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients/{id}", GetAPatient);
             surgeryGroup.MapPost("/patients", CreatePatient);
+
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/doctors/{id}", GetADoctor);
             surgeryGroup.MapPost("/doctors", CreateDoctor);
             surgeryGroup.MapGet("/appointments", GetAppointments);
+
             surgeryGroup.MapGet("/appointmentsbyids/{Doc_id},{Pat_id}", GetAppointmentsByIds);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointment", CreateAppointment);
+
+            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptions{id}", GetAPrescription);
+            surgeryGroup.MapPost("/prescriptions", CreatePresctiprion);
+
+            surgeryGroup.MapGet("/medicines", GetMedicines);
+            surgeryGroup.MapGet("/medicines{id}", GetAMedicine);
+            surgeryGroup.MapPost("/medicines", CreateMedicine);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -109,6 +122,9 @@ namespace workshop.wwwapi.Endpoints
             return test == null ? Results.BadRequest() : TypedResults.Created($"{patientDto.Name}", patientDto);
         }
 
+       
+        
+        
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
@@ -190,6 +206,9 @@ namespace workshop.wwwapi.Endpoints
             return test == null ? Results.BadRequest() : TypedResults.Created($"{DoctorDto.Name}", DoctorDto);
         }
 
+        
+        
+        
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointments(IRepository repository)
         {
@@ -328,6 +347,202 @@ namespace workshop.wwwapi.Endpoints
                 PatientId = test.PatientId
             };
             return test == null ? Results.BadRequest() : TypedResults.Created($"{AppointmentDto.Booking}", AppointmentDto);
+        }
+
+
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            var prescriptions = await repository.GetPrescriptions();
+
+            List<PrescriptionDto> prescriptionDtos = new List<PrescriptionDto>();
+
+            foreach (var prescription in prescriptions)
+            {
+                var prescriptionDto = new PrescriptionDto()
+                {
+                    Id = prescription.Id,
+                    DoctorId = prescription.DoctorId,
+                    PatientId = prescription.PatientId
+                };
+                prescriptionDto.Doctor = new DoctorPlainDto()
+                {
+                    Id = prescription.Doctor.Id,
+                    Name = prescription.Doctor.FullName
+                };
+                prescriptionDto.Patient = new PatientPlainDto()
+                {
+                    Id = prescription.Patient.Id,
+                    Name = prescription.Patient.FullName,
+                };
+
+                foreach (var perMed in prescription.PrescriptionMedicine)
+                {
+                    var relationDto = new MedicineNoPrescriptionDto()
+                    {
+                        MedicineId = perMed.MedicineId,
+                        Quantity = perMed.Quantity,
+                        Notes = perMed.Notes
+                    };
+                    relationDto.Medicine = new Models.Dto.Medicine.MedicinePlainDto()
+                    {
+                        Name = perMed.Medicine.Name,
+                        Id = perMed.Medicine.Id
+                    };
+                    prescriptionDto.PrescriptionMedicine.Add(relationDto);
+                }
+                prescriptionDtos.Add(prescriptionDto);
+            }
+
+            Payload<List<PrescriptionDto>> payload = new Payload<List<PrescriptionDto>>();
+            payload.data = prescriptionDtos;
+            return TypedResults.Ok(payload);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAPrescription(IRepository repository, int id)
+        {
+            var prescription = await repository.GetAPrescription(id);
+
+            PrescriptionDto prescriptionDto = new PrescriptionDto()
+            {
+                Id = prescription.Id,
+                DoctorId = prescription.DoctorId,
+                PatientId = prescription.PatientId
+            };
+
+            prescriptionDto.Doctor = new DoctorPlainDto()
+            {
+                Id = prescription.Doctor.Id,
+                Name = prescription.Doctor.FullName
+            };
+            prescriptionDto.Patient = new PatientPlainDto()
+            {
+                Id = prescription.Patient.Id,
+                Name = prescription.Patient.FullName,
+            };
+
+            foreach (var perMed in prescription.PrescriptionMedicine)
+            {
+                var relationDto = new MedicineNoPrescriptionDto()
+                {
+                    MedicineId = perMed.MedicineId,
+                    Quantity = perMed.Quantity,
+                    Notes = perMed.Notes
+                };
+                relationDto.Medicine = new Models.Dto.Medicine.MedicinePlainDto()
+                {
+                    Name = perMed.Medicine.Name,
+                    Id = perMed.Medicine.Id
+                };
+                prescriptionDto.PrescriptionMedicine.Add(relationDto);
+            }
+
+            Payload<PrescriptionDto> payload = new Payload<PrescriptionDto>();
+            payload.data = prescriptionDto;
+            return TypedResults.Ok(payload);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        private static async Task<IResult> CreatePresctiprion(IRepository repository, int Doc_id, int Pat_id)
+        {
+            var test = await repository.CreatePrescription(Doc_id, Pat_id);
+            PrescriptionPlainDto PrescriptionDto = new PrescriptionPlainDto()
+            {
+                Id = test.Id,
+                DoctorId = test.DoctorId,
+                PatientId = test.PatientId
+            };
+            return test == null ? Results.BadRequest() : TypedResults.Created($"{PrescriptionDto.Id}", PrescriptionDto);
+        }
+
+
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetMedicines(IRepository repository)
+        {
+            var medicines = await repository.GetMedicines();
+
+            List<MedicineDto> medicineDtos = new List<MedicineDto>();
+
+            foreach (var medicine in medicines)
+            {
+                var medicineDto = new MedicineDto()
+                {
+                    Id = medicine.Id,
+                    Name = medicine.Name
+                };
+
+                foreach (var perMed in medicine.PrescriptionMedicine)
+                {
+                    var relationDto = new PrescritptionNoMedicineDto()
+                    {
+                        PerscriptionId = perMed.PrescriptionId,
+                        Quantity = perMed.Quantity,
+                        Notes = perMed.Notes
+                    };
+                    relationDto.Prescription = new PrescriptionPlainDto()
+                    {
+                        Id = perMed.Prescription.Id,
+                        DoctorId = perMed.Prescription.DoctorId,
+                        PatientId = perMed.Prescription.PatientId,
+                    };
+                    medicineDto.PrescriptionMedicine.Add(relationDto);
+                }
+                medicineDtos.Add(medicineDto);
+            }
+
+            Payload<List<MedicineDto>> payload = new Payload<List<MedicineDto>>();
+            payload.data = medicineDtos;
+            return TypedResults.Ok(payload);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAMedicine(IRepository repository, int id)
+        {
+            var medicine = await repository.GetAMedicine(id);
+
+            MedicineDto medicineDto = new MedicineDto()
+            {
+                Id = medicine.Id,
+                Name = medicine.Name
+            };
+
+            foreach (var perMed in medicine.PrescriptionMedicine)
+            {
+                var relationDto = new PrescritptionNoMedicineDto()
+                {
+                    PerscriptionId = perMed.PrescriptionId,
+                    Quantity = perMed.Quantity,
+                    Notes = perMed.Notes
+                };
+                relationDto.Prescription = new PrescriptionPlainDto()
+                {
+                    Id = perMed.Prescription.Id,
+                    DoctorId = perMed.Prescription.DoctorId,
+                    PatientId = perMed.Prescription.PatientId,
+                };
+                medicineDto.PrescriptionMedicine.Add(relationDto);
+            }
+
+            Payload<MedicineDto> payload = new Payload<MedicineDto>();
+            payload.data = medicineDto;
+            return TypedResults.Ok(payload);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        private static async Task<IResult> CreateMedicine(IRepository repository, string name)
+        {
+            var test = await repository.CreateMedicine(name);
+            MedicinePlainDto MedicineDto = new MedicinePlainDto()
+            {
+                Id = test.Id,
+                Name = test.Name
+            };
+            return test == null ? Results.BadRequest() : TypedResults.Created($"{MedicineDto.Id}", MedicineDto);
         }
     }
 }

@@ -10,5 +10,6 @@ namespace workshop.wwwapi.Models.DatabaseModels
         [Column("full_name")]
         public string FullName { get; set; }
         public List<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public List<Prescription> Prescriptions { get; set; } = new List<Prescription>();
     }
 }

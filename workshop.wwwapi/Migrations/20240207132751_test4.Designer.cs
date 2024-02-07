@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240207132751_test4")]
+    partial class test4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,97 +89,97 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Jimi Trump"
-                        },
-                        new
-                        {
-                            Id = 2,
                             FullName = "Audrey Hepburn"
                         },
                         new
                         {
+                            Id = 2,
+                            FullName = "Audrey Windsor"
+                        },
+                        new
+                        {
                             Id = 3,
-                            FullName = "Kate Hepburn"
+                            FullName = "Elvis Windsor"
                         },
                         new
                         {
                             Id = 4,
-                            FullName = "Charles Presley"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            FullName = "Audrey Hendrix"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            FullName = "Donald Trump"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            FullName = "Kate Hepburn"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            FullName = "Kate Hendrix"
-                        },
-                        new
-                        {
-                            Id = 9,
                             FullName = "Charles Jagger"
                         },
                         new
                         {
-                            Id = 10,
-                            FullName = "Jimi Jagger"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            FullName = "Oprah Hepburn"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            FullName = "Charles Winfrey"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            FullName = "Charles Presley"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            FullName = "Donald Trump"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            FullName = "Audrey Winfrey"
-                        },
-                        new
-                        {
-                            Id = 16,
+                            Id = 5,
                             FullName = "Jimi Hepburn"
                         },
                         new
                         {
-                            Id = 17,
+                            Id = 6,
+                            FullName = "Donald Middleton"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            FullName = "Barack Middleton"
+                        },
+                        new
+                        {
+                            Id = 8,
                             FullName = "Audrey Winslet"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            FullName = "Kate Hepburn"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            FullName = "Barack Presley"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            FullName = "Kate Trump"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            FullName = "Donald Jagger"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            FullName = "Kate Hepburn"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            FullName = "Kate Windsor"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            FullName = "Elvis Presley"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            FullName = "Barack Presley"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            FullName = "Elvis Winfrey"
                         },
                         new
                         {
                             Id = 18,
-                            FullName = "Audrey Winslet"
+                            FullName = "Jimi Hepburn"
                         },
                         new
                         {
                             Id = 19,
-                            FullName = "Kate Middleton"
+                            FullName = "Donald Presley"
                         });
                 });
 
@@ -233,12 +236,12 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Kate Jagger"
+                            FullName = "Charles Winslet"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Charles Jagger"
+                            FullName = "Oprah Hendrix"
                         },
                         new
                         {
@@ -248,82 +251,82 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 4,
-                            FullName = "Audrey Hepburn"
+                            FullName = "Oprah Jagger"
                         },
                         new
                         {
                             Id = 5,
-                            FullName = "Barack Middleton"
+                            FullName = "Oprah Middleton"
                         },
                         new
                         {
                             Id = 6,
-                            FullName = "Mick Trump"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            FullName = "Kate Jagger"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            FullName = "Donald Trump"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            FullName = "Mick Presley"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            FullName = "Mick Trump"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            FullName = "Kate Winslet"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            FullName = "Kate Presley"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            FullName = "Jimi Trump"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            FullName = "Barack Obama"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            FullName = "Kate Winfrey"
-                        },
-                        new
-                        {
-                            Id = 16,
                             FullName = "Donald Winfrey"
                         },
                         new
                         {
+                            Id = 7,
+                            FullName = "Audrey Middleton"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            FullName = "Kate Hepburn"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            FullName = "Oprah Trump"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            FullName = "Kate Windsor"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            FullName = "Donald Middleton"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            FullName = "Kate Middleton"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            FullName = "Donald Winfrey"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            FullName = "Charles Obama"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            FullName = "Donald Trump"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            FullName = "Charles Windsor"
+                        },
+                        new
+                        {
                             Id = 17,
-                            FullName = "Audrey Presley"
+                            FullName = "Elvis Middleton"
                         },
                         new
                         {
                             Id = 18,
-                            FullName = "Mick Windsor"
+                            FullName = "Charles Obama"
                         },
                         new
                         {
                             Id = 19,
-                            FullName = "Barack Obama"
+                            FullName = "Barack Middleton"
                         });
                 });
 
@@ -345,10 +348,6 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnName("fk_patient_id");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PatientId");
 
                     b.ToTable("prescription");
 
@@ -436,25 +435,6 @@ namespace workshop.wwwapi.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Prescription", b =>
-                {
-                    b.HasOne("workshop.wwwapi.Models.DatabaseModels.Doctor", "Doctor")
-                        .WithMany("Prescriptions")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("workshop.wwwapi.Models.DatabaseModels.Patient", "Patient")
-                        .WithMany("Prescriptions")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.PrescriptionMedicine", b =>
                 {
                     b.HasOne("workshop.wwwapi.Models.DatabaseModels.Medicine", "Medicine")
@@ -477,8 +457,6 @@ namespace workshop.wwwapi.Migrations
             modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Doctor", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("Prescriptions");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Medicine", b =>
@@ -489,8 +467,6 @@ namespace workshop.wwwapi.Migrations
             modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Patient", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("Prescriptions");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Prescription", b =>

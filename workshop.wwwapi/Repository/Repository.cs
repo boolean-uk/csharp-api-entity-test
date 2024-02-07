@@ -39,7 +39,8 @@ namespace workshop.wwwapi.Repository
             };
             _databaseContext.Patients.Add(newPatient);
             _databaseContext.SaveChangesAsync();
-            return await GetAPatient(newPatient.Id);
+            //return await GetAPatient(newPatient.Id);
+            return newPatient;
         }
 
         public async Task<Doctor> GetADoctor(int id)
@@ -56,7 +57,8 @@ namespace workshop.wwwapi.Repository
             };
             _databaseContext.Doctors.Add(newDoctor);
             _databaseContext.SaveChangesAsync();
-            return await GetADoctor(newDoctor.Id);
+            //return await GetADoctor(newDoctor.Id);
+            return newDoctor;
         }
 
         public async Task<IEnumerable<Appointment>> GettAppointments()
@@ -78,13 +80,59 @@ namespace workshop.wwwapi.Repository
         {
             Appointment newAppointment = new Appointment()
             {
-                Booking = DateTimeOffset.UtcNow,
+                Booking = DateTime.UtcNow,
                 DoctorId = Doc_id,
                 PatientId = Pat_id
             };
             _databaseContext.Appointments.Add(newAppointment);
             _databaseContext.SaveChangesAsync();
             return newAppointment;
+        }
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions.Include(p=>p.Doctor).Include(p=>p.Patient).Include(p => p.PrescriptionMedicine).ThenInclude(a => a.Medicine).ToListAsync();
+        }
+
+        public async Task<Prescription> GetAPrescription(int id)
+        {
+            return await _databaseContext.Prescriptions.Include(p => p.Doctor).Include(p => p.Patient).Include(p => p.PrescriptionMedicine).ThenInclude(a => a.Medicine).FirstAsync(p => p.Id == id);
+        }
+
+        public async Task<Prescription> CreatePrescription(int Doc_id, int Pat_id)
+        {
+            Prescription newPrescription = new Prescription()
+            {
+                Id = (_databaseContext.Prescriptions.Count() == 0 ? 0 : _databaseContext.Prescriptions.Max(patient => patient.Id) + 1),
+                DoctorId = Doc_id,
+                PatientId = Pat_id
+            };
+            _databaseContext.Prescriptions.Add(newPrescription);
+            _databaseContext.SaveChangesAsync();
+            return newPrescription;
+        }
+
+        public async Task<IEnumerable<Medicine>> GetMedicines()
+        {
+            return await _databaseContext.Medicines.Include(p => p.PrescriptionMedicine).ThenInclude(a => a.Prescription).ToListAsync();
+        }
+
+        public async Task<Medicine> GetAMedicine(int id)
+        {
+            return await _databaseContext.Medicines.Include(p => p.PrescriptionMedicine).ThenInclude(a => a.Prescription).FirstAsync(p => p.Id == id);
+        }
+
+        public async Task<Medicine> CreateMedicine(string name)
+        {
+            Medicine newMedicine = new Medicine()
+            {
+                Name = name,
+                Id = (_databaseContext.Medicines.Count() == 0 ? 0 : _databaseContext.Medicines.Max(patient => patient.Id) + 1)
+            };
+            _databaseContext.Medicines.Add(newMedicine);
+            _databaseContext.SaveChangesAsync();
+            //return await GetAMedicine(newMedicine.Id);
+            return newMedicine;
         }
     }
 }
