@@ -19,7 +19,7 @@ namespace workshop.wwwapi.Endpoints
             //surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
             surgeryGroup.MapGet("/prescriptions/{id}", GetPrescription);
-            surgeryGroup.MapPost("/prescriptions/", CreatePrescription);
+            surgeryGroup.MapPost("/prescriptions/{id}", CreatePrescription);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -98,13 +98,22 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public static async Task<IResult> CreatePrescription(IRepository repository, PostPrescription prescription)
+        public static async Task<IResult> CreatePrescription(IRepository repository, int id, PostPrescription prescription)
         {
+            var appointment = await repository.GetAppointment(id);
+            if (appointment == null)
+            {
+                return TypedResults.NotFound($"Appointment-Id: {id} not found!");
+            }
+
             var newPrescription = await repository.CreatePrescription(prescription);
             if (newPrescription == null)
             {
                 return TypedResults.NotFound($"Could not find all medicines!");
             }
+
+            appointment.Prescription = newPrescription;
+            await repository.SaveChangesAsync();
             return TypedResults.Created($"/prescriptions/{newPrescription.Id}", PrescriptionWithMedicinesDTO.ToDTO(newPrescription));
         }
     }

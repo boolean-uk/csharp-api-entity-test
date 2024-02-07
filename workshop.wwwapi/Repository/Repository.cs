@@ -78,5 +78,15 @@ namespace workshop.wwwapi.Repository
             await _db.SaveChangesAsync();
             return newPrescription;
         }
+
+        public async Task<Appointment?> GetAppointment(int id)
+        {
+            return await _db.Appointments.FirstOrDefaultAsync(a => a.Id == id);
+        }
+        
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _db.SaveChangesAsync();
+        }
     }
 }
