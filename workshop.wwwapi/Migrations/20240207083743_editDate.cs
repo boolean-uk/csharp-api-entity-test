@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddFKPresAppoint : Migration
+    public partial class editDate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,7 +28,7 @@ namespace workshop.wwwapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Medicine",
+                name: "Medicines",
                 columns: table => new
                 {
                     medicine_id = table.Column<int>(type: "integer", nullable: false)
@@ -37,7 +37,7 @@ namespace workshop.wwwapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Medicine", x => x.medicine_id);
+                    table.PrimaryKey("PK_Medicines", x => x.medicine_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,7 +54,7 @@ namespace workshop.wwwapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Prescription",
+                name: "Presciptions",
                 columns: table => new
                 {
                     prescription_id = table.Column<int>(type: "integer", nullable: false)
@@ -62,21 +62,21 @@ namespace workshop.wwwapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Prescription", x => x.prescription_id);
+                    table.PrimaryKey("PK_Presciptions", x => x.prescription_id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Appointments",
                 columns: table => new
                 {
+                    booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     fk_doctor_id = table.Column<int>(type: "integer", nullable: false),
                     fk_patient_id = table.Column<int>(type: "integer", nullable: false),
-                    booking = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     fk_presciption_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_appointment_doctor_patient", x => new { x.fk_doctor_id, x.fk_patient_id });
+                    table.PrimaryKey("PK_appointment_doctor_patient_date", x => new { x.fk_doctor_id, x.fk_patient_id, x.booking });
                     table.ForeignKey(
                         name: "FK_Appointments_Doctors_fk_doctor_id",
                         column: x => x.fk_doctor_id,
@@ -90,15 +90,15 @@ namespace workshop.wwwapi.Migrations
                         principalColumn: "patient_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Appointments_Prescription_fk_presciption_id",
+                        name: "FK_Appointments_Presciptions_fk_presciption_id",
                         column: x => x.fk_presciption_id,
-                        principalTable: "Prescription",
+                        principalTable: "Presciptions",
                         principalColumn: "prescription_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "MedicinePrescription",
+                name: "MedicinePrescriptions",
                 columns: table => new
                 {
                     fk_prescription_id = table.Column<int>(type: "integer", nullable: false),
@@ -110,15 +110,15 @@ namespace workshop.wwwapi.Migrations
                 {
                     table.PrimaryKey("PK_medicineprescription_prescription_medicine", x => new { x.fk_prescription_id, x.fk_medicine_id });
                     table.ForeignKey(
-                        name: "FK_MedicinePrescription_Medicine_fk_medicine_id",
+                        name: "FK_MedicinePrescriptions_Medicines_fk_medicine_id",
                         column: x => x.fk_medicine_id,
-                        principalTable: "Medicine",
+                        principalTable: "Medicines",
                         principalColumn: "medicine_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MedicinePrescription_Prescription_fk_prescription_id",
+                        name: "FK_MedicinePrescriptions_Presciptions_fk_prescription_id",
                         column: x => x.fk_prescription_id,
-                        principalTable: "Prescription",
+                        principalTable: "Presciptions",
                         principalColumn: "prescription_id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -133,7 +133,7 @@ namespace workshop.wwwapi.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Medicine",
+                table: "Medicines",
                 columns: new[] { "medicine_id", "medicine_name" },
                 values: new object[,]
                 {
@@ -155,7 +155,7 @@ namespace workshop.wwwapi.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Prescription",
+                table: "Presciptions",
                 column: "prescription_id",
                 values: new object[]
                 {
@@ -166,16 +166,16 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "Appointments",
-                columns: new[] { "fk_doctor_id", "fk_patient_id", "booking", "fk_presciption_id" },
+                columns: new[] { "booking", "fk_doctor_id", "fk_patient_id", "fk_presciption_id" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTimeOffset(new DateTime(2024, 2, 3, 13, 52, 31, 479, DateTimeKind.Unspecified).AddTicks(2710), new TimeSpan(0, 1, 0, 0, 0)), 1 },
-                    { 1, 2, new DateTimeOffset(new DateTime(2024, 2, 7, 13, 52, 31, 479, DateTimeKind.Unspecified).AddTicks(2787), new TimeSpan(0, 1, 0, 0, 0)), 2 },
-                    { 2, 1, new DateTimeOffset(new DateTime(2024, 5, 2, 13, 52, 31, 479, DateTimeKind.Unspecified).AddTicks(2791), new TimeSpan(0, 2, 0, 0, 0)), 3 }
+                    { new DateTime(2022, 4, 6, 22, 0, 0, 0, DateTimeKind.Utc), 1, 1, 1 },
+                    { new DateTime(2024, 2, 2, 23, 0, 0, 0, DateTimeKind.Utc), 1, 2, 2 },
+                    { new DateTime(2024, 2, 6, 23, 0, 0, 0, DateTimeKind.Utc), 2, 1, 3 }
                 });
 
             migrationBuilder.InsertData(
-                table: "MedicinePrescription",
+                table: "MedicinePrescriptions",
                 columns: new[] { "fk_medicine_id", "fk_prescription_id", "notes", "quantity" },
                 values: new object[,]
                 {
@@ -198,8 +198,8 @@ namespace workshop.wwwapi.Migrations
                 column: "fk_presciption_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MedicinePrescription_fk_medicine_id",
-                table: "MedicinePrescription",
+                name: "IX_MedicinePrescriptions_fk_medicine_id",
+                table: "MedicinePrescriptions",
                 column: "fk_medicine_id");
         }
 
@@ -210,7 +210,7 @@ namespace workshop.wwwapi.Migrations
                 name: "Appointments");
 
             migrationBuilder.DropTable(
-                name: "MedicinePrescription");
+                name: "MedicinePrescriptions");
 
             migrationBuilder.DropTable(
                 name: "Doctors");
@@ -219,10 +219,10 @@ namespace workshop.wwwapi.Migrations
                 name: "Patients");
 
             migrationBuilder.DropTable(
-                name: "Medicine");
+                name: "Medicines");
 
             migrationBuilder.DropTable(
-                name: "Prescription");
+                name: "Presciptions");
         }
     }
 }

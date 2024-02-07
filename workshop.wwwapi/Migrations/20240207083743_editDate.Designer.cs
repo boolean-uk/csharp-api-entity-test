@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240202125231_AddFKPresAppoint")]
-    partial class AddFKPresAppoint
+    [Migration("20240207083743_editDate")]
+    partial class editDate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("fk_patient_id");
 
-                    b.Property<DateTimeOffset>("Booking")
+                    b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking");
 
@@ -43,8 +43,8 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("fk_presciption_id");
 
-                    b.HasKey("DoctorId", "PatientId")
-                        .HasName("PK_appointment_doctor_patient");
+                    b.HasKey("DoctorId", "PatientId", "Booking")
+                        .HasName("PK_appointment_doctor_patient_date");
 
                     b.HasIndex("PatientId");
 
@@ -57,21 +57,21 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTimeOffset(new DateTime(2024, 2, 3, 13, 52, 31, 479, DateTimeKind.Unspecified).AddTicks(2710), new TimeSpan(0, 1, 0, 0, 0)),
+                            Booking = new DateTime(2022, 4, 6, 22, 0, 0, 0, DateTimeKind.Utc),
                             PrescriptionId = 1
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 2,
-                            Booking = new DateTimeOffset(new DateTime(2024, 2, 7, 13, 52, 31, 479, DateTimeKind.Unspecified).AddTicks(2787), new TimeSpan(0, 1, 0, 0, 0)),
+                            Booking = new DateTime(2024, 2, 2, 23, 0, 0, 0, DateTimeKind.Utc),
                             PrescriptionId = 2
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 1,
-                            Booking = new DateTimeOffset(new DateTime(2024, 5, 2, 13, 52, 31, 479, DateTimeKind.Unspecified).AddTicks(2791), new TimeSpan(0, 2, 0, 0, 0)),
+                            Booking = new DateTime(2024, 2, 6, 23, 0, 0, 0, DateTimeKind.Utc),
                             PrescriptionId = 3
                         });
                 });
@@ -123,7 +123,7 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Medicine");
+                    b.ToTable("Medicines");
 
                     b.HasData(
                         new
@@ -182,7 +182,7 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasIndex("MedicineId");
 
-                    b.ToTable("MedicinePrescription");
+                    b.ToTable("MedicinePrescriptions");
 
                     b.HasData(
                         new
@@ -271,7 +271,7 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Prescription");
+                    b.ToTable("Presciptions");
 
                     b.HasData(
                         new

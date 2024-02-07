@@ -25,6 +25,10 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
         }
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id)
+        {
+            return await _databaseContext.Appointments.Where(a => a.PatientId == id).ToListAsync();
+        }
 
         public async Task<Patient> GetPatientById(int id)
         {
@@ -66,7 +70,7 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<Appointment> GetAppointmentByIDs(int DocId, int PatId)
         {
-            return await _databaseContext.Appointments.FirstOrDefaultAsync(a => a.DoctorId == DocId && a.PatientId == PatId);
+            return await _databaseContext.Appointments.OrderByDescending(a=>a.Booking).FirstOrDefaultAsync(a => a.DoctorId == DocId && a.PatientId == PatId);
         }
 
         public async Task<Appointment> CreateAppointment(InputAppointment input)
@@ -82,6 +86,62 @@ namespace workshop.wwwapi.Repository
             return await GetAppointmentByIDs(appointment.DoctorId,appointment.PatientId);
         }
 
-        
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Presciptions.Include(p => p.Medicines).ToListAsync();
+        }
+
+        public async Task<Prescription> GetPrescriptionById(int id)
+        {
+            return await _databaseContext.Presciptions.Include(p => p.Medicines).FirstOrDefaultAsync(p=>p.Id==id);
+        }
+
+        public async Task<Prescription> CreatePrescription(IEnumerable<InputPrescription> medicines)
+        {
+            Prescription prescription = new Prescription() { Id = _databaseContext.Presciptions.Max(p => p.Id) + 1 };
+            foreach (var m in medicines)
+            {
+                MedicinePrescription mp = new MedicinePrescription()
+                {
+                    PrescriptionId = prescription.Id,
+                    MedicineId = m.MedicineId,
+                    Quantity = m.Quantity,
+                    Notes = m.Notes
+                };
+                _databaseContext.Add(mp);
+                _databaseContext.SaveChangesAsync();
+            }
+            _databaseContext.Add(prescription);
+            _databaseContext.SaveChangesAsync();
+            return await GetPrescriptionById(prescription.Id);
+        }
+
+        public async Task<Appointment> AddPrescriptionToAppointment(int presID, int DocId, int PatId)
+        {
+            Appointment ap = await GetAppointmentByIDs(DocId, PatId);
+            if (ap == null) return null;
+            ap.PrescriptionId = presID;
+            return ap;
+        }
+
+        public async Task<IEnumerable<Medicine>> GetMedicines()
+        {
+            return await _databaseContext.Medicines.ToListAsync();
+        }
+
+        public async Task<Medicine> GetMedicineById(int id)
+        {
+            return await _databaseContext.Medicines.FirstOrDefaultAsync(m=>m.Id == id);
+        }
+
+        public Task<Medicine> CreateMedicine(string name)
+        {
+            Medicine medicine = new Medicine()
+            {
+                Id = _databaseContext.Medicines.Max(m => m.Id) + 1,
+                Name = name
+            };
+            return GetMedicineById(medicine.Id);
+        }
     }
 }

@@ -19,8 +19,8 @@ namespace workshop.wwwapi.Data
         {
             // Appointment entity with composite key
             modelBuilder.Entity<Appointment>()
-                .HasKey(a => new { a.DoctorId, a.PatientId })
-                .HasName("PK_appointment_doctor_patient");
+                .HasKey(a => new { a.DoctorId, a.PatientId, a.Booking })
+                .HasName("PK_appointment_doctor_patient_date");
 
             // MedicinePrescription entity with composite key
             modelBuilder.Entity<MedicinePrescription>()
@@ -71,21 +71,21 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>().HasData(
                 new Appointment
                 {
-                    Booking = new DateTimeOffset(DateTime.Now.AddDays(1)),  // Example date for the first appointment
+                    Booking = new DateTime(2022, 04, 07).ToUniversalTime(),
                     DoctorId = 1,  // Assign the doctor's Id
                     PatientId = 1,   // Assign the patient's Id
                     PrescriptionId= 1 // Assign the Prescription Id
                 },
                 new Appointment
                 {
-                    Booking = new DateTimeOffset(DateTime.Now.AddDays(5)),  // Example date for the first appointment
+                    Booking = new DateTime(2024, 02, 03).ToUniversalTime(),
                     DoctorId = 1,  // Assign the doctor's Id
                     PatientId = 2,   // Assign the patient's Id
                     PrescriptionId = 2 // Assign the Prescription Id
                 },
                 new Appointment
                 {
-                    Booking = new DateTimeOffset(DateTime.Now.AddMonths(3)),  // Example date for the first appointment
+                    Booking = new DateTime(2024,02,07).ToUniversalTime(),  
                     DoctorId = 2,  // Assign the doctor's Id
                     PatientId = 1,   // Assign the patient's Id
                     PrescriptionId = 3 // Assign the Prescription Id
@@ -105,5 +105,8 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Prescription> Presciptions { get; set; }
+        public DbSet<MedicinePrescription> MedicinePrescriptions { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
     }
 }

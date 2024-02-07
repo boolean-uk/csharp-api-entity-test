@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.DTO;
 using workshop.wwwapi.Models.InputObject;
@@ -20,9 +21,16 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/doctors/{id}", GetDoctorById);
             surgeryGroup.MapPost("/doctors", PostDoctor);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointments/{DocId,PatId}", GetAppointmentsByIDs);
             surgeryGroup.MapGet("/appointments", GetAppointments);
             surgeryGroup.MapPost("/appointments/{id}", PostAppointment);
+            surgeryGroup.MapGet("/prescription/", GetPrescriptions);
+            surgeryGroup.MapGet("/prescription/{id}", GetPrescriptionById);
+            surgeryGroup.MapPost("/prescription/", PostPrescription);
+            surgeryGroup.MapGet("/medicine/", GetMedicines);
+            surgeryGroup.MapGet("/medicine/{id}", GetMedicineById);
+            surgeryGroup.MapPost("/medicine/", PostMedicine);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -76,6 +84,17 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(appointmentDTOs);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
+        {
+            var appointments = await repository.GetAppointmentsByDoctor(id);
+            List<AppointmentDTO> appointmentDTOs = new List<AppointmentDTO>();
+            foreach (var item in appointments)
+            {
+                appointmentDTOs.Add(CreateAppointmentDTO(item));
+            }
+            return TypedResults.Ok(appointmentDTOs);
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointments(IRepository repository)
         {
             var appointments = await repository.GetAppointments();
@@ -96,6 +115,48 @@ namespace workshop.wwwapi.Endpoints
         {
             return TypedResults.Ok(CreateAppointmentDTO(await repository.CreateAppointment(input)));
         }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            var prescriptions = await repository.GetPrescriptions();
+            List<PrescriptionDTO> prescriptionDTO = new List<PrescriptionDTO>();
+            foreach (var item in prescriptions)
+            {
+                prescriptionDTO.Add(CreatePrescriptionDTO(item));
+            }
+            return TypedResults.Ok(prescriptionDTO);
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptionById(IRepository repository,int id)
+        {
+            return TypedResults.Ok(CreatePrescriptionDTO(await repository.GetPrescriptionById(id)));
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> PostPrescription(IRepository repository, IEnumerable<InputPrescription> input)
+        {
+            return TypedResults.Ok(CreatePrescriptionDTO(await repository.CreatePrescription(input)));
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetMedicines(IRepository repository)
+        {
+            var medicines = await repository.GetMedicines();
+            List<MedicineDTO> MedicineDTOs = new List<MedicineDTO>();
+            foreach (var item in medicines)
+            {
+                MedicineDTOs.Add(CreateMedicineDTO(item));
+            }
+            return TypedResults.Ok(MedicineDTOs);
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetMedicineById(IRepository repository, int id)
+        {
+            return TypedResults.Ok(CreateMedicineDTO(await repository.GetMedicineById(id)));
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> PostMedicine(IRepository repository, string name)
+        {
+            return TypedResults.Ok(CreateMedicineDTO(await repository.CreateMedicine(name)));
+        }
         public static PatientDTO CreatePatientDTO(Patient patient)
         {
             PatientDTO patientDTO = new PatientDTO();
@@ -105,6 +166,7 @@ namespace workshop.wwwapi.Endpoints
                 AppointmentForPatientDTO appointment = new AppointmentForPatientDTO();
                 appointment.Booking = appointments.Booking;
                 appointment.DoctorId = appointments.DoctorId;
+                appointment.PrescriptionId = appointments.PrescriptionId;
                 patientDTO.Appointments.Add(appointment);
             }
             return patientDTO;
@@ -118,6 +180,7 @@ namespace workshop.wwwapi.Endpoints
                 AppointmentForDoctorDTO appointment = new AppointmentForDoctorDTO();
                 appointment.Booking = appointments.Booking;
                 appointment.PatientId = appointments.PatientId;
+                appointment.PrescriptionId = appointments.PrescriptionId;
                 doctorDTO.Appointments.Add(appointment);
             }
             return doctorDTO;
@@ -128,8 +191,35 @@ namespace workshop.wwwapi.Endpoints
             appointmentDTO.Booking = appointment.Booking;
             appointmentDTO.PatientId = appointment.PatientId;
             appointmentDTO.DoctorId = appointment.DoctorId;
+            appointmentDTO.PrescriptionId = appointment.PrescriptionId;
+
 
             return appointmentDTO;
+        }
+        public static PrescriptionDTO CreatePrescriptionDTO(Prescription prescription)
+        {
+            PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
+            prescriptionDTO.ID = prescription.Id;
+            foreach (var medicine in prescription.Medicines)
+            {
+                PrescriptionMedicineDTO presMed = new PrescriptionMedicineDTO()
+                {
+                    MedicineId = medicine.MedicineId,
+                    PrescriptionId = medicine.PrescriptionId,
+                    Notes = medicine.Notes,
+                    Quantity = medicine.Quantity,
+                };
+                prescriptionDTO.Medicine.Add(presMed);
+            }
+
+            return prescriptionDTO;
+        }
+        public static MedicineDTO CreateMedicineDTO(Medicine medicine)
+        {
+            MedicineDTO MedicineDTO = new MedicineDTO();
+            MedicineDTO.Name = medicine.Name;
+
+            return MedicineDTO;
         }
     }
 }
