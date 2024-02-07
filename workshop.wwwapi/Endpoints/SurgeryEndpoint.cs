@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.DTOs;
 using workshop.wwwapi.Repository;
 
@@ -34,6 +35,11 @@ namespace workshop.wwwapi.Endpoints
                            {
                                Id = patient.Id,
                                Name = $"{patient.FirstName} {patient.LastName}",
+                               Appointments = patient.Appointments.Select(x =>new AppointmentDTO()
+                               {
+                                   DoctorId = x.DoctorId,
+                                   DoctorName = $"{x.Doctor.FirstName} {x.Doctor.LastName}",
+                               })
                            };
             
             return TypedResults.Ok(patients);
@@ -52,6 +58,11 @@ namespace workshop.wwwapi.Endpoints
             {
                 Id = patient.Id,
                 Name = $"{patient.FirstName} {patient.LastName}",
+                Appointments = patient.Appointments.Select(x => new AppointmentDTO()
+                {
+                    DoctorId = x.DoctorId,
+                    DoctorName = $"{x.Doctor.FirstName} {x.Doctor.LastName}",
+                })
             };
             
             return TypedResults.Ok(result);
@@ -84,6 +95,11 @@ namespace workshop.wwwapi.Endpoints
                            {
                                Id = doctor.Id,
                                Name = $"{doctor.FirstName} {doctor.LastName}",
+                               Appointments = doctor.Appointments.Select(x => new AppointmentDTO()
+                               {
+                                   PatientId = x.PatientId,
+                                   PatientName = $"{x.Patient.FirstName} {x.Patient.LastName}",
+                               })
                            };
             return TypedResults.Ok(doctors);
         }
@@ -100,7 +116,12 @@ namespace workshop.wwwapi.Endpoints
             var result = new DoctorDTO()
             {
                 Id = doctor.Id,
-                Name = $"{doctor.FirstName} {doctor.LastName}"
+                Name = $"{doctor.FirstName} {doctor.LastName}",
+                Appointments = doctor.Appointments.Select(x => new AppointmentDTO()
+                {
+                    PatientId = x.PatientId,
+                    PatientName = $"{x.Patient.FirstName} {x.Patient.LastName}",
+                })
             };
 
             return TypedResults.Ok(result);
@@ -175,14 +196,14 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound();
             }
             var appointmentDTOs = from app in apps
-                                                   select new AppointmentDTO()
-                                                   {
-                                                       PatientId = app.PatientId,
-                                                       DoctorId = app.DoctorId,
-                                                       Booking = app.Booking,
-                                                       PatientName = $"{app.Patient.FirstName} {app.Patient.LastName}",
-                                                       DoctorName = $"{app.Doctor.FirstName} {app.Doctor.LastName}"
-                                                   };
+                                    select new AppointmentDTO()
+                                    {
+                                        PatientId = app.PatientId,
+                                        DoctorId = app.DoctorId,
+                                        Booking = app.Booking,
+                                        PatientName = $"{app.Patient.FirstName} {app.Patient.LastName}",
+                                        DoctorName = $"{app.Doctor.FirstName} {app.Doctor.LastName}"
+                                    };
 
             return TypedResults.Ok(appointmentDTOs);
         }
