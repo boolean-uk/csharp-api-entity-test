@@ -1,11 +1,11 @@
 ﻿namespace workshop.wwwapi.Models.DTOs;
 
-public class DoctrorWithappointmentAndPatientDTO
+public class DoctrorWithAppointmentAndPatientDTO
 {
     public string FullName { get; set; }
     public ICollection<AppointmentWithPatentDTO> Appointments { get; set; }
 
-    public static DoctrorWithappointmentAndPatientDTO ToDTO(Doctor doctor)
+    public static DoctrorWithAppointmentAndPatientDTO ToDTO(Doctor doctor)
     {
         var appointments = new List<AppointmentWithPatentDTO>();
         foreach (var appointment in doctor.Appointments)
@@ -13,7 +13,7 @@ public class DoctrorWithappointmentAndPatientDTO
             appointments.Add(AppointmentWithPatentDTO.ToDTO(appointment));
         }
 
-        return new DoctrorWithappointmentAndPatientDTO()
+        return new DoctrorWithAppointmentAndPatientDTO()
         {
             FullName = doctor.FullName,
             Appointments = appointments,
