@@ -25,4 +25,11 @@ namespace workshop.wwwapi.Models
         public virtual Patient Patient { get; set; } = null;
 
     }
+
+    public class PostAppointment()
+    {
+        public int DoctorId { get; set; }
+        public int PatientId { get; set; }  
+        public DateTime Booking { get; set; }
+    }
 }

@@ -12,5 +12,6 @@ namespace workshop.wwwapi.Repository
         Task <Appointment>GetAppointment(int id);
         Task<Doctor> GetDoctorWithAppointments(int id);
         Task<Patient> GetPatientWithAppointments(int id);
+        Task<Appointment> AddAppointment(PostAppointment appointment);
     }
 }
