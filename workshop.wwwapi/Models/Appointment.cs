@@ -24,6 +24,9 @@ namespace workshop.wwwapi.Models
         [Column("patient")]
         public Patient Patient { get; set; }
 
+        [Column("prescriptions")]
+        public virtual List<Prescription> Prescriptions { get; set; } = new List<Prescription>();
+
 
 
     }

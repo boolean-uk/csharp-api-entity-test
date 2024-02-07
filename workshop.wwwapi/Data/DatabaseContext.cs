@@ -30,6 +30,14 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
             modelBuilder.Entity<Doctor>().HasKey(d => d.Id);
 
+            modelBuilder.Entity<Medicine>().HasData(seeder.Medicines);
+            modelBuilder.Entity<Medicine>().HasMany(m => m.Prescriptions).WithMany(p => p.Medicines);
+            modelBuilder.Entity<Prescription>().HasData(seeder.Prescriptions);
+            modelBuilder.Entity<Prescription>().HasMany(p => p.Medicines).WithMany(m => m.Prescriptions);
+            //modelBuilder.Entity<Prescription>().HasOne(p => p.Appointment)
+            //                                   .WithMany(a => a.Prescriptions)
+            //                                   .HasForeignKey(p => new { p.PatientId, p.DoctorId });
+
 
 
         }
@@ -45,5 +53,7 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set;  }
     }
 }
