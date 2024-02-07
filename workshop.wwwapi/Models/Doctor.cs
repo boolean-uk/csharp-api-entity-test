@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
+    [Table("doctors")]
     public class Doctor
     {
         
-        [Column("id")]
+        [Column("doctor_id")]
         public int Id { get; set; }
         [Column("name")]
         public string FullName { get; set; }
@@ -20,5 +21,15 @@ namespace workshop.wwwapi.Models
         public string FullName { get; set; }
     }
 
-    
+    public class DoctorSpecificDto
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; }
+        public List<DoctorAppointmentDto> Appointments { get; set; } = new();
+    }
+
+    public class DoctorCreate
+    {
+        public string FullName { get; set; }
+    }
 }

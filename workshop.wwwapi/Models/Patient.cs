@@ -9,7 +9,7 @@ namespace workshop.wwwapi.Models
     public class Patient
     {
 
-        [Column("id")]
+        [Column("doctor_id")]
         public int Id { get; set; }
         [Column("name")]
         public string FullName { get; set; }
@@ -27,10 +27,10 @@ namespace workshop.wwwapi.Models
         public string FullName { get; set; }
     }
 
-    public class PatientSpesificDto
+    public class PatientSpecificDto
     {
         public int Id { get; set; }
         public string FullName { get; set; }
-        public List<PatientAppointmentDto> Appointments { get; set; } = new();
+        public List<AppointmentPatientDto> Appointments { get; set; } = new();
     }
 }

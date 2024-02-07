@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly
+    [Table("appointments")]
     public class Appointment
     {
         [Column("doctor_id")]
@@ -20,16 +21,24 @@ namespace workshop.wwwapi.Models
 
     }
 
-    public class PatientAppointmentDto
+    public class DoctorAppointmentDto
     {
+        public DateTime Booking { get; set; }
+
+        public PatientDisplayDto Patient { get; set; }
+    }
+
+    public class AppointmentPatientDto
+    {
+        public PatientDisplayDto Patient { get; set; }
         public DateTime Booking { get; set; }
         [JsonIgnore]
         public int DoctorId { get; set; }
-        public DoctorDisplayDto DoctorDto { get; set; }
+        public DoctorDisplayDto Doctor { get; set; }
 
     }
 
-    public class DoctorAppointmentDto
+    public class AppointmentDoctorDto
     {
         public DoctorDisplayDto Doctor { get; set; }
         public DateTime Booking { get; set; }

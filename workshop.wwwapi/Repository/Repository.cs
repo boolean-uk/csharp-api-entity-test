@@ -19,9 +19,9 @@ namespace workshop.wwwapi.Repository
             return from patient in _db.Patients select new PatientDisplayDto { Id = patient.Id, FullName = patient.FullName };
         }
 
-        public async Task<PatientSpesificDto> GetPatientById(int id)
+        public async Task<PatientSpecificDto> GetPatientById(int id)
         {
-            PatientSpesificDto patient = new();
+            PatientSpecificDto patient = new();
             Patient getPatient = await _db.Patients.FirstOrDefaultAsync(p => p.Id == id);
             List<Doctor> doctors = await _db.Doctors.ToListAsync();
 
@@ -29,7 +29,7 @@ namespace workshop.wwwapi.Repository
             patient.FullName = getPatient.FullName;
             foreach (Appointment getAppointment in await _db.Appointments.Where(a => a.PatientId == id).ToListAsync())
             {
-                PatientAppointmentDto appointment = new();
+                AppointmentPatientDto appointment = new();
                 DoctorDisplayDto doctorDto = new();
 
 
@@ -39,7 +39,7 @@ namespace workshop.wwwapi.Repository
                 Doctor doctor = doctors.FirstOrDefault(d => d.Id == appointment.DoctorId);
                 doctorDto.Id = doctor.Id;
                 doctorDto.FullName = doctor.FullName;
-                appointment.DoctorDto = doctorDto;
+                appointment.Doctor = doctorDto;
 
                 patient.Appointments.Add(appointment);
             }
@@ -56,24 +56,115 @@ namespace workshop.wwwapi.Repository
             return addPatient;
         }
 
+        
+
         public async Task<bool> PatientIdExists(int id)
         {
             return await _db.Patients.Where(p => p.Id == id).CountAsync() != 0;
         }
 
 
-        public async Task<IEnumerable<Doctor>> GetDoctors()
+        public async Task<IEnumerable<DoctorDisplayDto>> GetDoctors()
         {
-            return await _db.Doctors.ToListAsync();
+            return from doctor in _db.Doctors select new DoctorDisplayDto { Id = doctor.Id, FullName = doctor.FullName };
         }
 
+        public async Task<DoctorSpecificDto> GetDoctorById(int id)
+        {
+            Doctor getDoctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == id);
+            DoctorSpecificDto displayDoctor = new();
+            displayDoctor.Id = id;
+            displayDoctor.FullName = getDoctor.FullName;
 
-        public async Task<List<DoctorAppointmentDto>> GetAppointmentsByDoctor(int id)
+            foreach(Appointment appointment in await _db.Appointments.Where(a => a.DoctorId == id).ToListAsync())
+            {
+                DoctorAppointmentDto appointmentDto = new();
+                PatientDisplayDto patientDto = new();
+                Patient patient = _db.Patients.FirstOrDefault(p => p.Id == appointment.PatientId);
+
+                patientDto.FullName = patient.FullName;
+                patientDto.Id = patient.Id;
+                appointmentDto.Booking = appointment.Booking;
+                appointmentDto.Patient = patientDto;
+                displayDoctor.Appointments.Add(appointmentDto);
+
+            }
+
+            return displayDoctor;
+        }
+
+        public async Task<Doctor> CreateDoctor(DoctorCreate doctor)
+        {
+            Doctor addDoctor = new();
+            addDoctor.Id = _db.Doctors.ToList().Last().Id + 1;
+            addDoctor.FullName = doctor.FullName;
+            await _db.Doctors.AddAsync(addDoctor);
+            _db.SaveChangesAsync();
+            return addDoctor;
+        }
+
+        public async Task<List<AppointmentDoctorDto>> GetAppointments()
+        {
+            List<Doctor> doctors = await _db.Doctors.ToListAsync(); 
+            List<Patient> patients = await _db.Patients.ToListAsync();
+            List<AppointmentDoctorDto> appointments = new();
+
+            foreach (Appointment getAppointment in await _db.Appointments.ToListAsync())
+            {
+                Doctor getDoctor = doctors.FirstOrDefault(d => d.Id == getAppointment.DoctorId);
+                Patient getPatient = patients.FirstOrDefault(p => p.Id == getAppointment.PatientId);
+                AppointmentDoctorDto appointment = new();
+                
+                PatientDisplayDto patient = new();
+                DoctorDisplayDto doctor = new();
+
+                doctor.Id = getAppointment.DoctorId;
+                doctor.FullName = getDoctor.FullName;
+                patient.Id = getAppointment.PatientId;
+                patient.FullName = getPatient.FullName;
+
+                appointment.Booking = getAppointment.Booking;
+                appointment.Doctor = doctor;
+                appointment.Patient = patient;
+
+                appointments.Add(appointment);
+            }
+            return appointments;
+        }
+
+        public async Task<AppointmentDoctorDto> GetAppointmentById(int patientId, int doctorId)
+        {
+            AppointmentDoctorDto appointment = new();
+            Appointment getAppointment = await _db.Appointments.FirstOrDefaultAsync(a => a.PatientId == patientId && a.DoctorId == doctorId);
+            if (getAppointment == null)
+            {
+                return appointment;
+            }
+
+            Doctor getDoctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == getAppointment.DoctorId);
+            Patient getPatient = await _db.Patients.FirstOrDefaultAsync(p => p.Id == getAppointment.PatientId);
+            
+            PatientDisplayDto patient = new();
+            DoctorDisplayDto doctor = new();
+
+            doctor.Id = getAppointment.DoctorId;
+            doctor.FullName = getDoctor.FullName;
+            patient.Id = getAppointment.PatientId;
+            patient.FullName = getPatient.FullName;
+
+            appointment.Booking = getAppointment.Booking;
+            appointment.Doctor = doctor;
+            appointment.Patient = patient;
+
+            return appointment;
+        }
+
+        public async Task<List<AppointmentDoctorDto>> GetAppointmentsByDoctor(int id)
         {
             //return await _db.Appointments.Where(a => a.DoctorId==id).ToListAsync();
             Doctor getDoctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == id);
             List<Patient> patients = await _db.Patients.ToListAsync();
-            List<DoctorAppointmentDto> appointments = new();
+            List<AppointmentDoctorDto> appointments = new();
 
             DoctorDisplayDto doctor = new();
             doctor.Id = id;
@@ -82,7 +173,7 @@ namespace workshop.wwwapi.Repository
 
             foreach(Appointment getAppointment in await _db.Appointments.Where(a => a.DoctorId == id).ToListAsync())
             {
-                DoctorAppointmentDto appointment = new();
+                AppointmentDoctorDto appointment = new();
                 PatientDisplayDto patientDto = new();
 
                 appointment.Booking = getAppointment.Booking;
@@ -92,6 +183,34 @@ namespace workshop.wwwapi.Repository
                 patientDto.FullName = patient.FullName;
                 patientDto.Id = getAppointment.PatientId;
                 appointment.Patient = patientDto;
+
+                appointments.Add(appointment);
+            }
+            return appointments;
+        }
+
+        public async Task<List<AppointmentPatientDto>> GetAppointmentsByPatient(int id)
+        {
+            List<Doctor> doctors = await _db.Doctors.ToListAsync();
+            List<AppointmentPatientDto> appointments = new();
+            Patient getPatient = await _db.Patients.FirstOrDefaultAsync(p => p.Id == id);
+
+            foreach (Appointment getAppointment in await _db.Appointments.Where(p => p.PatientId == id).ToListAsync())
+            {
+                Doctor getDoctor = doctors.FirstOrDefault(d => d.Id == getAppointment.DoctorId);
+                AppointmentPatientDto appointment = new();
+
+                PatientDisplayDto patient = new();
+                DoctorDisplayDto doctor = new();
+
+                doctor.Id = getAppointment.DoctorId;
+                doctor.FullName = getDoctor.FullName;
+                patient.Id = getAppointment.PatientId;
+                patient.FullName = getPatient.FullName;
+
+                appointment.Booking = getAppointment.Booking;
+                appointment.Doctor = doctor;
+                appointment.Patient = patient;
 
                 appointments.Add(appointment);
             }

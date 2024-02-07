@@ -12,12 +12,12 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Appointment>().HasKey(x => new { x.PatientId, x.DoctorId });
+            modelBuilder.Entity<Appointment>().HasKey(x => new { x.PatientId, x.DoctorId }).HasName("appointment_id");
 
             modelBuilder.Entity<Patient>().HasMany(x => x.Appointments).WithOne(x => x.Patient).HasForeignKey(x => x.PatientId);
             modelBuilder.Entity<Doctor>().HasMany(x => x.Appointments).WithOne(x => x.Doctor).HasForeignKey(x => x.DoctorId);

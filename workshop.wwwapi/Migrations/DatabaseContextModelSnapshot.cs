@@ -40,20 +40,20 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("appointments");
 
                     b.HasData(
                         new
                         {
                             PatientId = 1,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 3, 9, 44, 26, 158, DateTimeKind.Utc).AddTicks(2878)
+                            Booking = new DateTime(2024, 2, 8, 11, 10, 39, 102, DateTimeKind.Utc).AddTicks(4337)
                         },
                         new
                         {
                             PatientId = 2,
                             DoctorId = 2,
-                            Booking = new DateTime(2024, 2, 5, 9, 44, 26, 158, DateTimeKind.Utc).AddTicks(2887)
+                            Booking = new DateTime(2024, 2, 10, 11, 10, 39, 102, DateTimeKind.Utc).AddTicks(4345)
                         });
                 });
 
@@ -62,7 +62,7 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("doctor_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -73,18 +73,18 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("doctors");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            FullName = "Will Savu"
+                            FullName = "Will Saveu"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Bonesaw Jones"
+                            FullName = "John Bonesaw"
                         });
                 });
 
@@ -93,7 +93,7 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("doctor_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
