@@ -21,17 +21,17 @@ We have provided some basic scaffolding for you to get started.
 
 ### Part 2: Doctor & Appointment models
 
-Add a Doctor model, with the following properties: id, name
-Add an Appointments model, with the following properties: patientId, doctorId, appointmentDate
-Update the Doctor and Patient models to include a list of appointments; define all the foreign keys and relevant model properties
-Ensure the primary key for the Appointments model is a composite key of patientId and doctorId (this is specified in the OnModelCreating method of the DbContext class)
-Create a migration and push the migration to the remote database; verify the tables were created correctly
-Update the db context class and seed 2 doctors with hard-coded ids and names; create a few appointments for each doctor with some patients
+- Add a Doctor model, with the following properties: id, name
+- Add an Appointments model, with the following properties: patientId, doctorId, appointmentDate
+- Update the Doctor and Patient models to include a list of appointments; define all the foreign keys and relevant model properties
+- Ensure the primary key for the Appointments model is a composite key of patientId and doctorId (this is specified in the OnModelCreating method of the DbContext class)
+- Create a migration and push the migration to the remote database; verify the tables were created correctly
+- Update the db context class and seed 2 doctors with hard-coded ids and names; create a few appointments for each doctor with some patients
 
 ### Part 3: Doctor & Appointment endpoints
-Implement get all doctors, get doctor by id and create doctor endpoints in the controller; make sure to use DTOs as required for returning the results
-Implement get all appointments, get appointment by id, get appointments by doctor id, get appointments by patient id and create new appointment endpoints in the controller; make sure to use DTOs as required for returning the results
-Update all dtos for patient, doctor and appointments to include the relevant loaded fields via the relations:
+- Implement get all doctors, get doctor by id and create doctor endpoints in the controller; make sure to use DTOs as required for returning the results
+- Implement get all appointments, get appointment by id, get appointments by doctor id, get appointments by patient id and create new appointment endpoints in the controller; make sure to use DTOs as required for returning the results
+- Update all dtos for patient, doctor and appointments to include the relevant loaded fields via the relations:
 
 - a patient should include its appointments and each appointment include the doctor's name / id
 - a doctor should include its appointments and each appointment include the patient's name / id
