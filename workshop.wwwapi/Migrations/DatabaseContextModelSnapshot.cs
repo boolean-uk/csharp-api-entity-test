@@ -58,7 +58,7 @@ namespace workshop.wwwapi.Migrations
                         {
                             PatientId = 1,
                             DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 4, 16, 15, 2, 163, DateTimeKind.Utc).AddTicks(5864),
+                            Booking = new DateTime(2024, 2, 7, 16, 44, 44, 703, DateTimeKind.Utc).AddTicks(5961),
                             PrescriptionId = 1,
                             Type = "online"
                         },
@@ -66,24 +66,16 @@ namespace workshop.wwwapi.Migrations
                         {
                             PatientId = 2,
                             DoctorId = 2,
-                            Booking = new DateTime(2024, 2, 4, 16, 15, 2, 163, DateTimeKind.Utc).AddTicks(6026),
+                            Booking = new DateTime(2024, 2, 7, 16, 44, 44, 703, DateTimeKind.Utc).AddTicks(6085),
                             PrescriptionId = 2,
                             Type = "3rd floor room 34"
                         },
                         new
                         {
                             PatientId = 3,
-                            DoctorId = 2,
-                            Booking = new DateTime(2024, 2, 4, 16, 15, 2, 163, DateTimeKind.Utc).AddTicks(6064),
+                            DoctorId = 3,
+                            Booking = new DateTime(2024, 2, 7, 16, 44, 44, 703, DateTimeKind.Utc).AddTicks(6090),
                             PrescriptionId = 3,
-                            Type = "online"
-                        },
-                        new
-                        {
-                            PatientId = 2,
-                            DoctorId = 1,
-                            Booking = new DateTime(2024, 2, 4, 16, 15, 2, 163, DateTimeKind.Utc).AddTicks(6069),
-                            PrescriptionId = 4,
                             Type = "2nd floor, room 12"
                         });
                 });
@@ -116,6 +108,11 @@ namespace workshop.wwwapi.Migrations
                         {
                             Id = 2,
                             FullName = "Mrs. Cardiologist"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FullName = "Ms. Nurse"
                         });
                 });
 
@@ -193,12 +190,6 @@ namespace workshop.wwwapi.Migrations
                             MedicineId = 3,
                             PrescriptionId = 2,
                             Id = 3
-                        },
-                        new
-                        {
-                            MedicineId = 2,
-                            PrescriptionId = 1,
-                            Id = 4
                         });
                 });
 
@@ -278,6 +269,12 @@ namespace workshop.wwwapi.Migrations
                             Id = 3,
                             Notes = "Use when needed",
                             Quantity = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Notes = "Avoid if possible",
+                            Quantity = 6
                         });
                 });
 
@@ -296,7 +293,7 @@ namespace workshop.wwwapi.Migrations
                         .IsRequired();
 
                     b.HasOne("workshop.wwwapi.Models.Prescription", "Prescription")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("PrescriptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -344,6 +341,8 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Prescription", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("MedicinePrescriptions");
                 });
 #pragma warning restore 612, 618

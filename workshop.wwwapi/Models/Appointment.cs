@@ -16,11 +16,6 @@ namespace workshop.wwwapi.Models
         public string Type { get; set; }
 
 
-        [Column("prescription_id")]
-        public int PrescriptionId { get; set; }
-        public Prescription Prescription { get; set; }
-
-
         [Column("doctor_id")]
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; } 
@@ -29,6 +24,11 @@ namespace workshop.wwwapi.Models
         [Column("patient_id")]
         public int PatientId { get; set; }
         public Patient Patient { get; set; }
+
+
+        [Column("prescription_id")]
+        public int PrescriptionId { get; set; }
+        public Prescription Prescription { get; set; }
 
     }
 }
