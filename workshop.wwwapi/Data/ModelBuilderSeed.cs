@@ -139,11 +139,13 @@ namespace workshop.wwwapi.Data
             List<Patient> patients = Enumerable.Range(1, numPatients).Select(id => new Patient { ID = id, FullName = GeneratePatientName() }).ToList();
             List<Doctor> doctors = Enumerable.Range(1, numDoctors).Select(id => new Doctor {  ID = id, FullName = GenerateDoctorName() }).ToList();
             List<Appointment> appointments = new List<Appointment>();
+            AppointmentType[] appointmentTypes = (AppointmentType[])Enum.GetValues(typeof(AppointmentType));
             for (int i = 0; i < numAppointments; i++)
             {
                 int doctorID = random.Next(1, numDoctors + 1);
                 int patientID = random.Next(1, numPatients + 1);
-                Appointment appointment = new Appointment() { ID = i + 1, DoctorID = doctorID, PatientID = patientID, AppointmentTime = GenerateRandomDate()};
+                AppointmentType type = appointmentTypes[random.Next(appointmentTypes.Length)];
+                Appointment appointment = new Appointment() { ID = i + 1, DoctorID = doctorID, PatientID = patientID, AppointmentTime = GenerateRandomDate(), Type = type};
                 appointments.Add(appointment);
             }
             List<Prescription> prescriptions = Enumerable.Range(1, numPrescriptions).Select(id => new Prescription() { ID = id, AppointmentID = id }).ToList();

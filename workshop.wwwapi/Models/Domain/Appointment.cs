@@ -3,6 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models.Domain
 {
+    public enum AppointmentType
+    {
+        GeneralCheckUp,
+        FollowUp,
+        NutritinalCounseling,
+        SpecialistAdvice
+    }
     [Table("appointments")]
     public class Appointment
     {
@@ -24,5 +31,7 @@ namespace workshop.wwwapi.Models.Domain
         public DateTime AppointmentTime { get; set; }
         public Prescription pescription { get; set; }
 
+        [Column("appointment_type")]
+        public AppointmentType Type { get; set; }
     }
 }
