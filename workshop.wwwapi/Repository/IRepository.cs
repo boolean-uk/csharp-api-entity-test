@@ -1,4 +1,5 @@
 ﻿using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Types;
 
 namespace workshop.wwwapi.Repository
 {
@@ -11,5 +12,6 @@ namespace workshop.wwwapi.Repository
         //Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
         Task<IEnumerable<Prescription>> GetPrescriptions();
         Task<Prescription?> GetPrescription(int id);
+        Task<Prescription?> CreatePrescription(PostPrescription prescription);
     }
 }

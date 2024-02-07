@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Types;
 
 namespace workshop.wwwapi.Repository
 {
@@ -56,6 +57,26 @@ namespace workshop.wwwapi.Repository
         public async Task<Prescription?> GetPrescription(int id)
         {
             return await _db.Prescriptions.Include(p => p.MedicinePrescriptions).ThenInclude(mp => mp.Medicine).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Prescription?> CreatePrescription(PostPrescription prescription)
+        {
+            var medicinePrescriptions = new List<MedicinePrescription>();
+            foreach (var mp in prescription.MedicinePrescriptions)
+            {
+                var medicine = await _db.Medicines.FirstOrDefaultAsync(m => m.Id == mp.MedicineId);
+                if (medicine == null) return null;
+                medicinePrescriptions.Add(new MedicinePrescription()
+                {
+                    Medicine = medicine,
+                    Quantity = mp.Quantity,
+                    Instructions = mp.Instructions,
+                });
+            }
+            var newPrescription = new Prescription() { Name = prescription.Name, MedicinePrescriptions = medicinePrescriptions };
+            await _db.Prescriptions.AddAsync(newPrescription);
+            await _db.SaveChangesAsync();
+            return newPrescription;
         }
     }
 }

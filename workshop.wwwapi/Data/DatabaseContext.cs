@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Types;
 
-namespace workshop.wwwapi.Data 
+namespace workshop.wwwapi.Data
 {
     public class DatabaseContext : DbContext
     {

@@ -1,17 +1,19 @@
-﻿namespace workshop.wwwapi.Models.DTOs;
+﻿using workshop.wwwapi.Models.Types;
+
+namespace workshop.wwwapi.Models.DTOs;
 
 public class MedicinePrescriptionDTO
 {
-    public MedicineDTO MedicineDTO { get; set; }
-    public int quantity { get; set; }
-    public string instructions { get; set; }
+    public MedicineDTO Medicine { get; set; }
+    public int Quantity { get; set; }
+    public string Instructions { get; set; }
     public static MedicinePrescriptionDTO ToDTO(MedicinePrescription medicinePrescription)
     {
         return new MedicinePrescriptionDTO()
         {
-            MedicineDTO = MedicineDTO.ToDTO(medicinePrescription.Medicine),
-            quantity = medicinePrescription.Quantity,
-            instructions = medicinePrescription.Instructions,
+            Medicine = MedicineDTO.ToDTO(medicinePrescription.Medicine),
+            Quantity = medicinePrescription.Quantity,
+            Instructions = medicinePrescription.Instructions,
         };
     }
 }

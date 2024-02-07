@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace workshop.wwwapi.Models;
+namespace workshop.wwwapi.Models.Types;
 
 [Table("medicine_prescriptions")]
 public class MedicinePrescription
@@ -10,7 +10,7 @@ public class MedicinePrescription
     public Medicine Medicine { get; set; }
     [Column("ppk_prescription_id")]
     public int PrescriptionId { get; set; }
-    public Prescription Prescription { get; set;}
+    public Prescription Prescription { get; set; }
     [Column("quantity")]
     public int Quantity { get; set; }
     [Column("instructions")]

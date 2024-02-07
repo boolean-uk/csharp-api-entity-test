@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.DTOs;
 using workshop.wwwapi.Repository;
 
@@ -18,7 +19,7 @@ namespace workshop.wwwapi.Endpoints
             //surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
             surgeryGroup.MapGet("/prescriptions/{id}", GetPrescription);
-            //surgeryGroup.MapGet("/prescriptions/", CreatePrescription);
+            surgeryGroup.MapPost("/prescriptions/", CreatePrescription);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -73,6 +74,7 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
         }*/
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPrescriptions(IRepository repository)
         {
             var prescriptions = await repository.GetPrescriptions();
@@ -84,6 +86,7 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(returnList);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPrescription(IRepository repository, int id)
         {
             var prescription = await repository.GetPrescription(id);
@@ -93,12 +96,16 @@ namespace workshop.wwwapi.Endpoints
             }
             return TypedResults.Ok(PrescriptionWithMedicinesDTO.ToDTO(prescription));
         }
-        /*
-        public static async Task<IResult> CreatePrescription(IRepository repository, )
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, PostPrescription prescription)
         {
-            var prescription = await repository.CreatePrescription(id);
-            return TypedResults.Created($"/prescriptions/{prescription.Id}", PrescriptionWithMedicinesDTO.ToDTO(prescription));
+            var newPrescription = await repository.CreatePrescription(prescription);
+            if (newPrescription == null)
+            {
+                return TypedResults.NotFound($"Could not find all medicines!");
+            }
+            return TypedResults.Created($"/prescriptions/{newPrescription.Id}", PrescriptionWithMedicinesDTO.ToDTO(newPrescription));
         }
-        */
     }
 }

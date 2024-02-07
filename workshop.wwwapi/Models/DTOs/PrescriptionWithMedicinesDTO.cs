@@ -1,4 +1,6 @@
-﻿namespace workshop.wwwapi.Models.DTOs;
+﻿using workshop.wwwapi.Models.Types;
+
+namespace workshop.wwwapi.Models.DTOs;
 
 public class PrescriptionWithMedicinesDTO
 {

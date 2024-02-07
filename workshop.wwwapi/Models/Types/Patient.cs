@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace workshop.wwwapi.Models;
+namespace workshop.wwwapi.Models.Types;
 
-[Table("doctor")]
-public class Doctor
+[Table("patient")]
+public class Patient
 {
     [Column("id")]
     public int Id { get; set; }

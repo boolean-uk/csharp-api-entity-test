@@ -1,4 +1,4 @@
-﻿using workshop.wwwapi.Models;
+﻿using workshop.wwwapi.Models.Types;
 
 namespace workshop.wwwapi.Data;
 

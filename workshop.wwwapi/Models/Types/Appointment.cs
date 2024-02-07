@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace workshop.wwwapi.Models;
+namespace workshop.wwwapi.Models.Types;
 
 [Table("appointment")]
 public class Appointment
