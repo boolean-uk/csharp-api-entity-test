@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace workshop.wwwapi.Models.Domain
+namespace workshop.wwwapi.Models.Domain.Junctions
 {
     [Table("prescription_medicines")]
     public class PrescriptionMedicine

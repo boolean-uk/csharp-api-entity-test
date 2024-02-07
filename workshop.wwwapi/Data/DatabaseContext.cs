@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using workshop.wwwapi.Models.Domain;
+using workshop.wwwapi.Models.Domain.Junctions;
 
 namespace workshop.wwwapi.Data
 {

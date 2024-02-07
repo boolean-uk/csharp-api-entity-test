@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Models.Domain.Junctions;
 
 namespace workshop.wwwapi.Models.Domain
 {

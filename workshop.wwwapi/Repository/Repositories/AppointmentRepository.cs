@@ -2,7 +2,7 @@
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models.Domain;
 
-namespace workshop.wwwapi.Repository
+namespace workshop.wwwapi.Repository.Repositories
 {
     public class AppointmentRepository : IAppointmentRepository
     {
@@ -40,7 +40,7 @@ namespace workshop.wwwapi.Repository
         {
             await db.AddAsync(entity);
             await db.SaveChangesAsync();
-            var result =  await Get(entity.ID);
+            var result = await Get(entity.ID);
             return result;
         }
 

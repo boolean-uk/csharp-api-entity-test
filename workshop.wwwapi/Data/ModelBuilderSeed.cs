@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Runtime.Serialization.Formatters;
 using workshop.wwwapi.Models.Domain;
+using workshop.wwwapi.Models.Domain.Junctions;
 
 namespace workshop.wwwapi.Data
 {
