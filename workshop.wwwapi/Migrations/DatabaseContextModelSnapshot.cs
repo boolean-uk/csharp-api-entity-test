@@ -45,63 +45,63 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            DoctorId = 4,
-                            PatientId = 4,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9651)
-                        },
-                        new
-                        {
-                            DoctorId = 4,
-                            PatientId = 3,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9654)
-                        },
-                        new
-                        {
-                            DoctorId = 3,
-                            PatientId = 3,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9654)
-                        },
-                        new
-                        {
-                            DoctorId = 3,
-                            PatientId = 4,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9655)
-                        },
-                        new
-                        {
-                            DoctorId = 4,
-                            PatientId = 7,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9655)
-                        },
-                        new
-                        {
-                            DoctorId = 7,
-                            PatientId = 6,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9656)
-                        },
-                        new
-                        {
-                            DoctorId = 3,
-                            PatientId = 5,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9657)
-                        },
-                        new
-                        {
-                            DoctorId = 7,
-                            PatientId = 1,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9657)
-                        },
-                        new
-                        {
                             DoctorId = 1,
-                            PatientId = 7,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9658)
+                            PatientId = 1,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9367)
+                        },
+                        new
+                        {
+                            DoctorId = 2,
+                            PatientId = 2,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9369)
+                        },
+                        new
+                        {
+                            DoctorId = 3,
+                            PatientId = 3,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9370)
+                        },
+                        new
+                        {
+                            DoctorId = 4,
+                            PatientId = 4,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9370)
+                        },
+                        new
+                        {
+                            DoctorId = 5,
+                            PatientId = 5,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9370)
                         },
                         new
                         {
                             DoctorId = 6,
-                            PatientId = 3,
-                            Booking = new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9658)
+                            PatientId = 6,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9371)
+                        },
+                        new
+                        {
+                            DoctorId = 7,
+                            PatientId = 7,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9372)
+                        },
+                        new
+                        {
+                            DoctorId = 8,
+                            PatientId = 8,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9372)
+                        },
+                        new
+                        {
+                            DoctorId = 9,
+                            PatientId = 9,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9372)
+                        },
+                        new
+                        {
+                            DoctorId = 10,
+                            PatientId = 10,
+                            Booking = new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9373)
                         });
                 });
 
@@ -127,47 +127,47 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Elvis Obama"
+                            FullName = "Audrey Winfrey"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Audrey Jagger"
+                            FullName = "Audrey Obama"
                         },
                         new
                         {
                             Id = 3,
-                            FullName = "Mick Hepburn"
+                            FullName = "Charles Middleton"
                         },
                         new
                         {
                             Id = 4,
-                            FullName = "Elvis Presley"
+                            FullName = "Kate Hendrix"
                         },
                         new
                         {
                             Id = 5,
-                            FullName = "Elvis Jagger"
+                            FullName = "Audrey Hendrix"
                         },
                         new
                         {
                             Id = 6,
-                            FullName = "Charles Presley"
+                            FullName = "Charles Middleton"
                         },
                         new
                         {
                             Id = 7,
-                            FullName = "Charles Obama"
+                            FullName = "Mick Windsor"
                         },
                         new
                         {
                             Id = 8,
-                            FullName = "Donald Trump"
+                            FullName = "Barack Hendrix"
                         },
                         new
                         {
                             Id = 9,
-                            FullName = "Jimi Trump"
+                            FullName = "Kate Windsor"
                         },
                         new
                         {
@@ -198,52 +198,52 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Elvis Hepburn"
-                        },
-                        new
-                        {
-                            Id = 2,
                             FullName = "Kate Winslet"
                         },
                         new
                         {
+                            Id = 2,
+                            FullName = "Audrey Presley"
+                        },
+                        new
+                        {
                             Id = 3,
-                            FullName = "Kate Jagger"
+                            FullName = "Audrey Winslet"
                         },
                         new
                         {
                             Id = 4,
-                            FullName = "Oprah Hepburn"
+                            FullName = "Charles Hendrix"
                         },
                         new
                         {
                             Id = 5,
-                            FullName = "Oprah Winslet"
+                            FullName = "Oprah Presley"
                         },
                         new
                         {
                             Id = 6,
-                            FullName = "Kate Hendrix"
+                            FullName = "Barack Winslet"
                         },
                         new
                         {
                             Id = 7,
-                            FullName = "Elvis Winfrey"
+                            FullName = "Mick Middleton"
                         },
                         new
                         {
                             Id = 8,
-                            FullName = "Kate Windsor"
+                            FullName = "Kate Presley"
                         },
                         new
                         {
                             Id = 9,
-                            FullName = "Kate Hepburn"
+                            FullName = "Jimi Presley"
                         },
                         new
                         {
                             Id = 10,
-                            FullName = "Kate Obama"
+                            FullName = "Charles Presley"
                         });
                 });
 

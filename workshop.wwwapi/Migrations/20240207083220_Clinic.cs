@@ -70,15 +70,15 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "id", "full_name" },
                 values: new object[,]
                 {
-                    { 1, "Elvis Obama" },
-                    { 2, "Audrey Jagger" },
-                    { 3, "Mick Hepburn" },
-                    { 4, "Elvis Presley" },
-                    { 5, "Elvis Jagger" },
-                    { 6, "Charles Presley" },
-                    { 7, "Charles Obama" },
-                    { 8, "Donald Trump" },
-                    { 9, "Jimi Trump" },
+                    { 1, "Audrey Winfrey" },
+                    { 2, "Audrey Obama" },
+                    { 3, "Charles Middleton" },
+                    { 4, "Kate Hendrix" },
+                    { 5, "Audrey Hendrix" },
+                    { 6, "Charles Middleton" },
+                    { 7, "Mick Windsor" },
+                    { 8, "Barack Hendrix" },
+                    { 9, "Kate Windsor" },
                     { 10, "Audrey Trump" }
                 });
 
@@ -87,16 +87,16 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "id", "full_name" },
                 values: new object[,]
                 {
-                    { 1, "Elvis Hepburn" },
-                    { 2, "Kate Winslet" },
-                    { 3, "Kate Jagger" },
-                    { 4, "Oprah Hepburn" },
-                    { 5, "Oprah Winslet" },
-                    { 6, "Kate Hendrix" },
-                    { 7, "Elvis Winfrey" },
-                    { 8, "Kate Windsor" },
-                    { 9, "Kate Hepburn" },
-                    { 10, "Kate Obama" }
+                    { 1, "Kate Winslet" },
+                    { 2, "Audrey Presley" },
+                    { 3, "Audrey Winslet" },
+                    { 4, "Charles Hendrix" },
+                    { 5, "Oprah Presley" },
+                    { 6, "Barack Winslet" },
+                    { 7, "Mick Middleton" },
+                    { 8, "Kate Presley" },
+                    { 9, "Jimi Presley" },
+                    { 10, "Charles Presley" }
                 });
 
             migrationBuilder.InsertData(
@@ -104,16 +104,16 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "doctor_id", "patient_id", "appointment_time" },
                 values: new object[,]
                 {
-                    { 1, 7, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9658) },
-                    { 3, 3, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9654) },
-                    { 3, 4, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9655) },
-                    { 3, 5, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9657) },
-                    { 4, 3, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9654) },
-                    { 4, 4, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9651) },
-                    { 4, 7, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9655) },
-                    { 6, 3, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9658) },
-                    { 7, 1, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9657) },
-                    { 7, 6, new DateTime(2024, 2, 2, 12, 47, 25, 805, DateTimeKind.Utc).AddTicks(9656) }
+                    { 1, 1, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9367) },
+                    { 2, 2, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9369) },
+                    { 3, 3, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9370) },
+                    { 4, 4, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9370) },
+                    { 5, 5, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9370) },
+                    { 6, 6, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9371) },
+                    { 7, 7, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9372) },
+                    { 8, 8, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9372) },
+                    { 9, 9, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9372) },
+                    { 10, 10, new DateTime(2024, 2, 7, 8, 32, 19, 792, DateTimeKind.Utc).AddTicks(9373) }
                 });
 
             migrationBuilder.CreateIndex(

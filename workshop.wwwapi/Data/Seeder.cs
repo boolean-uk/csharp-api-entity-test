@@ -72,8 +72,8 @@ namespace workshop.wwwapi.Data
             {
                 Appointment app = new Appointment();
                 app.Booking = DateTime.UtcNow;
-                app.PatientId = appointmentRandom.Next(1, Patients.Count);
-                app.DoctorId = appointmentRandom.Next(1, Doctors.Count);
+                app.PatientId = z;//appointmentRandom.Next(1, Patients.Count);
+                app.DoctorId = z;//appointmentRandom.Next(1, Doctors.Count);
 
 
                 _appointments.Add(app);
