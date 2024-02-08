@@ -10,12 +10,12 @@ namespace workshop.wwwapi.Models
         [Column("id")]
         public int MedicineId { get; set; }
         [Column("name")]
-        public string Name { get; set; }
-    
+        public string? Name { get; set; }
         [Column("description")]
-        public string Description { get; set; } // notes section and how to take it 
+        public string? Description { get; set; }
 
-        public ICollection<PrescriptionMedicine> PrescriptionMedicine { get; set; }
+        // Navigation property for many-to-many relationship
+        public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; }
     }
 
     

@@ -17,18 +17,52 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Appointment>().HasKey(k => new { k.Booking, k.DoctorId, k.PatientId } );
+            //modelBuilder.Entity<Appointment>().HasKey(k => new { k.Id, k.DoctorId, k.PatientId } );
 
-            //! Extension: many-to-many between Perscriptions and medicine
-            modelBuilder.Entity<PrescriptionMedicine>().HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
+            modelBuilder.Entity<Appointment>()
+                .HasKey(k => new { k.Id });
 
-            modelBuilder.Entity<PrescriptionMedicine>().HasOne(pm => pm.Prescription)
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Doctor)
+                .WithMany(d => d.Appointments)
+                .HasForeignKey(a => a.DoctorId);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Patient)
+                .WithMany(p => p.Appointments)
+                .HasForeignKey(a => a.PatientId);
+
+            modelBuilder.Entity<Appointment>()
+                .HasMany(a => a.Prescriptions)
+                .WithOne(p => p.Appointment)
+                .HasForeignKey(p => p.AppointmentId);
+
+            //! Extension
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
+
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasOne(pm => pm.Prescription)
                 .WithMany(p => p.PrescriptionMedicines)
                 .HasForeignKey(pm => pm.PrescriptionId);
-            
-            modelBuilder.Entity<PrescriptionMedicine>().HasOne(pm => pm.Medicine)
-                .WithMany(p => p.PrescriptionMedicine)
+
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasOne(pm => pm.Medicine)
+                .WithMany(m => m.PrescriptionMedicines)
                 .HasForeignKey(pm => pm.MedicineId);
+            /*modelBuilder.Entity<PrescriptionMedicine>()
+            .HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
+
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasOne(pm => pm.Prescription)
+                .WithMany(p => p.PrescriptionMedicines)
+                .HasForeignKey(pm => pm.PrescriptionId);
+
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasOne(pm => pm.Medicine)
+                .WithMany(m => m.PrescriptionMedicines)
+                .HasForeignKey(pm => pm.MedicineId);
+            */
 
 
             //TODO: Seed Data Here
@@ -64,6 +98,28 @@ namespace workshop.wwwapi.Data
 
             modelBuilder.Entity<Appointment>().HasData( listOfAppointments );
 
+            //! Extension: Seeding medicine and prescriptions
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine { MedicineId = 1, Name = "Medicine 1", Description = "Description 1" },
+                new Medicine { MedicineId = 2, Name = "Medicine 2", Description = "Description 2" }
+            );
+
+            // Seed prescriptions associated with appointments
+            modelBuilder.Entity<Prescription>().HasData(
+                new Prescription { PrescriptionId = 1, AppointmentId = 1 },
+                new Prescription { PrescriptionId = 2, AppointmentId = 2 }
+            // Add more prescriptions as needed
+            );
+
+            modelBuilder.Entity<PrescriptionMedicine>().HasData(
+                new PrescriptionMedicine { PrescriptionId = 1, MedicineId = 1, Quantity = 2, Notes = "Take with food" },
+                new PrescriptionMedicine { PrescriptionId = 1, MedicineId = 2, Quantity = 1, Notes = "Before bedtime" },
+                new PrescriptionMedicine { PrescriptionId = 2, MedicineId = 2, Quantity = 3, Notes = "Twice a day" }
+            // Add more prescription medicines as needed
+            );
+
+
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -77,5 +133,11 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+
+        //! Extension
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionMedicines { get; set; }
+
     }
 }

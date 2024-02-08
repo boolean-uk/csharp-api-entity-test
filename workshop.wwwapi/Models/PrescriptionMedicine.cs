@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace workshop.wwwapi.Models
 {
-    [Table("perscription_medicine")]
+    [Table("prescription_medicine")]
     public class PrescriptionMedicine
     {
-        
-        [Column("perscription_id")]
+        [Column("prescription_id")]
         public int PrescriptionId { get; set; }
-        public Prescription Prescription { get; set; }        
+        public Prescription Prescription { get; set; }
 
         [Column("medicine_id")]
         public int MedicineId { get; set; }
         public Medicine Medicine { get; set; }
 
         [Column("quantiry")]
-        public int Quantiry { get; set; }
+        public int? Quantity { get; set; }
+        [Column("notes")]
+        public string? Notes { get; set; }
     }
 }
