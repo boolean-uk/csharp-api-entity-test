@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240206143601_EleventhMigration")]
+    partial class EleventhMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,13 +50,13 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTime(2024, 2, 9, 9, 40, 41, 835, DateTimeKind.Utc).AddTicks(3956)
+                            Booking = new DateTime(2024, 2, 7, 14, 36, 0, 646, DateTimeKind.Utc).AddTicks(8657)
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 2,
-                            Booking = new DateTime(2024, 2, 10, 9, 40, 41, 835, DateTimeKind.Utc).AddTicks(3970)
+                            Booking = new DateTime(2024, 2, 8, 14, 36, 0, 646, DateTimeKind.Utc).AddTicks(8667)
                         });
                 });
 
@@ -88,51 +91,6 @@ namespace workshop.wwwapi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Medicine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("notes");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("medicines");
-                });
-
-            modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.MedicinePerscription", b =>
-                {
-                    b.Property<int>("MedicineId")
-                        .HasColumnType("integer")
-                        .HasColumnName("medicineid");
-
-                    b.Property<int>("PerscriptionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("perscriptionid");
-
-                    b.HasKey("MedicineId", "PerscriptionId");
-
-                    b.HasIndex("PerscriptionId");
-
-                    b.ToTable("medicineperscriptions");
-                });
-
             modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Patient", b =>
                 {
                     b.Property<int>("Id")
@@ -164,20 +122,6 @@ namespace workshop.wwwapi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Perscription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("perscriptions");
-                });
-
             modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Appointment", b =>
                 {
                     b.HasOne("workshop.wwwapi.Models.DatabaseModels.Doctor", "Doctor")
@@ -195,21 +139,6 @@ namespace workshop.wwwapi.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.MedicinePerscription", b =>
-                {
-                    b.HasOne("workshop.wwwapi.Models.DatabaseModels.Medicine", null)
-                        .WithMany()
-                        .HasForeignKey("MedicineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("workshop.wwwapi.Models.DatabaseModels.Perscription", null)
-                        .WithMany()
-                        .HasForeignKey("PerscriptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.DatabaseModels.Doctor", b =>

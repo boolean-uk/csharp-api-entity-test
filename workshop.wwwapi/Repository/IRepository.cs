@@ -1,4 +1,4 @@
-﻿using workshop.wwwapi.Models;
+﻿using workshop.wwwapi.Models.DatabaseModels;
 
 namespace workshop.wwwapi.Repository
 {
@@ -8,8 +8,13 @@ namespace workshop.wwwapi.Repository
 
         Task<Patient> GetPatientById(int id);
         Task<IEnumerable<Doctor>> GetDoctors();
-        Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
 
+        Task<Doctor> GetDoctorById(int id);
+        Task<Doctor> CreateDoctor(Doctor doctor);
+
+        Task<IEnumerable<Appointment>> GetAppointments();
+        Task<IEnumerable<Appointment>> GetAppointmentsByDoctorId(int doctorid);
+        Task<IEnumerable<Appointment>> GetAppointmentsByPatientId(int patientid);
 
     }
 }
