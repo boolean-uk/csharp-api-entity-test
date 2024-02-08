@@ -12,11 +12,14 @@ namespace workshop.wwwapi.Models
         public string Booking { get; set; }
         
 
-        // in memoty!!! No not add column
+        [Column("doctor_id")]
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
         
+        [Column("patient_id")]
         public int PatientId { get; set; }
         public Patient Patient { get; set; }
+
+        public ICollection<Perscription> Perscriptions { get; set; }
     }
 }
