@@ -66,6 +66,7 @@ namespace workshop.wwwapi.Repository.PrescriptionRepo
             }
         }
 
+
         public async Task<Prescription?> createPrescription(string? note, int appointment_id)
         {
             //var isAppointment = await _db.Appointments.FindAsync(appointment_id);

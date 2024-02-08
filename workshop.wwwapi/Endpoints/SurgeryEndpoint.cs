@@ -3,6 +3,7 @@ using workshop.wwwapi.DTO;
 using workshop.wwwapi.Repository;
 using workshop.wwwapi.Models.Payloads;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Repository.PrescriptionRepo;
 
 namespace workshop.wwwapi.Endpoints
 {
@@ -25,6 +26,7 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/appointments", GetAllAppointments);
             surgeryGroup.MapGet("/appointment/{id}", GetAppointmentById);
+            surgeryGroup.MapPost("/appointment{id}/prescription", AttachPrescriptionToAppointment);
 
             surgeryGroup.MapGet("/appointmentsbydoctor/{doctorId}", GetAppointmentsByDoctor);
         }
@@ -149,7 +151,23 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(appointmentsByDoctorDTO);
         }
 
+        private static async Task<IResult> AttachPrescriptionToAppointment(int appointment_id, IRepository repository, IPrescriptionRepository prescriptionRepository, PrescriptionPostPayload payload)
+        {
+            var appointment = await repository.GetAppointmentWithDetailsById(appointment_id);
+            if (appointment == null)
+            {
+                return TypedResults.NotFound($"Could not find appointment with id {appointment_id}");
+            }
+            var prescription = await prescriptionRepository.createPrescription(payload.note, appointment_id);
+            if (prescription == null)
+            {
+                return TypedResults.BadRequest("Something went wrong whiles doing the operation");
+            }
+            return TypedResults.Created();
 
-        
+        }
+
+
+
     }
 }
