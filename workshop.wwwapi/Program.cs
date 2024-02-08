@@ -17,21 +17,24 @@ builder.Services.AddDbContext<DatabaseContext>(
    }
     );
 builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.AddScoped<IMedPrescriptionRepository, MedPrescriptionRepository>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+
+app.UseHttpsRedirection();
+app.ConfigurePatientEndpoint();
+//app.ApplyProjectMigrations();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.ApplyProjectMigrations();
 }
 
-app.UseHttpsRedirection();
-app.ConfigurePatientEndpoint();
 app.ApplyProjectMigrations();
-
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore

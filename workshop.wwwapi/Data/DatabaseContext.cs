@@ -7,12 +7,12 @@ namespace workshop.wwwapi.Data
 {
     public class DatabaseContext : DbContext
     {
-        //n private string _connectionString;
+        //private string _connectionString;
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
-            //var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            //_connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            //this.Database.EnsureCreated();
+          //  var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+          //  _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
+          //  this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -66,7 +66,7 @@ namespace workshop.wwwapi.Data
         }
 
 
-      // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
       //  {
       //      //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
       //      optionsBuilder.UseNpgsql(_connectionString);

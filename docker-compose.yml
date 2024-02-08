@@ -10,12 +10,12 @@ services:
       - "8080:8080"
       - "8081:8081"
     networks:
-      - workshopwwwapi-network
+      - workapi-network
     depends_on:
-      workshopwwwapi.database:
+      workapi.database:
         condition: service_healthy
-  workshopwwwapi.database:
-    container_name: "workshopwwwapi.database" # host url for my postgres db
+  workapi.database:
+    container_name: "workapi.database" # host url for my postgres db
     image: postgres:latest
     environment:
       POSTGRES_DB: postgres
@@ -24,7 +24,7 @@ services:
     ports:
       - 5432:5432
     networks:
-      - workshopwwwapi-network
+      - workapi-network
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -38,5 +38,5 @@ volumes:
     driver: local
 
 networks:
-  workshopwwwapi-network:
+  workapi-network:
     driver: bridge

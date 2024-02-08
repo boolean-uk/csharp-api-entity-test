@@ -25,6 +25,7 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbypatient/{patientId}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointmentsbydoctor/{doctorId}", GetAppointmentsByDoctor);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
+            surgeryGroup.MapPut("/appointments/doctors/{doctorId}/patients/{patientId}/prescriptions/{prescriptionId}", AttachPrescriptionToAppointment);
 
             surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
             surgeryGroup.MapGet("/prescriptionsbydoctor/{prescriptionId}", GetPrescription);
@@ -241,9 +242,32 @@ namespace workshop.wwwapi.Endpoints
         }
 
 
-                /// PATIENTS
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetMedicines(IRepository repository)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> AttachPrescriptionToAppointment(int prescriptionId, int doctorId, int patientId, IMedPrescriptionRepository repository)
+        {
+
+            if (doctorId.GetType() != typeof(int) || patientId.GetType() != typeof(int) || prescriptionId.GetType() != typeof(int))
+            {
+                return Results.BadRequest("The id needs to be a number");
+            }
+
+            Appointment? a = await repository.AttachPrescriptionToAppointment(prescriptionId, doctorId, patientId);
+
+            if (a == null)
+            {
+                return Results.BadRequest("Failed to create appointment.");
+            }
+
+            repository.SaveChanges();
+
+            return TypedResults.Ok(new AppointmentDTO(a));
+        }
+
+
+        /// PATIENTS
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetMedicines(IMedPrescriptionRepository repository)
         { 
 
             var med = await repository.GetMedicines();
@@ -261,7 +285,7 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> GetMedicine(int medId, IRepository repository)
+        public static async Task<IResult> GetMedicine(int medId, IMedPrescriptionRepository repository)
         {
 
             Medicine? medicine = await repository.GetMedicine(medId);
@@ -278,7 +302,7 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> CreateMedicine(CreateMedicinePayload payload, IRepository repository)
+        public static async Task<IResult> CreateMedicine(CreateMedicinePayload payload, IMedPrescriptionRepository repository)
         {
          
             if (payload.Name == null || payload.Name == "")
@@ -300,7 +324,7 @@ namespace workshop.wwwapi.Endpoints
 
         /// PATIENTS
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        public static async Task<IResult> GetPrescriptions(IMedPrescriptionRepository repository)
         { 
 
             var Prescriptions = await repository.GetPrescriptions();
@@ -318,7 +342,7 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> GetPrescription(int PrescriptionId, IRepository repository)
+        public static async Task<IResult> GetPrescription(int PrescriptionId, IMedPrescriptionRepository repository)
         {
 
             Prescription? prescription = await repository.GetPrescription(PrescriptionId, PreloadPolicy.PreloadRelations);
@@ -335,7 +359,7 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> CreatePrescription(int medicineId, CreatePrescriptionPayload payload, IRepository repository)
+        public static async Task<IResult> CreatePrescription(int medicineId, CreatePrescriptionPayload payload, IMedPrescriptionRepository repository)
         {
          
             if (payload.Quantity < 0 || payload.Notes == "")

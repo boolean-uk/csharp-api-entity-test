@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>409e9ca3-ecaf-4eca-8907-c631303594bc</ProjectGuid>
+    <ProjectGuid>df6f42ce-2cff-4723-9c2d-2e3def3f442b</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>workshop.wwwapi</DockerServiceName>

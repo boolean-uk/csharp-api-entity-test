@@ -27,16 +27,6 @@ namespace workshop.wwwapi.Repository
         Task<Appointment?> GetAppointment(int doctorId, int patientid, PreloadPolicy preloadPolicy = PreloadPolicy.DoNotPreloadRelations);
         Task<Appointment?> CreateAppointment(int doctorId, int patientId, int medId, string type);
 
-
-        Task<IEnumerable<Prescription>> GetPrescriptions();
-        Task<Prescription?> GetPrescription(int id, PreloadPolicy preloadPolicy = PreloadPolicy.DoNotPreloadRelations);
-        Task<Prescription?> CreatePrescription(int medId, int quantity, string notes);
-
-
-        Task<IEnumerable<Medicine>> GetMedicines();
-        Task<Medicine?> GetMedicine(int id);
-        Task<Medicine?> CreateMedicine(string name);
-
         public void SaveChanges();
     }
 }

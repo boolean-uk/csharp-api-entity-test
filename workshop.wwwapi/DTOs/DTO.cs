@@ -91,7 +91,27 @@ namespace workshop.wwwapi.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public SinglePrescriptionDTO Prescription { get; set; }
+
         public MedicineDTO(Medicine medicine)
+        {
+            Id = medicine.Id;
+            Name = medicine.Name;
+
+            foreach (MedicinePrescription mp in medicine.MedicinePrescriptions)
+            {
+                Prescription = new SinglePrescriptionDTO(mp.Prescription);
+            }
+        }
+    }
+
+
+    class SingleMedicineDTO
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public SingleMedicineDTO(Medicine medicine)
         {
             Id = medicine.Id;
             Name = medicine.Name;
@@ -105,7 +125,31 @@ namespace workshop.wwwapi.DTOs
 
         public string Notes {get ; set;}
 
+        public SingleMedicineDTO Medicine { get; set; }
+
         public PrescriptionDTO(Prescription prescription)
+        {
+            Id = prescription.Id;
+            Quantity = prescription.Quantity;
+            Notes = prescription.Notes;
+
+            foreach (MedicinePrescription mp in prescription.MedicinePrescriptions)
+            {
+                Medicine = new SingleMedicineDTO(mp.Medicine);
+            }
+            
+        }
+    }
+
+
+    class SinglePrescriptionDTO
+    {
+        public int Id { get; set; }
+        public int Quantity { get; set; }
+
+        public string Notes { get; set; }
+
+        public SinglePrescriptionDTO(Prescription prescription)
         {
             Id = prescription.Id;
             Quantity = prescription.Quantity;
