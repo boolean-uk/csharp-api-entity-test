@@ -13,9 +13,15 @@ namespace workshop.wwwapi.DTO
     {
         public DateTime time { get; set; }
         public DoctorPatient Patient { get; set; }
+        public List<DoctorMedicine> Medicines { get; set;}
     }
     public class DoctorPatient
     {
         public string Name { get; set; }
+    }
+    public class DoctorMedicine
+    {
+        public string Name { get; set; }
+        public string Instruction { get; set; }
     }
 }

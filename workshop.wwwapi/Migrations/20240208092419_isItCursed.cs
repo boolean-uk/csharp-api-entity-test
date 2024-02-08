@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class newStart : Migration
+    public partial class isItCursed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,7 +60,6 @@ namespace workshop.wwwapi.Migrations
                 {
                     doctor_id = table.Column<int>(type: "integer", nullable: false),
                     patient_id = table.Column<int>(type: "integer", nullable: false),
-                    booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     appointment_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -84,22 +83,20 @@ namespace workshop.wwwapi.Migrations
                 name: "prescriptions",
                 columns: table => new
                 {
-                    DoctorId = table.Column<int>(type: "integer", nullable: false),
-                    PatientId = table.Column<int>(type: "integer", nullable: false),
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    AppointmentDoctorId = table.Column<int>(type: "integer", nullable: true),
-                    AppointmentPatientId = table.Column<int>(type: "integer", nullable: true)
+                    doctor_id = table.Column<int>(type: "integer", nullable: false),
+                    patient_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_prescriptions", x => x.id);
                     table.ForeignKey(
-                        name: "FK_prescriptions_appointment_AppointmentDoctorId_AppointmentPa~",
-                        columns: x => new { x.AppointmentDoctorId, x.AppointmentPatientId },
+                        name: "FK_prescriptions_appointment_patient_id_doctor_id",
+                        columns: x => new { x.patient_id, x.doctor_id },
                         principalTable: "appointment",
-                        principalColumns: new[] { "doctor_id", "patient_id" });
+                        principalColumns: new[] { "doctor_id", "patient_id" },
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,19 +151,19 @@ namespace workshop.wwwapi.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "prescriptions",
-                columns: new[] { "id", "AppointmentDoctorId", "AppointmentPatientId", "description", "DoctorId", "PatientId" },
-                values: new object[] { 1, null, null, "Limit intake to 1 per day.", 1, 1 });
-
-            migrationBuilder.InsertData(
                 table: "appointment",
-                columns: new[] { "doctor_id", "patient_id", "booking", "appointment_date" },
+                columns: new[] { "doctor_id", "patient_id", "appointment_date" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 2, 7, 14, 9, 16, 258, DateTimeKind.Utc).AddTicks(5394) },
-                    { 1, 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 2, 7, 14, 9, 16, 258, DateTimeKind.Utc).AddTicks(5396) },
-                    { 2, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 2, 7, 14, 9, 16, 258, DateTimeKind.Utc).AddTicks(5397) }
+                    { 1, 1, new DateTime(2024, 2, 8, 9, 24, 19, 164, DateTimeKind.Utc).AddTicks(5142) },
+                    { 1, 2, new DateTime(2024, 2, 8, 9, 24, 19, 164, DateTimeKind.Utc).AddTicks(5147) },
+                    { 2, 1, new DateTime(2024, 2, 8, 9, 24, 19, 164, DateTimeKind.Utc).AddTicks(5148) }
                 });
+
+            migrationBuilder.InsertData(
+                table: "prescriptions",
+                columns: new[] { "id", "doctor_id", "patient_id" },
+                values: new object[] { 1, 1, 1 });
 
             migrationBuilder.InsertData(
                 table: "prescription_medicines",
@@ -188,9 +185,9 @@ namespace workshop.wwwapi.Migrations
                 column: "medicine_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_prescriptions_AppointmentDoctorId_AppointmentPatientId",
+                name: "IX_prescriptions_patient_id_doctor_id",
                 table: "prescriptions",
-                columns: new[] { "AppointmentDoctorId", "AppointmentPatientId" });
+                columns: new[] { "patient_id", "doctor_id" });
         }
 
         /// <inheritdoc />

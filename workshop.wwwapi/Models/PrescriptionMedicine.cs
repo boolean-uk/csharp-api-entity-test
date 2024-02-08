@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
@@ -7,9 +8,9 @@ namespace workshop.wwwapi.Models
     public class PrescriptionMedicine
     {
         //[Column("prescription_id")]
-        [Key, ForeignKey("Prescription"), Column("prescription_id", Order = 0)]
+        [Column("prescription_id"), ForeignKey("Prescription")]
         public int PrescriptionId { get; set; }
-        [ForeignKey("Medicine"), Column("medicine_id", Order = 1)]
+        [Column("medicine_id"), ForeignKey("Medicine")]
         public int MedicineId { get; set; }
 
         public Prescription Prescription { get; set; }

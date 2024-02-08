@@ -6,9 +6,11 @@ namespace workshop.wwwapi.DTO
     {
         public DateTime dateTime {  get; set; }
         [SwaggerSchema(ReadOnly = true)]
-        public AppointmentDoctor doctor { get; set; }
+        public AppointmentDoctor Doctor { get; set; }
         [SwaggerSchema(ReadOnly = true)]
-        public AppointmentPatient patient { get; set; }
+        public AppointmentPatient Patient { get; set; }
+        [SwaggerSchema(ReadOnly = true)]
+        public List<AppointmentMedicine> Medicines { get; set; }
 
     }
     public class AppointmentDoctor
@@ -18,6 +20,11 @@ namespace workshop.wwwapi.DTO
     public class AppointmentPatient
     {
         public string FullName { get; set; }
+    }
+    public class AppointmentMedicine
+    {
+        public string Name { get; set; }
+        public string Instruction { get; set; }
     }
 
 }

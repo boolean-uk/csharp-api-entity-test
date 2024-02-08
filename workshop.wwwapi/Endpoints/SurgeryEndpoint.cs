@@ -22,7 +22,12 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointments/{patientId}/{doctorId}", GetAppointment);
-            surgeryGroup.MapPost("appointments", CreateAppointment);
+            surgeryGroup.MapPost("/appointments", CreateAppointment);
+            surgeryGroup.MapGet("/prescription", GetPrescriptions);
+            surgeryGroup.MapGet("/prescription/{id}", GetPrescription);
+            surgeryGroup.MapPost("/prescription", CreatePrescription);
+            surgeryGroup.MapPut("/prescription/{id}", UpdatePrescription);
+            surgeryGroup.MapPost("/medicine", AttachMedicineToPrescription);
         }
 
         //              Patients
@@ -132,6 +137,66 @@ namespace workshop.wwwapi.Endpoints
 
             return TypedResults.Created($"/surgery/appointments/{appointment.PatientId}/{appointment.DoctorId}", 
                 Service.Service.toAppointmentDto(result));
+        }
+
+        //                  Prescriptions
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            IEnumerable<Prescription> prescriptions = await repository.GetPrescriptions();
+
+            return TypedResults.Ok(Service.Service.toPrescriptionDto(prescriptions));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetPrescription(IRepository repository, int id)
+        {
+            Prescription prescription = await repository.GetPrescription(id);
+            if ( prescription == null ) return TypedResults.NotFound();
+
+            return TypedResults.Ok(Service.Service.toPrescriptionDto(prescription));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, PrescriptionPost prescriptionPost)
+        {
+            if ( await repository.GetAppointment(prescriptionPost.PatientId, prescriptionPost.DoctorId) == null) 
+                return TypedResults.NotFound();
+
+            Prescription prescription = Service.Service.toPrescription(prescriptionPost);
+            var result = await repository.CreatePrescription(prescription);
+
+            return TypedResults.Ok(Service.Service.toPrescriptionDto(result));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> UpdatePrescription(IRepository repository, PrescriptionPost prescriptionPut, int id)
+        {
+            if (await repository.GetAppointment(prescriptionPut.PatientId, prescriptionPut.DoctorId) == null)
+                return TypedResults.NotFound();
+
+            Prescription oldPrescription = await repository.GetPrescription(id);
+            Prescription prescription = Service.Service.toPrescription(oldPrescription, prescriptionPut);
+            var result = await repository.UpdatePrescription(oldPrescription);
+
+            return TypedResults.Ok(Service.Service.toPrescriptionDto(result));
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> AttachMedicineToPrescription(IRepository repository, int prescriptionId, int medicineId)
+        {
+            if (await repository.GetPrescription(prescriptionId) == null) return TypedResults.NotFound();
+            if (await repository.GetMedicine(medicineId) == null) return TypedResults.NotFound();
+            if (await repository.GetMedicinePrescription(prescriptionId, medicineId) != null) return TypedResults.BadRequest();
+
+            PrescriptionMedicine prescriptionMedicine = Service.Service.toPrescriptionMedicine(prescriptionId, medicineId);
+            var result = await repository.GetConnection(prescriptionMedicine);
+            return TypedResults.Ok(Service.Service.toPrescriptionDto(result));
         }
     }
 }

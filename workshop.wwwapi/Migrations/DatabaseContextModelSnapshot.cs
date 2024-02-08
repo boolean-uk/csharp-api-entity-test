@@ -26,17 +26,11 @@ namespace workshop.wwwapi.Migrations
                 {
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
-                        .HasColumnName("doctor_id")
-                        .HasColumnOrder(0);
+                        .HasColumnName("doctor_id");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("integer")
-                        .HasColumnName("patient_id")
-                        .HasColumnOrder(1);
-
-                    b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("booking");
+                        .HasColumnName("patient_id");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp with time zone")
@@ -53,22 +47,19 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateTime = new DateTime(2024, 2, 7, 14, 9, 16, 258, DateTimeKind.Utc).AddTicks(5394)
+                            DateTime = new DateTime(2024, 2, 8, 9, 24, 19, 164, DateTimeKind.Utc).AddTicks(5142)
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 2,
-                            Booking = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateTime = new DateTime(2024, 2, 7, 14, 9, 16, 258, DateTimeKind.Utc).AddTicks(5396)
+                            DateTime = new DateTime(2024, 2, 8, 9, 24, 19, 164, DateTimeKind.Utc).AddTicks(5147)
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 1,
-                            Booking = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateTime = new DateTime(2024, 2, 7, 14, 9, 16, 258, DateTimeKind.Utc).AddTicks(5397)
+                            DateTime = new DateTime(2024, 2, 8, 9, 24, 19, 164, DateTimeKind.Utc).AddTicks(5148)
                         });
                 });
 
@@ -181,28 +172,17 @@ namespace workshop.wwwapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AppointmentDoctorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("AppointmentPatientId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
-                        .HasColumnOrder(0);
+                        .HasColumnName("doctor_id");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("integer")
-                        .HasColumnOrder(1);
+                        .HasColumnName("patient_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppointmentDoctorId", "AppointmentPatientId");
+                    b.HasIndex("PatientId", "DoctorId");
 
                     b.ToTable("prescriptions");
 
@@ -210,7 +190,6 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Limit intake to 1 per day.",
                             DoctorId = 1,
                             PatientId = 1
                         });
@@ -220,13 +199,11 @@ namespace workshop.wwwapi.Migrations
                 {
                     b.Property<int>("PrescriptionId")
                         .HasColumnType("integer")
-                        .HasColumnName("prescription_id")
-                        .HasColumnOrder(0);
+                        .HasColumnName("prescription_id");
 
                     b.Property<int>("MedicineId")
                         .HasColumnType("integer")
-                        .HasColumnName("medicine_id")
-                        .HasColumnOrder(1);
+                        .HasColumnName("medicine_id");
 
                     b.HasKey("PrescriptionId", "MedicineId");
 
@@ -268,9 +245,13 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Prescription", b =>
                 {
-                    b.HasOne("workshop.wwwapi.Models.Appointment", null)
+                    b.HasOne("workshop.wwwapi.Models.Appointment", "Appointment")
                         .WithMany("Prescriptions")
-                        .HasForeignKey("AppointmentDoctorId", "AppointmentPatientId");
+                        .HasForeignKey("PatientId", "DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.PrescriptionMedicine", b =>

@@ -24,14 +24,24 @@ namespace workshop.wwwapi.Service
             PatientDto patientDto = new PatientDto() { FullName = patient.FullName };
             if (patient.Appointments != null)
             {
-                foreach (var appointement in patient.Appointments)
+                foreach (var appointment in patient.Appointments)
                 {
-                    PatientAppointement appointemntDto = new PatientAppointement()
+                    PatientAppointement appointmentDto = new PatientAppointement()
                     {
-                        time = appointement.DateTime,
-                        Doctor = new PatientDoctor() { Name = appointement.Doctor.FullName }
+                        time = appointment.DateTime,
+                        Doctor = new PatientDoctor() { Name = appointment.Doctor.FullName }
                     };
-                    patientDto.Appointements.Add(appointemntDto);
+
+                    appointmentDto.Medicines = appointment.Prescriptions.
+                        SelectMany(p => p.Medicines).ToList().Select(pm =>
+                        new PatientMedicine
+                        {
+                            Name = pm.Medicine.Name,
+                            Instruction = pm.Medicine.Instructions
+                        }
+                    ).ToList();
+
+                    patientDto.Appointements.Add(appointmentDto);
                 }
             }
             return patientDto;
@@ -56,13 +66,17 @@ namespace workshop.wwwapi.Service
             DoctorDto doctorDto = new DoctorDto() { FullName = doctor.FullName };
             if (doctor.Appointments != null)
             {
-                foreach (var appointement in doctor.Appointments)
+                foreach (Appointment appointment in doctor.Appointments)
                 {
                     DoctorAppointement appointemntDto = new DoctorAppointement()
                     {
-                        time = appointement.DateTime,
-                        Patient = new DoctorPatient() { Name = appointement.Patient.FullName }
+                        time = appointment.DateTime,
+                        Patient = new DoctorPatient() { Name = appointment.Patient.FullName }
                     };
+                    appointemntDto.Medicines = appointment.Prescriptions.
+                        SelectMany(p => p.Medicines).ToList().Select(pm => 
+                        new DoctorMedicine { Name = pm.Medicine.Name, 
+                            Instruction = pm.Medicine.Instructions}).ToList();
                     doctorDto.Appointements.Add(appointemntDto);
                 }
             }
@@ -78,24 +92,85 @@ namespace workshop.wwwapi.Service
                 DoctorId = appointmentPost.doctorID
             };
         }
-        public static List<AppointmentDto> toAppointmentDto(List<Appointment> appointements)
+        public static List<AppointmentDto> toAppointmentDto(List<Appointment> appointments)
         {
-            List<AppointmentDto> appointementDtos = new List<AppointmentDto>();
-            foreach( var appointement in appointements )
+            List<AppointmentDto> appointmentDtos = new List<AppointmentDto>();
+            foreach( var appointment in appointments )
             {
-                appointementDtos.Add(toAppointmentDto(appointement));
+                appointmentDtos.Add(toAppointmentDto(appointment));
             }
-            return appointementDtos;
+            return appointmentDtos;
         }
 
-        public static AppointmentDto toAppointmentDto(Appointment appointement)
+        public static AppointmentDto toAppointmentDto(Appointment appointment)
         {
-            AppointmentDto appointementDto = new AppointmentDto() { 
-                dateTime = appointement.DateTime, doctor = new AppointmentDoctor() { FullName = appointement.Doctor.FullName }, 
-                patient = new AppointmentPatient() { FullName = appointement.Patient.FullName}
+            AppointmentDto appointmentDto = new AppointmentDto() { 
+                dateTime = appointment.DateTime, Doctor = new AppointmentDoctor() { FullName = appointment.Doctor.FullName }, 
+                Patient = new AppointmentPatient() { FullName = appointment.Patient.FullName}, 
+            };
+            appointmentDto.Medicines = appointment.Prescriptions.
+                SelectMany(p => p.Medicines).ToList().Select(pm =>
+                new AppointmentMedicine
+                {
+                    Name = pm.Medicine.Name, 
+                    Instruction = pm.Medicine.Instructions
+                }
+            ).ToList();
+
+            return appointmentDto;
+        }
+
+        //              prescriptions
+        public static Prescription toPrescription(PrescriptionPost prescriptionDto)
+        {
+            return new Prescription()
+            {
+                DoctorId = prescriptionDto.DoctorId,
+                PatientId = prescriptionDto.PatientId
+            };
+        }
+        public static Prescription toPrescription(Prescription prescription, PrescriptionPost prescriptionDto)
+        {
+            prescription.DoctorId = prescriptionDto.DoctorId;
+            prescription.PatientId = prescriptionDto.PatientId;
+            return prescription;
+        }
+
+        public static List<PrescriptionDto> toPrescriptionDto(IEnumerable<Prescription> prescriptions)
+        {
+            List<PrescriptionDto> prescriptionDtos = new List<PrescriptionDto>();
+            foreach (Prescription prescription in  prescriptions)
+            {
+                prescriptionDtos.Add(toPrescriptionDto(prescription));
+            }
+            return prescriptionDtos;
+        }
+
+        public static PrescriptionDto toPrescriptionDto(Prescription prescription)
+        {
+            PrescriptionDto prescriptionDto = new PrescriptionDto();
+            prescriptionDto.Medicines = prescription.Medicines.Select(m => new PrescriptionMedicineDto
+            {
+                Name = m.Medicine.Name, 
+                Instructions = m.Medicine.Instructions
+            });
+            prescriptionDto.Appointment = new PrescriptionAppointment()
+            {
+                Doctor = new PrescriptionDoctor() { FullName = prescription.Appointment.Doctor.FullName },
+                Patient = new PrescriptionPatient() { FullName = prescription.Appointment.Patient.FullName }, 
+                DateTime = prescription.Appointment.DateTime
             };
 
-            return appointementDto;
+            return prescriptionDto;
+        }
+
+        public static PrescriptionMedicine toPrescriptionMedicine(int prescriptionId, int medicineId)
+        {
+            return new PrescriptionMedicine()
+            {
+                PrescriptionId = prescriptionId,
+                MedicineId = medicineId
+            };
         }
     }
 }

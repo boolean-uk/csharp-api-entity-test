@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using workshop.wwwapi.Models;
 
@@ -18,8 +17,24 @@ namespace workshop.wwwapi.Data
         {
             //TODO: Appointment Key etc.. Add Here
 
-            modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId });
+            /*            modelBuilder.Entity<Doctor>().HasMany(d => d.Patients).
+                            WithMany(p => p.Doctors).UsingEntity<Appointment>();*/
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId } );
+            modelBuilder.Entity<Prescription>().HasOne(p => p.Appointment).WithMany(a => a.Prescriptions).
+                HasForeignKey(e => new { e.PatientId, e.DoctorId });
+            modelBuilder.Entity<Prescription>().HasMany(p => p.Medicines).
+                WithOne(m => m.Prescription);
             modelBuilder.Entity<PrescriptionMedicine>().HasKey(p => new { p.PrescriptionId, p.MedicineId });
+
+/*            modelBuilder.Entity<Doctor>().Navigation(d => d.Appointments).AutoInclude();
+            modelBuilder.Entity<Patient>().Navigation(p => p.Appointments).AutoInclude();
+            modelBuilder.Entity<Appointment>().Navigation(a => a.Patient).AutoInclude();
+            modelBuilder.Entity<Appointment>().Navigation(a => a.Doctor).AutoInclude();
+            modelBuilder.Entity<Appointment>().Navigation(a => a.Prescriptions).AutoInclude();
+            modelBuilder.Entity<Prescription>().Navigation(p => p.Medicines).AutoInclude();
+            modelBuilder.Entity<PrescriptionMedicine>().Navigation(pm => pm.Medicine).AutoInclude();*/
+
+
 
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(new List<Patient>()
@@ -45,7 +60,7 @@ namespace workshop.wwwapi.Data
             });
             modelBuilder.Entity<Prescription>().HasData(new List<Prescription>()
             {
-                new Prescription(){ Id = 1, DoctorId = 1, PatientId = 1, Description = "Limit intake to 1 per day."}
+                new Prescription(){ Id = 1, DoctorId = 1, PatientId = 1}
             });
             modelBuilder.Entity<PrescriptionMedicine>().HasData(new List<PrescriptionMedicine>()
             {

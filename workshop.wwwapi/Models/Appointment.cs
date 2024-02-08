@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
@@ -7,15 +8,13 @@ namespace workshop.wwwapi.Models
     [Table("appointment")]
     public class Appointment
     {
-        [Column("booking")]
-        public DateTime Booking { get; set; }
 //        [Column("doctor_id")]
 //        [ForeignKey("Doctor")]
-        [Key, Column("doctor_id", Order = 0), ForeignKey("Doctor")]
+        [Column("doctor_id"), ForeignKey("Doctor")]
         public int DoctorId { get; set; }
         //        [Column("patient_id")]
         //        [ForeignKey("Patient")]
-        [Key, Column("patient_id", Order = 1), ForeignKey("Patient")]
+        [Column("patient_id"), ForeignKey("Patient")]
         public int PatientId { get; set; }
 
         [Column("appointment_date")]
