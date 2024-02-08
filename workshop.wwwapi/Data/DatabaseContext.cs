@@ -17,8 +17,6 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            //modelBuilder.Entity<Appointment>().HasKey(k => new { k.Id, k.DoctorId, k.PatientId } );
-
             modelBuilder.Entity<Appointment>()
                 .HasKey(k => new { k.Id });
 
@@ -50,19 +48,7 @@ namespace workshop.wwwapi.Data
                 .HasOne(pm => pm.Medicine)
                 .WithMany(m => m.PrescriptionMedicines)
                 .HasForeignKey(pm => pm.MedicineId);
-            /*modelBuilder.Entity<PrescriptionMedicine>()
-            .HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
-
-            modelBuilder.Entity<PrescriptionMedicine>()
-                .HasOne(pm => pm.Prescription)
-                .WithMany(p => p.PrescriptionMedicines)
-                .HasForeignKey(pm => pm.PrescriptionId);
-
-            modelBuilder.Entity<PrescriptionMedicine>()
-                .HasOne(pm => pm.Medicine)
-                .WithMany(m => m.PrescriptionMedicines)
-                .HasForeignKey(pm => pm.MedicineId);
-            */
+            
 
 
             //TODO: Seed Data Here
@@ -108,14 +94,14 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Prescription>().HasData(
                 new Prescription { PrescriptionId = 1, AppointmentId = 1 },
                 new Prescription { PrescriptionId = 2, AppointmentId = 2 }
-            // Add more prescriptions as needed
+
             );
 
             modelBuilder.Entity<PrescriptionMedicine>().HasData(
                 new PrescriptionMedicine { PrescriptionId = 1, MedicineId = 1, Quantity = 2, Notes = "Take with food" },
                 new PrescriptionMedicine { PrescriptionId = 1, MedicineId = 2, Quantity = 1, Notes = "Before bedtime" },
                 new PrescriptionMedicine { PrescriptionId = 2, MedicineId = 2, Quantity = 3, Notes = "Twice a day" }
-            // Add more prescription medicines as needed
+
             );
 
 

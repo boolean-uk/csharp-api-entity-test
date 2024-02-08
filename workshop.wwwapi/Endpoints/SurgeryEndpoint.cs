@@ -9,10 +9,10 @@ namespace workshop.wwwapi.Endpoints
 
     
 
-    public static class SurgeryEndpoint
+    public static class SurgeryEndApi
     {
         //TODO:  add additional endpoints in here according to the requirements in the README.md 
-        public static void ConfigurePatientEndpoint(this WebApplication app)
+        public static void ConfigurePatientApi(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
 
