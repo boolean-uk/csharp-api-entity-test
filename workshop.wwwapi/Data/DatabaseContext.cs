@@ -37,12 +37,12 @@ namespace workshop.wwwapi.Data
             DateTime utc = DateTime.Now.ToUniversalTime();
             DateTime utc2 = DateTime.Now.AddDays( 1 ).ToUniversalTime();
             List<Appointment> appointments = new List<Appointment>();
-            appointments.Add(new Appointment { Booking = utc, DoctorId = 1, PatientId = 1 });
-            appointments.Add(new Appointment { Booking = utc, DoctorId = 2, PatientId = 5 });
-            appointments.Add(new Appointment { Booking = utc, DoctorId = 3, PatientId = 4 });
-            appointments.Add(new Appointment { Booking = utc2, DoctorId = 1, PatientId = 2 });
-            appointments.Add(new Appointment { Booking = utc2, DoctorId = 2, PatientId = 4 });
-            appointments.Add(new Appointment { Booking = utc2, DoctorId = 3, PatientId = 3 });
+            appointments.Add(new Appointment {Booking = utc, DoctorId = 1, PatientId = 1 });
+            appointments.Add(new Appointment {Booking = utc, DoctorId = 2, PatientId = 5 });
+            appointments.Add(new Appointment {Booking = utc, DoctorId = 3, PatientId = 4 });
+            appointments.Add(new Appointment {Booking = utc2, DoctorId = 1, PatientId = 2 });
+            appointments.Add(new Appointment {Booking = utc2, DoctorId = 2, PatientId = 4 });
+            appointments.Add(new Appointment {Booking = utc2, DoctorId = 3, PatientId = 3 });
 
             modelBuilder.Entity<Appointment>().HasData(appointments);
         }

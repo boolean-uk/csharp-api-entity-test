@@ -8,8 +8,10 @@ namespace workshop.wwwapi.Repository
         Task<Patient?> GetPatient(int id);
         Task<Patient?> CreatePatient(string name);
         Task<IEnumerable<Doctor>> GetDoctors();
+        Task<Doctor?> GetDoctor(int id);
+        Task<Doctor?> CreateDoctor(string name);
         Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
-
-
+        Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id);
+        Task<Appointment> CreateAppointment(int DoctorId, int PatientId);
     }
 }

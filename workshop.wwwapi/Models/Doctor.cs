@@ -3,6 +3,7 @@
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
+    public record CreateDoctorPayload(string FullName);
     [Table("doctors")]
     public class Doctor
     {
