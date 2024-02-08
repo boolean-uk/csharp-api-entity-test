@@ -1,33 +1,30 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using workshop.wwwapi.Models;
 
 namespace wwwapi.DTO
 {
     public class PatientReturnDTO
     {
-
         public int Id { get; set; }
 
         public string FullName { get; set; }
 
         public List<AppointmentDTO> Appointments { get; set; } = new List<AppointmentDTO>();
-        public PatientReturnDTO(Patient patient) {
-            Id=patient.Id;
-            FullName=patient.FullName;
 
-            foreach(Appointment a in patient.Appointments)
+        public PatientReturnDTO(Patient patient)
+        {
+            Id = patient.Id;
+            FullName = patient.FullName;
+
+            foreach (Appointment a in patient.Appointments)
             {
-                if(a != null) {Appointments.Add(new AppointmentDTO(a)); }
-                
+                if (a != null) { Appointments.Add(new AppointmentDTO(a)); }
             }
-        
         }
 
-        static public List<PatientReturnDTO> ListOfPatients( List<Patient> patients)
+        public static List<PatientReturnDTO> ListOfPatients(List<Patient> patients)
         {
-            List < PatientReturnDTO > patientReturnDTOs = new List < PatientReturnDTO >();
-            foreach(Patient patient in patients)
+            List<PatientReturnDTO> patientReturnDTOs = new List<PatientReturnDTO>();
+            foreach (Patient patient in patients)
             {
                 patientReturnDTOs.Add(new PatientReturnDTO(patient));
             }
@@ -37,17 +34,14 @@ namespace wwwapi.DTO
 
     public class AppointmentDTO
     {
-
-       public DateTime Booking { get; set; }
+        public DateTime Booking { get; set; }
         public DoctorDTO doctor { get; set; }
+
         public AppointmentDTO(Appointment a)
         {
-
             Booking = a.Booking;
-            if(doctor!= null) {doctor = new DoctorDTO(a.Doctor); }
-            
+            if (doctor != null) { doctor = new DoctorDTO(a.Doctor); }
         }
-
     }
 
     public class DoctorDTO
@@ -57,7 +51,6 @@ namespace wwwapi.DTO
 
         public DoctorDTO(Doctor d)
         {
-
             Id = d.Id;
             FullName = d.FullName;
         }

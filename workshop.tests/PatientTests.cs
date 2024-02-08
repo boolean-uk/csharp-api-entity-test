@@ -4,12 +4,12 @@ using System.Text;
 using workshop.wwwapi.Endpoints;
 using wwwapi.DTO;
 
-
 namespace workshop.tests;
 
 public class Tests
 {
-    HttpClient client;
+    private HttpClient client;
+
     [SetUp]
     public void setup()
     {
@@ -22,25 +22,25 @@ public class Tests
     {
         // Arrange
 
-
         // Act
         var response = await client.GetAsync("/surgery/patients");
         var responseData = await response.Content.ReadAsStringAsync();
         List<PatientReturnDTO> PatientDTO = JsonConvert.DeserializeObject<List<PatientReturnDTO>>(responseData);
-        
-        //Can i access the data in some way??
 
+        //Can i access the data in some way??
 
         // Assert
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
         Assert.That(responseData, Is.EqualTo(null));
     }
+
     [Test]
     public async Task GetPatientsById_ReturnsOK()
     {
         var response = await client.GetAsync("/surgery/patients/1");
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
     }
+
     [Test]
     public async Task CreatePatient_ReturnsOK()
     {
@@ -65,5 +65,4 @@ public class Tests
         var response = await client.GetAsync("/surgery/appointmentsbydoctor/1");
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
     }
-
 }

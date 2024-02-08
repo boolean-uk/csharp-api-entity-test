@@ -5,12 +5,12 @@ using wwwapi.DTO;
 
 namespace workshop.wwwapi.Endpoints
 {
-    public record patientPayload(string full_name);
+    public record PrescriptionPayload(int prescriptionId, List<int> MedicineIds);
 
-    public static class SurgeryEndpoint
+    public static class PrescriptionEndpoint
     {
         //TODO:  add additional endpoints in here according to the requirements in the README.md
-        public static void ConfigurePatientEndpoint(this WebApplication app)
+        public static void ConfigurePrescriptionEndpoint(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
 

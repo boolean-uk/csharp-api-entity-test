@@ -9,11 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddScoped<IRepository,Repository>();
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new JsonDateTimeConverter());
-});
+builder.Services.AddScoped<IRepository, Repository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,4 +24,6 @@ app.UseHttpsRedirection();
 app.ConfigurePatientEndpoint();
 app.Run();
 
-public partial class Program { } // needed for testing - please ignore
+
+public partial class Program
+{ } // needed for testing - please ignore
