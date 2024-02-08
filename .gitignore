@@ -483,9 +483,13 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-/workshop.wwwapi/appsettings.json
-/workshop.wwwapi/appsettings.Development.json
+
+
+
+#New added ignores
+*/**/appsettings.json
+*/**/appsettings.Development.json
 */**/bin/Debug   
 */**/bin/Release   
 */**/obj/Debug   
-*/**/obj/Release   
+*/**/obj/Release
