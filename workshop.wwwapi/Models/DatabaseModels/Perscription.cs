@@ -6,7 +6,6 @@ namespace workshop.wwwapi.Models.DatabaseModels
     [Table("perscriptions")]
     public class Perscription
     {
-        [Key]
         [Column("id")]
         public int Id { get; set; }
 

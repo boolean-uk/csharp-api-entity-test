@@ -20,7 +20,6 @@ namespace workshop.wwwapi.Data
 
             //TODO: Appointment Key etc.. Add Here
             modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId });
- //           modelBuilder.Entity<Appointment>().HasOne(a => a.Perscription);
             modelBuilder.Entity<Patient>().HasMany(x => x.Appointments).WithOne(x => x.Patient).HasForeignKey(x => x.PatientId);
             modelBuilder.Entity<Doctor>().HasMany(x => x.Appointments).WithOne(x => x.Doctor).HasForeignKey(x => x.DoctorId);
             modelBuilder.Entity<Perscription>().HasMany(x => x.Medicines).WithMany(x => x.Perscriptions).UsingEntity<MedicinePerscription>();
@@ -30,7 +29,10 @@ namespace workshop.wwwapi.Data
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(seeder.Patients);
             modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
+            modelBuilder.Entity<Medicine>().HasData(seeder.Medicines);
+            modelBuilder.Entity<Perscription>().HasData(seeder.Perscriptions);
             modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
+            modelBuilder.Entity<MedicinePerscription>().HasData(seeder.MedicinePerscriptions);
             
 
         }
