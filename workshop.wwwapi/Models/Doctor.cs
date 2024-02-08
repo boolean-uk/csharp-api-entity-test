@@ -13,6 +13,7 @@ namespace workshop.wwwapi.Models
         [Column("name")]
         public string FullName { get; set; }
         public List<Appointment> Appointments { get; set; } = new();
+        public List<Prescription> Prescriptions { get; set; } = new();
     }
 
     public class DoctorDisplayDto

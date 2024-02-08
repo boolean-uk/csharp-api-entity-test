@@ -5,6 +5,12 @@ using System.Text.Json.Serialization;
 
 namespace workshop.wwwapi.Models
 {
+    public enum AppointmentType
+    {
+        InPerson,
+        Online
+    }
+
     //TODO: decorate class/columns accordingly
     [Table("appointments")]
     public class Appointment
@@ -15,6 +21,7 @@ namespace workshop.wwwapi.Models
         public int PatientId { get; set; }
         [Column("booking")]
         public DateTime Booking { get; set; }
+        public AppointmentType Type { get; set; }
         public Patient Patient { get; set; } 
         public Doctor Doctor { get; set; } 
 
@@ -24,6 +31,7 @@ namespace workshop.wwwapi.Models
     public class DoctorAppointmentDto
     {
         public DateTime Booking { get; set; }
+        public AppointmentType Type { get; set; }
 
         public PatientDisplayDto Patient { get; set; }
     }
@@ -32,6 +40,7 @@ namespace workshop.wwwapi.Models
     {
         public PatientDisplayDto Patient { get; set; }
         public DateTime Booking { get; set; }
+        public AppointmentType Type { get; set; }
         [JsonIgnore]
         public int DoctorId { get; set; }
         public DoctorDisplayDto Doctor { get; set; }
@@ -42,6 +51,7 @@ namespace workshop.wwwapi.Models
     {
         public DoctorDisplayDto Doctor { get; set; }
         public DateTime Booking { get; set; }
+        public AppointmentType Type { get; set; }
         [JsonIgnore]
         public int PatientId { get; set; }
         public PatientDisplayDto Patient { get; set; }

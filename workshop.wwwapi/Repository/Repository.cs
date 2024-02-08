@@ -124,6 +124,7 @@ namespace workshop.wwwapi.Repository
                 patient.FullName = getPatient.FullName;
 
                 appointment.Booking = getAppointment.Booking;
+                appointment.Type = getAppointment.Type;
                 appointment.Doctor = doctor;
                 appointment.Patient = patient;
 
@@ -153,6 +154,7 @@ namespace workshop.wwwapi.Repository
             patient.FullName = getPatient.FullName;
 
             appointment.Booking = getAppointment.Booking;
+            appointment.Type = getAppointment.Type;
             appointment.Doctor = doctor;
             appointment.Patient = patient;
 
@@ -177,6 +179,7 @@ namespace workshop.wwwapi.Repository
                 PatientDisplayDto patientDto = new();
 
                 appointment.Booking = getAppointment.Booking;
+                appointment.Type = getAppointment.Type;
                 appointment.Doctor = doctor;
 
                 Patient patient = patients.FirstOrDefault(p => p.Id == getAppointment.PatientId);
@@ -209,6 +212,7 @@ namespace workshop.wwwapi.Repository
                 patient.FullName = getPatient.FullName;
 
                 appointment.Booking = getAppointment.Booking;
+                appointment.Type = getAppointment.Type;
                 appointment.Doctor = doctor;
                 appointment.Patient = patient;
 
