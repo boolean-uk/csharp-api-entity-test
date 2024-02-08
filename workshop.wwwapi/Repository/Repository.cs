@@ -70,5 +70,7 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
         }
 
+        
+
     }
 }

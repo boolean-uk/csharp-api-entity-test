@@ -88,12 +88,7 @@ namespace workshop.wwwapi.Endpoints
            
         }
 
-        private static async Task<IResult> AttachPrescriptionToAppointment()
-        {
-
-
-            throw new NotImplementedException();
-        }
+        
 
 
         
