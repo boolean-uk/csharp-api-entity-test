@@ -12,7 +12,7 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240208074819_DbMigration")]
+    [Migration("20240208123655_DbMigration")]
     partial class DbMigration
     {
         /// <inheritdoc />
@@ -24,6 +24,56 @@ namespace workshop.wwwapi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("MedicinePrescription", b =>
+                {
+                    b.Property<int>("MedicinesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PrescriptionsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MedicinesId", "PrescriptionsId");
+
+                    b.HasIndex("PrescriptionsId");
+
+                    b.ToTable("PrescriptionMedicines", (string)null);
+                });
+
+            modelBuilder.Entity("Prescription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("AppointmentBooking")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("AppointmentDoctorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("AppointmentPatientId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentBooking", "AppointmentPatientId", "AppointmentDoctorId");
+
+                    b.ToTable("prescriptions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1
+                        },
+                        new
+                        {
+                            Id = 2
+                        });
+                });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
@@ -39,6 +89,10 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
 
+                    b.Property<int?>("PrescriptionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("prescription_id");
+
                     b.HasKey("Booking", "PatientId", "DoctorId");
 
                     b.HasIndex("DoctorId");
@@ -50,49 +104,49 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            Booking = new DateTime(2024, 2, 8, 7, 48, 19, 502, DateTimeKind.Utc).AddTicks(8313),
+                            Booking = new DateTime(2024, 2, 8, 12, 36, 55, 15, DateTimeKind.Utc).AddTicks(2412),
                             PatientId = 1,
                             DoctorId = 1
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 8, 7, 48, 19, 502, DateTimeKind.Utc).AddTicks(8313),
+                            Booking = new DateTime(2024, 2, 8, 12, 36, 55, 15, DateTimeKind.Utc).AddTicks(2412),
                             PatientId = 2,
                             DoctorId = 1
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 8, 8, 48, 19, 502, DateTimeKind.Utc).AddTicks(8313),
+                            Booking = new DateTime(2024, 2, 8, 13, 36, 55, 15, DateTimeKind.Utc).AddTicks(2412),
                             PatientId = 1,
                             DoctorId = 3
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 8, 9, 18, 19, 502, DateTimeKind.Utc).AddTicks(8313),
+                            Booking = new DateTime(2024, 2, 8, 14, 6, 55, 15, DateTimeKind.Utc).AddTicks(2412),
                             PatientId = 2,
                             DoctorId = 1
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 8, 9, 48, 19, 502, DateTimeKind.Utc).AddTicks(8313),
+                            Booking = new DateTime(2024, 2, 8, 14, 36, 55, 15, DateTimeKind.Utc).AddTicks(2412),
                             PatientId = 1,
                             DoctorId = 2
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 8, 10, 18, 19, 502, DateTimeKind.Utc).AddTicks(8313),
+                            Booking = new DateTime(2024, 2, 8, 15, 6, 55, 15, DateTimeKind.Utc).AddTicks(2412),
                             PatientId = 3,
                             DoctorId = 3
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 8, 10, 48, 19, 502, DateTimeKind.Utc).AddTicks(8313),
+                            Booking = new DateTime(2024, 2, 8, 15, 36, 55, 15, DateTimeKind.Utc).AddTicks(2412),
                             PatientId = 2,
                             DoctorId = 2
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 8, 11, 18, 19, 502, DateTimeKind.Utc).AddTicks(8313),
+                            Booking = new DateTime(2024, 2, 8, 16, 6, 55, 15, DateTimeKind.Utc).AddTicks(2412),
                             PatientId = 3,
                             DoctorId = 2
                         });
@@ -134,6 +188,50 @@ namespace workshop.wwwapi.Migrations
                         });
                 });
 
+            modelBuilder.Entity("workshop.wwwapi.Models.Medicine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Instructions")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("instructions");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("medicines");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Instructions = "Take with water",
+                            Name = "Medicine A",
+                            Quantity = 10
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Instructions = "Take before meals",
+                            Name = "Medicine B",
+                            Quantity = 20
+                        });
+                });
+
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
                 {
                     b.Property<int>("Id")
@@ -170,6 +268,28 @@ namespace workshop.wwwapi.Migrations
                         });
                 });
 
+            modelBuilder.Entity("MedicinePrescription", b =>
+                {
+                    b.HasOne("workshop.wwwapi.Models.Medicine", null)
+                        .WithMany()
+                        .HasForeignKey("MedicinesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prescription", null)
+                        .WithMany()
+                        .HasForeignKey("PrescriptionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prescription", b =>
+                {
+                    b.HasOne("workshop.wwwapi.Models.Appointment", null)
+                        .WithMany("Prescriptions")
+                        .HasForeignKey("AppointmentBooking", "AppointmentPatientId", "AppointmentDoctorId");
+                });
+
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
                     b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
@@ -187,6 +307,11 @@ namespace workshop.wwwapi.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
+                {
+                    b.Navigation("Prescriptions");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>

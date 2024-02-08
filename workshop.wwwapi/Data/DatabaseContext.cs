@@ -7,12 +7,14 @@ namespace workshop.wwwapi.Data
     public class DatabaseContext : DbContext
     {
         private string _connectionString;
+
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
             this.Database.EnsureCreated();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Appointment>().HasKey(e => new { e.Booking, e.PatientId, e.DoctorId });
@@ -27,6 +29,20 @@ namespace workshop.wwwapi.Data
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId);
 
+            modelBuilder.Entity<Prescription>()
+                .HasMany(p => p.Medicines)
+                .WithMany(m => m.Prescriptions)
+                .UsingEntity(j => j.ToTable("PrescriptionMedicines"));
+
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine() { Id = 1, Name = "Medicine A", Quantity = 10, Instructions = "Take with water" },
+                new Medicine() { Id = 2, Name = "Medicine B", Quantity = 20, Instructions = "Take before meals" }
+                );
+
+            modelBuilder.Entity<Prescription>().HasData(
+                new Prescription() { Id = 1 },
+                new Prescription() { Id = 2 }
+                );
 
             modelBuilder.Entity<Patient>().HasData(
                 new Patient() { Id = 1, FullName = "Nigel"}, 
@@ -54,6 +70,7 @@ namespace workshop.wwwapi.Data
                 new Appointment() { Booking = now + 7 * timeDifference, DoctorId = 2, PatientId = 3 }
                 );
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
@@ -64,5 +81,7 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
     }
 }

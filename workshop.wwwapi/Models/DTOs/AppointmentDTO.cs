@@ -7,7 +7,9 @@
         public string DoctorFullName { get; set; }
         public int PatientId { get; set; }
         public string PatientFullName { get; set; }
+        public List<PrescriptionDTOLess> Prescriptions { get; set; }
     }
+
     public class DoctorAppointmentDTO
     {
         public DateTime Booking { get; set; }

@@ -125,12 +125,25 @@ namespace workshop.wwwapi.Repository
         }
 
         //-------------- Appointment -------------------
-        public async Task<IEnumerable<Appointment>> GetAppointments()
+        public async Task<IEnumerable<AppointmentDTO>> GetAppointments()
         {
-            return await _databaseContext.Appointments
-                  .Include(a => a.Doctor)
-                  .Include(a => a.Patient)
-                  .ToListAsync();
+            var appointments = await _databaseContext.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .Include(a => a.Prescriptions)
+                .ToListAsync();
+
+            var appointmentDTOs = appointments.Select(a => new AppointmentDTO
+            {
+                Booking = a.Booking,
+                DoctorId = a.DoctorId,
+                DoctorFullName = a.Doctor.FullName,
+                PatientId = a.PatientId,
+                PatientFullName = a.Patient.FullName,
+                Prescriptions = a.Prescriptions.Select(p => new PrescriptionDTOLess { Id = p.Id }).ToList()
+            });
+
+            return appointmentDTOs;
         }
 
         public async Task<IEnumerable<AppointmentDTO>> GetAppointmentsByDoctor(int id)
@@ -138,17 +151,21 @@ namespace workshop.wwwapi.Repository
             var appointments = await _databaseContext.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
+                .Include(a => a.Prescriptions)
                 .Where(a => a.DoctorId == id)
-                .Select(a => new AppointmentDTO
-                {
-                    Booking = a.Booking,
-                    DoctorId = a.DoctorId,
-                    DoctorFullName = a.Doctor.FullName,
-                    PatientId = a.PatientId,
-                    PatientFullName = a.Patient.FullName
-                })
                 .ToListAsync();
-            return appointments;
+
+            var appointmentDTOs = appointments.Select(a => new AppointmentDTO
+            {
+                Booking = a.Booking,
+                DoctorId = a.DoctorId,
+                DoctorFullName = a.Doctor.FullName,
+                PatientId = a.PatientId,
+                PatientFullName = a.Patient.FullName,
+                Prescriptions = a.Prescriptions.Select(p => new PrescriptionDTOLess { Id = p.Id }).ToList()
+            });
+
+            return appointmentDTOs;
         }
 
         public async Task<IEnumerable<AppointmentDTO>> GetAppointmentsByPatient(int id)
@@ -156,17 +173,133 @@ namespace workshop.wwwapi.Repository
             var appointments = await _databaseContext.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
+                .Include(a => a.Prescriptions)
                 .Where(a => a.PatientId == id)
-                .Select(a => new AppointmentDTO
-                {
-                    Booking = a.Booking,
-                    DoctorId = a.DoctorId,
-                    DoctorFullName = a.Doctor.FullName,
-                    PatientId = a.PatientId,
-                    PatientFullName = a.Patient.FullName
-                })
                 .ToListAsync();
-            return appointments; 
+
+            var appointmentDTOs = appointments.Select(a => new AppointmentDTO
+            {
+                Booking = a.Booking,
+                DoctorId = a.DoctorId,
+                DoctorFullName = a.Doctor.FullName,
+                PatientId = a.PatientId,
+                PatientFullName = a.Patient.FullName,
+                Prescriptions = a.Prescriptions.Select(p => new PrescriptionDTOLess { Id = p.Id }).ToList()
+            });
+
+            return appointmentDTOs;
+        }
+
+        //-------------------------- Medicine & Prescription -----------------------------
+        public async Task<IEnumerable<MedicineDTO>> GetAllMedicines()
+        {
+            var medicines = await _databaseContext.Medicines
+                .Include(m => m.Prescriptions)
+                .Select(m => new MedicineDTO
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Quantity = m.Quantity,
+                    Instructions = m.Instructions,
+                    Prescriptions = m.Prescriptions.Select(p => new PrescriptionDTOLess
+                    {
+                        Id = p.Id
+                    }).ToList()
+                }).ToListAsync();
+
+            return medicines;
+        }
+
+        public async Task<IEnumerable<PrescriptionDTO>> GetAllPrescriptions()
+        {
+            var prescriptions = await _databaseContext.Prescriptions
+                .Include(p => p.Medicines)
+                .Select(p => new PrescriptionDTO
+                {
+                    Id = p.Id,
+                    Medicines = p.Medicines.Select(m => new MedicineDTOLess
+                    {
+                        Id = m.Id,
+                        Name = m.Name,
+                        Quantity = m.Quantity,
+                        Instructions = m.Instructions
+                    }).ToList()
+                }).ToListAsync();
+
+            return prescriptions;
+        }
+
+        public async Task<Prescription> CreatePrescription(Prescription prescription)
+        {
+            _databaseContext.Prescriptions.Add(prescription);
+            await _databaseContext.SaveChangesAsync(); 
+            return prescription;
+        }
+
+        public async Task<PrescriptionDTO> AddMedicineToPrescription(int medicineId, int prescriptionId)
+        {
+            var medicine = await _databaseContext.Medicines.FindAsync(medicineId);
+            var prescription = await _databaseContext.Prescriptions.FindAsync(prescriptionId);
+
+            if (medicine == null || prescription == null)
+                return null;
+
+            prescription.Medicines.Add(medicine);
+            await _databaseContext.SaveChangesAsync();
+
+            var updatedPrescription = await _databaseContext.Prescriptions
+                .Include(p => p.Medicines)
+                .Where(p => p.Id == prescriptionId)
+                .Select(p => new PrescriptionDTO
+                {
+                    Id = p.Id,
+                    Medicines = p.Medicines.Select(m => new MedicineDTOLess
+                    {
+                        Id = m.Id,
+                        Name = m.Name,
+                        Quantity = m.Quantity,
+                        Instructions = m.Instructions
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+
+            return updatedPrescription;
+        }
+
+        public async Task<AppointmentDTO> AddPrescriptionToAppointment(int doctorId, int patientId, int prescriptionId)
+        {
+            var appointment = await _databaseContext.Appointments
+                .Include(a => a.Prescriptions)
+                .FirstOrDefaultAsync(a => a.DoctorId == doctorId && a.PatientId == patientId);
+
+            var prescription = await _databaseContext.Prescriptions.FindAsync(prescriptionId);
+
+            if (appointment == null || prescription == null)
+                return null;
+
+            appointment.Prescriptions.Add(prescription);
+            await _databaseContext.SaveChangesAsync();
+
+            var updatedAppointment = await _databaseContext.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .Include(a => a.Prescriptions)
+                .FirstOrDefaultAsync(a => a.DoctorId == doctorId && a.PatientId == patientId);
+
+            if (updatedAppointment == null)
+                return null;
+
+            var appointmentDTO = new AppointmentDTO
+            {
+                Booking = updatedAppointment.Booking,
+                DoctorId = updatedAppointment.DoctorId,
+                DoctorFullName = updatedAppointment.Doctor.FullName,
+                PatientId = updatedAppointment.PatientId,
+                PatientFullName = updatedAppointment.Patient.FullName,
+                Prescriptions = updatedAppointment.Prescriptions
+                    .Select(p => new PrescriptionDTOLess { Id = p.Id }).ToList()
+            };
+
+            return appointmentDTO;
         }
     }
 }
