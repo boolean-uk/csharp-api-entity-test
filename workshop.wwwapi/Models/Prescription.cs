@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace workshop.wwwapi.Models
 {
     [Table("perscriptions")]
-    public class Perscription
+    public class Prescription
     {
         [Key]
         [Column("id")]
-        public int PerscriptionId { get; set; }
-        [Column("name")]
-        public string Name { get; set; }
+        public int PrescriptionId { get; set; }
+        [Column("notes")]
+        public string Notes { get; set; }
 
         // foreign keys
         [Column("doctor_id")]
@@ -25,6 +25,6 @@ namespace workshop.wwwapi.Models
         public int AppointmentId { get; set; }
         public Appointment Appointment { get; set; }
 
-        public ICollection<PerscriptionMedicine> PerscriptionMedicines { get; set; }
+        public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; }
     }
 }

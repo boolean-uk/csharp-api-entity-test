@@ -15,7 +15,7 @@ namespace workshop.wwwapi.Models
         [Column("description")]
         public string Description { get; set; } // notes section and how to take it 
 
-        public ICollection<PerscriptionMedicine> PerscriptionMedicine { get; set; }
+        public ICollection<PrescriptionMedicine> PrescriptionMedicine { get; set; }
     }
 
     
