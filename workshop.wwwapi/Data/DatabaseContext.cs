@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.ModelsBase;
 
 namespace workshop.wwwapi.Data
 {
@@ -16,15 +16,20 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.Booking, a.DoctorId, a.PatientId });
+            modelBuilder.Entity<Appointment>().HasOne(a => a.Doctor).WithMany(d => d.Appointments).HasForeignKey(a => a.DoctorId);
+            modelBuilder.Entity<Appointment>().HasOne(a => a.Patient).WithMany(p => p.Appointments).HasForeignKey(a => a.PatientId);
 
-            //TODO: Seed Data Here
+
+            Seeder seeder = new Seeder();
+
+            modelBuilder.Entity<Patient>().HasData(seeder.Patients);
+            modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
+            modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
             
