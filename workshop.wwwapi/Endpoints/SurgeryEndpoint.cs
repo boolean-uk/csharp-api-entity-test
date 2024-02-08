@@ -28,6 +28,8 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointments/by_patient/{id}", GetAppointmentsByPatient);
 
             surgeryGroup.MapGet("/prescription/all", GetPrescriptions);
+            surgeryGroup.MapPost("/prescription/create", CreatePrescription);
+
 
         }
 
@@ -207,35 +209,64 @@ namespace workshop.wwwapi.Endpoints
 
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetPrescriptions(IRepository repository, int id)
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
         {
             var pres = await repository.GetPrescriptions();
-            
+
             List<PrescriptionDTO> presDTOs = new List<PrescriptionDTO>();
 
             foreach (var pre in pres)
             {
                 Doctor doc = await repository.GetDoctorById(pre.DoctorId);
                 Patient pat = await repository.GetPatientById(pre.PatientId);
-                var meds = await repository.GetMedicinePrescriptions();
-                meds = meds.Where(x => x.PrescriptionId == pre.Id);
+                var meds = repository.GetMedicinePrescriptions().Result.Where(x => x.PrescriptionId == pre.Id);
 
                 List<MedicineDTO> medsDTO = new List<MedicineDTO>();
                 foreach (var med in meds)
                 {
+                    var medicine = repository.GetMedicines().Result.FirstOrDefault(x => x.Id == med.MedId);
+
                     medsDTO.Add(new MedicineDTO()
                     {
-                        //TODO GET ALL DATA
+                        Amount = med.MedAmount,
+                        MedName = medicine.MedName
                     });
                 }
 
                 PrescriptionDTO presDTO = new PrescriptionDTO()
                 {
-                    DoctorName = doc.FullName, PatientName = pat.FullName
-                }
+                    DoctorName = doc.FullName, PatientName = pat.FullName, Medicines = medsDTO
+                };
+
+                presDTOs.Add(presDTO);
             }
 
             return TypedResults.Ok(presDTOs);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, CreatePrescriptionDTO makePres)
+        {
+            var meds = await repository.GetMedicines();
+            var docs = await repository.GetDoctorById(makePres.DoctorId);
+            var pati =await  repository.GetPatientById(makePres.PatientId);
+
+            if (meds.Count(x => x.Id == makePres.MedId) < 1 || docs == null || pati == null)
+            {
+                return TypedResults.NotFound("ERROR: Invalid Input Data");
+            }
+
+            Prescription newPrescription = new Prescription()
+                { DoctorId = makePres.DoctorId, PatientId = makePres.PatientId };
+
+            var complete = await repository.CreatePrescription(newPrescription);
+
+            MedicinePrescription newPreMed = new MedicinePrescription()
+                { MedAmount = makePres.MedAmount, MedId = makePres.MedId, PrescriptionId = complete.Id };
+
+            await repository.CreateMedicinePrescription(newPreMed);
+
+            return TypedResults.Ok(complete);
         }
     }
 }
