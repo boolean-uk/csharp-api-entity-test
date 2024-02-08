@@ -1,6 +1,9 @@
+using System.Text.Json.Serialization;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
+using workshop.wwwapi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.AddScoped<IService, Service>();
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
