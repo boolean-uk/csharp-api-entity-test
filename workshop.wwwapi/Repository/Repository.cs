@@ -16,7 +16,7 @@ namespace workshop.wwwapi.Repository
         //Patients
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            return await _databaseContext.Patients.Include(a => a.Appointments).ToListAsync();
+            return await _databaseContext.Patients.Include(a => a.Appointments).Include(p => p.Prescriptions).ToListAsync();
         }
         public async Task<Patient> GetPatient(int id)
         {
@@ -33,7 +33,7 @@ namespace workshop.wwwapi.Repository
         //Doctors
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
-            return await _databaseContext.Doctors.Include(a => a.Appointments).ToListAsync();
+            return await _databaseContext.Doctors.Include(a => a.Appointments).Include(p=> p.Prescriptions).ToListAsync();
         }
         public async Task<Doctor> GetDoctorById(int id)
         {
@@ -68,26 +68,27 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments.Where(p => p.PatientId == id).ToListAsync();
         }
 
+        //Prescription
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions.Include(m => m.Doctor).Include(p => p.Patient).ToListAsync();
+        }
 
-        //Prescriptions
-        //public async Task<IEnumerable<Prescription>> GetPrescriptions()
-        //{
-        //    return await _databaseContext.Prescriptions.ToListAsync();
-        //}
+        public async Task<IEnumerable<PrescriptionMedicine>> GetPrescriptionMedicines()
+        {
+            return await _databaseContext.PrescriptionMedicines
+                .Include(m => m.Medicine)
+                .Include(p => p.Prescription)
+                .Include(d => d.Prescription.Doctor)
+                .Include(p => p.Prescription.Patient)
+                .ToListAsync();
+        }
 
-        //public async Task<Prescription> GetPrescriptionsById(int id)
-        //{
-        //    return await _databaseContext.Prescriptions.FirstAsync(p => p.Id == id);
-        //}
-
-        //public async Task<Prescription> CreatePrescription(Prescription prep)
-        //{
-        //    _databaseContext.Prescriptions.Add(prep);
-        //    _databaseContext.SaveChangesAsync();
-        //    return prep;
-        //}
-
-
-
+        public async Task<PrescriptionMedicine> CreatePrescriptionMedicine(PrescriptionMedicine preMed)
+        {
+            _databaseContext.PrescriptionMedicines.Add(preMed);
+            _databaseContext.SaveChangesAsync();
+            return preMed;
+        }
     }
 }

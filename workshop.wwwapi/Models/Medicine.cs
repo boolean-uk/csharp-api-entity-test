@@ -10,9 +10,6 @@ namespace workshop.wwwapi.Models
         public int Id { get; set; }
         [Column("name")]
         public string Name { get; set; }
-        [Column("quantity")]
-        public int Quantity { get; set; }
-        [ForeignKey("prescriptionId")]
-        public int PrescriptionId { get; set; }
+        
     }
 }

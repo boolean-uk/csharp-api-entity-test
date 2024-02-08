@@ -24,7 +24,8 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointments/{id}", GetAppointmentsById);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctorId);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatientId);
-            //surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            surgeryGroup.MapPost("/prescriptions/{id}", CreatePrescription);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -239,27 +240,49 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(appointments);
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public static async Task<IResult> GetPrescriptions(IRepository repository)
-        //{
-        //    var prescriptions = await repository.GetPrescriptions();
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            var scriptMeds = await repository.GetPrescriptionMedicines();
 
-        //    List<PrescriptionDto> preDtos = new List<PrescriptionDto>();
+            List<PrescriptionDto> preDtos = new List<PrescriptionDto>();
 
-        //    foreach (var prescription in prescriptions)
-        //    {
-        //        PrescriptionDto script = new PrescriptionDto()
-        //        {
-        //            Instruction = prescription.Instruction,
-        //            DocotrId = prescription.DocotrId,
-        //            PatientId = prescription.PatientId,
-        //            medicineId = prescription.medicineId
-        //        };
-        //        preDtos.Add(script);
-        //    }
+            foreach (var prescription in scriptMeds)
+            {
+                PrescriptionDto script = new PrescriptionDto()
+                {
 
-            
-        //    return TypedResults.Ok(preDtos);
-        //}
+                    DoctorId = prescription.Prescription.DoctorId,
+                    DoctorName = prescription.Prescription.Doctor.FullName,
+                    PatientId = prescription.Prescription.PatientId,
+                    PatientName = prescription.Prescription.Patient.FullName,
+                    Instructions = prescription.Instruction,
+                    Medicine = prescription.Medicine.Name,
+                    Quantity = prescription.Quantity
+                };
+                preDtos.Add(script);
+            }
+            return TypedResults.Ok(preDtos);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, PrescriptionMedicine prepMed)
+        {
+            var created = await repository.CreatePrescriptionMedicine(prepMed);
+
+            PrescriptionMedsDto prescriptionDTO = new PrescriptionMedsDto()
+            {
+                DoctorId = prepMed.Prescription.DoctorId,
+                DoctorName = prepMed.Prescription.Doctor.FullName,
+                PatientId = prepMed.Prescription.PatientId,
+                PatientName = prepMed.Prescription.Patient.FullName,
+                MedicineName = prepMed.Medicine.Name,
+                Instructions = prepMed.Medicine.Name,
+                Quantity = prepMed.Quantity
+            };
+            return TypedResults.Ok(prescriptionDTO);
+        }
+
+
     }
 }

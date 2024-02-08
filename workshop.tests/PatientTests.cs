@@ -46,5 +46,45 @@ public class Tests
         Assert.That(patients.Count(), Is.EqualTo(2));
     }
 
-   
+    [Test]
+    public async Task DoctorEndpointStatus()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("surgery/doctors");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    }
+
+    [Test]
+    public async Task AppointmentEndpointStatus()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("surgery/appointments");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    }
+
+    [Test]
+    public async Task PrescriptionEndpointStatus()
+    {
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("surgery/prescriptions");
+
+        // Assert
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    }
 }

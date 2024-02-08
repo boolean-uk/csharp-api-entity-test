@@ -15,9 +15,7 @@ namespace workshop.wwwapi.Models
 
         [Column("Appointments")]
         public IEnumerable<Appointment> Appointments { get; set; } = new List<Appointment>();
-
-        //[Column("prescriptionId")]
-        //public int prescriptionId { get; set; }
+        public ICollection<Prescription> Prescriptions { get; set; }
 
     }
 }

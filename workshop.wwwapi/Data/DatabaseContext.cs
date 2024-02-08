@@ -18,13 +18,13 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Patient>();
-            modelBuilder.Entity<Doctor>();
+            modelBuilder.Entity<Patient>(); //.HasMany(e => e.Prescriptions).WithOne(e => e.Patient).HasForeignKey(e => e.PatientId);
+            modelBuilder.Entity<Doctor>(); //.HasMany(e => e.Prescriptions).WithOne(e => e.Doctor).HasForeignKey(e => e.DoctorId);
 
             modelBuilder.Entity<Appointment>().HasKey(a => new { a.PatientId, a.DoctorId });
 
-            modelBuilder.Entity<Medicine>();
-            modelBuilder.Entity<Prescription>();
+            modelBuilder.Entity<PrescriptionMedicine>().HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
+
 
 
 
@@ -40,11 +40,16 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>().HasData(new Appointment { Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 2});
             modelBuilder.Entity<Appointment>().HasData(new Appointment { Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 1});
 
-            //modelBuilder.Entity<Medicine>().HasData(new Medicine {  Id = 1, Name = "Aduvanze", Quantity = 1, PrescriptionId = 1});
-            //modelBuilder.Entity<Medicine>().HasData(new Medicine {  Id = 2, Name = "M&M", Quantity = 100, PrescriptionId = 2 });
+            modelBuilder.Entity<Medicine>().HasData(new Medicine {  Id = 1, Name = "Aduvanz"});
+            modelBuilder.Entity<Medicine>().HasData(new Medicine {  Id = 2, Name = "M&M"});
 
-            //modelBuilder.Entity<Prescription>().HasData(new Prescription { Id = 1, Instruction = "Take each morning", medicineId = 1, DocotrId = 1 });
-            //modelBuilder.Entity<Prescription>().HasData(new Prescription { Id = 2, Instruction = "Take each morning", medicineId = 2, DocotrId = 2 });
+            modelBuilder.Entity<Prescription>().HasData(new Prescription { Id = 1, DoctorId = 1, PatientId = 1 });
+            modelBuilder.Entity<Prescription>().HasData(new Prescription { Id = 2, DoctorId = 2, PatientId = 2});
+            modelBuilder.Entity<Prescription>().HasData(new Prescription { Id = 3, DoctorId = 2, PatientId = 1});
+
+            modelBuilder.Entity<PrescriptionMedicine>().HasData(new PrescriptionMedicine { Id = 1, Instruction = "Take each morning", MedicineId = 1, Quantity = 100, PrescriptionId = 1});
+            modelBuilder.Entity<PrescriptionMedicine>().HasData(new PrescriptionMedicine { Id = 2, Instruction = "Take each morning", MedicineId = 1, Quantity = 20, PrescriptionId = 2});
+            modelBuilder.Entity<PrescriptionMedicine>().HasData(new PrescriptionMedicine { Id = 3, Instruction = "Take each morning", MedicineId = 2, Quantity = 50, PrescriptionId = 1});
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -59,7 +64,8 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
-        //public DbSet<Medicine> Medicines { get; set; }
-        //public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionMedicines { get; set; }
     }
 }

@@ -17,11 +17,8 @@ namespace workshop.wwwapi.Models
         [Column("Appointments")]
         [JsonIgnore]
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        [JsonIgnore]
+        public ICollection<Prescription> Prescriptions { get; set; } 
 
-        //[Column("prescriptionId")]
-        //public int prescriptionId { get; set; }
-
-        //[Column("prescription")]
-        //public Prescription Prescription { get; set; }
     }
 }

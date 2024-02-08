@@ -8,17 +8,13 @@ namespace workshop.wwwapi.Models
     {
         [Key]
         public int Id { get; set; }
-
-        [Column("instruction")]
-        public string Instruction { get; set; }
-
-        [ForeignKey(nameof(DocotrId))]
-        public int DocotrId { get; set; }
+        
+        [ForeignKey(nameof(DoctorId))]
+        public int DoctorId { get; set; }
+        public Doctor Doctor { get; set; }
 
         [ForeignKey(nameof(PatientId))]
         public int PatientId { get; set; }
-
-        [ForeignKey("medicineId")]
-        public int medicineId { get; set; }
+        public Patient Patient { get; set; }
     }
 }
