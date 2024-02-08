@@ -47,7 +47,8 @@ namespace workshop.wwwapi.Endpoints
                         Booking = x.Booking,
                         DoctorId = x.DoctorId,
                         DoctorName = x.Doctor.FullName,
-                        
+                        AppointmentType = x.AppointmentType.ToString(),
+
 
                     }).ToList(),
                 };
@@ -84,6 +85,7 @@ namespace workshop.wwwapi.Endpoints
                     Booking = x.Booking,
                     DoctorId = x.DoctorId,
                     DoctorName = x.Doctor.FullName,
+                    AppointmentType = x.AppointmentType.ToString(),
                 }).ToList(),
             };
 
@@ -114,6 +116,7 @@ namespace workshop.wwwapi.Endpoints
                         Booking = x.Booking,
                         PatientId = x.PatientId,
                         PatientName = x.Patient.FullName,
+                        AppointmentType = x.AppointmentType.ToString(),
 
                     }).ToList(),
                 };
@@ -150,6 +153,7 @@ namespace workshop.wwwapi.Endpoints
                         Booking = x.Booking,
                         PatientId = x.PatientId,
                         PatientName = x.Patient.FullName,
+                        AppointmentType = x.AppointmentType.ToString(),
 
                 }).ToList(),
             };
@@ -204,6 +208,7 @@ namespace workshop.wwwapi.Endpoints
                     DoctorName = entity.Doctor.FullName,
                     PatientId = entity.PatientId,
                     PatientName = entity.Patient.FullName,
+                    AppointmentType = entity.AppointmentType.ToString(),
                 };
                 appointments.Add(appointment);
             }
@@ -238,6 +243,7 @@ namespace workshop.wwwapi.Endpoints
                     DoctorName = entity.Doctor.FullName,
                     PatientId = entity.PatientId,
                     PatientName = entity.Patient.FullName,
+                    AppointmentType = entity.AppointmentType.ToString(),
                 };
                 appointments.Add(appointment);
             }
@@ -269,6 +275,7 @@ namespace workshop.wwwapi.Endpoints
                     DoctorName = entity.Doctor.FullName,
                     PatientId = entity.PatientId,
                     PatientName = entity.Patient.FullName,
+                    AppointmentType = entity.AppointmentType.ToString(),
                 };
                 appointments.Add(appointment);
             }

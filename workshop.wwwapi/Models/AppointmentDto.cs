@@ -1,4 +1,6 @@
-﻿namespace workshop.wwwapi.Models
+﻿using workshop.wwwapi.Models.DatabaseModels;
+
+namespace workshop.wwwapi.Models
 {
     public class AppointmentDto
     {
@@ -8,5 +10,6 @@
         public string DoctorName { get; set; }
         public int PatientId { get; set; }
         public string PatientName { get; set; }
+        public string AppointmentType { get; set; }
     }
 }

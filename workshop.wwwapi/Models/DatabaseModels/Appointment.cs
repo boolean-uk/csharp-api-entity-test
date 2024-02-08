@@ -26,6 +26,9 @@ namespace workshop.wwwapi.Models.DatabaseModels
         public int PerscriptionId { get; set; }
         public Perscription Perscription { get; set; }
 
+        [Column("appointmenttype")]
+        public AppointmentType AppointmentType { get; set; }
+
 
     }
 }

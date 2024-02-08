@@ -32,8 +32,8 @@ namespace workshop.wwwapi.Data
 
         public List<Appointment> Appointments = new List<Appointment>()
         {
-            new Appointment{Booking = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(1), DateTimeKind.Utc), DoctorId = 1, PatientId = 1, PerscriptionId = 1},
-            new Appointment{Booking = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(2), DateTimeKind.Utc), PatientId = 2, DoctorId = 2, PerscriptionId = 2}
+            new Appointment{Booking = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(1), DateTimeKind.Utc), DoctorId = 1, PatientId = 1, PerscriptionId = 1, AppointmentType = AppointmentType.Physical},
+            new Appointment{Booking = DateTime.SpecifyKind(DateTime.UtcNow.AddDays(2), DateTimeKind.Utc), PatientId = 2, DoctorId = 2, PerscriptionId = 2, AppointmentType = AppointmentType.Digital}
 
         };
 
