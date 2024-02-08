@@ -18,7 +18,7 @@ namespace workshop.wwwapi.Models
         public Appointment Appointment { get; set; }
 
         // Navigation property for many-to-many relationship
-        public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; }
+        public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; } = new List<PrescriptionMedicine>();
     }
 }
 

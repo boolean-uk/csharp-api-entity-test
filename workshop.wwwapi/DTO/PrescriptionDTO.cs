@@ -12,15 +12,17 @@ namespace workshop.wwwapi.DTO
         public string? Notes { get; set; }
 
         public int AppointmentId { get; set; }
-        public Appointment Appointment { get; set; }
+        
 
 
         public PrescriptionDTO(Prescription prescription) {
             PrescriptionId = prescription.PrescriptionId;
-            Notes = prescription.Notes;
+            if (prescription.Notes != null)
+            {
+                Notes = prescription.Notes;
+            }
             AppointmentId = prescription.AppointmentId;
-            Appointment = prescription.Appointment;
-
+            
         }
     }
 }
