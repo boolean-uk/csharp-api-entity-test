@@ -15,9 +15,11 @@ namespace wwwapi.DTO
         public PatientReturnDTO(Patient patient) {
             Id=patient.Id;
             FullName=patient.FullName;
+
             foreach(Appointment a in patient.Appointments)
             {
-                Appointments.Add(new AppointmentDTO(a));
+                if(a != null) {Appointments.Add(new AppointmentDTO(a)); }
+                
             }
         
         }
@@ -40,8 +42,10 @@ namespace wwwapi.DTO
         public DoctorDTO doctor { get; set; }
         public AppointmentDTO(Appointment a)
         {
+
             Booking = a.Booking;
-            doctor = new DoctorDTO(a.Doctor);
+            if(doctor!= null) {doctor = new DoctorDTO(a.Doctor); }
+            
         }
 
     }

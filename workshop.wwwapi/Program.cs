@@ -10,6 +10,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonDateTimeConverter());
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
