@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Any;
 using System.Net.NetworkInformation;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.DatabaseModels;
@@ -22,6 +23,9 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointments", GetAppointments);
             surgeryGroup.MapGet("/appointmentsbydoctors/{doctorid}", GetAppointmentsByDoctorId);
             surgeryGroup.MapGet("/appointmentsbypatients/{patientid}", GetAppointmentsByPatientId);
+            surgeryGroup.MapGet("/perscriptions", GetPerscriptions);
+            surgeryGroup.MapGet("/perscriptions/{id}", GetPerscriptionById);
+            surgeryGroup.MapPost("/Perscriptions", CreatePerscription);
 
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -274,11 +278,78 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(result);
         }
 
+        public static async Task<IResult> GetPerscriptions(IRepository repository)
+        {
+            var entities = await repository.GetPerscriptions();
 
+            List<PerscriptionDto> perscriptions = new List<PerscriptionDto>();
 
+            foreach(var entity in entities)
+            {
+                PerscriptionDto perscription = new PerscriptionDto()
+                {
+                    Id = entity.Id,
+                    Medicines = entity.Medicines.Select(m => new MedicineDto()
+                    {
+                        Id = m.Id,
+                        Name = m.Name,
+                        Notes = m.Notes,
+                        Quantity = m.Quantity,                       
+                    }).ToList()
+                };
+                perscriptions.Add(perscription);
+            }
 
+            Payload<List<PerscriptionDto>> result = new Payload<List<PerscriptionDto>>();
+            result.data = perscriptions;
 
+            return TypedResults.Ok(result);
+        }
 
+        public static async Task<IResult> GetPerscriptionById(IRepository repository, int id)
+        {
+            var entities = await repository.GetPerscriptions();
 
+            if (!entities.Any(x => x.Id == id))
+            {
+                return TypedResults.NotFound("Perscription was not found");
+            }
+
+            var entity = await repository.GetPerscriptionById(id);
+            PerscriptionDto perscription = new PerscriptionDto()
+            {
+                Id = entity.Id,
+                Medicines = entity.Medicines.Select(m => new MedicineDto()
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Notes = m.Notes,
+                    Quantity = m.Quantity,
+                }).ToList()
+            };
+
+            Payload<PerscriptionDto> result = new Payload<PerscriptionDto>();
+            result.data = perscription;
+
+            return TypedResults.Ok(result);
+
+        }
+
+        public static async Task<IResult> CreatePerscription(IRepository repository, CreatePerscriptionDto perscription)
+        {
+            var entities = await repository.GetPerscriptions();
+
+            if(entities.Any(p => p.Id == perscription.Id))
+            {
+                return TypedResults.BadRequest("Perscription with id already exists");
+            }
+
+            Perscription entity = new Perscription();
+
+            entity.Id = perscription.Id;
+             
+            await repository.CreatePerscription(entity);
+            return TypedResults.Ok(entity);
+        }
     }
 }

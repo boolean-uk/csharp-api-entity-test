@@ -54,5 +54,22 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.PatientId == patientid).ToListAsync();
         }
 
+        public async Task<IEnumerable<Perscription>> GetPerscriptions()
+        {
+            return await _databaseContext.Perscriptions.Include(p => p.Medicines).ToListAsync();
+        }
+
+        public async Task<Perscription> GetPerscriptionById(int id)
+        {
+            return await _databaseContext.Perscriptions.Include(p => p.Medicines).FirstAsync(p => p.Id == id);
+        }
+
+        public async Task<Perscription> CreatePerscription(Perscription perscription)
+        {
+            await _databaseContext.Perscriptions.AddAsync(perscription);
+            await _databaseContext.SaveChangesAsync();
+            return perscription;
+
+        }
     }
 }
