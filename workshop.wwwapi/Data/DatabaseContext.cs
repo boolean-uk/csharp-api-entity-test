@@ -19,7 +19,7 @@ namespace workshop.wwwapi.Data
             //TODO: Appointment Key etc.. Add Here
             modelBuilder.Entity<Patient>().HasKey(e => new { e.Id});
             modelBuilder.Entity<Doctor>().HasKey(d => new { d.Id});
-            modelBuilder.Entity<Appointment>().HasKey(a => new { a.id, a.DoctorId, a.PatientId });
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId });
 
 
             //TODO: Seed Data Here
@@ -35,15 +35,15 @@ namespace workshop.wwwapi.Data
                 new Doctor { Id = 2, FullName = "Oliver"},
                 new Doctor { Id = 3, FullName = "James"}
             );
-            DateTime dateTime = DateTime.Now.ToUniversalTime();
+            DateTime dateTime = DateTime.Parse("1954-01-01 23:59:59 +0000").ToUniversalTime();
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { appointmentDate = dateTime, DoctorId = 1, PatientId = 1, id = 1 },
-                new Appointment { appointmentDate = dateTime, DoctorId = 1, PatientId = 2, id = 2 },
-                new Appointment { appointmentDate = dateTime, DoctorId = 2, PatientId = 3, id = 3 },
-                new Appointment { appointmentDate = dateTime, DoctorId = 2, PatientId = 1, id = 4 },
-                new Appointment { appointmentDate = dateTime, DoctorId = 3, PatientId = 2, id = 5 },
-                new Appointment { appointmentDate = dateTime, DoctorId = 3, PatientId = 3, id = 6 }
-            ); ;
+                new Appointment { appointmentDate = dateTime, DoctorId = 1, PatientId = 1 },
+                new Appointment { appointmentDate = dateTime, DoctorId = 1, PatientId = 2 },
+                new Appointment { appointmentDate = dateTime, DoctorId = 2, PatientId = 3 },
+                new Appointment { appointmentDate = dateTime, DoctorId = 2, PatientId = 1 },
+                new Appointment { appointmentDate = dateTime, DoctorId = 3, PatientId = 2 },
+                new Appointment { appointmentDate = dateTime, DoctorId = 3, PatientId = 3 }
+            ); 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

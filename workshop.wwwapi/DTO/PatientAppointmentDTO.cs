@@ -1,4 +1,5 @@
-﻿using workshop.wwwapi.Models;
+﻿using System.Text.Json.Serialization;
+using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.DTO
 {
@@ -19,5 +20,8 @@ namespace workshop.wwwapi.DTO
             PatientId = appointment.PatientId;
             
         }
+        [JsonConstructor]
+        public PatientAppointmentDTO() { }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using workshop.wwwapi.Models;
+﻿using System.Text.Json.Serialization;
+using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.DTO
 {
@@ -18,14 +19,23 @@ namespace workshop.wwwapi.DTO
             doctorAppointmentDTOs = new List<DoctorAppointmentDTO>();
 
             var list = doctor.Appointments;
-            foreach (var item in list)
+            if(list != null)
             {
-                DoctorAppointmentDTO doctorAppointmentDTO = new DoctorAppointmentDTO(item);
-                doctorAppointmentDTOs.Add(doctorAppointmentDTO);
+
+                foreach (var item in list)
+                {
+                    DoctorAppointmentDTO doctorAppointmentDTO = new DoctorAppointmentDTO(item);
+                    doctorAppointmentDTOs.Add(doctorAppointmentDTO);
+                }
             }
 
 
 
+        }
+        [JsonConstructor]
+        public doctorDTO()
+        {
+            
         }
     }
 }

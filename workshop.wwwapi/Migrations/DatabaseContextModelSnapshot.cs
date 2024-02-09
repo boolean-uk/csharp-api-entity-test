@@ -24,10 +24,6 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.Property<int>("id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
@@ -40,9 +36,7 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking");
 
-                    b.HasKey("id", "DoctorId", "PatientId");
-
-                    b.HasIndex("DoctorId");
+                    b.HasKey("DoctorId", "PatientId");
 
                     b.HasIndex("PatientId");
 
@@ -51,45 +45,39 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            id = 1,
                             DoctorId = 1,
                             PatientId = 1,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
-                            id = 2,
                             DoctorId = 1,
                             PatientId = 2,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
-                            id = 3,
                             DoctorId = 2,
                             PatientId = 3,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
-                            id = 4,
                             DoctorId = 2,
                             PatientId = 1,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
-                            id = 5,
                             DoctorId = 3,
                             PatientId = 2,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
-                            id = 6,
                             DoctorId = 3,
                             PatientId = 3,
-                            appointmentDate = new DateTime(2024, 2, 5, 9, 8, 14, 205, DateTimeKind.Utc).AddTicks(4237)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         });
                 });
 

@@ -14,10 +14,7 @@ namespace workshop.wwwapi.Models
 
         public IEnumerable<Appointment> Appointments { get; set; }
 
-        public Patient()
-        {
-            Appointments = new List<Appointment>();
-        }
+        
     }
 
 }

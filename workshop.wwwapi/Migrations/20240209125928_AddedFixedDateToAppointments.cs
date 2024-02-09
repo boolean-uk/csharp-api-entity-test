@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class CreatePatientDoctorAppointmentTables : Migration
+    public partial class AddedFixedDateToAppointments : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,13 +44,13 @@ namespace workshop.wwwapi.Migrations
                 name: "appointment",
                 columns: table => new
                 {
-                    booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     doctor_id = table.Column<int>(type: "integer", nullable: false),
-                    patient_id = table.Column<int>(type: "integer", nullable: false)
+                    patient_id = table.Column<int>(type: "integer", nullable: false),
+                    booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_appointment", x => new { x.booking, x.doctor_id, x.patient_id });
+                    table.PrimaryKey("PK_appointment", x => new { x.doctor_id, x.patient_id });
                     table.ForeignKey(
                         name: "FK_appointment_doctor_doctor_id",
                         column: x => x.doctor_id,
@@ -87,13 +87,16 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "appointment",
-                columns: new[] { "booking", "doctor_id", "patient_id" },
-                values: new object[] { new DateTime(2024, 1, 31, 14, 4, 5, 863, DateTimeKind.Utc).AddTicks(2880), 2, 1 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_appointment_doctor_id",
-                table: "appointment",
-                column: "doctor_id");
+                columns: new[] { "doctor_id", "patient_id", "booking" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc) },
+                    { 1, 2, new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc) },
+                    { 2, 1, new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc) },
+                    { 2, 3, new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc) },
+                    { 3, 2, new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc) },
+                    { 3, 3, new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc) }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_appointment_patient_id",

@@ -6,8 +6,7 @@ namespace workshop.wwwapi.Models
     [Table("appointment")]
     public class Appointment
     {
-        [Column("id")]
-        public int id { get; set; }
+       
         [Column("booking")]
         public DateTime appointmentDate { get; set; }
         [Column("doctor_id")]
@@ -20,11 +19,7 @@ namespace workshop.wwwapi.Models
 
         public Patient Patient { get; set; }
 
-        public Appointment()
-        {
-            Patient = new Patient();
-            Doctor = new Doctor();
-        }
+        
 
     }
 }

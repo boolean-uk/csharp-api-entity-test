@@ -3,18 +3,18 @@ using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.DTO
 {
-    public class DoctorPatientDTO
+    public class AppointmentDoctorDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public DoctorPatientDTO(Patient patient) 
+        public AppointmentDoctorDTO(Doctor doctor) 
         {
-            Id = patient.Id;
-            Name = patient.FullName;
+            Id = doctor.Id;
+            Name = doctor.FullName;
         }
         [JsonConstructor]
-        public DoctorPatientDTO()
+        public AppointmentDoctorDTO()
         {
             
         }

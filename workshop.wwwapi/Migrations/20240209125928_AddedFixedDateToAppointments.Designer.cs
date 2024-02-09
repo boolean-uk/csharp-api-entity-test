@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240205080811_updatedTheDataInTablesAgain")]
-    partial class updatedTheDataInTablesAgain
+    [Migration("20240209125928_AddedFixedDateToAppointments")]
+    partial class AddedFixedDateToAppointments
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,37 +50,37 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            appointmentDate = new DateTime(2024, 2, 5, 8, 8, 10, 973, DateTimeKind.Utc).AddTicks(7764)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 2,
-                            appointmentDate = new DateTime(2024, 2, 5, 8, 8, 10, 973, DateTimeKind.Utc).AddTicks(7764)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 3,
-                            appointmentDate = new DateTime(2024, 2, 5, 8, 8, 10, 973, DateTimeKind.Utc).AddTicks(7764)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 1,
-                            appointmentDate = new DateTime(2024, 2, 5, 8, 8, 10, 973, DateTimeKind.Utc).AddTicks(7764)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             DoctorId = 3,
                             PatientId = 2,
-                            appointmentDate = new DateTime(2024, 2, 5, 8, 8, 10, 973, DateTimeKind.Utc).AddTicks(7764)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             DoctorId = 3,
                             PatientId = 3,
-                            appointmentDate = new DateTime(2024, 2, 5, 8, 8, 10, 973, DateTimeKind.Utc).AddTicks(7764)
+                            appointmentDate = new DateTime(1954, 1, 1, 23, 59, 59, 0, DateTimeKind.Utc)
                         });
                 });
 

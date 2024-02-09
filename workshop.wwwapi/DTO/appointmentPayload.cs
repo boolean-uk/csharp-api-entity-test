@@ -1,4 +1,4 @@
 ﻿namespace workshop.wwwapi.DTO
 {
-    public record appointmentPayload(DateTime Date, int doctorId, int patientId); 
+    public record appointmentPayload(String Date, int doctorId, int patientId); 
 }

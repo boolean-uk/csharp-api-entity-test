@@ -14,23 +14,23 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            var patients = await _databaseContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).ToListAsync();
+            var patients = await _databaseContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).ToListAsync();  
+
             
-            _databaseContext.SaveChanges();
             return patients;
         }
 
-        public async Task<Patient> GetPatient(int id)
+        public async Task<Patient?> GetPatient(int id)
         {
-            var patient = await _databaseContext.Patients.FindAsync(id);
+            var patient = await _databaseContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).FirstOrDefaultAsync(p => p.Id == id);
+
             
-            _databaseContext.SaveChanges();
             return patient;
         }
 
-        public async Task<Patient> CreateAPatient(PatientPostPayload patientPayload)
+        public async Task<Patient> CreateAPatient(string fullname)
         {
-            Patient patient =  new Patient() {FullName = patientPayload.fullName };
+            Patient patient =  new Patient() {FullName = fullname };
             _databaseContext.Patients.Add(patient);
             _databaseContext.SaveChanges();
             return patient;
@@ -39,38 +39,44 @@ namespace workshop.wwwapi.Repository
 
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
-            return await _databaseContext.Doctors.ToListAsync();
+            var doctors = await _databaseContext.Doctors.Include(d => d.Appointments).ThenInclude(a => a.Patient).ToListAsync();
+            return doctors;
         }
-        public async Task<Doctor> GetDoctorsByID(int id)
+        public async Task<Doctor?> GetDoctorsByID(int id)
         {
-            var doctor = await _databaseContext.Doctors.FindAsync(id);
+            var doctor = await _databaseContext.Doctors.Include(d => d.Appointments).ThenInclude(a => a.Patient).FirstOrDefaultAsync(d => d.Id == id);
 
             return doctor;
         }
 
         public async Task<IEnumerable<Appointment>> GetAppointments()
         {
-            return await _databaseContext.Appointments.ToListAsync();
-        }
-
-        public async Task<Appointment> GetAppointmentsByID(int id)
-        {
-            var appointment = await _databaseContext.Appointments.FindAsync(id);
+            var appointment = await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).ToListAsync();
             return appointment;
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int doctorId)
+        public async Task<Appointment?> GetAppointmentsByID(int doctorID, int patientID)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==doctorId).ToListAsync();
+            
+            var appointment = await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).FirstOrDefaultAsync(a => a.PatientId == patientID && a.DoctorId == doctorID);
+            return appointment;
+        }
+
+        public async Task<IEnumerable<Appointment?>> GetAppointmentsByDoctorID(int doctorId)
+        {
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.DoctorId==doctorId).ToListAsync();
         }
 
         public async Task<IEnumerable<Appointment>> GetAppointmentsByPatientID(int patientId)
         {
-            return await _databaseContext.Appointments.Where(a => a.PatientId == patientId).ToListAsync();
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.PatientId == patientId).ToListAsync();
         }
 
         public async Task<Appointment?> CreateAppointment(DateTime date, int patientId, int doctorId)
         {
+            
+
+
             Appointment appointment = new Appointment();
             appointment.PatientId = patientId;
             appointment.DoctorId = doctorId;

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Numerics;
 using workshop.wwwapi.DTO;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
@@ -14,13 +16,13 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients/{id}", GetPatient);
-            surgeryGroup.MapPost("/CreateAPatient", CreateAPatient);
+            surgeryGroup.MapPost("/create_a_patient", CreateAPatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/doctors/{id}", GetDoctorsByID);
             surgeryGroup.MapGet("/appointments", GetAppointments);
-            surgeryGroup.MapGet("/appointments/{id}", GetAppointmentsByID);
-            surgeryGroup.MapGet("/appointments/{doctorId}", GetAppointmentsByDoctorID);
-            surgeryGroup.MapGet("/appointments/{patientId}", GetAppointmentsByPatientID);
+            surgeryGroup.MapGet("/appointments/patient_and_doctor/{patientid}/{doctorId}", GetAppointmentsByID);
+            surgeryGroup.MapGet("/appointments/doctor/{doctorId}", GetAppointmentsByDoctorID);
+            surgeryGroup.MapGet("/appointments/patient/{patientId}", GetAppointmentsByPatientID);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
         }
         
@@ -66,7 +68,7 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound("not a valid name");
             }
 
-            var result = await repository.CreateAPatient(patientPayload);
+            var result = await repository.CreateAPatient(patientPayload.fullName);
             var resultDTO = new patientDTO(result);
 
             return TypedResults.Ok(resultDTO);
@@ -76,7 +78,17 @@ namespace workshop.wwwapi.Endpoints
         
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            var result = await repository.GetDoctors();
+            List<doctorDTO> resultDTO = new List<doctorDTO>();
+            foreach (var doctor in result)
+            {
+                resultDTO.Add(new doctorDTO(doctor));
+            }
+            return TypedResults.Ok(resultDTO);
+
+
+
+            
         }
         public static async Task<IResult> GetDoctorsByID(IRepository repository, int id)
         {
@@ -100,31 +112,98 @@ namespace workshop.wwwapi.Endpoints
 
         public static async Task<IResult> GetAppointments(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetAppointments());
+            var result = await repository.GetAppointments();
+            List<appointmentDTO> resultDTO = new List<appointmentDTO>();
+            foreach (var appointment in result)
+            {
+                resultDTO.Add(new appointmentDTO(appointment));
+            }
+            return TypedResults.Ok(resultDTO);
+            
         }
 
 
         
-        public static async Task<IResult> GetAppointmentsByID(IRepository repository, int id)
+        public static async Task<IResult> GetAppointmentsByID(IRepository repository, int doctorID , int patientID)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByID(id));
+            if (doctorID <= 0 && patientID <= 0)
+            {
+                return TypedResults.BadRequest("id must be a positive value");
+            }
+
+            var appointment = await repository.GetAppointmentsByID(doctorID, patientID);
+
+            if (appointment == null)
+            {
+                return TypedResults.NotFound("not a valid id");
+            }
+            else
+            {
+                appointmentDTO appointmentDTO = new appointmentDTO(appointment);
+                return TypedResults.Ok(appointmentDTO);
+            }
+
+
+            
         }
 
         public static async Task<IResult> GetAppointmentsByDoctorID(IRepository repository, int doctorId)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(doctorId));
+            if (doctorId <= 0 )
+            {
+                return TypedResults.BadRequest("id must be a positive value");
+            }
+
+            var appointment = await repository.GetAppointmentsByDoctorID(doctorId );
+
+            if (appointment == null)
+            {
+                return TypedResults.NotFound("not a valid id");
+            }
+            else
+            {
+                List<appointmentDTO> resultDTO = new List<appointmentDTO>();
+                foreach (var result  in appointment )
+                {
+                    resultDTO.Add(new appointmentDTO(result));
+                }
+                return TypedResults.Ok(resultDTO);
+
+                
+            }
         }
 
         public static async Task<IResult> GetAppointmentsByPatientID(IRepository repository, int patientId)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByPatientID(patientId));
+            if ( patientId <= 0)
+            {
+                return TypedResults.BadRequest("id must be a positive value");
+            }
+
+            var appointment = await repository.GetAppointmentsByPatientID( patientId);
+
+            if (appointment == null)
+            {
+                return TypedResults.NotFound("not a valid id");
+            }
+            else
+            {
+                List<appointmentDTO> resultDTO = new List<appointmentDTO>();
+                foreach (var result in appointment)
+                {
+                    resultDTO.Add(new appointmentDTO(result));
+                }
+                return TypedResults.Ok(resultDTO);
+
+                
+            }
         }
 
         public static async Task<IResult> CreateAppointment(IRepository repository, appointmentPayload payload)
         {
-            if(payload.Date != null)
+            if(payload.Date == null || payload.Date == string.Empty)
             {
-                return TypedResults.BadRequest("not a valid date");
+                return TypedResults.BadRequest("not a valid Date, date needs to be written in the format (yyyy-MM-dd HH:mm:ss)");
             }
             if(payload.doctorId <= 0)
             {
@@ -135,8 +214,15 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.BadRequest("patientId needs to be a positive integer");
             }
 
+            DateTime dateTime;
+            string dateTimeFormat = "yyyy'-'MM'-'dd HH':'mm':'ss";
+            if (!DateTime.TryParseExact(payload.Date, dateTimeFormat, null, DateTimeStyles.None, out dateTime))
+            {
+                return TypedResults.BadRequest("not a valid startsAt, starts at needs to be written in the format (yyyy-MM-dd HH:mm:ss)");
+            }
+
             var result = await repository.CreateAppointment(
-                payload.Date, 
+                dateTime.ToUniversalTime(), 
                 payload.patientId, 
                 payload.doctorId
                 );
@@ -146,7 +232,9 @@ namespace workshop.wwwapi.Endpoints
             }
             else
             {
-                return TypedResults.Ok(result);
+                appointmentDTO appointmentDTO = new appointmentDTO(result);
+                return TypedResults.Ok(appointmentDTO);
+
             }
         }
 
