@@ -2,7 +2,7 @@
 
 namespace workshop.wwwapi.DTO
 {
-    public class AppointmentsPatientDoctorDTO
+    public class AppointmentsPatientDoctorPrescriptionsDTO
     {
         public int Id { get; set; }
         public string Booking { get; set; }
@@ -10,7 +10,7 @@ namespace workshop.wwwapi.DTO
         public List<DoctorsOnlyDTO> DoctorAppointments { get; set; }
         public ICollection<PrescriptionWithMedicineDTO> Prescriptions { get; set; }
 
-        public AppointmentsPatientDoctorDTO(Appointment appointment)
+        public AppointmentsPatientDoctorPrescriptionsDTO(Appointment appointment)
         {
             Id = appointment.Id;
             Booking = appointment.Booking;

@@ -57,13 +57,19 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments
                 .Include(a => a.Patient)
                 .Include(a => a.Doctor)
-                .FirstOrDefaultAsync(a => a.Id == appointmentId);
+                .Include(a => a.Prescriptions)
+                    .ThenInclude(pm => pm.PrescriptionMedicines)
+                        .ThenInclude(m => m.Medicine)
+                        .FirstOrDefaultAsync(a => a.Id == appointmentId);
         }
         public async Task<List<Appointment>?> GetAppointmentsByDoctorId(int doctorId)
         {
             return await _databaseContext.Appointments
                 .Include(a => a.Patient)
                 .Include(a => a.Doctor)
+                .Include(a => a.Prescriptions)
+                    .ThenInclude(pm => pm.PrescriptionMedicines)
+                        .ThenInclude(m => m.Medicine)
                 .Where(a => a.DoctorId == doctorId)
                 .ToListAsync();
         }

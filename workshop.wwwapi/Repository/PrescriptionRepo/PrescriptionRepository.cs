@@ -101,7 +101,7 @@ namespace workshop.wwwapi.Repository.PrescriptionRepo
         /// <param name="medicine_id"></param> given medicine
         /// <param name="prescription_id"></param> given prescription
         /// <returns></returns> false if medicine or prescription does not exists or if something goes wrong during saving else true if deletion goes correct
-        public async Task<bool> deleteMedicine(int medicine_id, int prescription_id)
+        public async Task<bool> deleteMedicineFromPrescription(int medicine_id, int prescription_id)
         {
             var prescription = await _db.Prescriptions.FindAsync(prescription_id);
             if (prescription == null)
@@ -150,7 +150,6 @@ namespace workshop.wwwapi.Repository.PrescriptionRepo
                 Console.WriteLine("OBS"+ex.ToString());
                 return false;
             }
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Medicine>> getAllMedicine()

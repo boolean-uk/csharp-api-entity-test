@@ -90,9 +90,15 @@ namespace workshop.wwwapi.Endpoints
            
         }
 
-        private static async Task<IResult> DeleteMedicineFromPrescription()
+        private static async Task<IResult> DeleteMedicineFromPrescription(int pres_id, int medic_id, IPrescriptionRepository prescriptionRepository)
         {
-            throw new NotImplementedException();
+            var isDeleted = await prescriptionRepository.deleteMedicineFromPrescription(medic_id, pres_id);
+            if (!isDeleted)
+            {
+                return TypedResults.BadRequest("Invalid ntered data");
+            }
+            return TypedResults.Ok("Successfully deelted medicine from prescription");
+            
         }
         
 

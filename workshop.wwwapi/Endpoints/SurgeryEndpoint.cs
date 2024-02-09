@@ -93,10 +93,10 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetAllAppointments(IRepository repository)
         {
             var appointments = await repository.GetAllAppointments();
-            var appointmentsPatientDoctorDTO = new List<AppointmentsPatientDoctorDTO>();
+            var appointmentsPatientDoctorDTO = new List<AppointmentsPatientDoctorPrescriptionsDTO>();
             foreach (var appointment in appointments)
             {
-                appointmentsPatientDoctorDTO.Add(new AppointmentsPatientDoctorDTO(appointment));
+                appointmentsPatientDoctorDTO.Add(new AppointmentsPatientDoctorPrescriptionsDTO(appointment));
             }
 
             return TypedResults.Ok(appointmentsPatientDoctorDTO);
@@ -116,9 +116,15 @@ namespace workshop.wwwapi.Endpoints
                 Id = appointment.Id,
                 Booking = appointment.Booking,
                 Patient = new PatientOnlyDTO(appointment.Patient),
-                Doctor = new DoctorsOnlyDTO(appointment.Doctor)
+                Doctor = new DoctorsOnlyDTO(appointment.Doctor),
+                Prescriptions = new List<PrescriptionWithMedicineDTO>()
                
             };
+            foreach (var prescription in appointment.Prescriptions)
+            {
+                var prescriptionDTO = new PrescriptionWithMedicineDTO(prescription);
+                appointmentDTO.Prescriptions.Add(prescriptionDTO);
+            }
 
             return TypedResults.Ok(appointmentDTO);
         }
@@ -177,6 +183,8 @@ namespace workshop.wwwapi.Endpoints
             }
             return TypedResults.Ok("The prescription has successfully been deleted");
         }
+
+
 
 
     }
