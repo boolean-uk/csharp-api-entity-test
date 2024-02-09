@@ -61,14 +61,14 @@ namespace workshop.wwwapi.Data
 
             List<Appointment> listOfAppointments =
             [
-                new Appointment { Id = 1, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 1 },
-                new Appointment { Id = 2, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 1, PatientId = 4 },
-                new Appointment { Id = 3, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 2 },
-                new Appointment { Id = 4, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 2, PatientId = 6 },
-                new Appointment { Id = 5, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 3 },
-                new Appointment { Id = 6, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 5 },
-                new Appointment { Id = 7, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 2, PatientId = 7 },
-                new Appointment { Id = 8, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 1, PatientId = 8 },
+                new Appointment { Id = 1, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 1, TypeOfAppointent = AppointmentType.Online },
+                new Appointment { Id = 2, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 1, PatientId = 4, TypeOfAppointent = AppointmentType.FaceToFace },
+                new Appointment { Id = 3, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 2, TypeOfAppointent = AppointmentType.Online },
+                new Appointment { Id = 4, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 2, PatientId = 6, TypeOfAppointent = AppointmentType.Online },
+                new Appointment { Id = 5, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 3, TypeOfAppointent = AppointmentType.Online },
+                new Appointment { Id = 6, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 3, PatientId = 5, TypeOfAppointent = AppointmentType.FaceToFace },
+                new Appointment { Id = 7, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 2, PatientId = 7, TypeOfAppointent = AppointmentType.FaceToFace },
+                new Appointment { Id = 8, Booking = DateTime.Now.ToString("yyyy-MM-dd"), DoctorId = 1, PatientId = 8, TypeOfAppointent = AppointmentType.Online },
             ];
 
             modelBuilder.Entity<Appointment>().HasData( listOfAppointments );

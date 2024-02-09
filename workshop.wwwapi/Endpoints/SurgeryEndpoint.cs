@@ -91,11 +91,20 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(new DoctorsOnlyDTO(doctor));
         }
 
-        public static async Task<IResult> AssignAppointment(int patient_id, int doc_id, IRepository repository)
+        public static async Task<IResult> AssignAppointment(int patient_id, int doc_id, IRepository repository, string appointmentTypeString)
         {
-            var appointment = await repository.assignAppointment(patient_id, doc_id, AppointmentType.Online);
+            if (!Enum.TryParse<AppointmentType>(appointmentTypeString, out var appointmentType))
+            {
+                return TypedResults.BadRequest("Invalid appointment type.");
+            }
+            var appointment = await repository.assignAppointment(patient_id, doc_id, appointmentType);
+            if (appointment == null)
+            {
+                return TypedResults.NotFound($"Could not find the doctor with id {doc_id} or pation with id {patient_id}");
+            }
 
-            throw new NotImplementedException();
+            return TypedResults.Created($"surgery/patients/{patient_id}/doctors/{doc_id}/appointments", new AppointmentDataDTO(appointment));
+         
         }
 
         public static async Task<IResult> GetAllAppointments(IRepository repository)

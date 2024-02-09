@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateAllTablesAgain : Migration
+    public partial class ReAddingAllTablesCoreAndExtensions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,6 +60,7 @@ namespace workshop.wwwapi.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     bookings = table.Column<string>(type: "text", nullable: false),
+                    appointment_type = table.Column<int>(type: "integer", nullable: false),
                     doctor_id = table.Column<int>(type: "integer", nullable: false),
                     patient_id = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -162,17 +163,17 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "appointments",
-                columns: new[] { "id", "bookings", "doctor_id", "patient_id" },
+                columns: new[] { "id", "bookings", "doctor_id", "patient_id", "appointment_type" },
                 values: new object[,]
                 {
-                    { 1, "2024-02-08", 3, 1 },
-                    { 2, "2024-02-08", 1, 4 },
-                    { 3, "2024-02-08", 3, 2 },
-                    { 4, "2024-02-08", 2, 6 },
-                    { 5, "2024-02-08", 3, 3 },
-                    { 6, "2024-02-08", 3, 5 },
-                    { 7, "2024-02-08", 2, 7 },
-                    { 8, "2024-02-08", 1, 8 }
+                    { 1, "2024-02-09", 3, 1, 1 },
+                    { 2, "2024-02-09", 1, 4, 0 },
+                    { 3, "2024-02-09", 3, 2, 1 },
+                    { 4, "2024-02-09", 2, 6, 1 },
+                    { 5, "2024-02-09", 3, 3, 1 },
+                    { 6, "2024-02-09", 3, 5, 0 },
+                    { 7, "2024-02-09", 2, 7, 0 },
+                    { 8, "2024-02-09", 1, 8, 1 }
                 });
 
             migrationBuilder.InsertData(

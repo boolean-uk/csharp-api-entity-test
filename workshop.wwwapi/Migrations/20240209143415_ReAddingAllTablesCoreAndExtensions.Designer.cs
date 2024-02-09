@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240208095801_CreateAllTablesAgain")]
-    partial class CreateAllTablesAgain
+    [Migration("20240209143415_ReAddingAllTablesCoreAndExtensions")]
+    partial class ReAddingAllTablesCoreAndExtensions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,10 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("patient_id");
 
+                    b.Property<int>("TypeOfAppointent")
+                        .HasColumnType("integer")
+                        .HasColumnName("appointment_type");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
@@ -59,58 +63,66 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            Booking = "2024-02-08",
+                            Booking = "2024-02-09",
                             DoctorId = 3,
-                            PatientId = 1
+                            PatientId = 1,
+                            TypeOfAppointent = 1
                         },
                         new
                         {
                             Id = 2,
-                            Booking = "2024-02-08",
+                            Booking = "2024-02-09",
                             DoctorId = 1,
-                            PatientId = 4
+                            PatientId = 4,
+                            TypeOfAppointent = 0
                         },
                         new
                         {
                             Id = 3,
-                            Booking = "2024-02-08",
+                            Booking = "2024-02-09",
                             DoctorId = 3,
-                            PatientId = 2
+                            PatientId = 2,
+                            TypeOfAppointent = 1
                         },
                         new
                         {
                             Id = 4,
-                            Booking = "2024-02-08",
+                            Booking = "2024-02-09",
                             DoctorId = 2,
-                            PatientId = 6
+                            PatientId = 6,
+                            TypeOfAppointent = 1
                         },
                         new
                         {
                             Id = 5,
-                            Booking = "2024-02-08",
+                            Booking = "2024-02-09",
                             DoctorId = 3,
-                            PatientId = 3
+                            PatientId = 3,
+                            TypeOfAppointent = 1
                         },
                         new
                         {
                             Id = 6,
-                            Booking = "2024-02-08",
+                            Booking = "2024-02-09",
                             DoctorId = 3,
-                            PatientId = 5
+                            PatientId = 5,
+                            TypeOfAppointent = 0
                         },
                         new
                         {
                             Id = 7,
-                            Booking = "2024-02-08",
+                            Booking = "2024-02-09",
                             DoctorId = 2,
-                            PatientId = 7
+                            PatientId = 7,
+                            TypeOfAppointent = 0
                         },
                         new
                         {
                             Id = 8,
-                            Booking = "2024-02-08",
+                            Booking = "2024-02-09",
                             DoctorId = 1,
-                            PatientId = 8
+                            PatientId = 8,
+                            TypeOfAppointent = 1
                         });
                 });
 
