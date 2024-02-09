@@ -127,8 +127,8 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/doctors/{id}", GetDoctor);
             surgeryGroup.MapPost("/doctors", CreateDoctor);
             surgeryGroup.MapGet("/appointments", GetAppointments);
-            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
-            surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
+            surgeryGroup.MapGet("/appointmentsbydoctor/{doctorId}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointmentsbypatient/{patientId}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
         }
         
