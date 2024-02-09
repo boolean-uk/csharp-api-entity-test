@@ -51,6 +51,10 @@ namespace workshop.wwwapi.Repository
             _db.SaveChanges();
             return doctor;
         }
+        public async Task<IEnumerable<Appointment>> GetAppointments()
+        {
+            return await _db.Appointments.ToListAsync();
+        }
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
         {
             return await _db.Appointments.Where(a => a.DoctorId==id).ToListAsync();
@@ -72,5 +76,6 @@ namespace workshop.wwwapi.Repository
             _db.SaveChanges();
             return appointment;
         }
+
     }
 }
