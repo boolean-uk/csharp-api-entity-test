@@ -21,5 +21,15 @@ namespace workshop.wwwapi.Models
         public Patient Patient { get; set; }
 
         public Prescription? Prescription { get; set; }
+
+        public locationEnum? Location { get; set; }
+
+
+    }
+    public enum locationEnum
+    {
+        Online,
+        InPerson,
+
     }
 }

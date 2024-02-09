@@ -5,71 +5,60 @@ using wwwapi.DTO;
 
 namespace workshop.wwwapi.Endpoints
 {
-    public record PrescriptionPayload(int prescriptionId, List<int> MedicineIds);
+    public record PrescriptionPayload(List<int> MedicineIds);
+    public record AppointmentPrescriptionPayload(int prescriptionId);
 
     public static class PrescriptionEndpoint
     {
         //TODO:  add additional endpoints in here according to the requirements in the README.md
         public static void ConfigurePrescriptionEndpoint(this WebApplication app)
         {
-            var surgeryGroup = app.MapGroup("surgery");
+            var PrescriptionGroup = app.MapGroup("Prescriptions");
 
-            surgeryGroup.MapGet("/patients", GetPatients);
-            surgeryGroup.MapGet("/patients/{id}", GetPatientsById);
-            surgeryGroup.MapPost("/patients", CreatePatient);
-            surgeryGroup.MapGet("/doctors", GetDoctors);
-            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            PrescriptionGroup.MapGet("/", GetPrescriptions);
+            PrescriptionGroup.MapPost("/", CreatePrescription);
+            PrescriptionGroup.MapDelete("/{id:int}", DeletePrescriptionById);
+            app.MapPost("/Appointment/{appointmentId:int}/Prescription", AddPrescriptionToAppointment);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetPatients(IRepository repository)
+        public static async Task<IResult> GetPrescriptions(IPrescriptionRepository repository)
         {
-            var patientsRespo = await repository.GetPatients();
-            List<Patient> patients = patientsRespo.ToList();
+            IEnumerable<Prescription> res = await repository.GetPrescriptions();
 
-            List<PatientReturnDTO> patientReturnDTO = PatientReturnDTO.ListOfPatients(patients);
-            return TypedResults.Ok(patientReturnDTO);
+            return TypedResults.Ok(PrescriptionDTO.FromList(res.ToList()));
+        
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(404)]
-        public static async Task<IResult> GetPatientsById(IRepository repository, int id)
+        public static async Task<IResult> CreatePrescription(IPrescriptionRepository repository, PrescriptionPayload payload )
         {
-            Patient? patient = await repository.GetPatientById(id);
-
-            if (patient == null) { return TypedResults.NotFound(); }
-
-            return TypedResults.Ok(new PatientReturnDTO(patient));
+            Prescription? prescription = await repository.CreatePrescription(payload.MedicineIds);
+            if (prescription == null) { return TypedResults.NotFound(); }
+            return TypedResults.Ok(new PrescriptionDTO(prescription));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> CreatePatient(patientPayload payload, IRepository repository)
+        public static async Task<IResult> DeletePrescriptionById(int id, IPrescriptionRepository repository)
         {
-            if (payload.full_name == null) { return TypedResults.BadRequest(); }
-
-            Patient? patient = await repository.CreateNewPatient(payload.full_name);
-
-            if (patient == null) { return TypedResults.NotFound(); }
-
-            return TypedResults.Ok(patient);
+            var res = await repository.DeletePrescriptionById(id);
+            if(res == null) {return  TypedResults.NotFound(); }    
+            return TypedResults.Ok(new PrescriptionDTO(res));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetDoctors(IRepository repository)
+        public static async Task<IResult> AddPrescriptionToAppointment(IPrescriptionRepository PrescriptionRepository, IRepository Repository, int appointmentId, AppointmentPrescriptionPayload payload )
         {
-            IEnumerable<Doctor> doctors = await repository.GetDoctors();
-            List<DoctorReturnDTO> DoctorDTOs = DoctorReturnDTO.ListOfDoctors(doctors.ToList());
-            if (DoctorDTOs.Count == 0) { return TypedResults.NotFound(); }
+            Appointment appointment = await Repository.GetAppointmentsById(appointmentId);
+            if (appointment == null) { return TypedResults.NotFound(); }
+            if (appointment.Prescription != null) { return TypedResults.BadRequest("Appointment already has a prescription."); }
 
-            return TypedResults.Ok(DoctorDTOs);
+            Prescription? prescription = await PrescriptionRepository.AddPrescriptionToAppointment(payload.prescriptionId, appointmentId);
+            if (prescription == null) { return TypedResults.NotFound(); }
+            return TypedResults.Ok(new PrescriptionDTO(prescription));
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
-        {
-            var res = await repository.GetAppointmentsByDoctor(id);
-            return TypedResults.Ok(AppointmentReturnDTO.ListOfAppointments(res.ToList()));
-        }
     }
 }

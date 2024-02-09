@@ -18,15 +18,22 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
+            modelBuilder.Entity<Prescription>()
+                .HasOne(e => e.Appointment)
+                .WithOne(a => a.Prescription)
+                .HasForeignKey<Prescription>(p => p.AppointmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
 
             modelBuilder.Entity<Appointment>().HasAlternateKey(e => new { e.Booking, e.PatientId, e.DoctorId });
-            if(false)
-            {
-                modelBuilder.Entity<Appointment>()
-                .HasOne(a => a.Prescription)
-                .WithOne(p => p.Appointment)
-                .HasForeignKey<Prescription>(p => p.AppointmentId);
-            }
+
+
+            modelBuilder.Entity<Appointment>()
+                .Property(e => e.Location)
+                    .HasConversion(
+                        v => v.ToString(),
+                        v=> (locationEnum)Enum.Parse(typeof(locationEnum), v));
 
             modelBuilder.Entity<Patient>().HasData(
                 new Patient() { Id = 1, FullName = "Joe" },
@@ -40,9 +47,9 @@ namespace workshop.wwwapi.Data
 
                 );
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment() {Id= 1, Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 2 },
-                new Appointment() {Id = 2,  Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 1 },
-                new Appointment() {Id = 3, Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 2 }
+                new Appointment() {Id= 1, Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 2 , Location=locationEnum.InPerson},
+                new Appointment() {Id = 2,  Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 1, Location = locationEnum.InPerson },
+                new Appointment() {Id = 3, Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 2, Location = locationEnum.Online }
 
                 );
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240209083446_TablePrescriptionNullableAppointmentRef")]
+    partial class TablePrescriptionNullableAppointmentRef
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,9 +88,6 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
 
-                    b.Property<string>("Location")
-                        .HasColumnType("text");
-
                     b.Property<int>("PatientId")
                         .HasColumnType("integer")
                         .HasColumnName("patient_id");
@@ -106,25 +106,22 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            Booking = new DateTime(2024, 2, 9, 10, 12, 47, 78, DateTimeKind.Utc).AddTicks(6629),
+                            Booking = new DateTime(2024, 2, 9, 8, 34, 46, 126, DateTimeKind.Utc).AddTicks(3870),
                             DoctorId = 1,
-                            Location = "InPerson",
                             PatientId = 2
                         },
                         new
                         {
                             Id = 2,
-                            Booking = new DateTime(2024, 2, 9, 10, 12, 47, 78, DateTimeKind.Utc).AddTicks(6636),
+                            Booking = new DateTime(2024, 2, 9, 8, 34, 46, 126, DateTimeKind.Utc).AddTicks(3883),
                             DoctorId = 2,
-                            Location = "InPerson",
                             PatientId = 1
                         },
                         new
                         {
                             Id = 3,
-                            Booking = new DateTime(2024, 2, 9, 10, 12, 47, 78, DateTimeKind.Utc).AddTicks(6637),
+                            Booking = new DateTime(2024, 2, 9, 8, 34, 46, 126, DateTimeKind.Utc).AddTicks(3884),
                             DoctorId = 2,
-                            Location = "Online",
                             PatientId = 2
                         });
                 });
@@ -319,8 +316,7 @@ namespace workshop.wwwapi.Migrations
                 {
                     b.HasOne("workshop.wwwapi.Models.Appointment", "Appointment")
                         .WithOne("Prescription")
-                        .HasForeignKey("workshop.wwwapi.Models.Prescription", "AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("workshop.wwwapi.Models.Prescription", "AppointmentId");
 
                     b.Navigation("Appointment");
                 });

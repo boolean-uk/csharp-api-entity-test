@@ -10,7 +10,7 @@ namespace wwwapi.DTO
         public int PatientId { get; set; }
         public string PatientFullName { get; set; }
 
-        public PrescriptionDTO? prescription { get; set; }
+        public PrescriptionforAppointmentDTO? prescription { get; set; }
 
         public AppointmentReturnDTO(Appointment appointment)
         {
@@ -21,7 +21,7 @@ namespace wwwapi.DTO
             PatientFullName = appointment.Patient.FullName;
             if (appointment.Prescription != null)
             {
-                prescription = new PrescriptionDTO(appointment.Prescription);
+                prescription = new PrescriptionforAppointmentDTO(appointment.Prescription);
             }
         }
 
@@ -36,29 +36,29 @@ namespace wwwapi.DTO
         }
     }
 
-    public class PrescriptionDTO
+    public class PrescriptionforAppointmentDTO
     {
         private Prescription prescription;
-        public List<MedicineDTOs> Medicines { get; set; } = [];
+        public List<MedicineDTO> Medicines { get; set; } = [];
 
-        public PrescriptionDTO(Prescription prescription)
+        public PrescriptionforAppointmentDTO(Prescription prescription)
         {
             foreach (var medicine in prescription.Medicines)
             {
 
-                Medicines.Add(new MedicineDTOs(medicine));
+                Medicines.Add(new MedicineDTO(medicine));
 
             }
         }
     }
 
-    public class MedicineDTOs
+    public class MedicineDTO
     {
         public string Name { get; set; }
         public string Note { get; set; }
         public int Quantity { get; set; }
 
-        public MedicineDTOs(Medicine medicine)
+        public MedicineDTO(Medicine medicine)
         {
             this.Name = medicine.Name;
             this.Note = medicine.Note;

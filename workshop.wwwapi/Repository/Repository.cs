@@ -31,7 +31,12 @@ namespace workshop.wwwapi.Repository
 
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
         {
-            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Include(a => a.Prescription).ThenInclude(p => p.Medicines).Where(a => a.DoctorId == id).ToListAsync();
+            return await _databaseContext.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .Include(a => a.Prescription).ThenInclude(p => p.Medicines)
+                .Where(a => a.DoctorId == id)
+                .ToListAsync();
         }
 
         public async Task<Patient?> CreateNewPatient(string fullname)
@@ -42,6 +47,16 @@ namespace workshop.wwwapi.Repository
             _databaseContext.SaveChanges();
 
             return p;
+        }
+
+        public async  Task<Appointment?> GetAppointmentsById(int id)
+        {
+            return await _databaseContext.Appointments
+                    .Include(a => a.Doctor)
+                    .Include(a => a.Patient)
+                    .Include(a => a.Prescription).ThenInclude(p => p.Medicines)
+                    .Where(a => a.Id == id)
+                    .FirstOrDefaultAsync();
         }
     }
 }
