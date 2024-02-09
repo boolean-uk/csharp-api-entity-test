@@ -112,9 +112,9 @@ namespace workshop.wwwapi.Repository
             return doctor;
         }
 
-        public async Task<Appointment> CreateAppointment(int doctorid, int patientid, DateTime booking)
+        public async Task<Appointment> CreateAppointment(int doctorid, int patientid, DateTime booking, AppointmentType type)
         {
-            Appointment appointment = new Appointment(doctorid, patientid, booking);
+            Appointment appointment = new Appointment(doctorid, patientid, booking, type);
             _databaseContext.Appointments.Add(appointment);
             await _databaseContext.SaveChangesAsync();
             

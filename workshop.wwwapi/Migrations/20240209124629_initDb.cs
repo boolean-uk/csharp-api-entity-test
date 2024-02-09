@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitializeDBStructure : Migration
+    public partial class initDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,7 +46,8 @@ namespace workshop.wwwapi.Migrations
                 {
                     booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     doctorid = table.Column<int>(type: "integer", nullable: false),
-                    patientid = table.Column<int>(type: "integer", nullable: false)
+                    patientid = table.Column<int>(type: "integer", nullable: false),
+                    appointmenttype = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,17 +91,17 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "appointment",
-                columns: new[] { "booking", "doctorid", "patientid" },
+                columns: new[] { "booking", "doctorid", "patientid", "appointmenttype" },
                 values: new object[,]
                 {
-                    { new DateTime(2024, 1, 11, 11, 0, 0, 0, DateTimeKind.Utc), 1, 1 },
-                    { new DateTime(2024, 2, 2, 14, 0, 0, 0, DateTimeKind.Utc), 1, 1 },
-                    { new DateTime(2024, 5, 29, 13, 0, 0, 0, DateTimeKind.Utc), 1, 3 },
-                    { new DateTime(2024, 3, 13, 10, 0, 0, 0, DateTimeKind.Utc), 1, 4 },
-                    { new DateTime(2024, 1, 17, 13, 0, 0, 0, DateTimeKind.Utc), 2, 2 },
-                    { new DateTime(2024, 2, 16, 9, 0, 0, 0, DateTimeKind.Utc), 2, 5 },
-                    { new DateTime(2024, 1, 6, 12, 0, 0, 0, DateTimeKind.Utc), 3, 2 },
-                    { new DateTime(2024, 4, 15, 8, 0, 0, 0, DateTimeKind.Utc), 3, 6 }
+                    { new DateTime(2024, 1, 11, 11, 0, 0, 0, DateTimeKind.Utc), 1, 1, 0 },
+                    { new DateTime(2024, 2, 2, 14, 0, 0, 0, DateTimeKind.Utc), 1, 1, 0 },
+                    { new DateTime(2024, 5, 29, 13, 0, 0, 0, DateTimeKind.Utc), 1, 3, 0 },
+                    { new DateTime(2024, 3, 13, 10, 0, 0, 0, DateTimeKind.Utc), 1, 4, 0 },
+                    { new DateTime(2024, 1, 17, 13, 0, 0, 0, DateTimeKind.Utc), 2, 2, 0 },
+                    { new DateTime(2024, 2, 16, 9, 0, 0, 0, DateTimeKind.Utc), 2, 5, 0 },
+                    { new DateTime(2024, 1, 6, 12, 0, 0, 0, DateTimeKind.Utc), 3, 2, 0 },
+                    { new DateTime(2024, 4, 15, 8, 0, 0, 0, DateTimeKind.Utc), 3, 6, 0 }
                 });
 
             migrationBuilder.CreateIndex(

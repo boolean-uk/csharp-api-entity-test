@@ -36,6 +36,10 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("appointmenttype");
+
                     b.HasKey("DoctorId", "PatientId", "Booking");
 
                     b.HasIndex("PatientId");
@@ -47,49 +51,57 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTime(2024, 1, 11, 11, 0, 0, 0, DateTimeKind.Utc)
+                            Booking = new DateTime(2024, 1, 11, 11, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTime(2024, 2, 2, 14, 0, 0, 0, DateTimeKind.Utc)
+                            Booking = new DateTime(2024, 2, 2, 14, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 2,
-                            Booking = new DateTime(2024, 1, 17, 13, 0, 0, 0, DateTimeKind.Utc)
+                            Booking = new DateTime(2024, 1, 17, 13, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 3,
-                            Booking = new DateTime(2024, 5, 29, 13, 0, 0, 0, DateTimeKind.Utc)
+                            Booking = new DateTime(2024, 5, 29, 13, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0
                         },
                         new
                         {
                             DoctorId = 3,
                             PatientId = 2,
-                            Booking = new DateTime(2024, 1, 6, 12, 0, 0, 0, DateTimeKind.Utc)
+                            Booking = new DateTime(2024, 1, 6, 12, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 4,
-                            Booking = new DateTime(2024, 3, 13, 10, 0, 0, 0, DateTimeKind.Utc)
+                            Booking = new DateTime(2024, 3, 13, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 5,
-                            Booking = new DateTime(2024, 2, 16, 9, 0, 0, 0, DateTimeKind.Utc)
+                            Booking = new DateTime(2024, 2, 16, 9, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0
                         },
                         new
                         {
                             DoctorId = 3,
                             PatientId = 6,
-                            Booking = new DateTime(2024, 4, 15, 8, 0, 0, 0, DateTimeKind.Utc)
+                            Booking = new DateTime(2024, 4, 15, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Type = 0
                         });
                 });
 
@@ -182,17 +194,21 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.HasOne("workshop.wwwapi.Models.Doctor", null)
+                    b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workshop.wwwapi.Models.Patient", null)
+                    b.HasOne("workshop.wwwapi.Models.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>

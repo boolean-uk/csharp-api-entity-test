@@ -27,7 +27,8 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> CreatePatient(IRepository repository, string FullName)
         {
             Patient? patient = await repository.CreatePatient(FullName);
-            if(patient == null){
+            if (patient == null)
+            {
                 return TypedResults.NotFound();
             }
             return TypedResults.Ok(PatientResponseDTO.FromRepository(patient));
@@ -36,16 +37,26 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> CreateDoctor(IRepository repository, string FullName)
         {
             Doctor? doctor = await repository.CreateDoctor(FullName);
-            if(doctor == null){
+            if (doctor == null)
+            {
                 return TypedResults.NotFound();
             }
             return TypedResults.Ok(DoctorResponseDTO.FromRepository(doctor));
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> CreateAppointment(IRepository repository, int doctorid, int patientid, DateTime booking)
+        public static async Task<IResult> CreateAppointment(IRepository repository, int doctorid, int patientid, DateTime booking, string appointmentType)
         {
-            Appointment? appointment = await repository.CreateAppointment(doctorid, patientid, booking);
-            if(appointment == null){
+            if (!Enum.IsDefined(typeof(AppointmentType), appointmentType))
+            {
+                return TypedResults.BadRequest("Invalid appointment type.");
+            }
+
+            AppointmentType type = (AppointmentType)Enum.Parse(typeof(AppointmentType), appointmentType);
+
+
+            Appointment? appointment = await repository.CreateAppointment(doctorid, patientid, booking, type);
+            if (appointment == null)
+            {
                 return TypedResults.NotFound();
             }
             return TypedResults.Ok(AppointmentResponseDTO.FromRepository(appointment));
@@ -75,7 +86,7 @@ namespace workshop.wwwapi.Endpoints
             }
             return TypedResults.Ok(DoctorResponseDTO.FromRepository(doctor));
         }
-        
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {

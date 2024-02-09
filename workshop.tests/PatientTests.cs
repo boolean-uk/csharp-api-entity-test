@@ -1,19 +1,30 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using NUnit.Framework;
+using Newtonsoft.Json;
 using workshop.wwwapi.Models;
 
-namespace workshop.tests;
-
-public class Tests
+namespace workshop.tests
 {
-
-    [Test]
-    public async Task PatientEndpointStatus()
+    public class Tests
     {
-        // Arrange
-        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
-        var client = factory.CreateClient();
-        var expectedData = new List<Patient>
+        private HttpClient _client;
+
+        [SetUp]
+        public void Setup()
+        {
+            var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+            _client = factory.CreateClient();
+        }
+
+        [Test]
+        public async Task PatientEndpointStatus()
+        {
+            // Arrange
+            var expectedData = new List<Patient>
             {
                 new Patient { Id = 1, FullName = "Elias Soprani" },
                 new Patient { Id = 2, FullName = "Olga Alm" },
@@ -22,19 +33,21 @@ public class Tests
                 new Patient { Id = 5, FullName = "Samuel Vacha" },
                 new Patient { Id = 6, FullName = "Theodor Johansson" }
             };
-        // Act
-        var response = await client.GetAsync("/patients");
 
-        // Assert
-        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
-         for (int i = 0; i < expectedData.Count; i++)
-            {
-                Assert.That(expectedData[i], Is.EqualTo(response[i], new PatientEqualityComparer()));
-            }
-        
+            // Act
+            var response = await _client.GetAsync("/patients");
+            response.EnsureSuccessStatusCode(); // Throw if not a success code
+
+            var responseData = await response.Content.ReadAsStringAsync();
+            var actualData = JsonConvert.DeserializeObject<List<Patient>>(responseData);
+
+            // Assert
+            Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
+            CollectionAssert.AreEqual(expectedData, actualData);
+        }
     }
 
-       public class PatientEqualityComparer : IEqualityComparer<Patient>
+    public class PatientEqualityComparer : IEqualityComparer<Patient>
     {
         public bool Equals(Patient x, Patient y)
         {

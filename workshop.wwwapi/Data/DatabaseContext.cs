@@ -34,14 +34,14 @@ namespace workshop.wwwapi.Data
 
                 modelBuilder.Entity<Appointment>()
                     .HasData(
-                        new Appointment { DoctorId = 1, PatientId = 1, Booking = new DateTime(2024, 1, 11, 11, 0, 0, DateTimeKind.Utc) },
-                        new Appointment { DoctorId = 1, PatientId = 1, Booking = new DateTime(2024, 2, 2, 14, 0, 0, DateTimeKind.Utc) },
-                        new Appointment { DoctorId = 2, PatientId = 2, Booking = new DateTime(2024, 1, 17, 13, 0, 0, DateTimeKind.Utc) },
-                        new Appointment { DoctorId = 1, PatientId = 3, Booking = new DateTime(2024, 5, 29, 13, 0, 0, DateTimeKind.Utc) },
-                        new Appointment { DoctorId = 3, PatientId = 2, Booking = new DateTime(2024, 1, 6, 12, 0, 0, DateTimeKind.Utc) },
-                        new Appointment { DoctorId = 1, PatientId = 4, Booking = new DateTime(2024, 3, 13, 10, 0, 0, DateTimeKind.Utc) },
-                        new Appointment { DoctorId = 2, PatientId = 5, Booking = new DateTime(2024, 2, 16, 9, 0, 0, DateTimeKind.Utc) },
-                        new Appointment { DoctorId = 3, PatientId = 6, Booking = new DateTime(2024, 4, 15, 8, 0, 0, DateTimeKind.Utc) }
+                        new Appointment { DoctorId = 1, PatientId = 1, Booking = new DateTime(2024, 1, 11, 11, 0, 0, DateTimeKind.Utc), Type = AppointmentType.InPerson },
+                        new Appointment { DoctorId = 1, PatientId = 1, Booking = new DateTime(2024, 2, 2, 14, 0, 0, DateTimeKind.Utc), Type = AppointmentType.InPerson },
+                        new Appointment { DoctorId = 2, PatientId = 2, Booking = new DateTime(2024, 1, 17, 13, 0, 0, DateTimeKind.Utc), Type = AppointmentType.InPerson },
+                        new Appointment { DoctorId = 1, PatientId = 3, Booking = new DateTime(2024, 5, 29, 13, 0, 0, DateTimeKind.Utc), Type = AppointmentType.InPerson },
+                        new Appointment { DoctorId = 3, PatientId = 2, Booking = new DateTime(2024, 1, 6, 12, 0, 0, DateTimeKind.Utc), Type = AppointmentType.InPerson },
+                        new Appointment { DoctorId = 1, PatientId = 4, Booking = new DateTime(2024, 3, 13, 10, 0, 0, DateTimeKind.Utc), Type = AppointmentType.InPerson },
+                        new Appointment { DoctorId = 2, PatientId = 5, Booking = new DateTime(2024, 2, 16, 9, 0, 0, DateTimeKind.Utc), Type = AppointmentType.InPerson },
+                        new Appointment { DoctorId = 3, PatientId = 6, Booking = new DateTime(2024, 4, 15, 8, 0, 0, DateTimeKind.Utc), Type = AppointmentType.InPerson }
                     );
 
         }
