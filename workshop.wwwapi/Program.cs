@@ -1,6 +1,10 @@
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
+using workshop.wwwapi.Models.AppointmentModels;
+using workshop.wwwapi.Models.DoctorModels;
+using workshop.wwwapi.Models.PatientModels;
 using workshop.wwwapi.Repository;
+using workshop.wwwapi.Repository.ExtensionRepository;
 using workshop.wwwapi.Repository.GenericRepository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IRepository<Doctor>, DoctorRepo>();
+builder.Services.AddScoped<IRepository<Patient>, PatientRepo>();
+builder.Services.AddScoped<IRepository<Appointment>, AppointmentRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

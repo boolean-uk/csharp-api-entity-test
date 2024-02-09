@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using workshop.wwwapi.Models.ModelsDto;
+using workshop.wwwapi.Models.DoctorModels;
+using workshop.wwwapi.Models.PatientModels;
 
-namespace workshop.wwwapi.Models.ModelsBase
+namespace workshop.wwwapi.Models.AppointmentModels
 {
     [Table("appointments")]
     public class Appointment

@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using workshop.wwwapi.Models.ModelsBase;
+using workshop.wwwapi.Models.AppointmentModels;
+using workshop.wwwapi.Models.DoctorModels;
+using workshop.wwwapi.Models.PatientModels;
 
 namespace workshop.wwwapi.Data
 {

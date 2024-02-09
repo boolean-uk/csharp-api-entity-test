@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using workshop.wwwapi.Models.ModelsDto;
+using workshop.wwwapi.Models.AppointmentModels;
 
-namespace workshop.wwwapi.Models.ModelsBase
+namespace workshop.wwwapi.Models.DoctorModels
 {
-    [Table("patients")]
-    public class Patient
+    [Table("doctors")]
+    public class Doctor
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
