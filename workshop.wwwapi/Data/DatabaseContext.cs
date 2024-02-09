@@ -17,10 +17,34 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Patient>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<Doctor>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<Appointment>().HasKey(e => new { e.PatientId, e.DoctorId });
 
             //TODO: Seed Data Here
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient { Id = 1, FullName = "Victor Adamson"},
+                new Patient { Id = 2, FullName = "Name Namesson"},
+                new Patient { Id = 3, FullName = "John Smith"},
+                new Patient { Id = 4, FullName = "Person MacPersonface"},
+                new Patient { Id = 5, FullName = "Phill Collins"}
+            );
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor { Id = 1, FullName = "Old Beardo"},
+                new Doctor { Id = 2, FullName = "Dr Strangelove"},
+                new Doctor { Id = 3, FullName = "Krieger"}
+            );
+            DateTime utc = DateTime.Now.ToUniversalTime();
+            DateTime utc2 = DateTime.Now.AddDays( 1 ).ToUniversalTime();
+            List<Appointment> appointments = new List<Appointment>();
+            appointments.Add(new Appointment {Booking = utc, DoctorId = 1, PatientId = 1 });
+            appointments.Add(new Appointment {Booking = utc, DoctorId = 2, PatientId = 5 });
+            appointments.Add(new Appointment {Booking = utc, DoctorId = 3, PatientId = 4 });
+            appointments.Add(new Appointment {Booking = utc2, DoctorId = 1, PatientId = 2 });
+            appointments.Add(new Appointment {Booking = utc2, DoctorId = 2, PatientId = 4 });
+            appointments.Add(new Appointment {Booking = utc2, DoctorId = 3, PatientId = 3 });
 
+            modelBuilder.Entity<Appointment>().HasData(appointments);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
