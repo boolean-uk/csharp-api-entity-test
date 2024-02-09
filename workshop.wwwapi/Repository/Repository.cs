@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Data;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
@@ -79,7 +80,31 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
         }
 
-        
+        public async Task<Appointment?> assignAppointment(int patient_id, int doc_id, AppointmentType appointmentType)
+        {
+            var patient = await GetPatientById(patient_id);
+            if (patient == null)
+            {
+                return null;
+            }
+            var doctor = await GetDoctorById(doc_id);   
+            if (doctor == null)
+            {
+                return null;
+            }
 
+            var newAppointment = new Appointment
+            {
+                PatientId = patient_id,
+                DoctorId = doctor.Id,
+                Booking = DateTime.UtcNow.ToString(),
+                TypeOfAppointent = appointmentType
+            };
+
+            _databaseContext.Appointments.Add(newAppointment);
+            await _databaseContext.SaveChangesAsync();
+
+            return newAppointment;  
+        }
     }
 }

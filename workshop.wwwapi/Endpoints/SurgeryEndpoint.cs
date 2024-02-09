@@ -24,6 +24,7 @@ namespace workshop.wwwapi.Endpoints
             
             surgeryGroup.MapGet("/doctor/{id}", GetDoctorById);
 
+            surgeryGroup.MapPost("/patients/{patient_id}/doctors/{doc_id}/appointments", AssignAppointment);
             surgeryGroup.MapGet("/appointments", GetAllAppointments);
             surgeryGroup.MapGet("/appointment/{id}", GetAppointmentById);
             surgeryGroup.MapPost("/appointment/{id}/prescription", AttachPrescriptionToAppointment);
@@ -88,6 +89,13 @@ namespace workshop.wwwapi.Endpoints
                 return TypedResults.NotFound($"Doctor with id {id} could not be found");
             }
             return TypedResults.Ok(new DoctorsOnlyDTO(doctor));
+        }
+
+        public static async Task<IResult> AssignAppointment(int patient_id, int doc_id, IRepository repository)
+        {
+            var appointment = await repository.assignAppointment(patient_id, doc_id, AppointmentType.Online);
+
+            throw new NotImplementedException();
         }
 
         public static async Task<IResult> GetAllAppointments(IRepository repository)

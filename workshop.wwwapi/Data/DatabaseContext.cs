@@ -20,6 +20,7 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>()
                 .HasKey(k => new { k.Id });
 
+            
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Doctor)
                 .WithMany(d => d.Appointments)
@@ -34,22 +35,10 @@ namespace workshop.wwwapi.Data
                 .HasMany(a => a.Prescriptions)
                 .WithOne(p => p.Appointment)
                 .HasForeignKey(p => p.AppointmentId);
-
+            
             //! Extension
             modelBuilder.Entity<PrescriptionMedicine>()
                 .HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
-
-            modelBuilder.Entity<PrescriptionMedicine>()
-                .HasOne(pm => pm.Prescription)
-                .WithMany(p => p.PrescriptionMedicines)
-                .HasForeignKey(pm => pm.PrescriptionId);
-
-            modelBuilder.Entity<PrescriptionMedicine>()
-                .HasOne(pm => pm.Medicine)
-                .WithMany(m => m.PrescriptionMedicines)
-                .HasForeignKey(pm => pm.MedicineId);
-            
-
 
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(
@@ -103,9 +92,6 @@ namespace workshop.wwwapi.Data
                 new PrescriptionMedicine { PrescriptionId = 2, MedicineId = 2, Quantity = 3, Notes = "Twice a day" }
 
             );
-
-
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

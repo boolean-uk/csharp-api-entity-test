@@ -14,7 +14,6 @@ namespace workshop.wwwapi.Repository
         Task<List<Appointment>?> GetAppointmentsByDoctorId(int doctorId);
 
         Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
-
-
+        Task<Appointment?> assignAppointment(int patient_id, int doc_id);
     }
 }

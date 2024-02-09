@@ -16,12 +16,8 @@ namespace workshop.wwwapi.DTO
             Notes = prescription.Notes ?? "No note given";
 
             PrescriptionMedicines = prescription.PrescriptionMedicines
-                .Select(pm => new PrescriptionMedicineDTO(pm)).ToList();
-               
-
-            
+                .Select(pm => new PrescriptionMedicineDTO(pm)).ToList(); 
         }
-        
     }
 
 

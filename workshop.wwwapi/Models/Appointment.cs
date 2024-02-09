@@ -2,6 +2,12 @@
 
 namespace workshop.wwwapi.Models
 {
+
+    public enum AppointmentType
+    {
+        FaceToFace,
+        Online
+    }
     //TODO: decorate class/columns accordingly
     [Table("appointments")]
     public class Appointment
@@ -10,6 +16,8 @@ namespace workshop.wwwapi.Models
         public int Id { get; set; }
         [Column("bookings")]
         public string Booking { get; set; }
+        [Column("appointment_type")]
+        public AppointmentType TypeOfAppointent { get; set; }
         
 
         [Column("doctor_id")]
