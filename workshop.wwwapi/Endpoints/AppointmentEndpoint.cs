@@ -40,7 +40,12 @@ namespace workshop.wwwapi.Endpoints
             {
                 return TypedResults.BadRequest("Patient does not exist");
             }
-            Appointment? appointment = await repository.CreateAppointment(payload.Booking, doctor, patient);
+            Prescription? prescription = await repository.GetPrescriptionById(payload.PrescriptionId, PreloadPolicy.DoNotPreloadRelations);
+            if (prescription == null)
+            {
+                return TypedResults.BadRequest("Prescription does not exist");
+            }
+            Appointment? appointment = await repository.CreateAppointment(payload.Booking, doctor, patient, prescription, payload.Type);
             if (appointment == null)
             {
                 return TypedResults.BadRequest("Appointment could not be created");
@@ -74,6 +79,42 @@ namespace workshop.wwwapi.Endpoints
             var appointment = await repository.GetAppointmentByDoctorId(doctorId);
             var appointmentDTO = new AppointmentDTO(appointment);
             return TypedResults.Ok(appointmentDTO);
+        }
+
+        public static async Task<IResult> LinkPrescriptionToAppointment(IRepository repository, int prescriptionId, int doctorId, int patientId)
+        {
+            if (prescriptionId.Equals(null)) {
+                return TypedResults.BadRequest("PrescriptionId is required");
+            }
+            if (doctorId.Equals(null)) {
+                return TypedResults.BadRequest("DoctorId is required");
+            }
+            if (patientId.Equals(null)) {
+                return TypedResults.BadRequest("PatientId is required");
+            }
+            Doctor? doctor = await repository.GetDoctorById(doctorId, PreloadPolicy.DoNotPreloadRelations);
+            if (doctor == null)
+            {
+                return TypedResults.BadRequest("Doctor does not exist");
+            }
+            Patient? patient = await repository.GetPatientById(patientId, PreloadPolicy.DoNotPreloadRelations);
+            if (patient == null)
+            {
+                return TypedResults.BadRequest("Patient does not exist");
+            }
+            Prescription? prescription = await repository.GetPrescriptionById(prescriptionId, PreloadPolicy.DoNotPreloadRelations);
+            if (prescription == null)
+            {
+                return TypedResults.BadRequest("Prescription does not exist");
+            }
+            Appointment? appointment = await repository.GetAppointmentByDoctorId(doctorId);
+            if (appointment == null)
+            {
+                return TypedResults.BadRequest("Appointment does not exist");
+            }
+
+            var link = await repository.LinkPrescriptionToAppointment(prescriptionId, doctorId, patientId);
+            return TypedResults.Ok(new AppointmentDTO(link));
         }
     }
 }

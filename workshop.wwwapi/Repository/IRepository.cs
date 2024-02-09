@@ -23,9 +23,23 @@ namespace workshop.wwwapi.Repository
         
 
         Task<IEnumerable<Appointment>> GetAppointments();
-        Task<Appointment?> CreateAppointment(DateTime booking, Doctor doctor, Patient patient);
+        Task<Appointment?> CreateAppointment(DateTime booking, Doctor doctor, Patient patient, Prescription prescription, string type);
 
         Task<Appointment?> GetAppointmentByPatientId(int patientId);
         Task<Appointment?> GetAppointmentByDoctorId(int doctorId);
-    }
+
+        Task<IEnumerable<Prescription>> GetPrescriptions();
+
+        Task<Prescription?> GetPrescriptionById(int id, PreloadPolicy preloadPolicy = PreloadPolicy.DoNotPreloadRelations);
+        Task<Prescription?> CreatePrescription(int medicineId, int quantity, string notes);
+
+        Task<Appointment?> LinkPrescriptionToAppointment(int doctorId, int patientId, int prescriptionId);
+
+        Task<IEnumerable<Medicine>> GetMedicines();
+
+        Task<Medicine?> GetMedicineById(int id, PreloadPolicy preloadPolicy = PreloadPolicy.DoNotPreloadRelations);
+
+        Task<Medicine?> CreateMedicine(string name);
+    
+    }   
 }

@@ -31,13 +31,20 @@ namespace workshop.wwwapi.DTO
         }
     }
 
-    public class PatientApointmentDTO
+    public class PatientAppointmentDTO
     {
+        public DateTime Booking { get; set; }
+
+        public string Type { get; set; }
         public DoctorDTO Doctor { get; set; }
-        public PatientApointmentDTO(Appointment appointment)
+
+        public PrescriptionDTO Prescription { get; set; }
+        public PatientAppointmentDTO(Appointment appointment)
         {
+            Booking = appointment.Booking;
+            Type = appointment.Type;
             Doctor = new DoctorDTO(appointment.Doctor);
+            Prescription = new PrescriptionDTO(appointment.Prescription);
         }
     }
-    
 }
