@@ -19,8 +19,10 @@ namespace workshop.wwwapi.Endpoints
             prescripGroup.MapGet("/", GetAllPrescriptions);
             prescripGroup.MapPost("/", CreatePrescription);
             prescripGroup.MapPut("/{id}/addMedicine/{medicine_id}", AddMedicineToPrescription);
+            prescripGroup.MapDelete("/{pres_id}/medicine/{medic_id}", DeleteMedicineFromPrescription);
 
             prescripGroup.MapGet("/medicine", GetAllMedicine);
+            
         }
 
 
@@ -88,6 +90,10 @@ namespace workshop.wwwapi.Endpoints
            
         }
 
+        private static async Task<IResult> DeleteMedicineFromPrescription()
+        {
+            throw new NotImplementedException();
+        }
         
 
 

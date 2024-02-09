@@ -26,7 +26,8 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/appointments", GetAllAppointments);
             surgeryGroup.MapGet("/appointment/{id}", GetAppointmentById);
-            surgeryGroup.MapPost("/appointment{id}/prescription", AttachPrescriptionToAppointment);
+            surgeryGroup.MapPost("/appointment/{id}/prescription", AttachPrescriptionToAppointment);
+            surgeryGroup.MapDelete("/appointment/{appo_id}/prescription/{pres_id}", DeletePrescription);
 
             surgeryGroup.MapGet("/appointmentsbydoctor/{doctorId}", GetAppointmentsByDoctor);
         }
@@ -167,6 +168,15 @@ namespace workshop.wwwapi.Endpoints
 
         }
 
+        private static async Task<IResult> DeletePrescription(int appo_id, int pres_id, IPrescriptionRepository prescriptionRepository)
+        {
+            var isDeleted = await prescriptionRepository.deletePrescription(pres_id, appo_id);
+            if (!isDeleted)
+            {
+                return TypedResults.BadRequest($"No valid data enterde");
+            }
+            return TypedResults.Ok("The prescription has successfully been deleted");
+        }
 
 
     }
