@@ -10,16 +10,42 @@ namespace workshop.wwwapi.Data
         private string _connectionString;
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.Example.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Appointment>()
+                .HasKey(a => new { a.PatientId, a.DoctorId, a.Booking })
+                .HasName("PK_appointment_doc_patient_booking");
 
             //TODO: Seed Data Here
+            Seeder seeder = new Seeder();
+            modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
+            modelBuilder.Entity<Patient>().HasData(seeder.Patients);
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment
+                {
+                    Booking = new DateTime(2001, 01, 02).ToUniversalTime(),
+                    DoctorId = 3,
+                    PatientId = 1
+                },
+                new Appointment
+                {
+                    Booking = new DateTime(2002, 01, 03).ToUniversalTime(),
+                    DoctorId = 2,
+                    PatientId = 3
+                },
+                new Appointment
+                {
+                    Booking = new DateTime(2002, 02, 03).ToUniversalTime(),
+                    DoctorId = 4,
+                    PatientId = 5
+                }
+                );
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
