@@ -7,8 +7,6 @@ namespace workshop.wwwapi.DTO
     {
         
         public int PrescriptionId { get; set; }
-
-        
         public string? Notes { get; set; }
 
         public int AppointmentId { get; set; }
@@ -20,6 +18,9 @@ namespace workshop.wwwapi.DTO
             if (prescription.Notes != null)
             {
                 Notes = prescription.Notes;
+            } else
+            {
+                Notes = "No note given";
             }
             AppointmentId = prescription.AppointmentId;
             

@@ -6,5 +6,6 @@
         public string Booking { get; set; }
         public PatientOnlyDTO Patient { get; set; }
         public DoctorsOnlyDTO Doctor { get; set; }
+        public ICollection<PrescriptionDTO> Prescriptions { get; set; }
     }
 }

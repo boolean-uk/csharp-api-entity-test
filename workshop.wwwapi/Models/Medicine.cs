@@ -17,6 +17,4 @@ namespace workshop.wwwapi.Models
         // Navigation property for many-to-many relationship
         public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; }
     }
-
-    
 }

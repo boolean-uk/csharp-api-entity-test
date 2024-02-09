@@ -46,7 +46,10 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments
                 .Include(a => a.Patient)
                 .Include(a => a.Doctor) // Ensure that the Doctor is loaded
-                .ToListAsync();
+                .Include(a => a.Prescriptions)
+                    .ThenInclude(pm => pm.PrescriptionMedicines)
+                        .ThenInclude(m => m.Medicine)
+                        .ToListAsync();
         }
 
         public async Task<Appointment?> GetAppointmentWithDetailsById(int appointmentId)
