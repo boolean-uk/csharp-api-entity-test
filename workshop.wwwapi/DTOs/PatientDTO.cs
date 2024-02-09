@@ -9,8 +9,9 @@ namespace workshop.wwwapi.DTOs
 
         }
 
-        int id;
-        string doctorName;
-        ICollection<Appointment> appointments;
+        public int id;
+        public string Name;
+        public string DoctorName;
+        public ICollection<Appointment> Appointments;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,18 +8,18 @@
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedDataIntoPatient : Migration
+    public partial class MoreAppointmentsMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
-                table: "patients",
-                columns: new[] { "id", "name" },
+                table: "appointments",
+                columns: new[] { "id", "booking", "doctor_id_fk", "patient_id_fk" },
                 values: new object[,]
                 {
-                    { 1, "Jack Peterson" },
-                    { 2, "Dave Davidson" }
+                    { 1, new DateTime(2024, 6, 2, 15, 0, 0, 0, DateTimeKind.Utc), 1, 2 },
+                    { 3, new DateTime(2023, 2, 6, 15, 0, 0, 0, DateTimeKind.Utc), 1, 1 }
                 });
         }
 
@@ -26,14 +27,14 @@ namespace workshop.wwwapi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
-                table: "patients",
+                table: "appointments",
                 keyColumn: "id",
                 keyValue: 1);
 
             migrationBuilder.DeleteData(
-                table: "patients",
+                table: "appointments",
                 keyColumn: "id",
-                keyValue: 2);
+                keyValue: 3);
         }
     }
 }

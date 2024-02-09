@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Models.Prescriptions;
 
 namespace workshop.wwwapi.Models
 {
@@ -7,18 +8,12 @@ namespace workshop.wwwapi.Models
     [Table("doctors")]
     public class Doctor
     {
-        private static int _id = 1;
-        public Doctor()
-        {
-            Id = _id++;
-        }
-
-        [Key]
-        [Column("id")]
+        [Key, Column("id", Order = 0)]
         public int Id { get; internal set; }
         [Column("name")]
         public string FullName { get; set; }
 
-        public ICollection<Appointment> appointments { get; set; } = new List<Appointment>();
+        //public Appointment appointment { get; set; } = null;
+        public List<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

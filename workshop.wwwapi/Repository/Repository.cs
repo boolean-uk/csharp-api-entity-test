@@ -1,87 +1,44 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository
 {
-    public class Repository : IRepository
+    public class Repository<T> : IRepository<T> where T : class
     {
-        private DatabaseContext _databaseContext;
+        protected DatabaseContext _db;
+        protected DbSet<T> _table = null;
         public Repository(DatabaseContext db)
         {
-            _databaseContext = db;
+            _db = db;
+            _table = _db.Set<T>();
         }
 
-        // --- Patients ---
-        public async Task<IEnumerable<Patient>> GetPatients()
+        public async Task<T> Delete(int id)
         {
-            return await _databaseContext.Patients.ToListAsync();
-        }
-        public async Task<Patient> GetPatient(int id)
-        {
-            return await _databaseContext.Patients.FirstOrDefaultAsync(x => x.Id == id);
-        }
+            T entity = await _table.FindAsync(id);
+            _table.Remove(entity);
 
-        public async Task<Patient> CreatePatient(string PatientName)
-        {
-            if (PatientName == "")
-                return null;
-
-            Patient patient = new Patient() { FullName = PatientName };
-            await _databaseContext.Patients.AddAsync(patient);
-
-            _databaseContext.SaveChanges();
-            return patient;
+            await _db.SaveChangesAsync();
+            return entity;
         }
 
-        // --- Doctors ---
-        public async Task<IEnumerable<Doctor>> GetDoctors()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return await _databaseContext.Doctors.ToListAsync();
-        }
-        public async Task<Doctor> GetDoctor(int id)
-        {
-            return await _databaseContext.Doctors.FirstOrDefaultAsync(x => x.Id == id);
+            return await _table.ToListAsync();
         }
 
-        public async Task<Doctor> CreateDoctor(string doctorName)
+        public async Task<T> GetByID(object id)
         {
-            if (doctorName == "")
-                return null;
-
-            Doctor doctor = new Doctor() { FullName = doctorName };
-            await _databaseContext.Doctors.AddAsync(doctor);
-
-            _databaseContext.SaveChanges();
-            return doctor;
-        }
-        // --- Appointments ---
-        public async Task<IEnumerable<Appointment>> GetAppointments()
-        {
-            return await _databaseContext.Appointments.ToListAsync();
+            return await _table.FindAsync(id);
         }
 
-        public async Task<Appointment> GetAppointment(int id)
+        public async Task<T> Insert(T entity)
         {
-            return await _databaseContext.Appointments.FirstOrDefaultAsync(x => x.Id == id);
-        }
+            await _table.AddAsync(entity);
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id)
-        {
-            return await _databaseContext.Appointments.Where(x => x.PatientIdFK == id).ToListAsync();
-        }
-
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
-        {
-            return await _databaseContext.Appointments.Where(a => a.DoctorIdFK == id).ToListAsync();
-        }
-        public async Task<Appointment> CreateAppointment(Appointment appointment)
-        {
-            await _databaseContext.Appointments.AddAsync(appointment);
-
-            _databaseContext.SaveChanges();
-            return appointment;
+            _db.SaveChanges();
+            return entity;
         }
     }
 }

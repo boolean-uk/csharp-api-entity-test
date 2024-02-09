@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240207101852_UpdateToDatatablesMigration4")]
-    partial class UpdateToDatatablesMigration4
+    [Migration("20240209114118_MoreAppointmentsMigration")]
+    partial class MoreAppointmentsMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,57 +27,56 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.Property<int>("PatientIdFK")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("patient_id_fk");
+                        .HasColumnName("id");
 
-                    b.Property<int>("DoctorIdFK")
-                        .HasColumnType("integer")
-                        .HasColumnName("doctor_id_fk");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking");
 
-                    b.Property<int?>("DoctorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Id")
+                    b.Property<int>("DoctorIdFK")
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("doctor_id_fk")
+                        .HasColumnOrder(0);
 
-                    b.Property<int?>("PatientId")
-                        .HasColumnType("integer");
+                    b.Property<int>("PatientIdFK")
+                        .HasColumnType("integer")
+                        .HasColumnName("patient_id_fk")
+                        .HasColumnOrder(1);
 
-                    b.HasKey("PatientIdFK", "DoctorIdFK", "Booking");
+                    b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorIdFK");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("PatientIdFK");
 
                     b.ToTable("appointments");
 
                     b.HasData(
                         new
                         {
-                            PatientIdFK = 2,
+                            Id = 1,
+                            Booking = new DateTime(2024, 6, 2, 15, 0, 0, 0, DateTimeKind.Utc),
                             DoctorIdFK = 1,
-                            Booking = new DateTime(2020, 4, 22, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Id = 1
+                            PatientIdFK = 2
                         },
                         new
                         {
-                            PatientIdFK = 1,
+                            Id = 2,
+                            Booking = new DateTime(2024, 2, 6, 15, 0, 0, 0, DateTimeKind.Utc),
                             DoctorIdFK = 2,
-                            Booking = new DateTime(2020, 1, 13, 10, 30, 0, 0, DateTimeKind.Unspecified),
-                            Id = 2
+                            PatientIdFK = 1
                         },
                         new
                         {
-                            PatientIdFK = 1,
+                            Id = 3,
+                            Booking = new DateTime(2023, 2, 6, 15, 0, 0, 0, DateTimeKind.Utc),
                             DoctorIdFK = 1,
-                            Booking = new DateTime(2020, 10, 30, 10, 30, 0, 0, DateTimeKind.Unspecified),
-                            Id = 3
+                            PatientIdFK = 1
                         });
                 });
 
@@ -86,7 +85,8 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("id")
+                        .HasColumnOrder(0);
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -145,18 +145,26 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.HasOne("workshop.wwwapi.Models.Doctor", null)
-                        .WithMany("appointments")
-                        .HasForeignKey("DoctorId");
+                    b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorIdFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("workshop.wwwapi.Models.Patient", null)
+                    b.HasOne("workshop.wwwapi.Models.Patient", "Patient")
                         .WithMany("appointments")
-                        .HasForeignKey("PatientId");
+                        .HasForeignKey("PatientIdFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
                 {
-                    b.Navigation("appointments");
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
