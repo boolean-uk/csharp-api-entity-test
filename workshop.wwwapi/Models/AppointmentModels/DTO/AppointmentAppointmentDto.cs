@@ -12,6 +12,16 @@ namespace workshop.wwwapi.Models.AppointmentModels.DTO
         public DoctorAppointmentDto Doctor { get; set; }
 
         public PatientAppointmentDto Patient { get; set; }
+
+        public static AppointmentAppointmentDto Create(Appointment appointment)
+        {
+            return new AppointmentAppointmentDto()
+            {
+                Booking = appointment.Booking,
+                Doctor = DoctorAppointmentDto.Create(appointment.Doctor),
+                Patient = PatientAppointmentDto.Create(appointment.Patient)
+            };
+        }
     }
 }
 
