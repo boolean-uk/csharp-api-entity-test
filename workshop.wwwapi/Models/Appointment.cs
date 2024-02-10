@@ -22,6 +22,9 @@ namespace workshop.wwwapi.Models
         [Column("appointment_date")]
         public DateTime AppointmentDate { get; set; }
 
+        [Column("appointment_is_online")]
+        public bool IsOnline { get; set; }
+
         public Patient Patient { get; set; }
 
         public Doctor Doctor { get; set; }
@@ -36,6 +39,7 @@ namespace workshop.wwwapi.Models
         public int PatientId { get; set; }
         public string PatientName { get; set; }
         public DateTime AppointmentDate { get; set; }
+        public bool IsOnline { get; set; }
 
         public AppointmentsResponseDTO(Appointment appointment)
         {
@@ -44,6 +48,8 @@ namespace workshop.wwwapi.Models
             PatientId = appointment.PatientId;
             PatientName = appointment.Patient?.FullName;
             AppointmentDate = appointment.AppointmentDate;
+            IsOnline = appointment.IsOnline;
+            
         }
     }
 }

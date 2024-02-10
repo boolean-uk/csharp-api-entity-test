@@ -55,13 +55,13 @@ namespace workshop.wwwapi.Data
             //Appointments data
             modelBuilder.Entity<Appointment>().HasData(
                 new Appointment { Id = 1, AppointmentDate = DateTime.UtcNow, 
-                    PatientId = 1, DoctorId = 1 },
+                    PatientId = 1, DoctorId = 1, IsOnline = false },
                 new Appointment { Id = 2, AppointmentDate = DateTime.UtcNow, 
-                    PatientId = 2, DoctorId = 2 },
+                    PatientId = 2, DoctorId = 2, IsOnline = true },
                 new Appointment { Id = 3, AppointmentDate = DateTime.UtcNow, 
-                    PatientId = 3, DoctorId = 3 },
+                    PatientId = 3, DoctorId = 3, IsOnline = true },
                 new Appointment { Id = 4, AppointmentDate = DateTime.UtcNow, 
-                    PatientId = 4, DoctorId = 4 }
+                    PatientId = 4, DoctorId = 4, IsOnline = true }
             );
 
 

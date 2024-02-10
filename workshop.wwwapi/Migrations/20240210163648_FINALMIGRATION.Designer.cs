@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240209130729_CREATEMANYTOMANYANDAPPOINTMENTS")]
-    partial class CREATEMANYTOMANYANDAPPOINTMENTS
+    [Migration("20240210163648_FINALMIGRATION")]
+    partial class FINALMIGRATION
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,10 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
 
+                    b.Property<bool>("IsOnline")
+                        .HasColumnType("boolean")
+                        .HasColumnName("appointment_is_online");
+
                     b.Property<int>("PatientId")
                         .HasColumnType("integer")
                         .HasColumnName("patient_id");
@@ -58,29 +62,33 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            AppointmentDate = new DateTime(2024, 2, 9, 13, 7, 28, 957, DateTimeKind.Utc).AddTicks(3842),
+                            AppointmentDate = new DateTime(2024, 2, 10, 16, 36, 47, 587, DateTimeKind.Utc).AddTicks(8042),
                             DoctorId = 1,
+                            IsOnline = false,
                             PatientId = 1
                         },
                         new
                         {
                             Id = 2,
-                            AppointmentDate = new DateTime(2024, 2, 9, 13, 7, 28, 957, DateTimeKind.Utc).AddTicks(3850),
+                            AppointmentDate = new DateTime(2024, 2, 10, 16, 36, 47, 587, DateTimeKind.Utc).AddTicks(8050),
                             DoctorId = 2,
+                            IsOnline = true,
                             PatientId = 2
                         },
                         new
                         {
                             Id = 3,
-                            AppointmentDate = new DateTime(2024, 2, 9, 13, 7, 28, 957, DateTimeKind.Utc).AddTicks(3851),
+                            AppointmentDate = new DateTime(2024, 2, 10, 16, 36, 47, 587, DateTimeKind.Utc).AddTicks(8052),
                             DoctorId = 3,
+                            IsOnline = true,
                             PatientId = 3
                         },
                         new
                         {
                             Id = 4,
-                            AppointmentDate = new DateTime(2024, 2, 9, 13, 7, 28, 957, DateTimeKind.Utc).AddTicks(3852),
+                            AppointmentDate = new DateTime(2024, 2, 10, 16, 36, 47, 587, DateTimeKind.Utc).AddTicks(8053),
                             DoctorId = 4,
+                            IsOnline = true,
                             PatientId = 4
                         });
                 });

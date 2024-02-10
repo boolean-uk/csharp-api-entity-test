@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class CREATEMANYTOMANYANDAPPOINTMENTS : Migration
+    public partial class FINALMIGRATION : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,7 +63,8 @@ namespace workshop.wwwapi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     doctor_id = table.Column<int>(type: "integer", nullable: false),
                     patient_id = table.Column<int>(type: "integer", nullable: false),
-                    appointment_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    appointment_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    appointment_is_online = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -162,13 +163,13 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "appointments",
-                columns: new[] { "id", "appointment_date", "doctor_id", "patient_id" },
+                columns: new[] { "id", "appointment_date", "doctor_id", "appointment_is_online", "patient_id" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 9, 13, 7, 28, 957, DateTimeKind.Utc).AddTicks(3842), 1, 1 },
-                    { 2, new DateTime(2024, 2, 9, 13, 7, 28, 957, DateTimeKind.Utc).AddTicks(3850), 2, 2 },
-                    { 3, new DateTime(2024, 2, 9, 13, 7, 28, 957, DateTimeKind.Utc).AddTicks(3851), 3, 3 },
-                    { 4, new DateTime(2024, 2, 9, 13, 7, 28, 957, DateTimeKind.Utc).AddTicks(3852), 4, 4 }
+                    { 1, new DateTime(2024, 2, 10, 16, 36, 47, 587, DateTimeKind.Utc).AddTicks(8042), 1, false, 1 },
+                    { 2, new DateTime(2024, 2, 10, 16, 36, 47, 587, DateTimeKind.Utc).AddTicks(8050), 2, true, 2 },
+                    { 3, new DateTime(2024, 2, 10, 16, 36, 47, 587, DateTimeKind.Utc).AddTicks(8052), 3, true, 3 },
+                    { 4, new DateTime(2024, 2, 10, 16, 36, 47, 587, DateTimeKind.Utc).AddTicks(8053), 4, true, 4 }
                 });
 
             migrationBuilder.InsertData(
