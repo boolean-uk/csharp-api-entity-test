@@ -1,0 +1,42 @@
+version: "3.4"
+
+services:
+  todo.api:
+    image: todoapi
+    build:
+      context: .
+      dockerfile: C:/Users/GRoll1/Experis/experis01.31/csharp-api-entity-test/workshop.wwwapi/workshop.wwwapi.csproj/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - todoapi-network
+    depends_on:
+      todo.database:
+        condition: service_healthy
+  todo.database:
+    container_name: "todo.database" # host url for my postgres db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+    networks:
+      - todoapi-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      interval: 1s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  todoapi-network:
+    driver: bridge

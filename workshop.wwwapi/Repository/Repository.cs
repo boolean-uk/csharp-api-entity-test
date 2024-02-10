@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
@@ -126,7 +127,8 @@ namespace workshop.wwwapi.Repository
         }
 
         //get appointments by patientID
-        public async Task<IEnumerable<Appointment?>> GetAppointmentsByPatientID(int patientId)
+        public async Task<IEnumerable<Appointment?>> 
+            GetAppointmentsByPatientID(int patientId)
         {
             var appointment = await _databaseContext.Appointments
                 .Include(a => a.Doctor)
@@ -163,6 +165,52 @@ namespace workshop.wwwapi.Repository
             _databaseContext.Appointments.Add(appointment);
             _databaseContext.SaveChanges();
             return appointment;
+        }
+
+        //Get all prescriptions
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                .Include(p => p.medicinePrescriptions)
+                    .ThenInclude(m => m.Medicine)
+                .ToListAsync();
+        }
+
+        //get prescription by ID
+        public async Task<Prescription?> GetPrescriptionByID(int id)
+        {
+            return await _databaseContext.Prescriptions
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                .Include(p => p.medicinePrescriptions)
+                    .ThenInclude(m => m.Medicine)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        //create prescription
+        public async Task<Prescription> 
+            CreatePrescription(string name, int appointmentId, int medicineId)
+        {
+            // add to prescriptionTable
+            Prescription prescription = new Prescription();
+            prescription.Name = name;
+            prescription.AppointmentId = appointmentId;
+            _databaseContext.Prescriptions.Add(prescription);
+            await _databaseContext.SaveChangesAsync();
+
+            MedicinePrescription medicinePrescription = new MedicinePrescription();
+            medicinePrescription.PrescriptionId = prescription.Id;
+            medicinePrescription.MedicineId = medicineId;
+            _databaseContext.MedicinePrescriptions.Add(medicinePrescription);
+            await _databaseContext.SaveChangesAsync();
+
+            return await GetPrescriptionByID(prescription.Id);
         }
     }
 }

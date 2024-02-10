@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -8,6 +9,10 @@ namespace workshop.wwwapi.Models
     [Table("appointments")]
     public class Appointment
     {
+        [Key]
+        [Column("id")]
+        public int Id { get; set; }
+
         [Column("doctor_id")]
         public int DoctorId { get; set; }
 

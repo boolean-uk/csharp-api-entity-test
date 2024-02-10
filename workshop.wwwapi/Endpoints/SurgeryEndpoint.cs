@@ -26,6 +26,11 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointment/doctor/{id}/", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointment/patient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointments/", CreateAppointment);
+
+            //prescriptions
+            surgeryGroup.MapGet("/prescriptions/", GetPrescriptions);
+            surgeryGroup.MapPost("/prescriptions/", CreatePrescription);
+            surgeryGroup.MapGet("/prescriptions/{id}/", GetPrescriptionByID);
         }
 
         //get all patients
@@ -108,7 +113,8 @@ namespace workshop.wwwapi.Endpoints
             var results = new List<AppointmentsResponseDTO>();
             foreach (var appo in appointments)
             {
-                AppointmentsResponseDTO appointmentsToReturn = new AppointmentsResponseDTO(appo);
+                AppointmentsResponseDTO appointmentsToReturn = 
+                    new AppointmentsResponseDTO(appo);
                 results.Add(appointmentsToReturn);
             }
             return TypedResults.Ok(results);
@@ -116,17 +122,20 @@ namespace workshop.wwwapi.Endpoints
 
         //get appointment by doctorID
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int doctorId)
+        public static async Task<IResult> 
+            GetAppointmentsByDoctor(IRepository repository, int doctorId)
         {
             var appointments = await repository.GetAppointmentsByDoctorID(doctorId);
             if (appointments == null)
             {
                 return TypedResults.NotFound(doctorId);
             }
-            List<AppointmentsResponseDTO> appointmentsToReturn = new List<AppointmentsResponseDTO>();
+            List<AppointmentsResponseDTO> appointmentsToReturn = 
+                new List<AppointmentsResponseDTO>();
             foreach (var appointment in appointments)
             {
-                AppointmentsResponseDTO appointmentToReturn = new AppointmentsResponseDTO(appointment);
+                AppointmentsResponseDTO appointmentToReturn = 
+                    new AppointmentsResponseDTO(appointment);
                 appointmentsToReturn.Add(appointmentToReturn);
             }
             return TypedResults.Ok(appointmentsToReturn);
@@ -134,17 +143,20 @@ namespace workshop.wwwapi.Endpoints
 
         //get appointment by patientID
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int patientId)
+        public static async Task<IResult> 
+            GetAppointmentsByPatient(IRepository repository, int patientId)
         {
             var appointments = await repository.GetAppointmentsByPatientID(patientId);
             if (appointments == null)
             {
                 return TypedResults.NotFound(patientId);
             }
-            List<AppointmentsResponseDTO> appointmentsToReturn = new List<AppointmentsResponseDTO>();
+            List<AppointmentsResponseDTO> appointmentsToReturn = 
+                new List<AppointmentsResponseDTO>();
             foreach (var appointment in appointments)
             {
-                AppointmentsResponseDTO appointmentToReturn = new AppointmentsResponseDTO(appointment);
+                AppointmentsResponseDTO appointmentToReturn = 
+                    new AppointmentsResponseDTO(appointment);
                 appointmentsToReturn.Add(appointmentToReturn);
             }
             return TypedResults.Ok(appointmentsToReturn);
@@ -155,9 +167,56 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> CreateAppointment(IRepository repository, 
             int doctorId, int patientId, DateTime appointmentTime)
         {
-            var appointment = await repository.CreateAppointment(doctorId, patientId, appointmentTime);
-            AppointmentsResponseDTO appointmentToReturn = new AppointmentsResponseDTO(appointment);
+            var appointment = await repository
+                .CreateAppointment(doctorId, patientId, appointmentTime);
+            AppointmentsResponseDTO appointmentToReturn = 
+                new AppointmentsResponseDTO(appointment);
             return TypedResults.Created("created", appointmentToReturn);
+        }
+
+        //get prescription
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            var prescriptions = await repository.GetPrescriptions();
+            List<PrescriptionsResponseDTO> prescriptionsToReturn = 
+                new List<PrescriptionsResponseDTO>();
+            foreach(var prescription in prescriptions)
+            {
+                PrescriptionsResponseDTO prescriptionToReturn = 
+                    new PrescriptionsResponseDTO(prescription);
+                prescriptionsToReturn.Add(prescriptionToReturn);
+            }
+            return TypedResults.Ok(prescriptionsToReturn);
+        }
+
+        //get prescription by ID
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptionByID
+            (IRepository repository, int id)
+        {
+            var prescription = await repository.GetPrescriptionByID(id);
+            if (prescription == null)
+            {
+                return TypedResults.NotFound("prescription does'nt exists");
+            }
+            PrescriptionsResponseDTO prescriptionToReturn = 
+                new PrescriptionsResponseDTO(prescription);
+            return TypedResults.Ok(prescriptionToReturn);
+
+        }
+
+        //create prescription
+        [ProducesResponseType(StatusCodes.Status201Created, Type = 
+            typeof(PrescriptionsResponseDTO))]
+        public static async Task<IResult> CreatePrescription(IRepository repository, 
+            string name, int appointmentId, int medicineId)
+        {
+            var prescription = await repository.CreatePrescription
+                (name, appointmentId, medicineId);
+            PrescriptionsResponseDTO prescriptionToReturn =
+                new PrescriptionsResponseDTO(prescription);
+            return TypedResults.Created("created", prescriptionToReturn);
         }
     }
 }

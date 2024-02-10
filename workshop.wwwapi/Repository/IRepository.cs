@@ -18,6 +18,13 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<Appointment>> GetAppointments();
         Task<IEnumerable<Appointment?>> GetAppointmentsByDoctorID(int id);
         Task<IEnumerable<Appointment?>> GetAppointmentsByPatientID(int id);
-        Task<Appointment> CreateAppointment(int doctorId, int patientId, DateTime appointmentTime);
+        Task<Appointment> CreateAppointment
+            (int doctorId, int patientId, DateTime appointmentTime);
+
+        //Prescriptions
+        Task<IEnumerable<Prescription?>> GetPrescriptions();
+        Task<Prescription> GetPrescriptionByID(int id);
+        Task<Prescription> CreatePrescription
+            (string name, int appointmentId, int medicineId);
     }
 }
