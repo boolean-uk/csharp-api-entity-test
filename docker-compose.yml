@@ -1,0 +1,42 @@
+version: "3.4"
+
+services:
+  api_cinema_challenge:
+    image: workshop_wwwapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7235:7235"
+      - "5045:5045"
+    networks:
+      - workshop_wwwapi-network
+    depends_on:
+      cinema_challenge.database:
+        condition: service_healthy
+  cinema_challenge.database:
+    container_name: "workshop_entity_test.database"
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: madsires
+      POSTGRES_USER: madsires
+      POSTGRES_PASSWORD: AYR77fyl1M-TNMlzMzwtRxQ_0zLIzE1G
+    ports:
+      - 5432:5432
+    networks:
+      - workshop_wwwapi_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "ctatftqt", "-U", "ctatftqt"]
+      interval: 1s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  api_cinema_challenge-network:
+    driver: bridge
