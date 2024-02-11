@@ -27,6 +27,16 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}" , GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}" , GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointments" , CreateAppointment);
+
+            surgeryGroup.MapGet("/medicines" , GetMedicines);
+            surgeryGroup.MapGet("/medicines/{id}" , GetMedicineById);
+            surgeryGroup.MapPost("/medicines" , CreateMedicine);
+            surgeryGroup.MapGet("/prescriptions" , GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptions/{id}" , GetPrescriptionById);
+            surgeryGroup.MapPost("/prescriptions" , CreatePrescription);
+
+            surgeryGroup.MapPost("/prescriptions/{prescriptionId}/medicines/{medicineId}" , AttachMedicineToPrescription);
+
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -105,6 +115,66 @@ namespace workshop.wwwapi.Endpoints
         {
             var appointment = await repository.CreateAppointment(appointmentDto);
             return Results.Created($"/appointments/{appointment.Id}" , appointment);
+        }
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetMedicines(IRepository repository)
+        {
+            return TypedResults.Ok(await repository.GetMedicines());
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetMedicineById(IRepository repository , int id)
+        {
+            var medicine = await repository.GetMedicineById(id);
+            if(medicine == null)
+            {
+                return Results.NotFound($"Medicine with ID {id} not found.");
+            }
+            return Results.Ok(medicine);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreateMedicine(IRepository repository , Medicine medicine)
+        {
+            var createdMedicine = await repository.CreateMedicine(medicine);
+            return Results.Created($"/medicines/{createdMedicine.Id}" , createdMedicine);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            return TypedResults.Ok(await repository.GetPrescriptions());
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptionById(IRepository repository , int id)
+        {
+            var prescription = await repository.GetPrescriptionById(id);
+            if(prescription == null)
+            {
+                return Results.NotFound($"Prescription with ID {id} not found.");
+            }
+            return Results.Ok(prescription);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreatePrescription(IRepository repository , Prescription prescription)
+        {
+            var createdPrescription = await repository.CreatePrescription(prescription);
+            return Results.Created($"/prescriptions/{createdPrescription.Id}" , createdPrescription);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> AttachMedicineToPrescription(IRepository repository , int prescriptionId , int medicineId , int quantity , string notes)
+        {
+            var updatedPrescription = await repository.AttachMedicineToPrescription(prescriptionId , medicineId , quantity , notes);
+            if(updatedPrescription == null)
+            {
+                return Results.NotFound($"Prescription with ID {prescriptionId} or Medicine with ID {medicineId} not found.");
+            }
+            return Results.Ok(updatedPrescription);
         }
     }
 }

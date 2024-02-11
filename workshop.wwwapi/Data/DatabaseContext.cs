@@ -12,8 +12,6 @@ namespace workshop.wwwapi.Data
         public DatabaseContext(IConfiguration configuration , DbContextOptions<DatabaseContext> options) : base(options)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
-            this.Database.EnsureCreated();
-
         }
 
         // This constructor is used at design-time
@@ -56,9 +54,11 @@ namespace workshop.wwwapi.Data
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
         }
 
-
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionsMedicines { get; set; }
     }
 }
