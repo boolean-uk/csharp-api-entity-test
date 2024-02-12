@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240208144316_ModelsBase")]
-    partial class ModelsBase
+    [Migration("20240212091432_Appointment.cs")]
+    partial class Appointmentcs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace workshop.wwwapi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("workshop.wwwapi.Models.ModelsBase.Appointment", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.AppointmentModels.Appointment", b =>
                 {
                     b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone")
@@ -50,67 +50,67 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            Booking = new DateTime(2024, 2, 11, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5945),
-                            DoctorId = 5,
-                            PatientId = 3
+                            Booking = new DateTime(2024, 2, 29, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3671),
+                            DoctorId = 2,
+                            PatientId = 5
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 3, 3, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5957),
-                            DoctorId = 3,
+                            Booking = new DateTime(2024, 2, 23, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3689),
+                            DoctorId = 4,
+                            PatientId = 4
+                        },
+                        new
+                        {
+                            Booking = new DateTime(2024, 2, 14, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3692),
+                            DoctorId = 5,
+                            PatientId = 2
+                        },
+                        new
+                        {
+                            Booking = new DateTime(2024, 3, 1, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3693),
+                            DoctorId = 2,
                             PatientId = 7
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 17, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5957),
-                            DoctorId = 2,
-                            PatientId = 6
-                        },
-                        new
-                        {
-                            Booking = new DateTime(2024, 2, 20, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5958),
-                            DoctorId = 2,
-                            PatientId = 3
-                        },
-                        new
-                        {
-                            Booking = new DateTime(2024, 2, 26, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5958),
+                            Booking = new DateTime(2024, 3, 1, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3695),
                             DoctorId = 5,
-                            PatientId = 8
-                        },
-                        new
-                        {
-                            Booking = new DateTime(2024, 2, 24, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5959),
-                            DoctorId = 2,
                             PatientId = 3
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 3, 4, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5960),
-                            DoctorId = 3,
+                            Booking = new DateTime(2024, 3, 6, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3699),
+                            DoctorId = 2,
                             PatientId = 9
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 25, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5961),
-                            DoctorId = 5,
-                            PatientId = 3
-                        },
-                        new
-                        {
-                            Booking = new DateTime(2024, 2, 12, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5961),
+                            Booking = new DateTime(2024, 2, 26, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3701),
                             DoctorId = 4,
-                            PatientId = 10
+                            PatientId = 9
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 3, 8, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5962),
+                            Booking = new DateTime(2024, 2, 27, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3703),
+                            DoctorId = 5,
+                            PatientId = 3
+                        },
+                        new
+                        {
+                            Booking = new DateTime(2024, 3, 5, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3705),
                             DoctorId = 2,
-                            PatientId = 9
+                            PatientId = 7
+                        },
+                        new
+                        {
+                            Booking = new DateTime(2024, 2, 24, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3708),
+                            DoctorId = 2,
+                            PatientId = 3
                         });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.ModelsBase.Doctor", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.DoctorModels.Doctor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,31 +132,31 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Jimi Winslet"
+                            FullName = "Mick Trump"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Kate Winslet"
+                            FullName = "Mick Winslet"
                         },
                         new
                         {
                             Id = 3,
-                            FullName = "Charles Middleton"
+                            FullName = "Barack Hepburn"
                         },
                         new
                         {
                             Id = 4,
-                            FullName = "Donald Presley"
+                            FullName = "Oprah Winslet"
                         },
                         new
                         {
                             Id = 5,
-                            FullName = "Elvis Middleton"
+                            FullName = "Jimi Winfrey"
                         });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.ModelsBase.Patient", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PatientModels.Patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,64 +178,64 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Barack Windsor"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FullName = "Kate Windsor"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FullName = "Jimi Jagger"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FullName = "Jimi Presley"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            FullName = "Barack Middleton"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            FullName = "Kate Obama"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            FullName = "Kate Presley"
-                        },
-                        new
-                        {
-                            Id = 8,
                             FullName = "Donald Hepburn"
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 2,
+                            FullName = "Jimi Windsor"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FullName = "Jimi Hendrix"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FullName = "Audrey Obama"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FullName = "Elvis Hendrix"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FullName = "Kate Hepburn"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            FullName = "Charles Presley"
+                        },
+                        new
+                        {
+                            Id = 8,
                             FullName = "Kate Obama"
                         },
                         new
                         {
+                            Id = 9,
+                            FullName = "Charles Winslet"
+                        },
+                        new
+                        {
                             Id = 10,
-                            FullName = "Charles Winfrey"
+                            FullName = "Elvis Windsor"
                         });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.ModelsBase.Appointment", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.AppointmentModels.Appointment", b =>
                 {
-                    b.HasOne("workshop.wwwapi.Models.ModelsBase.Doctor", "Doctor")
+                    b.HasOne("workshop.wwwapi.Models.DoctorModels.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workshop.wwwapi.Models.ModelsBase.Patient", "Patient")
+                    b.HasOne("workshop.wwwapi.Models.PatientModels.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -246,12 +246,12 @@ namespace workshop.wwwapi.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.ModelsBase.Doctor", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.DoctorModels.Doctor", b =>
                 {
                     b.Navigation("Appointments");
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.ModelsBase.Patient", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.PatientModels.Patient", b =>
                 {
                     b.Navigation("Appointments");
                 });

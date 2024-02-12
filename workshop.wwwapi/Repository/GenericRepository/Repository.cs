@@ -41,6 +41,10 @@ namespace workshop.wwwapi.Repository.GenericRepository
             return await _table.FindAsync(id);
         }
 
+        public virtual Task<IEnumerable<T>> GetById(object id_1, object id_2)
+        {
+            throw new NotImplementedException();
+        }
 
         public virtual async Task<T> Insert(T entity)
         {

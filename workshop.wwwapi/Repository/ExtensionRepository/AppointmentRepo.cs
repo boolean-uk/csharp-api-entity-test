@@ -18,5 +18,13 @@ namespace workshop.wwwapi.Repository.ExtensionRepository
         {
             return await _db.Appointments.Include(a => a.Doctor).Include(a => a.Patient).ToListAsync();
         }
+
+        public override async Task<IEnumerable<Appointment>> GetById(object doctor_id, object patient_id)
+        {
+            var appointments = await _db.Appointments.Include(a => a.Doctor).Include(a => a.Patient).ToListAsync();
+            
+            return appointments.Where(a=>a.DoctorId==(int)doctor_id && a.PatientId==(int)patient_id);
+        }
+        
     }
 }

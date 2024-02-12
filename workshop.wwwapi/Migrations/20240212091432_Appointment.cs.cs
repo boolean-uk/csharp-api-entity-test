@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class ModelsBase : Migration
+    public partial class Appointmentcs : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,11 +70,11 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "id", "full_name" },
                 values: new object[,]
                 {
-                    { 1, "Jimi Winslet" },
-                    { 2, "Kate Winslet" },
-                    { 3, "Charles Middleton" },
-                    { 4, "Donald Presley" },
-                    { 5, "Elvis Middleton" }
+                    { 1, "Mick Trump" },
+                    { 2, "Mick Winslet" },
+                    { 3, "Barack Hepburn" },
+                    { 4, "Oprah Winslet" },
+                    { 5, "Jimi Winfrey" }
                 });
 
             migrationBuilder.InsertData(
@@ -82,16 +82,16 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "id", "full_name" },
                 values: new object[,]
                 {
-                    { 1, "Barack Windsor" },
-                    { 2, "Kate Windsor" },
-                    { 3, "Jimi Jagger" },
-                    { 4, "Jimi Presley" },
-                    { 5, "Barack Middleton" },
-                    { 6, "Kate Obama" },
-                    { 7, "Kate Presley" },
-                    { 8, "Donald Hepburn" },
-                    { 9, "Kate Obama" },
-                    { 10, "Charles Winfrey" }
+                    { 1, "Donald Hepburn" },
+                    { 2, "Jimi Windsor" },
+                    { 3, "Jimi Hendrix" },
+                    { 4, "Audrey Obama" },
+                    { 5, "Elvis Hendrix" },
+                    { 6, "Kate Hepburn" },
+                    { 7, "Charles Presley" },
+                    { 8, "Kate Obama" },
+                    { 9, "Charles Winslet" },
+                    { 10, "Elvis Windsor" }
                 });
 
             migrationBuilder.InsertData(
@@ -99,16 +99,16 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "booking", "doctor_id", "patient_id" },
                 values: new object[,]
                 {
-                    { new DateTime(2024, 2, 11, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5945), 5, 3 },
-                    { new DateTime(2024, 2, 12, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5961), 4, 10 },
-                    { new DateTime(2024, 2, 17, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5957), 2, 6 },
-                    { new DateTime(2024, 2, 20, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5958), 2, 3 },
-                    { new DateTime(2024, 2, 24, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5959), 2, 3 },
-                    { new DateTime(2024, 2, 25, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5961), 5, 3 },
-                    { new DateTime(2024, 2, 26, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5958), 5, 8 },
-                    { new DateTime(2024, 3, 3, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5957), 3, 7 },
-                    { new DateTime(2024, 3, 4, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5960), 3, 9 },
-                    { new DateTime(2024, 3, 8, 14, 43, 15, 860, DateTimeKind.Utc).AddTicks(5962), 2, 9 }
+                    { new DateTime(2024, 2, 14, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3692), 5, 2 },
+                    { new DateTime(2024, 2, 23, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3689), 4, 4 },
+                    { new DateTime(2024, 2, 24, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3708), 2, 3 },
+                    { new DateTime(2024, 2, 26, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3701), 4, 9 },
+                    { new DateTime(2024, 2, 27, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3703), 5, 3 },
+                    { new DateTime(2024, 2, 29, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3671), 2, 5 },
+                    { new DateTime(2024, 3, 1, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3693), 2, 7 },
+                    { new DateTime(2024, 3, 1, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3695), 5, 3 },
+                    { new DateTime(2024, 3, 5, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3705), 2, 7 },
+                    { new DateTime(2024, 3, 6, 9, 14, 31, 437, DateTimeKind.Utc).AddTicks(3699), 2, 9 }
                 });
 
             migrationBuilder.CreateIndex(

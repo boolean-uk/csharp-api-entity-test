@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240212091503_Doctor.cs")]
+    partial class Doctorcs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,63 +50,63 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            Booking = new DateTime(2024, 2, 22, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2051),
-                            DoctorId = 3,
-                            PatientId = 10
+                            Booking = new DateTime(2024, 3, 9, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6521),
+                            DoctorId = 4,
+                            PatientId = 5
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 3, 2, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2068),
+                            Booking = new DateTime(2024, 2, 22, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6542),
                             DoctorId = 5,
-                            PatientId = 8
+                            PatientId = 5
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 3, 7, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2069),
+                            Booking = new DateTime(2024, 2, 21, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6544),
                             DoctorId = 2,
+                            PatientId = 1
+                        },
+                        new
+                        {
+                            Booking = new DateTime(2024, 2, 29, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6546),
+                            DoctorId = 2,
+                            PatientId = 2
+                        },
+                        new
+                        {
+                            Booking = new DateTime(2024, 2, 14, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6548),
+                            DoctorId = 2,
+                            PatientId = 9
+                        },
+                        new
+                        {
+                            Booking = new DateTime(2024, 2, 19, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6551),
+                            DoctorId = 1,
                             PatientId = 4
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 21, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2070),
-                            DoctorId = 1,
-                            PatientId = 6
-                        },
-                        new
-                        {
-                            Booking = new DateTime(2024, 2, 23, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2070),
+                            Booking = new DateTime(2024, 3, 1, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6553),
                             DoctorId = 4,
                             PatientId = 2
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 2, 26, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2072),
-                            DoctorId = 2,
-                            PatientId = 8
-                        },
-                        new
-                        {
-                            Booking = new DateTime(2024, 2, 29, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2073),
-                            DoctorId = 4,
-                            PatientId = 8
-                        },
-                        new
-                        {
-                            Booking = new DateTime(2024, 2, 21, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2074),
-                            DoctorId = 1,
+                            Booking = new DateTime(2024, 3, 2, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6555),
+                            DoctorId = 5,
                             PatientId = 5
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 3, 7, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2074),
-                            DoctorId = 3,
-                            PatientId = 9
+                            Booking = new DateTime(2024, 3, 5, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6556),
+                            DoctorId = 2,
+                            PatientId = 3
                         },
                         new
                         {
-                            Booking = new DateTime(2024, 3, 2, 9, 15, 31, 950, DateTimeKind.Utc).AddTicks(2076),
-                            DoctorId = 4,
-                            PatientId = 4
+                            Booking = new DateTime(2024, 3, 2, 9, 15, 2, 765, DateTimeKind.Utc).AddTicks(6559),
+                            DoctorId = 3,
+                            PatientId = 9
                         });
                 });
 
@@ -129,27 +132,27 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Oprah Winslet"
+                            FullName = "Elvis Hepburn"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Jimi Trump"
+                            FullName = "Oprah Hepburn"
                         },
                         new
                         {
                             Id = 3,
-                            FullName = "Kate Hepburn"
+                            FullName = "Kate Jagger"
                         },
                         new
                         {
                             Id = 4,
-                            FullName = "Charles Hendrix"
+                            FullName = "Charles Hepburn"
                         },
                         new
                         {
                             Id = 5,
-                            FullName = "Kate Windsor"
+                            FullName = "Charles Hepburn"
                         });
                 });
 
@@ -175,52 +178,52 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Charles Jagger"
+                            FullName = "Barack Winfrey"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Elvis Windsor"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FullName = "Audrey Hendrix"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FullName = "Mick Middleton"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            FullName = "Elvis Jagger"
-                        },
-                        new
-                        {
-                            Id = 6,
                             FullName = "Oprah Jagger"
                         },
                         new
                         {
+                            Id = 3,
+                            FullName = "Charles Hepburn"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FullName = "Audrey Hepburn"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FullName = "Jimi Hepburn"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FullName = "Donald Obama"
+                        },
+                        new
+                        {
                             Id = 7,
-                            FullName = "Kate Presley"
+                            FullName = "Barack Hepburn"
                         },
                         new
                         {
                             Id = 8,
-                            FullName = "Kate Hendrix"
+                            FullName = "Oprah Middleton"
                         },
                         new
                         {
                             Id = 9,
-                            FullName = "Kate Windsor"
+                            FullName = "Donald Middleton"
                         },
                         new
                         {
                             Id = 10,
-                            FullName = "Barack Winslet"
+                            FullName = "Mick Hepburn"
                         });
                 });
 

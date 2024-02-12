@@ -17,10 +17,54 @@ namespace workshop.wwwapi.Endpoints
         {
             var surgeryGroup = app.MapGroup("surgery");
 
-            surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/doctors", GetDoctors);
+            surgeryGroup.MapGet("/doctors/{id}", GetDoctorById);
+            surgeryGroup.MapPost("/doctors", CreateDoctor);
+
+            surgeryGroup.MapGet("/patients", GetPatients);
+            surgeryGroup.MapGet("/patients/{id}", GetPatientById);
+            surgeryGroup.MapPost("/patients", CreatePatient);
+
             surgeryGroup.MapGet("/appointments", GetAppointments);
-            surgeryGroup.MapGet("/appointments/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapPost("/appointments", CreateAppointment);
+            surgeryGroup.MapGet("/appointments/{doctor_id, patient_id}", GetAppointmentsByPatientIdAndDoctorId);
+        }
+
+        private static async Task<IResult> CreateDoctor(IRepository<Doctor> repo, PutDoctorDto putDoctor)
+        {
+            var doctor = new Doctor
+            {
+                FullName = putDoctor.Name,
+            };
+
+            doctor = await repo.Insert(doctor);
+            var doctorDto = DoctorDoctorDto.Create(doctor);
+            return TypedResults.Created($"/doctors/{doctorDto.DoctorId}", doctorDto);
+        }
+        private static async Task<IResult> CreateAppointment(IRepository<Appointment> appointmentRepo, IRepository<Doctor> doctorRepo, IRepository<Patient> patientRepo, PutAppointmentDto putAppointment)
+        {
+            var appointment = new Appointment
+            {
+                Booking = putAppointment.Booking,
+                Doctor = await doctorRepo.GetById(putAppointment.DoctorId),
+                Patient = await patientRepo.GetById(putAppointment.PatientId),
+            };
+
+            appointment = await appointmentRepo.Insert(appointment);
+            var appointmentDto = AppointmentAppointmentDto.Create(appointment);
+            return TypedResults.Created($"/appointments/{appointmentDto.Patient.PatientId}, {appointmentDto.Doctor.DoctorId}", appointmentDto);
+        }
+
+        private static async Task<IResult> CreatePatient(IRepository<Patient> repo, PutPatientDto putPatient)
+        {
+            var patient = new Patient
+            {
+                FullName = putPatient.Name
+            };
+
+            patient = await repo.Insert(patient);
+            var patientDto = PatientPatientDto.Create(patient);
+            return TypedResults.Created($"/patients/{patientDto.PatientId}", patientDto);
         }
 
         private static async Task<IResult> GetAppointments(IRepository<Appointment> repo)
@@ -52,11 +96,25 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(doctorDtos);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository<Doctor> repository, int id)
+        public static async Task<IResult> GetDoctorById(IRepository<Doctor> repository, int id)
         {
             var doctor = await repository.GetById(id);
             var doctorDto = DoctorDoctorDto.Create(doctor);
             return TypedResults.Ok(doctorDto);
-        } 
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPatientById(IRepository<Patient> repository, int id)
+        {
+            var patient = await repository.GetById(id);
+            var patientDto = PatientPatientDto.Create(patient);
+            return TypedResults.Ok(patientDto);
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointmentsByPatientIdAndDoctorId(IRepository<Appointment> repository, int doctor_id, int patient_id)
+        {
+            var appointments = await repository.GetById(doctor_id, patient_id);
+            var appointmentDto = appointments.Select(AppointmentAppointmentDto.Create);
+            return TypedResults.Ok(appointmentDto);
+        }
     }
 }

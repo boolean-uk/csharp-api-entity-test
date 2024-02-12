@@ -15,6 +15,6 @@ namespace workshop.wwwapi.Models.DoctorModels
         [Column("full_name")]
         public string FullName { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; }
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

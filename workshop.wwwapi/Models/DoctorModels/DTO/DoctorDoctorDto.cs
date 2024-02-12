@@ -13,8 +13,10 @@ namespace workshop.wwwapi.Models.DoctorModels.DTO
 
         public static DoctorDoctorDto Create(Doctor doctor)
         {
+
             return new DoctorDoctorDto()
             {
+
                 DoctorId = doctor.Id,
                 Name = doctor.FullName,
                 Appointments = doctor.Appointments.Select(AppointmentDoctorDto.Create).ToList()
