@@ -23,6 +23,10 @@ namespace workshop.wwwapi.Models
 
         [ForeignKey("PatientId")]
         public Patient? Patient { get; set; }
+
+        [Column("appointmenttype")]
+        public AppointmentType AppointmentType { get; set; }
+
     }
 
 }

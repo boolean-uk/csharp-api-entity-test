@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//TODO: IN FREE TIME REFRACTOR CODE AND ORGANIZE IT INTO SEPARETE FILES!!!
+
+
+using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
@@ -112,6 +115,59 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.SaveChangesAsync();
 
             return appointment;
+        }
+        public async Task<IEnumerable<Medicine>> GetMedicines()
+        {
+            return await _databaseContext.Medicines.ToListAsync();
+        }
+
+        public async Task<Medicine> GetMedicineById(int id)
+        {
+            return await _databaseContext.Medicines.FindAsync(id);
+        }
+
+        public async Task<Medicine> CreateMedicine(Medicine medicine)
+        {
+            _databaseContext.Medicines.Add(medicine);
+            await _databaseContext.SaveChangesAsync();
+            return medicine;
+        }
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions.ToListAsync();
+        }
+
+        public async Task<Prescription> GetPrescriptionById(int id)
+        {
+            return await _databaseContext.Prescriptions.FindAsync(id);
+        }
+
+        public async Task<Prescription> CreatePrescription(Prescription prescription)
+        {
+            _databaseContext.Prescriptions.Add(prescription);
+            await _databaseContext.SaveChangesAsync();
+            return prescription;
+        }
+
+        public async Task<Prescription> AttachMedicineToPrescription(int prescriptionId , int medicineId , int quantity , string notes)
+        {
+            var prescription = await _databaseContext.Prescriptions.FindAsync(prescriptionId);
+            var medicine = await _databaseContext.Medicines.FindAsync(medicineId);
+            if(prescription == null || medicine == null)
+            {
+                throw new Exception("Prescription or Medicine not found.");
+            }
+            var prescriptionMedicine = new PrescriptionMedicine
+            {
+                PrescriptionId = prescriptionId ,
+                MedicineId = medicineId ,
+                Quantity = quantity ,
+                Notes = notes
+            };
+            _databaseContext.PrescriptionsMedicines.Add(prescriptionMedicine);
+            await _databaseContext.SaveChangesAsync();
+            return prescription;
         }
     }
 }
