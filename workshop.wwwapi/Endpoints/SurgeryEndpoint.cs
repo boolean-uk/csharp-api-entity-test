@@ -6,6 +6,7 @@ using workshop.wwwapi.Models.DoctorModels;
 using workshop.wwwapi.Models.DoctorModels.DTO;
 using workshop.wwwapi.Models.PatientModels;
 using workshop.wwwapi.Models.PatientModels.DTO;
+using workshop.wwwapi.Models.PrescriptionModels;
 using workshop.wwwapi.Repository.ExtensionRepository;
 using workshop.wwwapi.Repository.GenericRepository;
 
@@ -16,6 +17,7 @@ namespace workshop.wwwapi.Endpoints
         public static void ConfigureSurgeryEndpoint(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
+            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
 
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/doctors/{id}", GetDoctorById);
@@ -28,6 +30,12 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointments", GetAppointments);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
             surgeryGroup.MapGet("/appointments/{doctor_id, patient_id}", GetAppointmentsByPatientIdAndDoctorId);
+        }
+
+        private static async Task<IResult> GetPrescriptions(IRepository<Prescription> repo)
+        {
+            var prescriptions = await repo.Get();
+            return TypedResults.Ok(prescriptions);
         }
 
         private static async Task<IResult> CreateDoctor(IRepository<Doctor> repo, PutDoctorDto putDoctor)
