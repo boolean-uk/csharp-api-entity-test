@@ -21,6 +21,11 @@ namespace workshop.wwwapi.Data
                 .HasKey(a => new { a.PatientId, a.DoctorId, a.Booking })
                 .HasName("PK_appointment_doc_patient_booking");
 
+            modelBuilder.Entity<Doctor>()
+                .HasMany(e => e.Appointments)
+                .WithOne(e => e.Doctor)
+                .HasForeignKey(e => e.DoctorId);
+
             //TODO: Seed Data Here
             Seeder seeder = new Seeder();
             modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
