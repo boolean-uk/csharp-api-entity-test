@@ -8,6 +8,16 @@ namespace workshop.wwwapi.DTOs
         public DateTime Booking {  get; set; }
         public DoctorDTO Doctor { get; set; }
         public PatientDTO Patient { get; set; }
+        public string AppointmentType { get; set; }
+
+        public AppointmentDTO(Appointment a)
+        {
+            Id = a.Id;
+            Booking = a.Booking;
+            Doctor = new DoctorDTO(a.Doctor);
+            Patient = new PatientDTO(a.Patient);
+            AppointmentType = a.AppointmentType.ToString();
+        }
     }
 
     public class AppointmentWithPatientsDTO

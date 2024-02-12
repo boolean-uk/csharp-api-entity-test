@@ -20,6 +20,9 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointments/doctors/{id}", GetDoctorsAppointments);
             surgeryGroup.MapGet("/appointments/patients/{id}", GetPatientsAppointments);
             surgeryGroup.MapPost("/appointments/appointment", NewAppointment);
+
+            app.MapGet("/prescriptions", GetPrescriptions);
+            app.MapPost("/prescriptions", CreatePrescription);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatient(IRepository repository, int id)
@@ -69,13 +72,7 @@ namespace workshop.wwwapi.Endpoints
             foreach (var appointment in result)
             {
                 appointments.Add(
-                    new AppointmentDTO
-                    {
-                        Id = appointment.Id,
-                        Booking = appointment.Booking,
-                        Patient = new PatientDTO(appointment.Patient),
-                        Doctor = new DoctorDTO(appointment.Doctor)
-                    }
+                    new AppointmentDTO(appointment)
                 ); 
             }
             return TypedResults.Ok(appointments);
@@ -84,14 +81,7 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetAppointment(IRepository repository, int id)
         {
             var result = await repository.GetAppointment(id);
-            var appointment = new AppointmentDTO
-            {
-                Id = result.Id,
-                Booking = result.Booking,
-                Patient = new PatientDTO(result.Patient),
-                Doctor = new DoctorDTO(result.Doctor)
-               
-            };
+            var appointment = new AppointmentDTO(result);
             return TypedResults.Ok(appointment);
         }
 
@@ -111,14 +101,34 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> NewAppointment(IRepository repository, PostAppointment appointment)
         {
             var result = await repository.AddAppointment(appointment);
-            var a = new AppointmentDTO
-            {
-                Id=result.Id,
-                Booking = result.Booking,
-                Patient = new PatientDTO(result.Patient),
-                Doctor = new DoctorDTO(result.Doctor)
-            };
+            var a = new AppointmentDTO(result);
             return TypedResults.Ok(a);
+        }
+
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            var result = await repository.GetPrescriptions();
+            List<PrescriptionDTO> prescriptions = new List<PrescriptionDTO>();
+            foreach (var prescription in result)
+            {
+                prescriptions.Add(new PrescriptionDTO(prescription));
+            }
+            return TypedResults.Ok(prescriptions);
+        }
+
+        public static async Task<IResult> CreatePrescription(IRepository repository, PrescriptionPost prescriptionPost, int appointmentId, int medicineId)
+        {
+            // Should update tables Prescription and PrescriptionMedicine
+            var p = new Prescription
+            {
+                AppointmentId = appointmentId,
+                MedicineId = medicineId,
+                Note = prescriptionPost.Note,
+                Quantity = prescriptionPost.Quantity
+            };
+            var prescription = await repository.AddPrescription(p);
+
+            return TypedResults.Ok(new PrescriptionDTO(prescription));
         }
 
     }

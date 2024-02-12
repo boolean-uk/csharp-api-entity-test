@@ -3,6 +3,12 @@ using System.Text.Json.Serialization;
 
 namespace workshop.wwwapi.Models
 {
+
+    public enum AppointmentType
+    {
+        Person, Online
+    }
+
     //TODO: decorate class/columns accordingly
     [Table("appointments")]
     public class Appointment
@@ -17,13 +23,12 @@ namespace workshop.wwwapi.Models
         [Column("patient_id")]
         [ForeignKey("patients")]
         public int PatientId { get; set; }
-        [JsonInclude]
-
+        [Column("appointment_type")]
+        public AppointmentType AppointmentType { get; set; }    
+        public Prescription?Prescription { get; set; }
         public virtual Doctor Doctor { get; set; } = null;
-        [JsonInclude]
 
         public virtual Patient Patient { get; set; } = null;
-
     }
 
     public class PostAppointment()

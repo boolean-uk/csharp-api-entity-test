@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240212115703_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,10 +33,6 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AppointmentType")
-                        .HasColumnType("integer")
-                        .HasColumnName("appointment_type");
 
                     b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone")
@@ -59,15 +58,13 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 2,
-                            AppointmentType = 0,
-                            Booking = new DateTime(2024, 2, 12, 12, 32, 5, 146, DateTimeKind.Utc).AddTicks(4055),
+                            Booking = new DateTime(2024, 2, 12, 11, 57, 2, 943, DateTimeKind.Utc).AddTicks(8579),
                             DoctorId = 2,
                             PatientId = 2
                         },
                         new
                         {
                             Id = 3,
-                            AppointmentType = 0,
                             Booking = new DateTime(2024, 5, 7, 8, 30, 0, 0, DateTimeKind.Utc),
                             DoctorId = 2,
                             PatientId = 1
@@ -75,7 +72,6 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 4,
-                            AppointmentType = 1,
                             Booking = new DateTime(2024, 5, 7, 8, 30, 0, 0, DateTimeKind.Utc),
                             DoctorId = 1,
                             PatientId = 2
@@ -144,38 +140,7 @@ namespace workshop.wwwapi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("patients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FullName = "George Banan"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FullName = "Sir Donald Philipe"
-                        });
-                });
-
-            modelBuilder.Entity("workshop.wwwapi.Models.Prescription", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.MedicinePrescription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -229,6 +194,37 @@ namespace workshop.wwwapi.Migrations
                         });
                 });
 
+            modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("patients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FullName = "George Banan"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FullName = "Sir Donald Philipe"
+                        });
+                });
+
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
                     b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
@@ -248,16 +244,16 @@ namespace workshop.wwwapi.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("workshop.wwwapi.Models.Prescription", b =>
+            modelBuilder.Entity("workshop.wwwapi.Models.MedicinePrescription", b =>
                 {
                     b.HasOne("workshop.wwwapi.Models.Appointment", "Appointment")
-                        .WithOne("Prescription")
-                        .HasForeignKey("workshop.wwwapi.Models.Prescription", "AppointmentId")
+                        .WithOne("MedicinePrescription")
+                        .HasForeignKey("workshop.wwwapi.Models.MedicinePrescription", "AppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("workshop.wwwapi.Models.Medicine", "Medicine")
-                        .WithMany("Prescriptions")
+                        .WithMany("MedicinePrescriptions")
                         .HasForeignKey("MedicineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -269,7 +265,7 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.Navigation("Prescription");
+                    b.Navigation("MedicinePrescription");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
@@ -279,7 +275,7 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Medicine", b =>
                 {
-                    b.Navigation("Prescriptions");
+                    b.Navigation("MedicinePrescriptions");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
