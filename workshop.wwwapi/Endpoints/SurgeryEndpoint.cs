@@ -71,7 +71,7 @@ namespace workshop.wwwapi.Endpoints
             var result = await repository.CreateAPatient(patientPayload.fullName);
             var resultDTO = new patientDTO(result);
 
-            return TypedResults.Ok(resultDTO);
+            return TypedResults.Created($"/create_a_patient{result}", resultDTO);
         }
 
 
@@ -233,7 +233,7 @@ namespace workshop.wwwapi.Endpoints
             else
             {
                 appointmentDTO appointmentDTO = new appointmentDTO(result);
-                return TypedResults.Ok(appointmentDTO);
+                return TypedResults.Created($"/appointments{result}",appointmentDTO);
 
             }
         }

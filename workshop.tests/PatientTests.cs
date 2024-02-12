@@ -23,12 +23,32 @@ public class Tests
         // Act
         var response = await client.GetAsync("/surgery/patients");
         var response1 = await client.GetAsync("/surgery/patients/1");
-        //var response2 = await client.PostAsync("/surgery/create_a_patient", );
+        
 
 
         // Assert
         Assert.That(response.StatusCode == System.Net.HttpStatusCode.OK);
         Assert.That(response1.StatusCode == System.Net.HttpStatusCode.OK);
+    }
+
+    [Test]
+    public async Task PatientEndpointStatusCreated()
+    {
+
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+
+        
+
+        PatientPostPayload obj = new PatientPostPayload("Harry");
+
+
+        var response2 = await client.PostAsJsonAsync("/surgery/create_a_patient", obj);
+
+
+        Assert.That(response2.StatusCode == System.Net.HttpStatusCode.Created);
     }
 
     [Test]
@@ -44,6 +64,7 @@ public class Tests
             new Patient { Id = 1, FullName = "Marcus" },
             new Patient { Id = 2, FullName = "Anna" },
             new Patient { Id = 3, FullName = "Pontus"},
+            new Patient { Id = 4, FullName = "Harry"} //added after above test
            
         };
 
@@ -133,22 +154,40 @@ public class Tests
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
-        DateTime dateTime = DateTime.Parse("1954-01-01 23:59:59 +0000").ToUniversalTime();
-        var obj = new {DoctorId = 3, PatientId = 1, appointmentDate = dateTime };
+       
         
         // Act
         var response = await client.GetAsync("/surgery/appointments");
         var response1 = await client.GetAsync($"/surgery/appointments/patient_and_doctor/1/1");
         var response2 = await client.GetAsync("/surgery/appointments/doctor/1");
         var response3 = await client.GetAsync("/surgery/appointments/patient/1");
-        //var response4 = await client.PostAsJsonAsync("/surgery/appointments", obj);
+        
 
         // Assert
         Assert.That(response.StatusCode == System.Net.HttpStatusCode.OK);
         Assert.That(response1.StatusCode == System.Net.HttpStatusCode.OK);
         Assert.That(response2.StatusCode == System.Net.HttpStatusCode.OK);
         Assert.That(response3.StatusCode == System.Net.HttpStatusCode.OK);
-        //Assert.That(response4.StatusCode == System.Net.HttpStatusCode.OK);
+        
+    }
+
+    [Test]
+    public async Task AppointmentEndpointStatusCreated()
+    {
+
+        // Arrange
+        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var client = factory.CreateClient();
+
+       
+        string date = new string("1954-01-02 00:59:59");
+        
+        appointmentPayload obj = new appointmentPayload (date ,2 , 2 );
+
+
+        var response4 = await client.PostAsJsonAsync("/surgery/appointments", obj);
+        //Assert.That(response4.StatusCode == System.Net.HttpStatusCode.BadRequest);
+        Assert.That(response4.StatusCode == System.Net.HttpStatusCode.Created);
     }
 
     [Test]
@@ -164,13 +203,15 @@ public class Tests
         
         var expectedAppointmentPayload = new List<Appointment>()
         {
+            
             new Appointment() {DoctorId = 2, PatientId = 1, appointmentDate = dateTime},//    0
             new Appointment() {DoctorId = 1, PatientId = 1, appointmentDate = dateTime},//    1
             new Appointment() {DoctorId = 3, PatientId = 2, appointmentDate = dateTime},//    2
+            new Appointment() {DoctorId = 2, PatientId = 2, appointmentDate = dateTime},// this was added from the test above
             new Appointment() {DoctorId = 1, PatientId = 2, appointmentDate = dateTime},//    3
             new Appointment() {DoctorId = 3, PatientId = 3, appointmentDate = dateTime},//    4
             new Appointment() {DoctorId = 2, PatientId = 3, appointmentDate = dateTime},//    5
-            //new Appointment() {DoctorId = 3, PatientId = 1, appointmentDate = dateTime}
+
 
         };
 
@@ -185,7 +226,7 @@ public class Tests
         Assert.That(responsePayload.Result.Count, Is.EqualTo(expectedAppointmentPayload.Count));
         for (int i = 0; i < expectedAppointmentPayload.Count; i++)
         {
-            //went through and tested each value individualy (replased i with a number in the table 0-5). for some reason some of the appointments in the table has switched orders in the table
+            //went through and tested each value individualy (replased i with a number in the table 0-6). for some reason some of the appointments in the table has switched orders in the table
             Assert.That(responsePayload.Result.ElementAtOrDefault(i).DoctorId, Is.EqualTo(expectedAppointmentPayload[i].DoctorId));
             Assert.That(responsePayload.Result.ElementAtOrDefault(i).PatientId, Is.EqualTo(expectedAppointmentPayload[i].PatientId));
            
