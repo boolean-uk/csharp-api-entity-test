@@ -33,4 +33,8 @@ namespace workshop.wwwapi.Models
         {
         }
     }
- }
+    public class PatientPatch
+    {
+        public string Name { get; set; }
+    }
+    }

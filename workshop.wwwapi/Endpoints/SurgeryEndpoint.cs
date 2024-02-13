@@ -53,7 +53,7 @@ namespace workshop.wwwapi.Endpoints
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> CreatePatient(IRepository repository, IService service, PatientDto patient)
+        public static async Task<IResult> CreatePatient(IRepository repository, IService service, PatientPatch patient)
         {
             string name = patient.Name;
             if (repository.GetEntities<Patient>().Result.Any(x => x.FullName == name))
@@ -98,7 +98,7 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> CreateDoctor(IRepository repository, IService service, DoctorDto doctor)
+        public static async Task<IResult> CreateDoctor(IRepository repository, IService service, DoctorPatch doctor)
         {
             string name = doctor.Name;
             if (repository.GetEntities<Doctor>().Result.Any(x => x.FullName == name))

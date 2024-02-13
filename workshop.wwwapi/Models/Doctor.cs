@@ -31,5 +31,9 @@ namespace workshop.wwwapi.Models
             
         }
     }
-}
+    public class DoctorPatch
+    {
+        public string Name { get; set; }
+    }
+    }
 
