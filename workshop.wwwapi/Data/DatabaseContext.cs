@@ -12,15 +12,22 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
 
             //TODO: Seed Data Here
+            Seeder seeder = new Seeder();
 
+            modelBuilder.Entity<Patient>().HasData(seeder.Patients);
+            modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
+            modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
+            modelBuilder.Entity<Appointment>().Navigation(x => x.Doctor).AutoInclude();
+            modelBuilder.Entity<Appointment>().Navigation(x => x.Patient).AutoInclude();
+
+            modelBuilder.Entity<Appointment>().Property(x => x.AppointmentType).HasConversion(x => x.ToString(), x => (AppointmentType)Enum.Parse(typeof(AppointmentType), x));
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
