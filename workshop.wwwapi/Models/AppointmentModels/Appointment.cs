@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using workshop.wwwapi.Models.DoctorModels;
 using workshop.wwwapi.Models.PatientModels;
 using workshop.wwwapi.Models.PrescriptionModels;

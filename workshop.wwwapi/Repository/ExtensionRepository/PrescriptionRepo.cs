@@ -17,7 +17,14 @@ namespace workshop.wwwapi.Repository.ExtensionRepository
 
         public override async Task<IEnumerable<Prescription>> Get()
         {
-            return await _db.Prescriptions.Include(p => p.Appointment).Include(p => p.PrescriptionMedicines).ThenInclude(pm => pm.Medicine).ToListAsync();
+            return await _db.Prescriptions
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                .Include(p=>p.Appointment)
+                    .ThenInclude(a =>a.Patient)
+                .Include(p => p.PrescriptionMedicines)
+                    .ThenInclude(pm => pm.Medicine)
+                .ToListAsync();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace workshop.wwwapi.Models.PrescriptionModels
         public int AppointmentPatientId { get; set; }
         public DateTime AppointmentBooking { get; set; }
         public Appointment Appointment { get; set; }
-        public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; }
+        public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; } = new List<PrescriptionMedicine>();
     }
 
 }

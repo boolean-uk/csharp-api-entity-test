@@ -7,6 +7,7 @@ using workshop.wwwapi.Models.DoctorModels.DTO;
 using workshop.wwwapi.Models.PatientModels;
 using workshop.wwwapi.Models.PatientModels.DTO;
 using workshop.wwwapi.Models.PrescriptionModels;
+using workshop.wwwapi.Models.PrescriptionModels.DTO;
 using workshop.wwwapi.Repository.ExtensionRepository;
 using workshop.wwwapi.Repository.GenericRepository;
 
@@ -35,7 +36,8 @@ namespace workshop.wwwapi.Endpoints
         private static async Task<IResult> GetPrescriptions(IRepository<Prescription> repo)
         {
             var prescriptions = await repo.Get();
-            return TypedResults.Ok(prescriptions);
+            var prescriptionDtos = prescriptions.Select(PrescriptionPrescriptionDto.Create);
+            return TypedResults.Ok(prescriptionDtos);
         }
 
         private static async Task<IResult> CreateDoctor(IRepository<Doctor> repo, PutDoctorDto putDoctor)

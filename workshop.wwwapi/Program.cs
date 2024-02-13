@@ -20,6 +20,10 @@ builder.Services.AddScoped<IRepository<Doctor>, DoctorRepo>();
 builder.Services.AddScoped<IRepository<Patient>, PatientRepo>();
 builder.Services.AddScoped<IRepository<Appointment>, AppointmentRepo>();
 builder.Services.AddScoped<IRepository<Prescription>, PrescriptionRepo>();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

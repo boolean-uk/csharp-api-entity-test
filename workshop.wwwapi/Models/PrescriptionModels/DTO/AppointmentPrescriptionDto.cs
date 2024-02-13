@@ -1,12 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using workshop.wwwapi.Models.AppointmentModels.DTO;
+using workshop.wwwapi.Models.AppointmentModels;
+using System;
 
-namespace workshop.wwwapi.Models.AppointmentModels.DTO
+namespace workshop.wwwapi.Models.PrescriptionModels.DTO
 {
-    public class AppointmentAppointmentDto
+    public class AppointmentPrescriptionDto
     {
-
         public DateTime Booking { get; set; }
 
         public DoctorAppointmentDto Doctor { get; set; }
@@ -15,17 +14,15 @@ namespace workshop.wwwapi.Models.AppointmentModels.DTO
 
         public String Type { get; set; }
 
-        public static AppointmentAppointmentDto Create(Appointment appointment)
+        public static AppointmentPrescriptionDto Create(Appointment appointment)
         {
-            return new AppointmentAppointmentDto()
+            return new AppointmentPrescriptionDto()
             {
                 Booking = appointment.Booking,
                 Doctor = DoctorAppointmentDto.Create(appointment.Doctor),
                 Patient = PatientAppointmentDto.Create(appointment.Patient),
-                Type = appointment.Type.ToString(),
+                Type = appointment.Type.ToString()
             };
         }
     }
 }
-
-
