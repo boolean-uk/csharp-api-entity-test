@@ -12,5 +12,8 @@ namespace workshop.wwwapi.DTO
 
         public string PatientName { get; set;}
         public string DoctorName { get; set;}
+
+        public string Type { get; set; }
+
     }
 }

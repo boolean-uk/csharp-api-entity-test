@@ -69,8 +69,8 @@ namespace workshop.wwwapi.Data
                 );
 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { PatientId = 1, DoctorId = 1, Booking = DateTime.SpecifyKind(new DateTime(2024, 3, 7, 14, 0, 0), DateTimeKind.Utc) },
-                new Appointment { PatientId = 2, DoctorId = 2, Booking = DateTime.SpecifyKind(new DateTime(2024, 4, 8, 15, 0, 0), DateTimeKind.Utc) }
+                new Appointment { PatientId = 1, DoctorId = 1, Booking = DateTime.SpecifyKind(new DateTime(2024, 3, 7, 14, 0, 0), DateTimeKind.Utc), Type="Online" },
+                new Appointment { PatientId = 2, DoctorId = 2, Booking = DateTime.SpecifyKind(new DateTime(2024, 4, 8, 15, 0, 0), DateTimeKind.Utc), Type= "In Person" }
                 );
         }
                 

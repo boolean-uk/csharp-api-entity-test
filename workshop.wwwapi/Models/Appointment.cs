@@ -10,6 +10,7 @@ namespace workshop.wwwapi.Models
         [Column("booking")]
         public DateTime Booking { get; set; }
 
+        public string Type { get; set; }
      
         [ForeignKey("doctor_id")]
         public int DoctorId { get; set; }

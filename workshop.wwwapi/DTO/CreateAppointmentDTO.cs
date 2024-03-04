@@ -6,5 +6,8 @@
         public int DoctorId { get; set; }
         public DateTime Booking { get; set; }
 
+        public string Type { get; set; }
+
+
     }
 }
