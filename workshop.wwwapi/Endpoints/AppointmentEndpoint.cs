@@ -35,7 +35,8 @@ namespace workshop.wwwapi.Endpoints
             }*/
             Appointment? appointment = await IRepository.CreateAppointment(payload.Booking, payload.PatientId , payload.DoctorId);
             if (appointment == null) return TypedResults.BadRequest("All fields are required!");
-            return TypedResults.Ok(AppointmentResponseDTO.FromRepository(appointment));
+            var dbAppointment = await IRepository.GetAppointmentsById(appointment.Id);
+            return TypedResults.Ok(AppointmentResponseDTO.FromRepository(dbAppointment));
         }
     }
 }

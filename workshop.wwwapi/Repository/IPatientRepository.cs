@@ -6,6 +6,6 @@ namespace workshop.wwwapi.Repository
     {
         Task<IEnumerable<Patient>> GetPatients();
         Task<Patient> GetPatientById(int patientId);
-        Task<Patient> CreatePatient(string FullName, string Email);
+        Task<Patient> CreatePatient(string FullName, string Email, string Gender);
     }
 }

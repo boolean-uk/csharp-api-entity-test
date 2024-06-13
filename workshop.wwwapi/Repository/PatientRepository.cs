@@ -14,7 +14,7 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            return await _databaseContext.Patients.Include(p => p.Appointments).ToListAsync();
+            return await _databaseContext.Patients.Include(p => p.Appointments).ThenInclude(x => x.Doctor).ToListAsync();
         }
         public async Task<Patient> GetPatientById(int patientId)
         {
@@ -31,12 +31,12 @@ namespace workshop.wwwapi.Repository
             return patient;
         }        
 
-        public async Task<Patient> CreatePatient(string FullName, string Email)
+        public async Task<Patient> CreatePatient(string FullName, string Email, string Gender)
         {
             if (FullName == "" || Email == "") return null; 
            
 
-            Patient? patient = new Patient(FullName, Email);
+            Patient? patient = new Patient(FullName, Email, Gender);
             _databaseContext.Patients.Add(patient);
             await _databaseContext.SaveChangesAsync();
             return patient;

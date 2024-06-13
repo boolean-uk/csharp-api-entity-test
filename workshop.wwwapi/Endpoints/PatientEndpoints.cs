@@ -8,7 +8,7 @@ namespace workshop.wwwapi.Endpoints
 {
     public static class PatientEndpoints
     { 
-        public record CreatePatientPayload(string FullName, string Email);
+        public record CreatePatientPayload(string FullName, string Email, string Gender);
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
            app.MapGet("/patients", GetPatients);
@@ -44,7 +44,7 @@ namespace workshop.wwwapi.Endpoints
                 return Results.BadRequest("All fields are required.");
             }
 
-           Patient? patient = await IRepository.CreatePatient(payload.FullName, payload.Email);
+           Patient? patient = await IRepository.CreatePatient(payload.FullName, payload.Email, payload.Gender);
             if (patient == null)
             {
                 return TypedResults.BadRequest("Failed to create student!");

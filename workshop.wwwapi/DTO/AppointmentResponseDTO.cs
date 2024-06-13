@@ -5,13 +5,14 @@ namespace workshop.wwwapi.DTO
 {
     public class AppointmentResponseDTO
     {
-        //public int Id { get; set; }
+        public int Id { get; set; }
         public PatientDTO Patient { get; set; }
         public DoctorDTO Doctor { get; set; }
         public DateTime AppointmentTime { get; set; }
 
         public AppointmentResponseDTO(Appointment appointment)
         {
+            Id = appointment.Id;
             AppointmentTime = appointment.Booking;
             Patient = new PatientDTO(appointment.Patient);
             Doctor = new DoctorDTO(appointment.Doctor);

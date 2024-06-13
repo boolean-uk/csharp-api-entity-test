@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240611061505_PatientAppointmentTable")]
-    partial class PatientAppointmentTable
+    [Migration("20240613083053_Gender")]
+    partial class Gender
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,49 +50,49 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4719)
+                            Booking = new DateTime(2024, 6, 13, 8, 30, 53, 269, DateTimeKind.Utc).AddTicks(2618)
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 2,
-                            Booking = new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4722)
+                            Booking = new DateTime(2024, 6, 13, 8, 30, 53, 269, DateTimeKind.Utc).AddTicks(2622)
                         },
                         new
                         {
                             DoctorId = 3,
                             PatientId = 3,
-                            Booking = new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4724)
+                            Booking = new DateTime(2024, 6, 13, 8, 30, 53, 269, DateTimeKind.Utc).AddTicks(2623)
                         },
                         new
                         {
                             DoctorId = 4,
                             PatientId = 4,
-                            Booking = new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4725)
+                            Booking = new DateTime(2024, 6, 13, 8, 30, 53, 269, DateTimeKind.Utc).AddTicks(2624)
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 4,
-                            Booking = new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4726)
+                            Booking = new DateTime(2024, 6, 13, 8, 30, 53, 269, DateTimeKind.Utc).AddTicks(2625)
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 3,
-                            Booking = new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4727)
+                            Booking = new DateTime(2024, 6, 13, 8, 30, 53, 269, DateTimeKind.Utc).AddTicks(2626)
                         },
                         new
                         {
                             DoctorId = 3,
                             PatientId = 2,
-                            Booking = new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4728)
+                            Booking = new DateTime(2024, 6, 13, 8, 30, 53, 269, DateTimeKind.Utc).AddTicks(2627)
                         },
                         new
                         {
                             DoctorId = 4,
                             PatientId = 1,
-                            Booking = new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4729)
+                            Booking = new DateTime(2024, 6, 13, 8, 30, 53, 269, DateTimeKind.Utc).AddTicks(2628)
                         });
                 });
 
@@ -156,6 +156,10 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("text")
                         .HasColumnName("full_name");
 
+                    b.Property<string>("Gender")
+                        .HasColumnType("text")
+                        .HasColumnName("gender");
+
                     b.HasKey("Id");
 
                     b.ToTable("patients");
@@ -165,25 +169,29 @@ namespace workshop.wwwapi.Migrations
                         {
                             Id = 1,
                             Email = "annadrijver.nl",
-                            FullName = "Anna Drijver"
+                            FullName = "Anna Drijver",
+                            Gender = "A"
                         },
                         new
                         {
                             Id = 2,
                             Email = "tomcruise.nl",
-                            FullName = "Tom Cruise"
+                            FullName = "Tom Cruise",
+                            Gender = "A"
                         },
                         new
                         {
                             Id = 3,
                             Email = "georginaverbaan.nl",
-                            FullName = "Gerogina Verbaan"
+                            FullName = "Gerogina Verbaan",
+                            Gender = "A"
                         },
                         new
                         {
                             Id = 4,
                             Email = "daanschuurmans.nl",
-                            FullName = "Daan Schuurmans"
+                            FullName = "Daan Schuurmans",
+                            Gender = "A"
                         });
                 });
 

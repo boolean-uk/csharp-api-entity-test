@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240613084556_IdToKey")]
+    partial class IdToKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,17 +27,6 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("bookings");
-
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctor_id");
@@ -43,9 +35,15 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("patient_id");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("Booking")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("bookings");
 
-                    b.HasIndex("DoctorId");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.HasKey("DoctorId", "PatientId");
 
                     b.HasIndex("PatientId");
 
@@ -54,59 +52,59 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Booking = new DateTime(2024, 6, 13, 8, 53, 23, 699, DateTimeKind.Utc).AddTicks(2871),
                             DoctorId = 1,
-                            PatientId = 1
+                            PatientId = 1,
+                            Booking = new DateTime(2024, 6, 13, 8, 45, 56, 434, DateTimeKind.Utc).AddTicks(6199),
+                            Id = 1
                         },
                         new
                         {
-                            Id = 2,
-                            Booking = new DateTime(2024, 6, 13, 8, 53, 23, 699, DateTimeKind.Utc).AddTicks(2876),
                             DoctorId = 2,
-                            PatientId = 2
+                            PatientId = 2,
+                            Booking = new DateTime(2024, 6, 13, 8, 45, 56, 434, DateTimeKind.Utc).AddTicks(6204),
+                            Id = 2
                         },
                         new
                         {
-                            Id = 3,
-                            Booking = new DateTime(2024, 6, 13, 8, 53, 23, 699, DateTimeKind.Utc).AddTicks(2877),
                             DoctorId = 3,
-                            PatientId = 3
+                            PatientId = 3,
+                            Booking = new DateTime(2024, 6, 13, 8, 45, 56, 434, DateTimeKind.Utc).AddTicks(6206),
+                            Id = 3
                         },
                         new
                         {
-                            Id = 4,
-                            Booking = new DateTime(2024, 6, 13, 8, 53, 23, 699, DateTimeKind.Utc).AddTicks(2878),
                             DoctorId = 4,
-                            PatientId = 4
+                            PatientId = 4,
+                            Booking = new DateTime(2024, 6, 13, 8, 45, 56, 434, DateTimeKind.Utc).AddTicks(6207),
+                            Id = 4
                         },
                         new
                         {
-                            Id = 5,
-                            Booking = new DateTime(2024, 6, 13, 8, 53, 23, 699, DateTimeKind.Utc).AddTicks(2880),
                             DoctorId = 1,
-                            PatientId = 4
+                            PatientId = 4,
+                            Booking = new DateTime(2024, 6, 13, 8, 45, 56, 434, DateTimeKind.Utc).AddTicks(6208),
+                            Id = 5
                         },
                         new
                         {
-                            Id = 6,
-                            Booking = new DateTime(2024, 6, 13, 8, 53, 23, 699, DateTimeKind.Utc).AddTicks(2881),
                             DoctorId = 2,
-                            PatientId = 3
+                            PatientId = 3,
+                            Booking = new DateTime(2024, 6, 13, 8, 45, 56, 434, DateTimeKind.Utc).AddTicks(6209),
+                            Id = 6
                         },
                         new
                         {
-                            Id = 7,
-                            Booking = new DateTime(2024, 6, 13, 8, 53, 23, 699, DateTimeKind.Utc).AddTicks(2882),
                             DoctorId = 3,
-                            PatientId = 2
+                            PatientId = 2,
+                            Booking = new DateTime(2024, 6, 13, 8, 45, 56, 434, DateTimeKind.Utc).AddTicks(6211),
+                            Id = 7
                         },
                         new
                         {
-                            Id = 8,
-                            Booking = new DateTime(2024, 6, 13, 8, 53, 23, 699, DateTimeKind.Utc).AddTicks(2883),
                             DoctorId = 4,
-                            PatientId = 1
+                            PatientId = 1,
+                            Booking = new DateTime(2024, 6, 13, 8, 45, 56, 434, DateTimeKind.Utc).AddTicks(6215),
+                            Id = 8
                         });
                 });
 

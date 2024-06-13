@@ -23,16 +23,21 @@ namespace workshop.wwwapi.Models
 
         [Column("email")]
         public string Email { get; set; }
+        [Column("gender")]
+        public string? Gender { get; set; }
 
         [Column("appointment")]
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
+    
     
         // constructor 
         public Patient () { }
-        public Patient(string fullName, string email)
+        public Patient(string fullName, string email, string gender)
         {
             FullName = fullName;
             Email = email;
+            Gender = gender;
         }   
 
     }

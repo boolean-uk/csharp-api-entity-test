@@ -25,7 +25,7 @@ namespace workshop.wwwapi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId });
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.Id });
 
             modelBuilder.Entity<Doctor>().HasData(
                 new Doctor { Id = 1, FullName = "John Doe" },
@@ -35,22 +35,22 @@ namespace workshop.wwwapi.Data
             );
 
             modelBuilder.Entity<Patient>().HasData(
-                new Patient { Id = 1, FullName = "Anna Drijver", Email = "annadrijver.nl" },
-                new Patient { Id = 2, FullName = "Tom Cruise", Email = "tomcruise.nl" },
-                new Patient { Id = 3, FullName = "Gerogina Verbaan", Email = "georginaverbaan.nl" },
-                new Patient { Id = 4, FullName = "Daan Schuurmans", Email = "daanschuurmans.nl" }
+                new Patient { Id = 1, FullName = "Anna Drijver", Email = "annadrijver.nl", Gender = "A" },
+                new Patient { Id = 2, FullName = "Tom Cruise", Email = "tomcruise.nl", Gender = "A" },
+                new Patient { Id = 3, FullName = "Gerogina Verbaan", Email = "georginaverbaan.nl", Gender = "A" },
+                new Patient { Id = 4, FullName = "Daan Schuurmans", Email = "daanschuurmans.nl", Gender = "A" }
             );
 
 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 1 },
-                new Appointment { Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 2 },
-                new Appointment { Booking = DateTime.UtcNow, DoctorId = 3, PatientId = 3 },
-                new Appointment { Booking = DateTime.UtcNow, DoctorId = 4, PatientId = 4 },
-                new Appointment { Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 4 },
-                new Appointment { Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 3 },
-                new Appointment { Booking = DateTime.UtcNow, DoctorId = 3, PatientId = 2 },
-                new Appointment { Booking = DateTime.UtcNow, DoctorId = 4, PatientId = 1 }
+                new Appointment { Id = 1, Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 1 },
+                new Appointment { Id = 2, Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 2 },
+                new Appointment { Id = 3, Booking = DateTime.UtcNow, DoctorId = 3, PatientId = 3 },
+                new Appointment { Id = 4, Booking = DateTime.UtcNow, DoctorId = 4, PatientId = 4 },
+                new Appointment { Id = 5, Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 4 },
+                new Appointment { Id = 6, Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 3 },
+                new Appointment { Id = 7, Booking = DateTime.UtcNow, DoctorId = 3, PatientId = 2 },
+                new Appointment { Id = 8, Booking = DateTime.UtcNow, DoctorId = 4, PatientId = 1 }
             );
         }
 

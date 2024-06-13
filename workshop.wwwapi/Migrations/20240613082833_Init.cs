@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class PatientAppointmentTable : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,7 +34,8 @@ namespace workshop.wwwapi.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     full_name = table.Column<string>(type: "text", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false)
+                    email = table.Column<string>(type: "text", nullable: false),
+                    bijnaam = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,13 +80,13 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.InsertData(
                 table: "patients",
-                columns: new[] { "id", "email", "full_name" },
+                columns: new[] { "id", "bijnaam", "email", "full_name" },
                 values: new object[,]
                 {
-                    { 1, "annadrijver.nl", "Anna Drijver" },
-                    { 2, "tomcruise.nl", "Tom Cruise" },
-                    { 3, "georginaverbaan.nl", "Gerogina Verbaan" },
-                    { 4, "daanschuurmans.nl", "Daan Schuurmans" }
+                    { 1, "A", "annadrijver.nl", "Anna Drijver" },
+                    { 2, "A", "tomcruise.nl", "Tom Cruise" },
+                    { 3, "A", "georginaverbaan.nl", "Gerogina Verbaan" },
+                    { 4, "A", "daanschuurmans.nl", "Daan Schuurmans" }
                 });
 
             migrationBuilder.InsertData(
@@ -93,14 +94,14 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "doctor_id", "patient_id", "bookings" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4719) },
-                    { 1, 4, new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4726) },
-                    { 2, 2, new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4722) },
-                    { 2, 3, new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4727) },
-                    { 3, 2, new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4728) },
-                    { 3, 3, new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4724) },
-                    { 4, 1, new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4729) },
-                    { 4, 4, new DateTime(2024, 6, 11, 6, 15, 5, 20, DateTimeKind.Utc).AddTicks(4725) }
+                    { 1, 1, new DateTime(2024, 6, 13, 8, 28, 32, 579, DateTimeKind.Utc).AddTicks(6508) },
+                    { 1, 4, new DateTime(2024, 6, 13, 8, 28, 32, 579, DateTimeKind.Utc).AddTicks(6520) },
+                    { 2, 2, new DateTime(2024, 6, 13, 8, 28, 32, 579, DateTimeKind.Utc).AddTicks(6517) },
+                    { 2, 3, new DateTime(2024, 6, 13, 8, 28, 32, 579, DateTimeKind.Utc).AddTicks(6522) },
+                    { 3, 2, new DateTime(2024, 6, 13, 8, 28, 32, 579, DateTimeKind.Utc).AddTicks(6523) },
+                    { 3, 3, new DateTime(2024, 6, 13, 8, 28, 32, 579, DateTimeKind.Utc).AddTicks(6518) },
+                    { 4, 1, new DateTime(2024, 6, 13, 8, 28, 32, 579, DateTimeKind.Utc).AddTicks(6524) },
+                    { 4, 4, new DateTime(2024, 6, 13, 8, 28, 32, 579, DateTimeKind.Utc).AddTicks(6519) }
                 });
 
             migrationBuilder.CreateIndex(

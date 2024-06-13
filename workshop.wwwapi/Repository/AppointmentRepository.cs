@@ -29,5 +29,16 @@ namespace workshop.wwwapi.Repository
                 .ToListAsync();
         }
 
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsById(int id)
+        {
+            // TODO added lambda patientID
+            // await _databaseContext.Appointments.Include(a => a.PatientId).Where(a => a.DoctorId==id).ToListAsync();
+            return await _databaseContext.Appointments
+                .Where(a => a.Id == id)
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .ToListAsync();
+        }
     }
 }
