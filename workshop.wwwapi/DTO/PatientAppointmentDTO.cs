@@ -10,6 +10,6 @@ namespace workshop.wwwapi.DTO
         {
             Doctor = new DoctorDTO(appointment.Doctor);
             Booking = appointment.Booking;
-        }
+        }       
     }
 }

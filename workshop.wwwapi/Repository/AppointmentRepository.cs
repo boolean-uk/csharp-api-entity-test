@@ -24,13 +24,13 @@ namespace workshop.wwwapi.Repository
             // await _databaseContext.Appointments.Include(a => a.PatientId).Where(a => a.DoctorId==id).ToListAsync();
             return await _databaseContext.Appointments
                 .Where(a => a.DoctorId == id)
-                .Include(a => a.Doctor)
-                .Include(a => a.Patient)
+                //.Include(a => a.Doctor)
+                //.Include(a => a.Patient)
                 .ToListAsync();
         }
 
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsById(int id)
+        public async Task<IEnumerable<Appointment>> GetAppointmentById(int id)
         {
             // TODO added lambda patientID
             // await _databaseContext.Appointments.Include(a => a.PatientId).Where(a => a.DoctorId==id).ToListAsync();

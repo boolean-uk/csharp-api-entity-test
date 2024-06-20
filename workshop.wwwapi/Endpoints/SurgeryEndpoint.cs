@@ -17,9 +17,16 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetDoctors(IDoctorRepository IRepository)
+        public static async Task<IResult> GetDoctors(IDoctorRepository iDoctorRepository)
         {
-            return TypedResults.Ok(await IRepository.GetDoctors());
+            var doctors = await iDoctorRepository.GetDoctors();
+            var doctorDTO = new List<DoctorResponseDTO>();
+            foreach (var doctor in doctors)
+            {
+                doctorDTO.Add(new DoctorResponseDTO(doctor));
+            }
+            //return TypedResults.Ok(patientDTO);
+            return TypedResults.Ok(DoctorResponseDTO.FromRepository(await iDoctorRepository.GetDoctors()));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
