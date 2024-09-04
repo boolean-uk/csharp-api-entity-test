@@ -1,6 +1,7 @@
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Repository;
+using workshop.wwwapi.Repository.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddScoped<IRepository,Repository>();
+
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,7 +27,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.ConfigurePatientEndpoint();
+app.ConfigureDoctorEndpoint();
+app.ConfigureAppointmentEndpoint();
+app.ConfigurePrescriptionEndpoint();
+app.ConfigureMedicineEndpoint();
+
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore
