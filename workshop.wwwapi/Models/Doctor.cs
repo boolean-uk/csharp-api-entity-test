@@ -9,7 +9,7 @@ namespace workshop.wwwapi.Models
     {
         [Key]
         [Column("id")]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [Column("full_name")]
         public string FullName { get; set; }
 

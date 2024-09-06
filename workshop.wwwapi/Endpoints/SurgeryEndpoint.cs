@@ -14,6 +14,7 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients{id}", GetPatient);
+            surgeryGroup.MapPost("/patients", CreatePatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
         }
@@ -26,7 +27,9 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(patientDtos);
         }
 
-        public static async Task<IResult> GetPatient(int id, IRepository repository, IMapper mapper)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetPatient(Guid id, IRepository repository, IMapper mapper)
         {
             Patient patient = null;
 
@@ -44,13 +47,22 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(patientDto);
         }
 
+        public static async Task<IResult> CreatePatient(CreatePatientDTO patientDTO, IRepository repository, IMapper mapper)
+        {
+            Patient patient = mapper.Map<Patient>(patientDTO);
+            
+            var createdPatient = await repository.CreatePatient(patient);
+
+            return TypedResults.Ok(createdPatient);
+        }
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
             return TypedResults.Ok(await repository.GetPatients());
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
+        public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, Guid id)
         {
             
             return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));

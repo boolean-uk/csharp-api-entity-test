@@ -11,5 +11,9 @@ public class MappingProfile : Profile
 
         CreateMap<Patient, GetPatientDTO>()
             .ForMember(dest => dest.Appointments, opt => opt.MapFrom(src => src.Appointments));
+
+        CreateMap<CreatePatientDTO, Patient>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore()) // Ignore Id property
+            .ForMember(dest => dest.Appointments, opt => opt.Ignore()); // Ignore navigation property
     }
 }

@@ -38,20 +38,29 @@ namespace workshop.wwwapi.Data
 
             //TODO: Seed Data Here
 
+            var patient1Id = Guid.NewGuid();
+            var patient2Id = Guid.NewGuid();
+
+            var doctor1Id = Guid.NewGuid();
+            var doctor2Id = Guid.NewGuid();
+
+            // Seed Patients
             modelBuilder.Entity<Patient>().HasData(
-               new Patient { Id = 1, FullName = "John Doe" },
-               new Patient {  Id = 2, FullName = "Jane Smith" }
+                new Patient { Id = patient1Id, FullName = "John Doe" },
+                new Patient { Id = patient2Id, FullName = "Jane Smith" }
             );
 
+            // Seed Doctors
             modelBuilder.Entity<Doctor>().HasData(
-                 new Doctor { Id = 1, FullName = "Dr. Alice Johnson" },
-                 new Doctor { Id = 2, FullName = "Dr. Bob Smith" }
+                new Doctor { Id = doctor1Id, FullName = "Dr. Alice Johnson" },
+                new Doctor { Id = doctor2Id, FullName = "Dr. Bob Smith" }
             );
 
+            // Seed Appointments using the manually defined Guids
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { PatientId = 1, DoctorId = 1, AppointmentDate = new DateTime(2024, 10, 1, 10, 0, 0, DateTimeKind.Utc) },
-                new Appointment { PatientId = 2, DoctorId = 2, AppointmentDate = new DateTime(2024, 10, 2, 11, 0, 0, DateTimeKind.Utc) },
-                new Appointment { PatientId = 2, DoctorId = 1, AppointmentDate = new DateTime(2024, 11, 5, 11, 0, 0, DateTimeKind.Utc) }
+                new Appointment { PatientId = patient1Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 10, 1, 10, 0, 0, DateTimeKind.Utc) },
+                new Appointment { PatientId = patient2Id, DoctorId = doctor2Id, AppointmentDate = new DateTime(2024, 10, 2, 11, 0, 0, DateTimeKind.Utc) },
+                new Appointment { PatientId = patient2Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 11, 5, 11, 0, 0, DateTimeKind.Utc) }
             );
 
             base.OnModelCreating(modelBuilder);

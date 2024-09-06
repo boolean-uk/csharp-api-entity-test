@@ -8,10 +8,10 @@ namespace workshop.wwwapi.Models
     public class Appointment
     {
         [Column("patient_id")]
-        public int PatientId { get; set; }
+        public Guid PatientId { get; set; }
 
         [Column("doctor_id")]
-        public int DoctorId { get; set; }
+        public Guid DoctorId { get; set; }
 
         [Column("appointment_date")]
         public DateTime AppointmentDate { get; set; }

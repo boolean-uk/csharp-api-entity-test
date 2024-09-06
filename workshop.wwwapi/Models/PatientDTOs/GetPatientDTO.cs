@@ -8,9 +8,8 @@ namespace workshop.wwwapi.Models
     public class GetPatientDTO
     {
     
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        [Column("full_name")]
         public string FullName { get; set; }
 
         // Navigation 
