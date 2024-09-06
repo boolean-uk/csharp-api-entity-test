@@ -10,25 +10,25 @@ namespace workshop.wwwapi.Data
         private string _connectionString;
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
+          
             this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
-            
+            Doctor doctor2 = new Doctor { Id = 2, FullName = "Dr. Jane Doe" };
+            Patient patient2 = new Patient { Id = 2, FullName = "John Doe" };
+            Doctor doctor = new Doctor { Id = 1, FullName = "Dr. John Doe" };
+            Patient patient = new Patient { Id = 1, FullName = "Jane Doe" };
+            Appointment appointment = new Appointment { Id = 1, Booking = DateTime.UtcNow, DoctorId = doctor.Id, PatientId = patient.Id };
+            Appointment appointment2 = new Appointment { Id = 2, Booking = DateTime.UtcNow, DoctorId = doctor2.Id, PatientId = patient2.Id };
 
-            //TODO: Seed Data Here
+            modelBuilder.Entity<Doctor>().HasData(doctor, doctor2);
+            modelBuilder.Entity<Patient>().HasData(patient, patient2);  
+            modelBuilder.Entity<Appointment>().HasData(appointment, appointment2);
+
 
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
-            optionsBuilder.UseNpgsql(_connectionString);
-            optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
-            
-        }
+   
 
 
         public DbSet<Patient> Patients { get; set; }
