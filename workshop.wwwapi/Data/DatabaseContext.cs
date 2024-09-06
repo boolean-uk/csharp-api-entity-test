@@ -12,22 +12,28 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
+            modelBuilder.Entity<Appointment>().HasKey(a => a.Id);
+
+            modelBuilder.Entity<Appointment>().HasOne<Doctor>().WithMany().HasForeignKey(a => a.DoctorId);
             
+            modelBuilder.Entity<Appointment>().HasOne<Patient>().WithMany().HasForeignKey(a => a.PatientId);
 
             //TODO: Seed Data Here
+            Seeder seeder = new Seeder();
 
+            modelBuilder.Entity<Patient>().HasData(seeder.patients);
+            modelBuilder.Entity<Doctor>().HasData(seeder.doctors);
+            modelBuilder.Entity<Appointment>().HasData(seeder.appointments);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
-            
         }
 
 

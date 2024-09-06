@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Repository;
@@ -11,6 +12,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IRepository,Repository>();
 var app = builder.Build();
+
+using (var dbContext = new DatabaseContext(new DbContextOptions<DatabaseContext>()))
+{
+    dbContext.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
