@@ -14,5 +14,8 @@ namespace workshop.wwwapi.Models
 
         [Column("full_name")]
         public string FullName { get; set; }
+
+        // Navigation 
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }
