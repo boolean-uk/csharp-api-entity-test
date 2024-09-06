@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System;
 using System.Diagnostics;
 using workshop.wwwapi.Models;
 
@@ -36,21 +37,24 @@ namespace workshop.wwwapi.Data
 
 
             //TODO: Seed Data Here
+
             modelBuilder.Entity<Patient>().HasData(
-               new Patient
-               {
-                   Id = 1,
-                   FullName = "John Doe"
-               },
-               new Patient
-               {
-                   Id = 2,
-                   FullName = "Jane Smith"
-               }
+               new Patient { Id = 1, FullName = "John Doe" },
+               new Patient {  Id = 2, FullName = "Jane Smith" }
+            );
+
+            modelBuilder.Entity<Doctor>().HasData(
+                 new Doctor { Id = 1, FullName = "Dr. Alice Johnson" },
+                 new Doctor { Id = 2, FullName = "Dr. Bob Smith" }
+            );
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment { PatientId = 1, DoctorId = 1, AppointmentDate = new DateTime(2024, 10, 1, 10, 0, 0, DateTimeKind.Utc) },
+                new Appointment { PatientId = 2, DoctorId = 2, AppointmentDate = new DateTime(2024, 10, 2, 11, 0, 0, DateTimeKind.Utc) },
+                new Appointment { PatientId = 2, DoctorId = 1, AppointmentDate = new DateTime(2024, 11, 5, 11, 0, 0, DateTimeKind.Utc) }
             );
 
             base.OnModelCreating(modelBuilder);
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -59,7 +63,6 @@ namespace workshop.wwwapi.Data
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
             
         }
-
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
