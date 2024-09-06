@@ -37,6 +37,25 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Doctors.Include(d => d.Appointments).ThenInclude(p => p.Patient).ToListAsync();
         }
+
+        public async Task<Doctor> GetDoctor(Guid id)
+        {
+            Doctor doctor = await _databaseContext.Doctors.Include(p => p.Appointments).ThenInclude(p => p.Patient).FirstOrDefaultAsync(p => p.Id == id);
+
+            if (doctor == null)
+                throw new Exception("Doctor not found");
+
+            return doctor;
+        }
+
+        public async Task<Doctor> CreateDoctor(Doctor doctor)
+        {
+            _databaseContext.Doctors.Add(doctor);
+            await _databaseContext.SaveChangesAsync();
+
+            return await _databaseContext.Doctors.Include(p => p.Appointments).ThenInclude(p => p.Patient).FirstOrDefaultAsync(p => p.Id == doctor.Id);
+        }
+
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(Guid id)
         {
             return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
