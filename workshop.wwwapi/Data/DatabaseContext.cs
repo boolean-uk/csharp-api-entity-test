@@ -8,6 +8,7 @@ namespace workshop.wwwapi.Data
     public class DatabaseContext : DbContext
     {
         private string _connectionString;
+
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -17,10 +18,37 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.Booking, a.PatientId, a.DoctorId });
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Doctor)
+                .WithMany(d => d.Appointments)
+                .HasForeignKey(a => a.DoctorId);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Patient)
+                .WithMany(p => p.Appointments)
+                .HasForeignKey(a => a.PatientId);
 
             //TODO: Seed Data Here
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient() { Id = 1, FullName = "Nigel" },
+                new Patient() { Id = 2, FullName = "Jonas" }
+                );
 
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor() { Id = 1, FullName = "Doctor Jekyll" },
+                new Doctor() { Id = 2, FullName = "Doctor Hyde" }
+                );
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment() { Booking = DateTime.Now, DoctorId = 1, PatientId = 2 },
+                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(30), DoctorId = 1, PatientId = 2 },
+                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(60), DoctorId = 2, PatientId = 1 },
+                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(45), DoctorId = 2, PatientId = 1 },
+                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(90), DoctorId = 1, PatientId = 2 },
+                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(20), DoctorId = 2, PatientId = 1 }
+                );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
