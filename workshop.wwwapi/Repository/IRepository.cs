@@ -9,7 +9,13 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<AppointmentDTO>> GetAppointmentsByDoctor(int id);
         Task<DoctorDTO> GetDoctor(int id);
 
-        Task<AppointmentDTO> CreateAppointment(DateTime time, int doctorId, int patientId);
+        AppointmentDTO CreateAppointment(int month, int day, int doctorId, int patientId);
+
+        List<AppointmentDTO> GetAppointmentsByPatient(int id);
+
+        List<AppointmentDTO> GetAppointments();
+
+        AppointmentDTO GetAppointment(int patientId, int doctorId);
 
     }
 }

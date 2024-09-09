@@ -20,24 +20,24 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapPost("/appointments", CreateAppointments);
         }
 
-        private static async Task CreateAppointments(IRepository repository, DateTime time, int doctorId, int patientId)
+        private static async Task<IResult> CreateAppointments(IRepository repository, int month, int day, int doctorId, int patientId)
         {
-            return TypedResults.Ok(repository.CreateAppointment(time, doctorId, patientId));
+            return TypedResults.Ok(repository.CreateAppointment(month, day, doctorId, patientId));
         }
 
-        private static async Task GetAppointmentsByPatient(IRepository repository)
+        private static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
         {
-            throw new NotImplementedException();
+            return TypedResults.Ok(repository.GetAppointmentsByPatient(id));
         }
 
-        private static async Task GetAppointment(IRepository repository)
+        private static async Task<IResult> GetAppointment(IRepository repository, int patientId, int doctorId)
         {
-            throw new NotImplementedException();
+            return TypedResults.Ok(repository.GetAppointment(patientId, doctorId));
         }
 
-        private static async Task GetAppointments(IRepository repository)
+        private static async Task<IResult> GetAppointments(IRepository repository)
         {
-            throw new NotImplementedException();
+            return TypedResults.Ok(repository.GetAppointments());
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

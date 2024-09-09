@@ -8,11 +8,12 @@ namespace workshop.wwwapi.Models
     public class Doctor
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("DOCTOR_ID")]
         public int Id { get; set; }
         [Column("FULLNAME")]
         public string FullName { get; set; }
 
-        List<Appointment> Appointments { get; set; }
+        public List<Appointment> Appointments { get; set; }
     }
 }

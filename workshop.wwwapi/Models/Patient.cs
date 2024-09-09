@@ -10,11 +10,12 @@ namespace workshop.wwwapi.Models
     public class Patient
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("PATIENT_ID")]
         public int Id { get; set; }
         [Column("FULLNAME")]
         public string FullName { get; set; }
-        List<Appointment> Appointments { get; set; }
+        public List<Appointment> Appointments { get; set; }
 
     }
 }

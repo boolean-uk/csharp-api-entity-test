@@ -7,7 +7,7 @@ namespace workshop.wwwapi.Models
     [Table("APPOINTMENT")]
     public class Appointment //composite key of booking and doctor
     {
-        [Key]
+        
         [Column("APPOINTMENT_DATE")]
         public DateTime Booking { get; set; }
 
@@ -16,10 +16,14 @@ namespace workshop.wwwapi.Models
         [ForeignKey("DOCTOR")]
         [Column("DOCTOR_ID")]
         public int DoctorId { get; set; }
+
+        public Doctor doctor { get; set; }
         
         [ForeignKey("PATIENT")]
         [Column("PATIENT_ID")]
         public int PatientId { get; set; }
+
+        public Patient patient { get; set; }
 
     }
 }

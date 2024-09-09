@@ -8,7 +8,9 @@
             {
                 Booking = appointment.Booking,
                 DoctorId = appointment.DoctorId,
-                PatientId = appointment.PatientId
+                PatientId = appointment.PatientId,
+                doctor = appointment.doctor.MapToDTO(),
+                patient = appointment.patient.MapToDTO()
             };
         }
 
@@ -18,7 +20,9 @@
             {
                 Booking = appointment.Booking,
                 DoctorId = appointment.DoctorId,
-                PatientId = appointment.PatientId
+                PatientId = appointment.PatientId,
+                doctor = appointment.doctor.MapToDTO(),
+                patient = appointment.patient.MapToDTO()
             }).ToList();
         }
     }

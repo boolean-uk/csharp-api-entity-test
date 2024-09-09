@@ -14,8 +14,12 @@ namespace workshop.wwwapi.Models
         [Column("DOCTOR_ID")]
         public int DoctorId { get; set; }
 
+        public DoctorDTO doctor { get; set; }
+
         [ForeignKey("PATIENT")]
         [Column("PATIENT_ID")]
         public int PatientId { get; set; }
+
+        public PatientDTO patient { get; set; }
     }
 }

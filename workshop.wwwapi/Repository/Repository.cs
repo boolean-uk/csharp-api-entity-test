@@ -34,11 +34,29 @@ namespace workshop.wwwapi.Repository
             return doctor.MapToDTO();
         }
 
-        public async Task<AppointmentDTO> CreateAppointment(DateTime time, int doctorId, int patientId)
+        public AppointmentDTO CreateAppointment(int month, int day, int doctorId, int patientId)
         {
             Appointment appointment = null;
-            await _databaseContext.Appointments.AddAsync(appointment = new Appointment() {Booking = time, DoctorId = doctorId, PatientId = patientId });
-            await _databaseContext.SaveChangesAsync();
+            _databaseContext.Appointments.Add(appointment = new Appointment() {Booking = new DateTime(2024, month, day, 0, 0, 0, DateTimeKind.Utc), DoctorId = doctorId, PatientId = patientId });
+            _databaseContext.SaveChanges();
+            return appointment.MapToDTO();
+        }
+
+        public List<AppointmentDTO> GetAppointmentsByPatient(int id)
+        {
+            var patient = _databaseContext.Patients.Include(a => a.Appointments).FirstOrDefault(x => x.Id == id);
+            return patient.Appointments.MapListToDTO();
+        }
+
+        public  List<AppointmentDTO> GetAppointments()
+        {
+            var appointments = _databaseContext.Appointments.ToList();
+            return appointments.MapListToDTO();
+        }
+
+        public AppointmentDTO GetAppointment(int patientId, int doctorId)
+        {
+            var appointment = _databaseContext.Appointments.FirstOrDefault(x => x.PatientId == patientId && x.DoctorId == doctorId);
             return appointment.MapToDTO();
         }
     }
