@@ -1,13 +1,14 @@
-﻿using workshop.wwwapi.Models;
+﻿using workshop.wwwapi.Data;
+using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository
 {
-    public interface IRepository
+    public interface IRepository<T>
     {
-        Task<IEnumerable<Patient>> GetPatients();
-        Task<IEnumerable<Doctor>> GetDoctors();
-        Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
-
+        Task<IEnumerable<T>> GetAll();
+        Task<T> GetByID(object id);
+        Task<T> Insert(T entity);
+        Task<T> Delete(int id);
 
     }
 }
