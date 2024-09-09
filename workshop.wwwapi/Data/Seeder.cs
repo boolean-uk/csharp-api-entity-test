@@ -1,4 +1,5 @@
-﻿using workshop.wwwapi.Models;
+﻿using System.Runtime.CompilerServices;
+using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Data
 {
@@ -79,19 +80,39 @@ namespace workshop.wwwapi.Data
 
             }
 
-            for (int x = 1; x < 250; x++)
+            for (int x = 1; x < 4; x++)
             {
                 Appointment appointment = new Appointment();
-                appointment.Booking = _appointmentDates[appointmentRandom.Next(_appointmentDates.Count)];
+                //appointment.Booking = _appointmentDates[appointmentRandom.Next(_appointmentDates.Count)];
                 appointment.DoctorId = _doctors[appointmentRandom.Next(_doctors.Count)].Id;
-                appointment.PatientId = _patients[appointmentRandom.Next(_lastnames.Count)].Id;
-                _appointments.Add(appointment);
+                //bool exists = AppointmentExists(appointment.Booking, appointment.DoctorId);
+                //if (!exists)
+                //{
+                    appointment.PatientId = _patients[appointmentRandom.Next(_patients.Count)].Id;
+                    _appointments.Add(appointment);
+                //}
 
             }
+
+            
 
 
 
         }
+
+        //private bool AppointmentExists(DateTime date, int doctorId)
+        //{
+        //    bool exists = false;
+        //    _appointments.ForEach(appointment =>
+        //    {
+        //        if (appointment.Booking == date && appointment.DoctorId == doctorId)
+        //        {
+        //            exists = true;
+        //        }
+
+        //    });
+        //    return exists;
+        //}
         public List<Doctor> Doctors { get { return _doctors; } }
         public List<Patient> Patients { get { return _patients; } }
         public List<Appointment> Appointments { get { return _appointments; } }

@@ -15,15 +15,5 @@ namespace workshop.wwwapi.Models
         [Column("FULLNAME")]
         public string FullName { get; set; }
     
-    
-
-
-
-
-
-
-
-
     }
-
 }
