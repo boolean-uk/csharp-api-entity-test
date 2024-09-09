@@ -29,23 +29,37 @@ namespace workshop.wwwapi.Data
             //modelBuilder.Entity<Appointment>().Property(b => b.Booking).ValueGeneratedOnAdd();
             //modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
 
-            modelBuilder.Entity<Appointment>().HasKey(pc => new { pc.AppointmentId, pc.DoctorId });
+            modelBuilder.Entity<Appointment>().HasKey(pc => new { pc.PatientId, pc.DoctorId });
+
+
 
             List<Patient> patients = new List<Patient>()
             {
                 new Patient() {Id = 1, FullName= "Joe"},
-                new Patient() {Id = 2, FullName= "Mark"}
+                new Patient() {Id = 2, FullName= "Mark"},
+                new Patient() {Id = 3, FullName= "Jeff"},
+                new Patient() {Id = 4, FullName= "Rolf"},
+                new Patient() {Id = 5, FullName= "Gabe"},
+                new Patient() {Id = 6, FullName= "Jesus"}
             };
 
-            Doctor doctor = new Doctor() { Id = 1, FullName = "Adrian" };
+            List<Doctor> doctors = new List<Doctor>()
+            {
+                new Doctor() { Id = 1, FullName = "Adrian" },
+                new Doctor() { Id = 2, FullName = "Jake" }
+            };
 
             List<Appointment> appointments = new List<Appointment>() {
+                 new Appointment() { Booking = new DateTime(2024, 06, 06, 0, 0, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 1 },
+                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 2 },
+                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 5 },
+                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 4 },
+                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 3 },
+                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 6 },
+             };
 
-                new Appointment() { AppointmentId = 1, DoctorId = 1, PatientId = 1},
-                new Appointment() { AppointmentId = 2, DoctorId = 1, PatientId = 2}
-            };
 
-            modelBuilder.Entity<Doctor>().HasData(doctor);
+            modelBuilder.Entity<Doctor>().HasData(doctors);
             modelBuilder.Entity<Patient>().HasData(patients);
             modelBuilder.Entity<Appointment>().HasData(appointments);
 

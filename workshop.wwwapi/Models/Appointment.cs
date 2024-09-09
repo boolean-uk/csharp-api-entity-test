@@ -9,9 +9,9 @@ namespace workshop.wwwapi.Models
     {
         //[Key]
         //[Column("APPOINTMENT_DATE")]
-        //public DateTime Booking { get; set; }
+        public DateTime Booking { get; set; }
 
-        public int AppointmentId { get; set; }
+        //public int AppointmentId { get; set; }
         
         //[ForeignKey("DOCTOR")]
         //[Column("DOCTOR_ID")]
