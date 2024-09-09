@@ -84,14 +84,21 @@ namespace workshop.wwwapi.Repository
 
         public async Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id)
         {
-            return await _databaseContext.Appointments.Where(a => a.PatientId == id).ToListAsync();
+            return await _databaseContext.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .Where(a => a.PatientId == id)
+                .ToListAsync();
         }
 
         public async Task<Appointment> GetAppointmentById(DateTime booking, int doctorId, int patientId)
         {
-            return await _databaseContext.Appointments.FirstOrDefaultAsync(a => a.Booking.Equals(booking) && 
-                                                                                a.DoctorId == doctorId && 
-                                                                                a.PatientId == patientId);
+            return await _databaseContext.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .FirstOrDefaultAsync(a => a.Booking.Equals(booking) && 
+                                          a.DoctorId == doctorId && 
+                                          a.PatientId == patientId);
         }
 
         public async Task<Appointment> CreateAppointment(Appointment entity)
