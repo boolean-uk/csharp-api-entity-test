@@ -13,11 +13,18 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/patient/{id}", GetPatient);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
         { 
             return TypedResults.Ok(await repository.GetPatients());
+        }
+        
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPatient(IRepository repository, int id)
+        {
+            return TypedResults.Ok(await repository.GetPatientById(id));
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)

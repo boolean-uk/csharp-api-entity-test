@@ -489,3 +489,7 @@ $RECYCLE.BIN/
 */**/bin/Release   
 */**/obj/Debug   
 */**/obj/Release   
+/workshop.tests/appsettings.json
+/workshop.wwwapi/appsettings.json
+/workshop.wwwapi/Migrations/20240909134020_NewSeeder.cs
+/workshop.wwwapi/Migrations/DatabaseContextModelSnapshot.cs

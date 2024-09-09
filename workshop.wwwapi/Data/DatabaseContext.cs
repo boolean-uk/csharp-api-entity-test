@@ -17,7 +17,49 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            List<Patient> patients = new List<Patient>();
+            patients.Add(new Patient()
+            {
+                Id = 1,
+                FullName = "Ola Normann"
+            });
+            patients.Add(new Patient()
+            {
+                Id = 2,
+                FullName = "Per Ola"
+            });
+
+            List<Doctor> doctors = new List<Doctor>();
+            doctors.Add(new Doctor()
+            {
+                Id = 1,
+                FullName = "Ola Doktor"
+            });
+            doctors.Add(new Doctor()
+            {
+                Id = 2,
+                FullName = "Falsk Doktor"
+            });
+            List<Appointment> appointments = new List<Appointment>();
+            appointments.Add(
+                new Appointment()
+                {
+                    DoctorId = 1,
+                    PatientId = 2,
+                    Booking = DateTime.UtcNow
+                });
+            appointments.Add(
+                new Appointment()
+                {
+                    DoctorId = 2,
+                    PatientId = 1,
+                    Booking = DateTime.UtcNow
+                });
+
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.DoctorId, a.PatientId });
+            modelBuilder.Entity<Patient>().HasData(patients);
+            modelBuilder.Entity<Doctor>().HasData(doctors);
+            modelBuilder.Entity<Appointment>().HasData(appointments);
 
             //TODO: Seed Data Here
 

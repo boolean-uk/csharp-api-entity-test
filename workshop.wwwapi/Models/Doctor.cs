@@ -3,9 +3,15 @@
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
+    [Table("Doctor")]
     public class Doctor
-    {        
-        public int Id { get; set; }        
+    {
+        [Column("id")]        
+        public int Id { get; set; }
+
+        [Column("Fullname")]
         public string FullName { get; set; }
+
+        public List<Appointment> appointments { get; set; }
     }
 }
