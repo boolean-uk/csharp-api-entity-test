@@ -54,8 +54,6 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(DTOgenerator.GeneratePatientDTO(p));
         }
 
-
-
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
@@ -87,6 +85,7 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> GetAppointments(IRepository repository)
         {
             IEnumerable<Appointment> appointments = await repository.GetAppointments();
@@ -95,10 +94,11 @@ namespace workshop.wwwapi.Endpoints
             {
                 response.Add(DTOgenerator.GenerateAppointmentDTO(a));
             }
-            return TypedResults.Ok(response);
+            return appointments.Count() != 0 ? TypedResults.Ok(response) : TypedResults.NotFound();
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
             IEnumerable<Appointment> appointments = await repository.GetAppointmentsByDoctor(id);
@@ -111,6 +111,7 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
         {
             IEnumerable<Appointment> appointments = await repository.GetAppointmentsByPatient(id);
