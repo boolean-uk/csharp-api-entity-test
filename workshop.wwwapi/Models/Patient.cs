@@ -8,10 +8,14 @@ namespace workshop.wwwapi.Models
     public class Patient
     {
         [Column("id")]
-        public int Id { get; set; }
+        private int _id;
         [Column("firstname")]
-        public string FirstName { get; set; }
+        private string _firstname { get; set; }
         [Column("lastname")]
-        public string LastName { get; set; }
+        private string _lastname { get; set; }
+
+        public int Id { get => _id; set => _id = value; }
+        public string FirstName { get => _firstname; set => _firstname = value; }
+        public string LastName { get => _lastname; set => _lastname = value; }
     }
 }
