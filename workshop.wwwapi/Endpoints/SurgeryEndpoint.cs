@@ -6,6 +6,7 @@ namespace workshop.wwwapi.Endpoints
     public static class SurgeryEndpoint
     {
         //TODO:  add additional endpoints in here according to the requirements in the README.md 
+      /*
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
@@ -29,5 +30,6 @@ namespace workshop.wwwapi.Endpoints
         {
             return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
         }
+      */
     }
 }

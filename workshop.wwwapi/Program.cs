@@ -9,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.AddScoped<IAppointmentRepository,AppointmentRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,7 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.ConfigurePatientEndpoint();
+app.ConfigurePatientEndpoints();
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore
