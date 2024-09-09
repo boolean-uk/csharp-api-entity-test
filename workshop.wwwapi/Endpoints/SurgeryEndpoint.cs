@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using workshop.wwwapi.DTO;
 using workshop.wwwapi.Repository;
+using workshop.wwwapi.ViewModels;
 
 namespace workshop.wwwapi.Endpoints
 {
@@ -14,6 +15,7 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients{id}", GetPatientById);
+            surgeryGroup.MapPost("/patients", CreatePatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
         }
@@ -51,6 +53,22 @@ namespace workshop.wwwapi.Endpoints
             else
             {
                 return TypedResults.NotFound("Patient not found");
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> CreatePatient(IRepository repository, PatientPostModel model)
+        {
+            var newpatient = await repository.CreatePatient(new Models.Patient() { FirstName = model.FirstName, LastName = model.LastName });
+            if (newpatient != null)
+            {
+                GetPatientDTO patient = new(newpatient.FirstName, newpatient.LastName);
+                return TypedResults.Ok(patient);
+            }
+            else 
+            {
+                return TypedResults.BadRequest("Could not create patient");
             }
         }
 
