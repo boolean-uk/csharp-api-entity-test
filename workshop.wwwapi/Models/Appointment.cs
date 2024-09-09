@@ -1,13 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly
-    public class Appointment
+    [Table("APPOINTMENT")]
+    public class Appointment //composite key of booking and doctor
     {
-        
+        [Key]
+        [Column("APPOINTMENT_DATE")]
         public DateTime Booking { get; set; }
+        
+        [ForeignKey("DOCTOR")]
+        [Column("DOCTOR_ID")]
         public int DoctorId { get; set; }
+        [ForeignKey("PATIENT")]
+        [Column("PATIENT_ID")]
         public int PatientId { get; set; }
 
     }
