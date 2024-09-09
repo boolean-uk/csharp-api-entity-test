@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using workshop.wwwapi.Enum;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Data
@@ -16,11 +17,37 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
-            
+            //TODO: Appointment Key etc.. Add Herei
+            modelBuilder.Entity<Appointment>().HasKey(x => new { x.PatientId, x.DoctorId });
+
+            modelBuilder.Entity<Appointment>()
+            .HasOne(a => a.Patient)
+            .WithMany(p => p.Appointments)
+             .HasForeignKey(a => a.PatientId);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Doctor)
+                .WithMany(d => d.Appointments)
+                .HasForeignKey(a => a.DoctorId);
 
             //TODO: Seed Data Here
+            modelBuilder.Entity<Patient>().HasData(
+               new Patient { Id = 1, FullName = "A Patient" },
+               new Patient { Id = 2, FullName = "Another Patient" }
+                );
 
+            modelBuilder.Entity<Doctor>().HasData(
+        new Doctor { Id = 1, FullName = "Dr. Doctor" },
+        new Doctor { Id = 2, FullName = "Dr. AlsoDoctor" }
+    );
+
+            
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment { PatientId = 1, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(1), Type = AppointmentType.InPerson },
+                new Appointment { PatientId = 2, DoctorId = 1, Booking = DateTime.UtcNow.AddDays(2), Type = AppointmentType.Online },
+                new Appointment { PatientId = 1, DoctorId = 2, Booking = DateTime.UtcNow.AddDays(3), Type = AppointmentType.InPerson }
+           
+            );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
