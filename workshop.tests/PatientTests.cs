@@ -14,9 +14,9 @@ public class Tests
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/patients");
+        var response = await client.GetAsync("/patients/doctorid=3q78329&patientid=23123");
 
         // Assert
-        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+        Assert.That(response.StatusCode == System.Net.HttpStatusCode.OK);
     }
 }

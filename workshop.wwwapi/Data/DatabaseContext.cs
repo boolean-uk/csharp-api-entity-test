@@ -13,7 +13,7 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,12 +42,12 @@ namespace workshop.wwwapi.Data
                 );
 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment() { Booking = DateTime.Now, DoctorId = 1, PatientId = 2 },
-                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(30), DoctorId = 1, PatientId = 2 },
-                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(60), DoctorId = 2, PatientId = 1 },
-                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(45), DoctorId = 2, PatientId = 1 },
-                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(90), DoctorId = 1, PatientId = 2 },
-                new Appointment() { Booking = DateTime.Now + TimeSpan.FromMinutes(20), DoctorId = 2, PatientId = 1 }
+                new Appointment() { Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 2 },
+                new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(30), DoctorId = 1, PatientId = 2 },
+                new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(60), DoctorId = 2, PatientId = 1 },
+                new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(45), DoctorId = 2, PatientId = 1 },
+                new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(90), DoctorId = 1, PatientId = 2 },
+                new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(20), DoctorId = 2, PatientId = 1 }
                 );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -55,7 +55,6 @@ namespace workshop.wwwapi.Data
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
-            
         }
 
 

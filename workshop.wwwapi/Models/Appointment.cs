@@ -3,24 +3,20 @@
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly
-    [Table("appointment")]
+    [Table("appointments")]
     public class Appointment
     {
         [Column("booking")]
         public DateTime Booking { get; set; }
 
-        
+        [ForeignKey("Doctor")]
         [Column("doctorId")]
         public int DoctorId { get; set; }
-
-        [ForeignKey("Doctor")]
         public Doctor Doctor { get; set; }
 
-
-        [ForeignKey("patientId")]
-        public int PatientId { get; set; }
-
         [ForeignKey("Patient")]
+        [Column("patientId")]
+        public int PatientId { get; set; }
         public Patient Patient { get; set; }
     }
 }

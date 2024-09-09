@@ -5,11 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
-    [Table("doctor")]
+    [Table("doctors")]
     [PrimaryKey("Id")]
     public class Doctor
     {
-        [Key]
         [Column("id")]
         public int Id { get; set; }
 
