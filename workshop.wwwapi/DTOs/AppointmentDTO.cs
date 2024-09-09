@@ -22,4 +22,11 @@
         public int PatientId { get; set; }
         public string PatientFullName { get; set; }
     }
+
+    public class PostAppointmentDTO
+    {
+        public string Booking { get; set; }
+        public int DoctorId { get; set; }
+        public int PatientId { get; set; }
+    }
 }
