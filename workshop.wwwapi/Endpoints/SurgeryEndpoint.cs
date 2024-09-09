@@ -29,5 +29,10 @@ namespace workshop.wwwapi.Endpoints
         {
             return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
         }
+
+        public static async Task<IResult> GetDoctor(IRepository repository, int id)
+        {
+            return TypedResults.Ok(await repository.GetDoctor(id));
+        }
     }
 }

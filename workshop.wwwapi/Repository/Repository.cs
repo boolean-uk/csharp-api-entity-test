@@ -23,5 +23,10 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
         }
+
+        public async Task<Doctor> GetDoctor(int id)
+        {
+            return await _databaseContext.Doctors.FirstOrDefaultAsync(a => a.Id == id);
+        }
     }
 }
