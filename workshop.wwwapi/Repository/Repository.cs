@@ -15,6 +15,11 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Patients.ToListAsync();
         }
+
+        public async Task<Patient> GetPatientById(int id)
+        {
+            return await _databaseContext.Patients.FirstOrDefaultAsync(p => p.Id == id);
+        }
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
             return await _databaseContext.Doctors.ToListAsync();
