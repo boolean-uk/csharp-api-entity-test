@@ -12,9 +12,11 @@ namespace workshop.wwwapi.Repository
             _databaseContext = db;
         }
 
-        public Task<Doctor> CreateDoctor(Doctor newDoctor)
+        public async Task<Doctor> CreateDoctor(Doctor newDoctor)
         {
-            throw new NotImplementedException();
+            await _databaseContext.Doctors.AddAsync(newDoctor);
+            await _databaseContext.SaveChangesAsync();
+            return newDoctor;
         }
 
         public async Task<IEnumerable<Doctor>> GetAllDoctors()
@@ -22,9 +24,9 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Doctors.ToListAsync();
         }
 
-        public Task<Doctor> GetDoctorById(int id)
+        public async Task<Doctor> GetDoctorById(int id)
         {
-            throw new NotImplementedException();
+            return await _databaseContext.Doctors.FindAsync(id);
         }
     }
 }

@@ -12,14 +12,31 @@ namespace workshop.wwwapi.Repository
             _databaseContext = db;
         }
 
-        public Task<IEnumerable<Appointment>> GetAllAppointments()
+        public async Task<Appointment> CreateAppointment(Appointment appointment)
         {
-            throw new NotImplementedException();
+            await _databaseContext.Appointments.AddAsync(appointment);
+            await _databaseContext.SaveChangesAsync();
+            return appointment;
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAllAppointments()
+        {
+            return await _databaseContext.Appointments.ToListAsync();
         }
 
         public async Task<IEnumerable<Appointment>> GetAppointmentByDoctor(int id)
         {
-            return await _databaseContext.Appointments.Where(d => d.DoctorId == id).ToListAsync();
+            return await _databaseContext.Appointments.Where(a => a.DoctorId == id).ToListAsync();
+        }
+
+        public async Task<Appointment> GetAppointmentById(int doctorId, int patientId)
+        {
+            return await _databaseContext.Appointments.Where(a => a.DoctorId == doctorId && a.PatientId == patientId).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentByPatient(int id)
+        {
+            return await _databaseContext.Appointments.Where(a => a.PatientId == id).ToListAsync();
         }
     }
 }
