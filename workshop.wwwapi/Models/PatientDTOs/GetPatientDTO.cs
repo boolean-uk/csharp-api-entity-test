@@ -13,6 +13,6 @@ namespace workshop.wwwapi.Models
         public string FullName { get; set; }
 
         // Navigation 
-        public ICollection<GetAppointmentDTO> Appointments { get; set; } = new List<GetAppointmentDTO>();
+        public ICollection<GetPatientAppDTO> Appointments { get; set; } = new List<GetPatientAppDTO>();
     }
 }

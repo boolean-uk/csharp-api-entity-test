@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.AppointmentDTOs;
 using workshop.wwwapi.Models.DoctorDTOs;
 
 public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        //Get appointment/-s endpoint
-        CreateMap<Appointment, GetAppointmentDTO>()
+        //Get patient/-s endpoint
+        CreateMap<Appointment, GetPatientAppDTO>()
             .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Doctor.FullName));
 
         CreateMap<Patient, GetPatientDTO>()
@@ -30,6 +31,17 @@ public class MappingProfile : Profile
         CreateMap<CreateDoctorDTO, Doctor>()
             .ForMember(dest => dest.Id, opt => opt.Ignore()) // Ignore Id property
             .ForMember(dest => dest.Appointments, opt => opt.Ignore()); // Ignore navigation property
+
+        //Get appointment/-s endpoint
+        CreateMap<Appointment, GetAppointmentDTO>()
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.Patient.Id))
+            .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.FullName))
+            .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Doctor.FullName))
+            .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.Doctor.Id));
+
+        //Create appointment
+        CreateMap<CreateAppointmentDTO,Appointment>();
+
 
 
     }

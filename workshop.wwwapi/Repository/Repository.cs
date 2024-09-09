@@ -56,9 +56,35 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Doctors.Include(p => p.Appointments).ThenInclude(p => p.Patient).FirstOrDefaultAsync(p => p.Id == doctor.Id);
         }
 
+        public async Task<IEnumerable<Appointment>> GetAppointments()
+        {
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a=> a.Patient).ToListAsync();
+        }
+
+        public async Task<Appointment> GetAppointment(Guid patientId, Guid doctorId)
+        {
+            Appointment appointment = await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).FirstOrDefaultAsync(a => a.PatientId == patientId && a.DoctorId == doctorId);
+
+            if (appointment == null)
+                throw new Exception("Appointment not found");
+
+            return appointment;
+        }
+
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(Guid id)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.DoctorId==id).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatient(Guid id)
+        {
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.PatientId == id).ToListAsync();
+        }
+
+        public async Task CreateAppointment(Appointment appointment)
+        {
+            _databaseContext.Appointments.Add(appointment);
+            await _databaseContext.SaveChangesAsync();
         }
     }
 }
