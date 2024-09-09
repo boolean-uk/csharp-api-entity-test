@@ -27,7 +27,7 @@ namespace workshop.wwwapi.Repository
             return appointments.MapListToDTO();
         
         }
-
+        
         public async Task<DoctorDTO> GetDoctor(int id)
         {
             var doctor = await _databaseContext.Doctors.FirstOrDefaultAsync(a => a.Id == id);
