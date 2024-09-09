@@ -17,8 +17,8 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            //modelBuilder.Entity<Doctor>().HasKey(x => x.Id);
-            //modelBuilder.Entity<Patient>().HasKey(x => x.Id);
+            modelBuilder.Entity<Doctor>().HasKey(x => x.Id);
+            modelBuilder.Entity<Patient>().HasKey(x => x.Id);
             //modelBuilder.Entity<Appointment>().HasKey(pc => pc.DoctorId);
             //modelBuilder.Entity<Appointment>().HasKey(pc => new { pc.Booking, pc.DoctorId });
 

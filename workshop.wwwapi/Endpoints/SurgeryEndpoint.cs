@@ -22,7 +22,7 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            return TypedResults.Ok(await repository.GetDoctors());
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
