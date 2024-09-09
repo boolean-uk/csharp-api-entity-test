@@ -11,7 +11,6 @@ namespace workshop.wwwapi.Repository
         Task updateAsync(T entity);
 
         Task deleteAsync(int id);
-
-
+       
     }
 }

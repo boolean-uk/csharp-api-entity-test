@@ -11,14 +11,24 @@ namespace workshop.wwwapi.Models
         public int Id  { get; set; }
         [Column("booking_time")]
         public DateTime Booking { get; set; }
-        [Column("doctor_Id")]
+
 
         public Doctor doctor { get; set; }
+
+        [Column("doctor_Id")]
         public int DoctorId { get; set; }
-        [Column("patient_Id")]
 
         public Patient patient { get; set; }
+
+        [Column("patient_Id")]
         public int PatientId { get; set; }
+
+        [Column("perscription_Id")]
+        public int PerscriptionId { get; set; }
+
+        public Perscription Perscription { get; set; }
+
+
 
     }
 }

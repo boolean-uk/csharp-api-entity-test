@@ -6,7 +6,6 @@ namespace workshop.wwwapi.Models
     [Table("doctors")]
     public class Doctor
     {
-        [Key]
         [Column("id")]
         public int Id { get; set; }
 
