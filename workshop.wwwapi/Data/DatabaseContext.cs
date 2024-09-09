@@ -30,6 +30,19 @@ namespace workshop.wwwapi.Data
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId);
 
+            modelBuilder.Entity<Prescription>()
+                .HasMany(p => p.Medicines)
+                .WithMany(m => m.Prescriptions)
+                .UsingEntity(mp => mp.ToTable("medicinePrescription"));
+
+            modelBuilder.Entity<Medicine>()
+                .HasMany(m => m.Prescriptions)
+                .WithMany(p => p.Medicines)
+                .UsingEntity(mp => mp.ToTable("medicinePrescription"));
+
+            modelBuilder.Entity<MedicinePrescription>()
+                .HasKey(mp => mp.Id);
+
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(
                 new Patient() { Id = 1, FullName = "Nigel" },
@@ -49,6 +62,23 @@ namespace workshop.wwwapi.Data
                 new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(90), DoctorId = 1, PatientId = 2 },
                 new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(20), DoctorId = 2, PatientId = 1 }
                 );
+
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine() { Id = 1, Name = "Paracetamol", Quantity = 25, Instructions = "Take up to two times a day",
+                    Prescriptions = MedicinesPrescriptions.Where(mp => mp.MedicineId == 1).SelectMany(mp => Prescriptions.Where(p => p.Id == mp.PrescriptionId)).ToList() },
+                new Medicine() { Id = 2, Name = "Ibux", Quantity = 5, Instructions = "Take one a day",
+                    Prescriptions = MedicinesPrescriptions.Where(mp => mp.MedicineId == 2).SelectMany(mp => Prescriptions.Where(p => p.Id == mp.PrescriptionId)).ToList() }
+                );
+
+            modelBuilder.Entity<Prescription>().HasData(
+                new Prescription() { Id = 1 },
+                new Prescription() { Id = 2 }
+                );
+
+            modelBuilder.Entity<MedicinePrescription>().HasData(
+                new MedicinePrescription() { Id = 1, MedicineId =, PrescriptionId = },
+                new MedicinePrescription() { Id = 2, MedicineId =, PrescriptionId = }
+                );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -61,5 +91,8 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<MedicinePrescription> MedicinesPrescriptions { get; set; }
     }
 }
