@@ -1,14 +1,20 @@
 ﻿using workshop.wwwapi.Models;
+using workshop.wwwapi.ViewModel;
 
 namespace workshop.wwwapi.Repository
 {
     public interface IRepository
     {
-        Task<IEnumerable<Patient>> GetPatients();
-        Task<Patient> GetPatient(int id);
-        Task<IEnumerable<Doctor>> GetDoctors();
-        Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
-
-
+        Task<IEnumerable<PatientDTO>> GetPatients();
+        Task<PatientDTO> GetPatient(int id);
+        Task<PatientDTO> AddPatient(Patient entity);
+        Task<IEnumerable<DoctorDTO>> GetDoctors();
+        Task<DoctorDTO> GetDoctor(int id);
+        Task<DoctorDTO> AddDoctor(Doctor entity);
+        Task<IEnumerable<AppointmentDTO>> GetAppointments();
+        Task<AppointmentDTO> GetAppointment(int id);
+        Task<IEnumerable<AppointmentDTO>> GetAppointmentsByDoctor(int id);
+        Task<IEnumerable<AppointmentDTO>> GetAppointmentsByPatient(int id);
+        Task<AppointmentDTO> AddAppointment(Appointment entity);
     }
 }

@@ -16,11 +16,7 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Appointment>().HasKey(a => a.Id);
-
-            modelBuilder.Entity<Appointment>().HasOne<Doctor>().WithMany().HasForeignKey(a => a.DoctorId);
-            
-            modelBuilder.Entity<Appointment>().HasOne<Patient>().WithMany().HasForeignKey(a => a.PatientId);
+            modelBuilder.Entity<Appointment>().HasKey(i => new { i.DoctorId, i.PatientId });
 
             //TODO: Seed Data Here
             Seeder seeder = new Seeder();

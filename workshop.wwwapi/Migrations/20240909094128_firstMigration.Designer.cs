@@ -12,7 +12,7 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240906142207_firstMigration")]
+    [Migration("20240909094128_firstMigration")]
     partial class firstMigration
     {
         /// <inheritdoc />
@@ -27,17 +27,6 @@ namespace workshop.wwwapi.Migrations
 
             modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("booking");
-
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer")
                         .HasColumnName("doctorId");
@@ -46,28 +35,32 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("patientId");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("Booking")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("booking");
 
-                    b.HasIndex("DoctorId");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    b.HasIndex("PatientId");
+                    b.HasKey("DoctorId", "PatientId");
 
                     b.ToTable("appointments");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Booking = new DateTime(2025, 3, 29, 0, 29, 1, 234, DateTimeKind.Utc).AddTicks(7901),
-                            DoctorId = 1,
-                            PatientId = 1
+                            DoctorId = 2,
+                            PatientId = 1,
+                            Booking = new DateTime(2025, 5, 12, 11, 53, 26, 428, DateTimeKind.Utc).AddTicks(7955),
+                            Id = 1
                         },
                         new
                         {
-                            Id = 2,
-                            Booking = new DateTime(2025, 8, 15, 5, 38, 47, 234, DateTimeKind.Utc).AddTicks(7995),
                             DoctorId = 2,
-                            PatientId = 2
+                            PatientId = 2,
+                            Booking = new DateTime(2024, 10, 24, 8, 2, 51, 428, DateTimeKind.Utc).AddTicks(8084),
+                            Id = 2
                         });
                 });
 
@@ -93,12 +86,12 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Charles Winfrey"
+                            FullName = "Oprah Jagger"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Oprah Trump"
+                            FullName = "Mick Winslet"
                         });
                 });
 
@@ -124,28 +117,13 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Donald Obama"
+                            FullName = "Jimi Trump"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Mick Trump"
+                            FullName = "Donald Windsor"
                         });
-                });
-
-            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
-                {
-                    b.HasOne("workshop.wwwapi.Models.Doctor", null)
-                        .WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("workshop.wwwapi.Models.Patient", null)
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
