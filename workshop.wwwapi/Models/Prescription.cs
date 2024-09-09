@@ -2,19 +2,15 @@
 
 namespace workshop.wwwapi.Models
 {
-    public enum AppointmentType
+    [Table("prescriptions")]
+    public class Prescription
     {
-        Online = 0,
-        InPerson = 1
-    }
-
-    [Table("appointments")]
-    public class Appointment
-    {
-        [Column("type")]
-        public AppointmentType Type { get; set; }
-        [Column("booking")]
-        public DateTime Booking { get; set; }
+        [Column("id")]
+        public int Id { get; set; }
+        [Column("quantity")]
+        public int Quantity { get; set; }
+        [Column("notes")]
+        public string Notes { get; set; }
         [ForeignKey("Doctor")]
         [Column("doctor_id")]
         public int DoctorId { get; set; }

@@ -31,14 +31,37 @@ namespace workshop.wwwapi.Data
             };
             var appointments = new List<Appointment>()
             {
-                new Appointment() { Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 1},
-                new Appointment() { Booking = DateTime.Parse("2024/10/10").ToUniversalTime(), DoctorId = 1, PatientId = 2 },
-                new Appointment() { Booking = DateTime.Parse("2024/10/20").ToUniversalTime(), DoctorId = 2, PatientId = 3 },
-                new Appointment() { Booking = DateTime.Parse("2024/10/22").ToUniversalTime(), DoctorId = 2, PatientId = 1 },
+                new Appointment() { Type = AppointmentType.Online, Booking = DateTime.UtcNow, DoctorId = 1, PatientId = 1},
+                new Appointment() { Type = AppointmentType.Online, Booking = DateTime.Parse("2024/10/10").ToUniversalTime(), DoctorId = 1, PatientId = 2 },
+                new Appointment() { Type = AppointmentType.InPerson, Booking = DateTime.Parse("2024/10/20").ToUniversalTime(), DoctorId = 2, PatientId = 3 },
+                new Appointment() { Type = AppointmentType.InPerson, Booking = DateTime.Parse("2024/10/22").ToUniversalTime(), DoctorId = 2, PatientId = 1 },
             };
             modelBuilder.Entity<Patient>().HasData(patients);
             modelBuilder.Entity<Doctor>().HasData(doctors);
             modelBuilder.Entity<Appointment>().HasData(appointments);
+
+            // more data for medicines and prescriptions...
+            modelBuilder.Entity<Pharmacy>().HasKey(k => new { k.MedicineId, k.PrescriptionId });
+            modelBuilder.Entity<Prescription>().HasKey(k => new { k.DoctorId, k.PatientId });
+
+            var medicines = new List<Medicine>()
+            {
+                new Medicine() { Id = 1, Name = "Afeditab" },
+                new Medicine() { Id = 2, Name = "Agrylin" }
+            };
+            var prescriptions = new List<Prescription>()
+            {
+                new Prescription() { Id = 1, Quantity = 50, Notes =  "Take 1 pill daily", DoctorId = 1, PatientId = 1 },
+                new Prescription() { Id = 2, Quantity = 50, Notes =  "Take 1 pill daily", DoctorId = 2, PatientId = 2 }
+            };
+            var pharmacy = new List<Pharmacy>()
+            {
+                new Pharmacy() { MedicineId = 1, PrescriptionId = 1 },
+                new Pharmacy() { MedicineId = 2, PrescriptionId = 2 },
+            };
+            modelBuilder.Entity<Medicine>().HasData(medicines);
+            modelBuilder.Entity<Prescription>().HasData(prescriptions);
+            modelBuilder.Entity<Pharmacy>().HasData(pharmacy);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -52,5 +75,9 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Pharmacy> Pharmacy { get; set; }
     }
 }

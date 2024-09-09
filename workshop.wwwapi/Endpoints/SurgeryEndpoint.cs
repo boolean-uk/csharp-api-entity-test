@@ -23,6 +23,10 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
+
+            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptions/{id}", GetPrescription);
+            surgeryGroup.MapPost("/prescriptions", CreatePrescription);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -77,6 +81,23 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> CreateAppointment(IRepository repository, AppointmentView model)
         {
             return TypedResults.Ok(await repository.CreateAppointment(model));
+        }
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            return TypedResults.Ok(await repository.GetPrescriptions());
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescription(IRepository repository, int id)
+        {
+            return TypedResults.Ok(await repository.GetPrescriptionById(id));
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, PrescriptionView model)
+        {
+            return TypedResults.Ok(await repository.CreatePrescription(model));
         }
     }
 }
