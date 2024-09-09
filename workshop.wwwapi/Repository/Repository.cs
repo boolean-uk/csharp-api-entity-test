@@ -141,7 +141,7 @@ namespace workshop.wwwapi.Repository
             Appointment appointment = new Appointment();
             appointment.PatientId = patientId;
             DateTime now = DateTime.Now;
-            appointment.Booking = now;
+            appointment.Booking = now.ToUniversalTime();
             appointment.DoctorId = docId;
 
             _databaseContext.Appointments.Add(appointment);

@@ -12,11 +12,17 @@ namespace workshop.wwwapi.Models
         [Column("booking")] 
         public DateTime Booking { get; set; }
         
-        [Column("doctorId")] 
+        [Column("doctorId")]
+        [ForeignKey("doctor id")]
         public int DoctorId { get; set; }
         
-        [Column("patientId")] 
+        [Column("patientId")]
+        [ForeignKey("patient id")]
         public int PatientId { get; set; }
+
+        [Column("prescriptionId")]
+        [ForeignKey("prescription id")]
+        public int PrescriptionId { get; set; }
 
     }
 }
