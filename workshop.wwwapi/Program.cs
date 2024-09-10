@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Repository;
@@ -12,6 +13,11 @@ builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IRepository,Repository>();
 var app = builder.Build();
 
+using (var dbContext = new DatabaseContext(new DbContextOptions<DatabaseContext>()))
+{
+    dbContext.Database.EnsureCreated();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -21,6 +27,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.ConfigurePatientEndpoint();
+app.ConfigureDoctorEndpoint();
+app.ConfigureAppointmentEndpoint();
+app.ConfigurePerscriptionEndpoint();
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore
