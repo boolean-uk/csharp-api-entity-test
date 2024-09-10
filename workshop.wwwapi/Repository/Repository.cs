@@ -24,10 +24,10 @@ namespace workshop.wwwapi.Repository
         public async Task<IEnumerable<AppointmentDTO>> GetAppointmentsByDoctor(int id)
         {
             var appointments = await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
-            appointments.ForEach(async x =>
+            appointments.ForEach( x =>
             {
-                x.doctor = await _databaseContext.Doctors.FirstOrDefaultAsync(d => d.Id == id);
-                x.patient = await _databaseContext.Patients.FirstOrDefaultAsync(p => p.Id == x.PatientId);
+                x.doctor =  _databaseContext.Doctors.FirstOrDefault(d => d.Id == id);
+                x.patient = _databaseContext.Patients.FirstOrDefault(p => p.Id == x.PatientId);
             });
             return appointments.MapListToDTO();
         
