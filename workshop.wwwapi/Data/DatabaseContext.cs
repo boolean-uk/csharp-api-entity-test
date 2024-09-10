@@ -51,18 +51,28 @@ namespace workshop.wwwapi.Data
 
             List<Appointment> appointments = new List<Appointment>() {
                  new Appointment() { Booking = new DateTime(2024, 06, 06, 0, 0, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 1 },
-                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 2 },
-                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 5 },
-                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 4 },
-                 new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 3 },
+                 new Appointment() {Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 2},
+                 new Appointment() {Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 5},
+                 new Appointment() {Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 4},
+                 new Appointment() {Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 3},
                  //new Appointment() { Booking = new DateTime(2024, 06, 07, 0, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 6 },
              };
 
-            appointments.ForEach(appointment =>
-            {
-                appointment.doctor = doctors.FirstOrDefault(x => x.Id == appointment.DoctorId);
-                appointment.patient = patients.FirstOrDefault(x => x.Id == appointment.PatientId);
-            });
+            //this.Appointments.Where(a => a.DoctorId == 1).ExecuteUpdate(a => a.SetProperty(p => p.doctor, doctors.FirstOrDefault(x => x.Id == 1)));
+            //this.Appointments.Where(a => a.DoctorId == 2).ExecuteUpdate(a => a.SetProperty(p => p.doctor, doctors.FirstOrDefault(x => x.Id == 2)));
+
+            //appointments.ForEach(appointment =>
+            //{
+            //    appointment.doctor = doctors.FirstOrDefault(x => x.Id == appointment.DoctorId);
+            //    appointment.patient = patients.FirstOrDefault(x => x.Id == appointment.PatientId);
+            //});
+
+            //Seeder seeder = new Seeder(this);
+
+            //modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
+            //modelBuilder.Entity<Patient>().HasData(seeder.Patients);
+            //modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
+
             modelBuilder.Entity<Doctor>().HasData(doctors);
             modelBuilder.Entity<Patient>().HasData(patients);
             modelBuilder.Entity<Appointment>().HasData(appointments);
