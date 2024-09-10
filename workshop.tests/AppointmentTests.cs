@@ -24,7 +24,7 @@ namespace workshop.tests
 
 
             // Act
-            var response1 = await client.GetAsync("appointments?doctorId=2&patientId=2&dateTime=2024-11-16T00%3A00%3A00.000Z");
+            var response1 = await client.GetAsync("http://localhost:5045/surgery/appointments?doctorId=2&patientId=2&dateTime=2024-11-16T00%3A00%3A00.000Z");
 
             // Assert
             Assert.IsTrue(response1.StatusCode == System.Net.HttpStatusCode.OK);
