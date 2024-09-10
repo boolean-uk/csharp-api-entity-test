@@ -8,5 +8,7 @@
         public int PatientID { get; set; }
 
         public DateTime? booking { get; set; } = default(DateTime?);
+
+        public string type { get; set; }
     }
 }

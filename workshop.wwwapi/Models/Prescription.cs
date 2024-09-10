@@ -7,10 +7,11 @@ namespace workshop.wwwapi.Models
     public class Prescription
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")] 
         public int Id { get; set; }
 
-
+        
         public ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; } = new List<PrescriptionMedicine>();
 
     }

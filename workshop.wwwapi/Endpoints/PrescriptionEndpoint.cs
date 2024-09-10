@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
@@ -12,53 +13,44 @@ namespace workshop.wwwapi.Endpoints
 
             prescription.MapGet("/GetAll", GetPrescriptions);
             prescription.MapPost("/Create", CreatePrescription);
-            prescription.MapPut("/Attach{id}", AttachPrescription);
+            prescription.MapGet("/Get{id}", GetPrescription);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPrescriptions(IRepository repository)
         {
-            try
-            {
-                return TypedResults.Ok(await repository.GetPatients());
-            }
-            catch (Exception ex)
-            {
-                return TypedResults.Problem(ex.Message);
-            }
+            return TypedResults.Ok(await repository.GetPrescriptions());
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> CreatePrescription(IRepository repository, InputDTO data) //New DTO for Prescription needed
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, int appointmentId,
+            List<int> medineIds) 
         {
-            try
+            foreach (var med in medineIds)
             {
-
-
-                //Reponse
-                return TypedResults.Created($"http://localhost:5045/Prescription/{result.Id}", result);
+                if(!await repository.CheckExists(4, med))
+                {
+                    return TypedResults.NotFound();
+                }
             }
-            catch (Exception ex)
+            if(!await repository.CheckExists(3, appointmentId))
             {
-                return TypedResults.Problem(ex.Message);
+                return TypedResults.NotFound();
             }
+
+            return TypedResults.Ok(await repository.CreatePrescription(appointmentId, medineIds));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> AttachPrescription(IRepository repository, InputDTO data, int appointmentId) //New DTO for Prescription needed
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetPrescription(IRepository repository, int id)
         {
-            try
+            var result = await repository.GetPrescription(id);
+            if (result == null)
             {
-
-
-                //Reponse
-                return TypedResults.Ok(result);
+                return TypedResults.NotFound();
             }
-            catch (Exception ex)
-            {
-                return TypedResults.Problem(ex.Message);
-            }
+            return TypedResults.Ok(result);
         }
     }
 }

@@ -48,11 +48,11 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> CreateNewAppointment(IRepository repository,int doctorId, int patientId)
         {
-            if (!await repository.CheckExists(true, doctorId))
+            if (!await repository.CheckExists(0, doctorId))
             {
                 return TypedResults.NotFound();
             }
-            if (!await repository.CheckExists(false, patientId))
+            if (!await repository.CheckExists(1, patientId))
             {
                 return TypedResults.NotFound();
             }

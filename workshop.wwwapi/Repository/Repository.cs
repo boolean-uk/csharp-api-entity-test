@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.DTO;
 using workshop.wwwapi.Models;
@@ -91,6 +92,14 @@ namespace workshop.wwwapi.Repository
             var patName = _databaseContext.Patients.ToList().Where(d => app.PatientId == d.Id).FirstOrDefault().FullName;
             ret.PatientName = patName;
             ret.doctorName = docName;
+            if (app.type == AppointmentType.online)
+            {
+                ret.type = "Online";
+            }
+            else if (app.type == AppointmentType.inPerson)
+            {
+                ret.type = "In person";
+            }
             return ret;
         }
 
@@ -171,9 +180,9 @@ namespace workshop.wwwapi.Repository
             }
             return result;
         }
-        public async Task<bool> CheckExists(bool doctor, int id) //false is patient
+        public async Task<bool> CheckExists(int type, int id) 
         {
-            if (doctor)
+            if (type == 0) //doctor
             {
                 var existingDoctorIds = await _databaseContext.Doctors
                     .Where(a => id.Equals(a.Id))
@@ -182,12 +191,43 @@ namespace workshop.wwwapi.Repository
 
                 return existingDoctorIds.Count == 1;
             }
-            var existingPatientIds = await _databaseContext.Patients
-                    .Where(a => id.Equals(a.Id))
-                    .Select(a => a.Id)
-                    .ToListAsync();
+            else if (type == 1) //patient
+            {
+                var existingPatientIds = await _databaseContext.Patients
+                        .Where(a => id.Equals(a.Id))
+                        .Select(a => a.Id)
+                        .ToListAsync();
 
-            return existingPatientIds.Count == 1;
+                return existingPatientIds.Count == 1;
+            }
+            else if(type == 2)//prescription
+            {
+                var existingPrescriptionIds = await _databaseContext.Prescriptions
+                        .Where(a => id.Equals(a.Id))
+                        .Select(a => a.Id)
+                        .ToListAsync();
+
+                return existingPrescriptionIds.Count == 1;
+            }
+            else if(type == 3)//appointment
+            {
+                var existingAppointmentIds = await _databaseContext.Appointments
+                                        .Where(a => id.Equals(a.Id))
+                                        .Select(a => a.Id)
+                                        .ToListAsync();
+
+                return existingAppointmentIds.Count == 1;
+            }
+            else if (type == 4)//medince
+            {
+                var existingMedicineIds = await _databaseContext.Medicines
+                                        .Where(a => id.Equals(a.Id))
+                                        .Select(a => a.Id)
+                                        .ToListAsync();
+
+                return existingMedicineIds.Count == 1;
+            }
+            return false;
         }
 
         public async Task<DoctorDTO> AddDoctor(string firstName, string lastName)
@@ -208,6 +248,88 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.SaveChangesAsync();
             PatientDTO ret = new PatientDTO(pat.Id, pat.FullName);
             return ret;
+        }
+
+        public async Task<PrescriptionDTO> CreatePrescription(int appointmentId, List<int> medicinIds)
+        {
+            Prescription prescription = new Prescription();
+            _databaseContext.Prescriptions.Add(prescription);
+            await _databaseContext.SaveChangesAsync();
+            
+            var per = await _databaseContext.Prescriptions.Include(p => p.PrescriptionMedicines).ThenInclude(pm => pm.Medicine).Where(p => p.Id == _databaseContext.Prescriptions.Count()).FirstOrDefaultAsync();
+            var app = await _databaseContext.Appointments.Where(a => a.Id == appointmentId).FirstOrDefaultAsync();
+
+            _databaseContext.Remove(app);
+            await _databaseContext.SaveChangesAsync();
+
+            app.PrescriptionId = per.Id;
+            await _databaseContext.Appointments.AddAsync(app);
+            await _databaseContext.SaveChangesAsync();
+
+            
+
+            foreach (var med in medicinIds)
+            {
+                PrescriptionMedicine pre = new PrescriptionMedicine();
+                pre.PrescriptionId = appointmentId;
+                pre.MedicineId = med;
+                pre.Medicine = _databaseContext.Medicines.FirstOrDefault(m => m.Id == med);
+                pre.Prescription = _databaseContext.Prescriptions.FirstOrDefault(p => p.Id == prescription.Id);
+                _databaseContext.PrescriptionMedicines.Add(pre);
+                await _databaseContext.SaveChangesAsync();
+
+            }
+           
+
+            PrescriptionDTO retValue = new PrescriptionDTO();
+            retValue.appointmentId = appointmentId;
+            MakePrescriptionDTO(prescription, retValue);
+
+            
+
+            return retValue;
+
+        }
+
+        private void MakePrescriptionDTO(Prescription prescription, PrescriptionDTO ret)
+        {
+            foreach (var item in prescription.PrescriptionMedicines)
+            {
+                ret.MedicinID.Add(item.MedicineId);
+                MedicineDTO dto = new MedicineDTO();
+                dto.prescriptionId = item.PrescriptionId;
+                dto.Quantity = item.Medicine.Quantity;
+                dto.Instruction = item.Medicine.Instruction;
+                dto.Name = item.Medicine.Name;
+                ret.Medicines.Add(dto);
+            }
+        }
+
+        public async Task<PrescriptionDTO> GetPrescription(int id)
+        {
+
+            var prescription = await _databaseContext.Prescriptions.Include(p => p.PrescriptionMedicines).ThenInclude(pm => pm.Medicine).Where(p => p.Id == id).FirstOrDefaultAsync();
+            if (prescription == null)
+            {
+
+                return null;
+            }
+            PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
+            MakePrescriptionDTO(prescription, prescriptionDTO);
+            return prescriptionDTO;
+        }
+
+        public async Task<IEnumerable<PrescriptionDTO>> GetPrescriptions()
+        {
+            var prescriptions = await _databaseContext.Prescriptions.Include(p => p.PrescriptionMedicines).ThenInclude(pm => pm.Medicine).ToListAsync();
+            List<PrescriptionDTO> result = new List<PrescriptionDTO>();
+            foreach (var pre in prescriptions)
+            {
+                PrescriptionDTO add = new PrescriptionDTO();
+                MakePrescriptionDTO(pre, add);
+                result.Add(add);
+            }
+            return result;
         }
     }
 }

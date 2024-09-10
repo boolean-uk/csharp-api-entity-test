@@ -121,13 +121,13 @@ namespace workshop.wwwapi.Data
                 _patients.Add(patient);
             }
 
+
+
             
 
 
-
-
             //extension seeding, didn't see(d) this coming, eh?
-           
+
             for (int i = 1; i < 11; i++)
             {
                 Medicine medicine = new Medicine
@@ -147,7 +147,8 @@ namespace workshop.wwwapi.Data
             {
                 Prescription prescription = new Prescription
                 {
-                    Id = i
+                    Id = i,
+
                 };
 
                 _prescriptions.Add(prescription);
@@ -155,7 +156,7 @@ namespace workshop.wwwapi.Data
 
             for (int i = 1; i < 11; i++)
             {
-                // Prescription can have 3 medicines
+                // Prescription can have 4 medicines
                 List<int> randoms = new List<int>();
                 while (randoms.Count < 3)
                 {
@@ -170,16 +171,18 @@ namespace workshop.wwwapi.Data
                 {
                     _prescriptionMedicines.Add(new PrescriptionMedicine() { MedicineId = i, PrescriptionId = id });
                 }
-            }
 
+            }
 
             for (int i = 1; i < 11; i++)
             {
                 Appointment appointment = new Appointment();
                 appointment.Id = i;
 
+                appointment.type = (AppointmentType)dateRandom.Next(0, 2);
                 appointment.PatientId = _patients[i - 1].Id;
                 appointment.DoctorId = _doctors[doctorRandom.Next(_doctors.Count)].Id;
+                appointment.PrescriptionId = _prescriptions[i - 1].Id;
 
                 DateTime now = DateTime.Now;
                 DateTime futureDate = now.AddDays(dateRandom.Next(1, 366)).AddHours(dateRandom.Next(0, 24)).AddMinutes(dateRandom.Next(0, 60)).AddSeconds(dateRandom.Next(0, 60));

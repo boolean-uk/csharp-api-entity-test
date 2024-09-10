@@ -17,8 +17,13 @@ namespace workshop.wwwapi.Repository
         Task<DoctorDTO> AddDoctor(string firstName, string lastName);
         Task<PatientDTO> AddPatient(string firstName, string lastName);
 
-        Task<bool> CheckExists(bool doctor, int id);
+        //0 is doctor, 1 is patient, 2 is prescription, 3 is appointment, 4 is medince
+        Task<bool> CheckExists(int type, int id);
 
+        Task<PrescriptionDTO> CreatePrescription(int appointmentId, List<int> medicinIds);
 
+        Task<PrescriptionDTO> GetPrescription(int id);
+
+        Task<IEnumerable<PrescriptionDTO>> GetPrescriptions();
     }
 }

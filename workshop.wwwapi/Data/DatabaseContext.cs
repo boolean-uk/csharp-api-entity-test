@@ -21,7 +21,7 @@ namespace workshop.wwwapi.Data
 
             ////TODO: Seed Data Here
 
-            modelBuilder.Entity<Appointment>().HasKey(i => new { i.DoctorId, i.PatientId, i.PrescriptionId });
+            modelBuilder.Entity<Appointment>().HasKey(i => new { i.DoctorId, i.PatientId, i.PrescriptionId});
 
             modelBuilder.Entity<PrescriptionMedicine>().HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
 

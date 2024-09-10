@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240910081346_seventhMigration")]
+    partial class seventhMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,10 +35,6 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("patientId");
 
-                    b.Property<int?>("PrescriptionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("prescription_id");
-
                     b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("booking");
@@ -44,104 +43,80 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    b.Property<int?>("type")
-                        .HasColumnType("integer")
-                        .HasColumnName("AppointmentType");
-
-                    b.HasKey("DoctorId", "PatientId", "PrescriptionId");
+                    b.HasKey("DoctorId", "PatientId");
 
                     b.ToTable("appointments");
 
                     b.HasData(
                         new
                         {
-                            DoctorId = 2,
+                            DoctorId = 9,
                             PatientId = 1,
-                            PrescriptionId = 1,
-                            Booking = new DateTime(2025, 5, 19, 7, 30, 35, 297, DateTimeKind.Utc).AddTicks(7011),
-                            Id = 1,
-                            type = 0
+                            Booking = new DateTime(2025, 6, 23, 1, 49, 38, 625, DateTimeKind.Utc).AddTicks(9200),
+                            Id = 1
                         },
                         new
                         {
-                            DoctorId = 9,
+                            DoctorId = 2,
                             PatientId = 2,
-                            PrescriptionId = 2,
-                            Booking = new DateTime(2025, 5, 22, 13, 7, 40, 297, DateTimeKind.Utc).AddTicks(7138),
-                            Id = 2,
-                            type = 1
+                            Booking = new DateTime(2024, 10, 7, 14, 58, 57, 625, DateTimeKind.Utc).AddTicks(9253),
+                            Id = 2
                         },
                         new
                         {
                             DoctorId = 7,
                             PatientId = 3,
-                            PrescriptionId = 3,
-                            Booking = new DateTime(2025, 5, 30, 0, 51, 14, 297, DateTimeKind.Utc).AddTicks(7145),
-                            Id = 3,
-                            type = 1
-                        },
-                        new
-                        {
-                            DoctorId = 7,
-                            PatientId = 4,
-                            PrescriptionId = 4,
-                            Booking = new DateTime(2025, 8, 12, 21, 22, 45, 297, DateTimeKind.Utc).AddTicks(7175),
-                            Id = 4,
-                            type = 0
-                        },
-                        new
-                        {
-                            DoctorId = 9,
-                            PatientId = 5,
-                            PrescriptionId = 5,
-                            Booking = new DateTime(2025, 8, 12, 18, 7, 54, 297, DateTimeKind.Utc).AddTicks(7185),
-                            Id = 5,
-                            type = 0
-                        },
-                        new
-                        {
-                            DoctorId = 7,
-                            PatientId = 6,
-                            PrescriptionId = 6,
-                            Booking = new DateTime(2024, 12, 23, 22, 48, 57, 297, DateTimeKind.Utc).AddTicks(7191),
-                            Id = 6,
-                            type = 1
-                        },
-                        new
-                        {
-                            DoctorId = 3,
-                            PatientId = 7,
-                            PrescriptionId = 7,
-                            Booking = new DateTime(2025, 6, 4, 21, 36, 42, 297, DateTimeKind.Utc).AddTicks(7196),
-                            Id = 7,
-                            type = 0
-                        },
-                        new
-                        {
-                            DoctorId = 4,
-                            PatientId = 8,
-                            PrescriptionId = 8,
-                            Booking = new DateTime(2024, 9, 26, 22, 56, 29, 297, DateTimeKind.Utc).AddTicks(7206),
-                            Id = 8,
-                            type = 0
-                        },
-                        new
-                        {
-                            DoctorId = 6,
-                            PatientId = 9,
-                            PrescriptionId = 9,
-                            Booking = new DateTime(2025, 1, 17, 11, 39, 32, 297, DateTimeKind.Utc).AddTicks(7210),
-                            Id = 9,
-                            type = 0
+                            Booking = new DateTime(2025, 6, 20, 11, 53, 12, 625, DateTimeKind.Utc).AddTicks(9259),
+                            Id = 3
                         },
                         new
                         {
                             DoctorId = 10,
+                            PatientId = 4,
+                            Booking = new DateTime(2025, 6, 11, 0, 55, 9, 625, DateTimeKind.Utc).AddTicks(9263),
+                            Id = 4
+                        },
+                        new
+                        {
+                            DoctorId = 3,
+                            PatientId = 5,
+                            Booking = new DateTime(2025, 9, 7, 6, 50, 14, 625, DateTimeKind.Utc).AddTicks(9266),
+                            Id = 5
+                        },
+                        new
+                        {
+                            DoctorId = 6,
+                            PatientId = 6,
+                            Booking = new DateTime(2025, 6, 26, 9, 39, 5, 625, DateTimeKind.Utc).AddTicks(9270),
+                            Id = 6
+                        },
+                        new
+                        {
+                            DoctorId = 9,
+                            PatientId = 7,
+                            Booking = new DateTime(2025, 3, 8, 22, 33, 58, 625, DateTimeKind.Utc).AddTicks(9273),
+                            Id = 7
+                        },
+                        new
+                        {
+                            DoctorId = 6,
+                            PatientId = 8,
+                            Booking = new DateTime(2024, 12, 20, 6, 28, 21, 625, DateTimeKind.Utc).AddTicks(9277),
+                            Id = 8
+                        },
+                        new
+                        {
+                            DoctorId = 7,
+                            PatientId = 9,
+                            Booking = new DateTime(2024, 9, 22, 14, 35, 19, 625, DateTimeKind.Utc).AddTicks(9280),
+                            Id = 9
+                        },
+                        new
+                        {
+                            DoctorId = 7,
                             PatientId = 10,
-                            PrescriptionId = 10,
-                            Booking = new DateTime(2024, 11, 2, 1, 41, 13, 297, DateTimeKind.Utc).AddTicks(7215),
-                            Id = 10,
-                            type = 0
+                            Booking = new DateTime(2025, 6, 3, 16, 31, 56, 625, DateTimeKind.Utc).AddTicks(9284),
+                            Id = 10
                         });
                 });
 
@@ -167,52 +142,52 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Mickey Mathiasson"
+                            FullName = "Elvis Winslow"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Oprah Winfrey"
+                            FullName = "Elvis Mathiasson"
                         },
                         new
                         {
                             Id = 3,
-                            FullName = "Kate Winslow"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FullName = "Kate Winslow"
-                        },
-                        new
-                        {
-                            Id = 5,
                             FullName = "Adam Duck"
                         },
                         new
                         {
+                            Id = 4,
+                            FullName = "Neo Mouse"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FullName = "Neo Schwarzenegger"
+                        },
+                        new
+                        {
                             Id = 6,
-                            FullName = "Arnold Obama"
+                            FullName = "Barack Mathiasson"
                         },
                         new
                         {
                             Id = 7,
-                            FullName = "Mickey Mathiasson"
+                            FullName = "Mickey Duck"
                         },
                         new
                         {
                             Id = 8,
-                            FullName = "Adam Mathiasson"
+                            FullName = "Adam Duck"
                         },
                         new
                         {
                             Id = 9,
-                            FullName = "Barack Xavier"
+                            FullName = "Felix Obama"
                         },
                         new
                         {
                             Id = 10,
-                            FullName = "Ragnar Mathiasson"
+                            FullName = "Donald Winfrey"
                         });
                 });
 
@@ -247,72 +222,72 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            Instruction = "Inject with needle into the bloodstream.",
-                            Name = "Ultra Aspirin",
-                            Quantity = 98
+                            Instruction = "Put in coworker's food.",
+                            Name = "Bad Pills",
+                            Quantity = 25
                         },
                         new
                         {
                             Id = 2,
-                            Instruction = "Lick over a long period of time.",
-                            Name = "Ultra Aspirin",
-                            Quantity = 2
+                            Instruction = "Swallow with water.",
+                            Name = "Crazy Couch drops",
+                            Quantity = 91
                         },
                         new
                         {
                             Id = 3,
-                            Instruction = "Inject with needle into the bloodstream.",
-                            Name = "Yummy Drugs",
-                            Quantity = 80
+                            Instruction = "Snort before tequila shot.",
+                            Name = "Stupid Leaves",
+                            Quantity = 1
                         },
                         new
                         {
                             Id = 4,
                             Instruction = "Insert into rectum.",
-                            Name = "Crazy Potion",
-                            Quantity = 6
+                            Name = "Ultra Couch drops",
+                            Quantity = 14
                         },
                         new
                         {
                             Id = 5,
-                            Instruction = "Swallow with water.",
-                            Name = "Good Potion",
-                            Quantity = 17
+                            Instruction = "Mix with chicken noodle soup.",
+                            Name = "Stupid Aspirin",
+                            Quantity = 23
                         },
                         new
                         {
                             Id = 6,
-                            Instruction = "Swallow without anything added.",
-                            Name = "Crazy Blue Pills",
-                            Quantity = 40
+                            Instruction = "Consume with any meal.",
+                            Name = "Super Blue Pills",
+                            Quantity = 14
                         },
                         new
                         {
                             Id = 7,
-                            Instruction = "Lick over a long period of time.",
-                            Name = "Crazy Mushrooms",
-                            Quantity = 71
+                            Instruction = "Mix with chicken noodle soup.",
+                            Name = "Crazy Heroin",
+                            Quantity = 76
                         },
                         new
                         {
                             Id = 8,
-                            Instruction = "Mix with chicken noodle soup.",
-                            Name = "Super Couch drops",
-                            Quantity = 69
+                            Instruction = "Insert into rectum.",
+                            Name = "Ultra Heroin",
+                            Quantity = 63
                         },
                         new
                         {
                             Id = 9,
-                            Instruction = "Put in coworker's food.",
-                            Name = "Super Xanax",
-                            Quantity = 20
+                            Instruction = "Hide in cabinet and let the placebo effect do it's job.",
+                            Name = "Not Leaves",
+                            Quantity = 98
                         },
                         new
                         {
                             Id = 10,
-                            Instruction = "Hide in cabinet and let the placebo effect do it's job.",
-                            Name = "Not Xanax",
-                            Quantity = 65
+                            Instruction = "Snort before tequila shot.",
+                            Name = "Stupid Xanax",
+                            Quantity = 93
                         });
                 });
 
@@ -338,107 +313,121 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Felix Mathiasson"
+                            FullName = "Kate Schwarzenegger"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Neo Obama"
+                            FullName = "Ragnar Obama"
                         },
                         new
                         {
                             Id = 3,
-                            FullName = "Oprah Lothbrok"
+                            FullName = "Barack Mouse"
                         },
                         new
                         {
                             Id = 4,
-                            FullName = "Kate Andersson"
+                            FullName = "Charles Sandler"
                         },
                         new
                         {
                             Id = 5,
-                            FullName = "Donald Duck"
+                            FullName = "Elvis Mouse"
                         },
                         new
                         {
                             Id = 6,
-                            FullName = "Charles Mouse"
+                            FullName = "Neo Mouse"
                         },
                         new
                         {
                             Id = 7,
-                            FullName = "Oprah Mouse"
+                            FullName = "Elvis Winfrey"
                         },
                         new
                         {
                             Id = 8,
-                            FullName = "Neo Presley"
+                            FullName = "Neo Xavier"
                         },
                         new
                         {
                             Id = 9,
-                            FullName = "Oprah Andersson"
+                            FullName = "Oprah Lothbrok"
                         },
                         new
                         {
                             Id = 10,
-                            FullName = "Donald Andersson"
+                            FullName = "Arnold Mathiasson"
                         });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Prescription", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("appointmentId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("appointmentId");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("appointmentId"));
+
+                    b.Property<int>("Id")
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.HasKey("Id");
+                    b.HasKey("appointmentId");
 
                     b.ToTable("prescriptions");
 
                     b.HasData(
                         new
                         {
+                            appointmentId = 10,
                             Id = 1
                         },
                         new
                         {
+                            appointmentId = 9,
                             Id = 2
                         },
                         new
                         {
+                            appointmentId = 8,
                             Id = 3
                         },
                         new
                         {
+                            appointmentId = 7,
                             Id = 4
                         },
                         new
                         {
+                            appointmentId = 6,
                             Id = 5
                         },
                         new
                         {
+                            appointmentId = 5,
                             Id = 6
                         },
                         new
                         {
+                            appointmentId = 4,
                             Id = 7
                         },
                         new
                         {
+                            appointmentId = 3,
                             Id = 8
                         },
                         new
                         {
+                            appointmentId = 2,
                             Id = 9
                         },
                         new
                         {
+                            appointmentId = 1,
                             Id = 10
                         });
                 });
@@ -462,137 +451,137 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            PrescriptionId = 9,
-                            MedicineId = 1
-                        },
-                        new
-                        {
                             PrescriptionId = 4,
                             MedicineId = 1
-                        },
-                        new
-                        {
-                            PrescriptionId = 1,
-                            MedicineId = 1
-                        },
-                        new
-                        {
-                            PrescriptionId = 1,
-                            MedicineId = 2
-                        },
-                        new
-                        {
-                            PrescriptionId = 3,
-                            MedicineId = 2
-                        },
-                        new
-                        {
-                            PrescriptionId = 4,
-                            MedicineId = 2
-                        },
-                        new
-                        {
-                            PrescriptionId = 1,
-                            MedicineId = 3
-                        },
-                        new
-                        {
-                            PrescriptionId = 10,
-                            MedicineId = 3
-                        },
-                        new
-                        {
-                            PrescriptionId = 3,
-                            MedicineId = 3
-                        },
-                        new
-                        {
-                            PrescriptionId = 6,
-                            MedicineId = 4
-                        },
-                        new
-                        {
-                            PrescriptionId = 5,
-                            MedicineId = 4
                         },
                         new
                         {
                             PrescriptionId = 7,
-                            MedicineId = 4
-                        },
-                        new
-                        {
-                            PrescriptionId = 6,
-                            MedicineId = 5
-                        },
-                        new
-                        {
-                            PrescriptionId = 8,
-                            MedicineId = 5
+                            MedicineId = 1
                         },
                         new
                         {
                             PrescriptionId = 10,
-                            MedicineId = 5
-                        },
-                        new
-                        {
-                            PrescriptionId = 1,
-                            MedicineId = 6
-                        },
-                        new
-                        {
-                            PrescriptionId = 10,
-                            MedicineId = 6
-                        },
-                        new
-                        {
-                            PrescriptionId = 5,
-                            MedicineId = 6
-                        },
-                        new
-                        {
-                            PrescriptionId = 1,
-                            MedicineId = 7
-                        },
-                        new
-                        {
-                            PrescriptionId = 5,
-                            MedicineId = 7
+                            MedicineId = 1
                         },
                         new
                         {
                             PrescriptionId = 3,
-                            MedicineId = 7
-                        },
-                        new
-                        {
-                            PrescriptionId = 7,
-                            MedicineId = 8
-                        },
-                        new
-                        {
-                            PrescriptionId = 3,
-                            MedicineId = 8
-                        },
-                        new
-                        {
-                            PrescriptionId = 4,
-                            MedicineId = 8
+                            MedicineId = 2
                         },
                         new
                         {
                             PrescriptionId = 10,
-                            MedicineId = 9
+                            MedicineId = 2
+                        },
+                        new
+                        {
+                            PrescriptionId = 5,
+                            MedicineId = 2
+                        },
+                        new
+                        {
+                            PrescriptionId = 1,
+                            MedicineId = 3
                         },
                         new
                         {
                             PrescriptionId = 2,
-                            MedicineId = 9
+                            MedicineId = 3
+                        },
+                        new
+                        {
+                            PrescriptionId = 4,
+                            MedicineId = 3
+                        },
+                        new
+                        {
+                            PrescriptionId = 10,
+                            MedicineId = 4
                         },
                         new
                         {
                             PrescriptionId = 3,
+                            MedicineId = 4
+                        },
+                        new
+                        {
+                            PrescriptionId = 1,
+                            MedicineId = 4
+                        },
+                        new
+                        {
+                            PrescriptionId = 1,
+                            MedicineId = 5
+                        },
+                        new
+                        {
+                            PrescriptionId = 8,
+                            MedicineId = 5
+                        },
+                        new
+                        {
+                            PrescriptionId = 5,
+                            MedicineId = 5
+                        },
+                        new
+                        {
+                            PrescriptionId = 7,
+                            MedicineId = 6
+                        },
+                        new
+                        {
+                            PrescriptionId = 2,
+                            MedicineId = 6
+                        },
+                        new
+                        {
+                            PrescriptionId = 9,
+                            MedicineId = 6
+                        },
+                        new
+                        {
+                            PrescriptionId = 1,
+                            MedicineId = 7
+                        },
+                        new
+                        {
+                            PrescriptionId = 3,
+                            MedicineId = 7
+                        },
+                        new
+                        {
+                            PrescriptionId = 6,
+                            MedicineId = 7
+                        },
+                        new
+                        {
+                            PrescriptionId = 5,
+                            MedicineId = 8
+                        },
+                        new
+                        {
+                            PrescriptionId = 9,
+                            MedicineId = 8
+                        },
+                        new
+                        {
+                            PrescriptionId = 1,
+                            MedicineId = 8
+                        },
+                        new
+                        {
+                            PrescriptionId = 9,
+                            MedicineId = 9
+                        },
+                        new
+                        {
+                            PrescriptionId = 8,
+                            MedicineId = 9
+                        },
+                        new
+                        {
+                            PrescriptionId = 6,
                             MedicineId = 9
                         },
                         new
@@ -602,12 +591,12 @@ namespace workshop.wwwapi.Migrations
                         },
                         new
                         {
-                            PrescriptionId = 1,
+                            PrescriptionId = 7,
                             MedicineId = 10
                         },
                         new
                         {
-                            PrescriptionId = 6,
+                            PrescriptionId = 10,
                             MedicineId = 10
                         });
                 });
