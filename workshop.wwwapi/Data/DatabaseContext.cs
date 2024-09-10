@@ -17,7 +17,35 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Appointment>().HasKey(c => new { c.Booking, c.DoctorId });
+            List<Appointment> appointmentlist = new List<Appointment>()
+            {
+                new Appointment() { Booking = new DateTime(2024, 06, 06, 0, 0, 0, DateTimeKind.Utc ), DoctorId = 1, PatientId = 1 },
+                new Appointment() { Booking = new DateTime(2024, 06, 06, 0, 0, 0, DateTimeKind.Utc ), DoctorId = 2, PatientId = 2 },
+                new Appointment() { Booking = new DateTime(2024, 07, 07, 0, 0, 0, DateTimeKind.Utc ), DoctorId = 2, PatientId = 3 }
+
+
+            };
+
+            modelBuilder.Entity<Doctor>().HasKey(c => new { c.Id });
+            List<Doctor> doctors = new List<Doctor>()
+            {
+                new Doctor() { Id = 1, FullName = "T1000" },
+                new Doctor() { Id = 2, FullName ="Dave" }
+            };
+
+            modelBuilder.Entity<Patient>().HasKey(c => new { c.Id });
+            List<Patient> patientlist = new List<Patient>()
+            {
+                new Patient() { Id = 1, FullName = "P1"},
+                new Patient() { Id = 2, FullName = "P2"},
+                new Patient() { Id = 3, FullName = "P3"}
+            };
+
+            modelBuilder.Entity<Appointment>().HasData(appointmentlist);
+            modelBuilder.Entity<Doctor>().HasData(doctors);
+            modelBuilder.Entity<Patient>().HasData(patientlist);
+
 
             //TODO: Seed Data Here
 
