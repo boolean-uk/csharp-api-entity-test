@@ -15,12 +15,16 @@ namespace workshop.wwwapi.Models
         public int DoctorId { get; set; }
 
         [ForeignKey("DoctorId")]
-        public Doctor Doctor {get; set;}
+        public Doctor Doctor { get; set; }
 
         [Column(Order = 1)]
-        public int PatientId { get; set;}
+        public int PatientId { get; set; }
 
         [ForeignKey("PatientId")]
         public Patient Patient { get; set; }
+        //public int? MOPID { get; set; } 
+        //[ForeignKey("MOPID")]
+        //public MedicinOnPrescription? Prescription { get; set; }
+        //public Location Location { get; set; }
     }
 }

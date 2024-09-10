@@ -28,14 +28,18 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>().HasOne(a => a.Patient)
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId);
-                //.HasPrincipalKey(p => p.PatientId);
 
             //TODO: Seed Data Here
 
+            //Lists
             List<Patient> patientList = new List<Patient>();
             List<Doctor> doctorList = new List<Doctor>();
             List<Appointment> appointments = new List<Appointment>();
+            List<Medicin> medicins = new List<Medicin>();
+            List<MedicinOnPrescription> medicinOnPrescriptions = new List<MedicinOnPrescription>();
+            List<Prescription> prescriptions = new List<Prescription>();
 
+            //Patients
             Patient patient1 = new Patient();
             patient1.PatientId = 1;
             patient1.FirstName = "Anders";
@@ -46,6 +50,7 @@ namespace workshop.wwwapi.Data
             patient2.FirstName = "Per";
             patient2.LastName = "Kristian";
 
+            //Doctors
             Doctor doctor1 = new Doctor();
             doctor1.DoctorId = 1;
             doctor1.FullName = "Lea Gonzales";
@@ -54,6 +59,7 @@ namespace workshop.wwwapi.Data
             doctor2.DoctorId = 2;
             doctor2.FullName = "Miah Hagen";
 
+            //Appointments
             Appointment appointment1 = new Appointment();
             appointment1.Booking = DateTime.UtcNow;
             appointment1.DoctorId = doctor1.DoctorId;
@@ -64,6 +70,41 @@ namespace workshop.wwwapi.Data
             appointment2.DoctorId = doctor2.DoctorId;
             appointment2.PatientId = patient2.PatientId;
 
+            //Medicin
+            Medicin medicin1 = new Medicin();
+            medicin1.Id = 1;
+            medicin1.Name = "Parecet";
+
+            Medicin medicin2 = new Medicin();
+            medicin2.Id = 2;
+            medicin2.Name = "Biotics";
+
+            Prescription prescription1 = new Prescription();
+            prescription1.Id = 1;
+
+            Prescription prescription2 = new Prescription();
+            prescription2.Id = 2;
+
+            //MedicinOnPrescription
+            MedicinOnPrescription MOD1 = new MedicinOnPrescription();
+            MOD1.MedicinId = 1;
+            MOD1.PrescriptionId = 1;
+            MOD1.Cuantity = 3;
+            MOD1.Notes = "Swallow them, not more than 4 daily";
+
+            MedicinOnPrescription MOD2 = new MedicinOnPrescription();
+            MOD2.MedicinId = 2;
+            MOD2.PrescriptionId = 1;
+            MOD2.Cuantity = 1;
+            MOD2.Notes = "Take 1 each hour";
+
+            MedicinOnPrescription MOD3 = new MedicinOnPrescription();
+            MOD2.MedicinId = 2;
+            MOD2.PrescriptionId = 1;
+            MOD2.Cuantity = 1;
+            MOD2.Notes = "Take 1 each hour";
+
+            //Add to lists
             patientList.Add(patient1);
             patientList.Add(patient2);
             doctorList.Add(doctor1);

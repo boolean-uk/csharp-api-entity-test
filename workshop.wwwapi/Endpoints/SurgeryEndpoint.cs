@@ -18,7 +18,7 @@ namespace workshop.wwwapi.Endpoints
             var surgeryGroup = app.MapGroup("surgery");
 
             surgeryGroup.MapGet("/patients", GetPatients);
-            surgeryGroup.MapGet("/patiens{id:int}", GetSinglePatient);
+            surgeryGroup.MapGet("/patients/{id:int}", GetSinglePatient);
             surgeryGroup.MapPost("/patients", CreatePatient);
 
             surgeryGroup.MapGet("/doctors", GetDoctors);
@@ -43,22 +43,28 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
         public static async Task<IResult> GetSinglePatient(IRepository repository, int id)
         {
             Patient patient = await repository.GetSinglePatient(id);
+            if(patient == null)
+            {
+                return TypedResults.NotFound(error404);
+            }
+
             PatientDto patientDto = new PatientDto(patient);
             return TypedResults.Ok(patientDto);
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public static async Task<IResult> CreatePatient(IRepository repository, PatientPostModel model)
         {
             Patient patient = new Patient();
             patient.FirstName = model.FirstName;
             patient.LastName = model.LastName;
             await repository.CreatePatient(patient);
-            return TypedResults.Ok(patient);
+            return TypedResults.Created("", patient);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
