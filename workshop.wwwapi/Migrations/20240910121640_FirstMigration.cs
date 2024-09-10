@@ -46,13 +46,13 @@ namespace workshop.wwwapi.Migrations
                 name: "appointments",
                 columns: table => new
                 {
+                    Booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DoctorId = table.Column<int>(type: "integer", nullable: false),
-                    PatientId = table.Column<int>(type: "integer", nullable: false),
-                    Booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    PatientId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_appointments", x => new { x.PatientId, x.DoctorId });
+                    table.PrimaryKey("PK_appointments", x => new { x.PatientId, x.DoctorId, x.Booking });
                     table.ForeignKey(
                         name: "FK_appointments_doctors_DoctorId",
                         column: x => x.DoctorId,
@@ -73,7 +73,8 @@ namespace workshop.wwwapi.Migrations
                 values: new object[,]
                 {
                     { 1, "Hannibal", "Lecter" },
-                    { 2, "Henry", "Jones Jr." }
+                    { 2, "Henry", "Jones Jr." },
+                    { 3, "Davy", "Jones" }
                 });
 
             migrationBuilder.InsertData(
@@ -82,16 +83,24 @@ namespace workshop.wwwapi.Migrations
                 values: new object[,]
                 {
                     { 1, "John", "Doe" },
-                    { 2, "Jane", "Dough" }
+                    { 2, "Jane", "Dough" },
+                    { 3, "Hughie", "Dodson" }
                 });
 
             migrationBuilder.InsertData(
                 table: "appointments",
-                columns: new[] { "DoctorId", "PatientId", "Booking" },
+                columns: new[] { "Booking", "DoctorId", "PatientId" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc) },
-                    { 2, 2, new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc) }
+                    { new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc), 1, 1 },
+                    { new DateTime(2024, 9, 14, 14, 30, 0, 0, DateTimeKind.Utc), 2, 1 },
+                    { new DateTime(2024, 9, 14, 13, 30, 0, 0, DateTimeKind.Utc), 3, 1 },
+                    { new DateTime(2024, 9, 14, 14, 30, 0, 0, DateTimeKind.Utc), 1, 2 },
+                    { new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc), 2, 2 },
+                    { new DateTime(2024, 9, 14, 14, 30, 0, 0, DateTimeKind.Utc), 3, 2 },
+                    { new DateTime(2024, 9, 14, 13, 30, 0, 0, DateTimeKind.Utc), 1, 3 },
+                    { new DateTime(2024, 9, 14, 13, 30, 0, 0, DateTimeKind.Utc), 2, 3 },
+                    { new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc), 3, 3 }
                 });
 
             migrationBuilder.CreateIndex(

@@ -12,7 +12,7 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240910070017_FirstMigration")]
+    [Migration("20240910121640_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace workshop.wwwapi.Migrations
                     b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("PatientId", "DoctorId");
+                    b.HasKey("PatientId", "DoctorId", "Booking");
 
                     b.HasIndex("DoctorId");
 
@@ -54,6 +54,48 @@ namespace workshop.wwwapi.Migrations
                             PatientId = 2,
                             DoctorId = 2,
                             Booking = new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 3,
+                            DoctorId = 3,
+                            Booking = new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 3,
+                            DoctorId = 1,
+                            Booking = new DateTime(2024, 9, 14, 13, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 3,
+                            DoctorId = 2,
+                            Booking = new DateTime(2024, 9, 14, 13, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 1,
+                            DoctorId = 3,
+                            Booking = new DateTime(2024, 9, 14, 13, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 2,
+                            DoctorId = 1,
+                            Booking = new DateTime(2024, 9, 14, 14, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 1,
+                            DoctorId = 2,
+                            Booking = new DateTime(2024, 9, 14, 14, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 2,
+                            DoctorId = 3,
+                            Booking = new DateTime(2024, 9, 14, 14, 30, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -89,6 +131,12 @@ namespace workshop.wwwapi.Migrations
                             Id = 2,
                             FirstName = "Henry",
                             LastName = "Jones Jr."
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Davy",
+                            LastName = "Jones"
                         });
                 });
 
@@ -124,6 +172,12 @@ namespace workshop.wwwapi.Migrations
                             Id = 2,
                             FirstName = "Jane",
                             LastName = "Dough"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Hughie",
+                            LastName = "Dodson"
                         });
                 });
 

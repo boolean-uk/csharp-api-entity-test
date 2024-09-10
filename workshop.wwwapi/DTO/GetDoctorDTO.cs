@@ -1,18 +1,17 @@
 ﻿namespace workshop.wwwapi.DTO
 {
-    public class GetPatientDTO
+    public class GetDoctorDTO
     {
         private string _firstname;
         private string _lastname;
-        public GetPatientDTO(string firstname, string lastname)
+        public GetDoctorDTO(string firstname, string lastname)
         {
             _firstname = firstname;
             _lastname = lastname;
         }
 
         public string Name => $"{_firstname} {_lastname}";
-
-        public List<DTOPatientAppointment> Appointments { get; set; } = new List<DTOPatientAppointment>();
-
+        
+        public List<DTODoctorAppointment> Appointments { get; set; } = new List<DTODoctorAppointment>();
     }
 }
