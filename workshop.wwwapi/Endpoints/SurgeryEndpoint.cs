@@ -17,15 +17,15 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients/{id}", GetAPatient);
-            surgeryGroup.MapPost("/patients/{patient}", CreatePatient);
+            surgeryGroup.MapPost("/patients", CreatePatient);
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/doctors/{id}", GetADoctor);
-            surgeryGroup.MapPost("/doctors/{doctor}", CreateDoctor);
-            surgeryGroup.MapGet("/appointments/", GetAppointments);
-            surgeryGroup.MapGet("/appointments/patient{patientid}/doctor{doctorid}", GetAppointment);
-            surgeryGroup.MapPost("/appointements/{appointment}", CreateAppointment);
-            surgeryGroup.MapGet("/appointments/patient{id}", GetAppointmentsByPatient);
-            surgeryGroup.MapGet("/appointments/doctor{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapPost("/doctors", CreateDoctor);
+            surgeryGroup.MapGet("/appointments", GetAppointments);
+            surgeryGroup.MapGet("/appointments/patient/doctor", GetAppointment);
+            surgeryGroup.MapPost("/appointments", CreateAppointment);
+            surgeryGroup.MapGet("/appointments/patient", GetAppointmentsByPatient);
+            surgeryGroup.MapGet("/appointments/doctor", GetAppointmentsByDoctor);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -161,7 +161,7 @@ namespace workshop.wwwapi.Endpoints
             var patient = await repository.GetAPatient(appointment.PatientId);
             var doctor = await repository.GetADoctor(appointment.DoctorId);
 
-            Appointment newAppointment = new Appointment()
+            Appointment newAppointment = new ()
             {
                 Booking = appointment.Booking,
                 Patient = patient,
@@ -171,7 +171,7 @@ namespace workshop.wwwapi.Endpoints
             };
 
             await repository.CreateAppointment(newAppointment);
-            return TypedResults.Created($"https://localhost:7235/appointments/patient{appointment.PatientId}/doctor{appointment.DoctorId}");
+            return TypedResults.Created($"https://localhost:7235/appointments/patient/doctor");
         }
 
         private static async Task<List<PatientAppointmentDTO>> ToPatientAppointments(IRepository repository, Patient patient)
