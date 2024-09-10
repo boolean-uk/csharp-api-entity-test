@@ -6,7 +6,7 @@ using System.Data;
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
-    [Table("patients")]
+    [Table("patient")]
     [PrimaryKey("Id")]
     public class Patient
     {

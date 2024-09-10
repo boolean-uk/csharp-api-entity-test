@@ -3,7 +3,7 @@
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly
-    [Table("appointments")]
+    [Table("appointment")]
     public class Appointment
     {
         [Column("booking")]

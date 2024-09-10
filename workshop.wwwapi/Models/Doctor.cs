@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
-    [Table("doctors")]
+    [Table("doctor")]
     [PrimaryKey("Id")]
     public class Doctor
     {
