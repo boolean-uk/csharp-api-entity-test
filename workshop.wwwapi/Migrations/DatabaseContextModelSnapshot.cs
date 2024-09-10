@@ -35,7 +35,23 @@ namespace workshop.wwwapi.Migrations
 
                     b.HasKey("PatientId", "DoctorId");
 
-                    b.ToTable("Appointments");
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            PatientId = 1,
+                            DoctorId = 1,
+                            Booking = new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 2,
+                            DoctorId = 2,
+                            Booking = new DateTime(2024, 9, 14, 12, 30, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
@@ -50,9 +66,27 @@ namespace workshop.wwwapi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("doctors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Hannibal",
+                            LastName = "Lecter"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Henry",
+                            LastName = "Jones Jr."
+                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
@@ -88,6 +122,31 @@ namespace workshop.wwwapi.Migrations
                             FirstName = "Jane",
                             LastName = "Dough"
                         });
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
+                {
+                    b.HasOne("workshop.wwwapi.Models.Doctor", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workshop.wwwapi.Models.Patient", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }
