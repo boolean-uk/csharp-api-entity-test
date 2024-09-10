@@ -27,20 +27,41 @@ namespace workshop.wwwapi.Endpoints
 
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public static async Task<IResult> GetPatients(IRepository repository)
-        { 
-            GetPatientsResponse response = new GetPatientsResponse();
+        {
+            GetPatientsResponse patientresponse = new GetPatientsResponse();
             var results = await repository.GetPatients();
-            foreach (Patient p in results) 
+
+            if (results != null) 
             {
-                DTOPatient patient = new DTOPatient();
-                patient.PatientName = p.FullName;
+                foreach (Patient p in results)
+                {
+                    GetPatientAppointmentResponse response = new GetPatientAppointmentResponse();
+                    var appointmentresult = await repository.GetAppointments();
 
-                response.Patients.Add(patient);
-            
+                    DTOPatient patient = new DTOPatient();
+                    patient.PatientName = p.FullName;
+
+                    foreach (Appointment a in appointmentresult.Where(x => x.PatientId == p.Id))
+                    {
+                        DTOPatientAppointment appointment = new DTOPatientAppointment();
+                        Doctor doctor = await repository.GetDoctorById(a.DoctorId);
+
+                        appointment.AppointmentDate = a.AppointmentDate;
+                        appointment.Doctor = doctor.FullName;
+
+                        response.Appointments.Add(appointment);
+                        patient.Appointments = response.Appointments;
+                        
+                    }
+                    patientresponse.Patients.Add(patient);
+                }
+                return TypedResults.Ok(patientresponse);
             }
+            return TypedResults.BadRequest();
 
-            return TypedResults.Ok(response);
+
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -48,10 +69,28 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetPatientById(IRepository repository, int patientid)
         {
             var getPatient = await repository.GetPatientById(patientid);
-            if(getPatient != null)
+
+            if (getPatient != null)
             {
+                GetPatientAppointmentResponse response = new GetPatientAppointmentResponse();
+                var results = await repository.GetAppointments();
+
                 DTOPatient patient = new DTOPatient();
                 patient.PatientName = getPatient.FullName;
+
+                foreach (Appointment a in results.Where(x => x.PatientId == getPatient.Id))
+                {
+                    DTOPatientAppointment appointment = new DTOPatientAppointment();
+                    Doctor doctor = await repository.GetDoctorById(a.DoctorId);
+
+                    appointment.AppointmentDate = a.AppointmentDate;
+                    appointment.Doctor = doctor.FullName;
+
+                    response.Appointments.Add(appointment);
+                    patient.Appointments = response.Appointments;
+
+                }
+
                 return TypedResults.Ok(patient);
             }
             return TypedResults.BadRequest("No patient matches given id");
@@ -74,21 +113,42 @@ namespace workshop.wwwapi.Endpoints
 
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            GetDoctorsResponse response = new GetDoctorsResponse();
+            GetDoctorsResponse doctorResponse = new GetDoctorsResponse();
             var results = await repository.GetDoctors();
 
-            foreach (Doctor d in results)
+            if (results != null) 
             {
-                DTODoctor doctor = new DTODoctor();
-                doctor.DoctorName = d.FullName;
+                foreach (Doctor d in results)
+                {
+                    DTODoctor doctor = new DTODoctor();
+                    doctor.DoctorName = d.FullName;
 
-                response.Doctors.Add(doctor);
+                    GetDoctorAppointmentResponse appointmentResponse = new GetDoctorAppointmentResponse();
+                    var appointmentresult = await repository.GetAppointments();
 
+                    foreach (Appointment a in appointmentresult.Where(x => x.DoctorId == d.Id))
+                    {
+                        DTODoctorAppointment appointment = new DTODoctorAppointment();
+                        Patient patient = await repository.GetPatientById(a.PatientId);
+
+                        appointment.AppointmentDate = a.AppointmentDate;
+                        appointment.Patient = patient.FullName;
+
+                        appointmentResponse.Appointments.Add(appointment);
+                        doctor.Appointments = appointmentResponse.Appointments;
+
+                    }
+
+                    doctorResponse.Doctors.Add(doctor);
+
+                }
+                return TypedResults.Ok(doctorResponse);
             }
-
-            return TypedResults.Ok(response);
+            return TypedResults.BadRequest();
+            
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -96,10 +156,28 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetDoctorById(IRepository repository, int doctorid)
         {
             var getDoctor = await repository.GetDoctorById(doctorid);
+
             if (getDoctor != null)
             {
+                GetDoctorAppointmentResponse response = new GetDoctorAppointmentResponse();
+                var results = await repository.GetAppointments();
+
                 DTODoctor doctor = new DTODoctor();
                 doctor.DoctorName = getDoctor.FullName;
+
+                foreach (Appointment a in results.Where(x => x.DoctorId == getDoctor.Id))
+                {
+                    DTODoctorAppointment appointment = new DTODoctorAppointment();
+                    Patient patient = await repository.GetPatientById(a.PatientId);
+
+                    appointment.AppointmentDate = a.AppointmentDate;
+                    appointment.Patient = patient.FullName;
+
+                    response.Appointments.Add(appointment);
+                    doctor.Appointments = response.Appointments;
+
+                }
+
                 return TypedResults.Ok(doctor);
             }
             return TypedResults.BadRequest("No doctor matches given id");
@@ -150,7 +228,7 @@ namespace workshop.wwwapi.Endpoints
             DTOAppointment appointment = new DTOAppointment();
 
             var results = await repository.GetAppointmentById(doctorid, patientid);
-            if(results != null) 
+            if (results != null)
             {
                 Doctor doctor = await repository.GetDoctorById(doctorid);
                 Patient patient = await repository.GetPatientById(patientid);
@@ -172,9 +250,9 @@ namespace workshop.wwwapi.Endpoints
             GetAppointmentsResponse response = new GetAppointmentsResponse();
             var results = await repository.GetAppointmentsByDoctor(doctorid);
             Doctor doctor = await repository.GetDoctorById(doctorid);
-            
 
-            foreach (Appointment a in results) 
+
+            foreach (Appointment a in results)
             {
                 DTOAppointment appointment = new DTOAppointment();
                 Patient patient = await repository.GetPatientById(a.PatientId);
@@ -217,7 +295,7 @@ namespace workshop.wwwapi.Endpoints
             Doctor doctor = await repository.GetDoctorById(doctorid);
             Patient patient = await repository.GetPatientById(patientid);
 
-            if (doctor != null && patient != null) 
+            if (doctor != null && patient != null)
             {
                 Appointment appointment = new Appointment() { AppointmentDate = DateTime.UtcNow, DoctorId = doctorid, PatientId = patientid };
 
@@ -230,8 +308,8 @@ namespace workshop.wwwapi.Endpoints
             }
 
             return TypedResults.BadRequest("Appointmentinformation is not valid");
-            
-            
+
+
         }
 
     }

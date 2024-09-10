@@ -18,7 +18,7 @@ namespace workshop.wwwapi.Repository
         }
         public async Task<Patient> GetPatientById(int id)
         {
-            return await _databaseContext.Patients.FirstOrDefaultAsync(p => p.Id == id);
+            return await _databaseContext.Patients.Include(a => a.Appointments).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Patient> AddPatient(string name)
