@@ -11,17 +11,72 @@ namespace workshop.wwwapi.Repository
         {
             _databaseContext = db;
         }
-        public async Task<IEnumerable<Patient>> GetPatients()
+        public async Task<IEnumerable<PatientDTO>> GetPatients()
         {
-            return await _databaseContext.Patients.ToListAsync();
+            var patients =  await _databaseContext.Patients.ToListAsync();
+            return patients.MapListToDTO();
         }
-        public async Task<IEnumerable<Doctor>> GetDoctors()
+        public async Task<IEnumerable<DoctorDTO>> GetDoctors()
         {
-            return await _databaseContext.Doctors.ToListAsync();
+            var doctors = await _databaseContext.Doctors.ToListAsync();
+            return doctors.MapListToDTO();
         }
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
+        public async Task<IEnumerable<AppointmentDTO>> GetAppointmentsByDoctor(int id)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            var appointments = await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            appointments.ForEach( x =>
+            {
+                x.doctor =  _databaseContext.Doctors.FirstOrDefault(d => d.Id == id);
+                x.patient = _databaseContext.Patients.FirstOrDefault(p => p.Id == x.PatientId);
+            });
+            return appointments.MapListToDTO();
+        
+        }
+        
+        public async Task<DoctorDTO> GetDoctor(int id)
+        {
+            var doctor = await _databaseContext.Doctors.FirstOrDefaultAsync(a => a.Id == id);
+            return doctor.MapToDTO();
+        }
+
+        public AppointmentDTO CreateAppointment(int month, int day, int doctorId, int patientId)
+        {
+            Appointment appointment = null;
+            _databaseContext.Appointments.Add(appointment = new Appointment() {Booking = new DateTime(2024, month, day, 0, 0, 0, DateTimeKind.Utc), DoctorId = doctorId, PatientId = patientId });
+            _databaseContext.SaveChanges();
+            return appointment.MapToDTO();
+        }
+
+        public List<AppointmentDTO> GetAppointmentsByPatient(int id)
+        {
+            var patient = _databaseContext.Patients.Include(a => a.Appointments).FirstOrDefault(x => x.Id == id);
+            patient.Appointments.ForEach(x =>
+            {
+                x.doctor = _databaseContext.Doctors.FirstOrDefault(d => d.Id == id);
+                x.patient = _databaseContext.Patients.FirstOrDefault(p => p.Id == x.PatientId);
+            });
+            return patient.Appointments.MapListToDTO();
+        }
+
+        public  List<AppointmentDTO> GetAppointments()
+        {
+            var appointments = _databaseContext.Appointments.ToList();
+            appointments.ForEach(x =>
+            {
+                x.doctor = _databaseContext.Doctors.FirstOrDefault(d => d.Id == x.DoctorId);
+                x.patient = _databaseContext.Patients.FirstOrDefault(p => p.Id == x.PatientId);
+            });
+            return appointments.MapListToDTO();
+        }
+
+        public AppointmentDTO GetAppointment(int patientId, int doctorId)
+        {
+            var appointment = _databaseContext.Appointments.FirstOrDefault(x => x.PatientId == patientId && x.DoctorId == doctorId);
+            
+            appointment.doctor = _databaseContext.Doctors.FirstOrDefault(d => d.Id == doctorId);
+            appointment.patient = _databaseContext.Patients.FirstOrDefault(p => p.Id == patientId);
+
+            return appointment.MapToDTO();
         }
     }
 }

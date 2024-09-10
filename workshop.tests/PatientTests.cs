@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace workshop.tests;
 
-public class Tests
+public class PatientTests
 {
 
     [Test]
@@ -14,9 +14,15 @@ public class Tests
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/patients");
+        var response = await client.GetAsync("http://localhost:5045/surgery/patients");
 
         // Assert
         Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+
+        response = await client.GetAsync("http://localhost:5045/surgery/appointments/patient/1");
+    
+        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+
     }
+
 }
