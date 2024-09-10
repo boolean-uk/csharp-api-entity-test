@@ -156,12 +156,18 @@ namespace workshop.wwwapi.Data
                 //Every patient has an appointment, but not every doctor has one
                 appointment.PatientId = _patients[z - 1].Id;
                 appointment.DoctorId = _doctors[doctorRandom.Next(_doctors.Count)].Id;
-                appointment.PerscriptionId = _perscriptions[medicineRandom.Next(_perscriptions.Count)].Id;
+                
+                //1. Each appointment gets a unique perscription
+                //2. Each appointment gets a random perscription
+                appointment.PerscriptionId = _perscriptions[z - 1].Id; //1
+                //appointment.PerscriptionId = _perscriptions[medicineRandom.Next(_perscriptions.Count)].Id; //2
 
                 //Create a random date for the booking
                 DateTime now = DateTime.Now;
                 DateTime futureDate = now.AddDays(dateRandom.Next(1, 366)).AddHours(dateRandom.Next(0, 24)).AddMinutes(dateRandom.Next(0, 60)).AddSeconds(dateRandom.Next(0, 60));
                 appointment.Booking = futureDate.ToUniversalTime();
+
+                appointment.Type = (AppointmentType)dateRandom.Next(0, 2);
 
                 _appointments.Add(appointment);
             }

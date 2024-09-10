@@ -16,5 +16,10 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<AppointmentDTO>> GetAppointmentsByDoctor(int id);
         Task<IEnumerable<AppointmentDTO>> GetAppointmentsByPatient(int id);
         Task<AppointmentDTO> AddAppointment(Appointment entity);
+        Task<IEnumerable<PerscriptionDTO>> GetPerscriptions();
+        Task<PerscriptionDTO> AddPerscription(Perscription entity);
+        Task<PerscriptionDTO> UpdatePerscription(int id, List<int> medicineIds);
+        Task<AppointmentDTO> AttachPerscription(int perscriptionId, int appointmentId);
+        Task<IEnumerable<MedicineDTO>> GetMedicines();
     }
 }

@@ -9,6 +9,7 @@ namespace workshop.wwwapi.Models
     public class Appointment
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int Id { get; set; }
         [Column("booking")]
@@ -22,5 +23,7 @@ namespace workshop.wwwapi.Models
         [Key, Column("perscriptionId")]
         [ForeignKey("Perscription")]
         public int PerscriptionId { get; set; }
+        [Column("type")]
+        public AppointmentType Type { get; set; }
     }
 }

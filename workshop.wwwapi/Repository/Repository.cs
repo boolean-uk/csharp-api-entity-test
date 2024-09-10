@@ -160,7 +160,105 @@ namespace workshop.wwwapi.Repository
         }
         private AppointmentDTO ConstructAppointmentDTO(Appointment appointment)
         {
-            return new AppointmentDTO(appointment, _db.Patients.ToList(), _db.Doctors.ToList());
+            return new AppointmentDTO(appointment, _db.Patients.ToList(), _db.Doctors.ToList(), _db.Perscriptions.ToList(), _db.PerscriptionMedicines.Include(pm => pm.Medicine).ToList());
+        }
+
+
+
+        //--Perscriptions--
+        public async Task<IEnumerable<PerscriptionDTO>> GetPerscriptions()
+        {
+            //Get perscriptions
+            var perscriptions = await _db.Perscriptions.Include(p => p.PerscriptionMedicines).ThenInclude(pm => pm.Medicine).ToListAsync();
+            List<PerscriptionDTO> result = new List<PerscriptionDTO>();
+            foreach (var perscription in perscriptions)
+            {
+                result.Add(ConstructPerscriptionDTO(perscription));
+            }
+
+            //Response
+            return result;
+        }
+        public async Task<PerscriptionDTO> AddPerscription(Perscription entity)
+        {
+            //Add perscription
+            await _db.AddAsync(entity);
+            await _db.SaveChangesAsync();
+
+            //Response
+            return ConstructPerscriptionDTO(entity);
+        }
+        public async Task<PerscriptionDTO> UpdatePerscription(int id, List<int> medicineIds)
+        {
+            //Update perscription with medicine Ids
+            var perscription = await _db.Perscriptions.Include(p => p.PerscriptionMedicines).ThenInclude(pm => pm.Medicine).Where(p => p.Id == id).FirstOrDefaultAsync();
+            if(perscription == null)
+            {
+                throw new Exception("Perscription not found");
+            }
+
+            foreach (var medId in medicineIds)
+            {
+                perscription.PerscriptionMedicines.Add(new PerscriptionMedicine() { MedicineId = medId, PerscriptionId = perscription.Id });
+            }
+
+            //Update the database
+            _db.Attach(perscription).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            //Response
+            return ConstructPerscriptionDTO(perscription);
+        }
+        public async Task<AppointmentDTO> AttachPerscription(int perscriptionId, int appointmentId)
+        {
+            //Get perscriptions
+            var perscription = await _db.Perscriptions.Include(p => p.PerscriptionMedicines).ThenInclude(pm => pm.Medicine).Where(p => p.Id == perscriptionId).FirstOrDefaultAsync();
+            if (perscription == null)
+            {
+                throw new Exception("Perscription not found");
+            }
+            var appointment = await _db.Appointments.Where(a => a.Id == appointmentId).FirstOrDefaultAsync();
+            if (appointment == null)
+            {
+                throw new Exception("Appointment not found");
+            }
+
+            //Remove the appointment from the database
+            _db.Appointments.Remove(appointment);
+            await _db.SaveChangesAsync();
+
+            //Alter the appointment perscriptionId and re-add the appointment to the database
+            appointment.PerscriptionId = perscription.Id;
+            await _db.AddAsync(appointment);
+            await _db.SaveChangesAsync();
+
+            //Response
+            return ConstructAppointmentDTO(appointment);
+        }
+        private PerscriptionDTO ConstructPerscriptionDTO(Perscription perscription)
+        {
+            return new PerscriptionDTO(perscription, _db.PerscriptionMedicines.Include(pm => pm.Medicine).ToList());
+        }
+
+
+
+        //--Medicines--
+        public async Task<IEnumerable<MedicineDTO>> GetMedicines()
+        {
+            //Get medicines
+            var medicines = await _db.Medicines.Include(p => p.PerscriptionMedicines).ThenInclude(pm => pm.Perscription).ToListAsync();
+            List<MedicineDTO> result = new List<MedicineDTO>();
+            foreach (var medicine in medicines)
+            {
+                result.Add(ConstructMedicineDTO(medicine));
+            }
+
+            //Response
+            return result;
+        }
+        private MedicineDTO ConstructMedicineDTO(Medicine medicine)
+        {
+            return new MedicineDTO(medicine);
         }
     }
 }

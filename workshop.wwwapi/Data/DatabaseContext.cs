@@ -47,6 +47,6 @@ namespace workshop.wwwapi.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Medicine> Medicines { get; set; }
         public DbSet<Perscription> Perscriptions { get; set; }
-        public DbSet<PerscriptionMedicine> PerscriptionsMedicines { get; set; }
+        public DbSet<PerscriptionMedicine> PerscriptionMedicines { get; set; }
     }
 }

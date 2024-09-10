@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class secondMigration : Migration
+    public partial class thirdMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,7 +83,7 @@ namespace workshop.wwwapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PerscriptionsMedicines",
+                name: "perscriptionMedicines",
                 columns: table => new
                 {
                     medicineId = table.Column<int>(type: "integer", nullable: false),
@@ -91,15 +91,15 @@ namespace workshop.wwwapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PerscriptionsMedicines", x => new { x.medicineId, x.perscriptionId });
+                    table.PrimaryKey("PK_perscriptionMedicines", x => new { x.medicineId, x.perscriptionId });
                     table.ForeignKey(
-                        name: "FK_PerscriptionsMedicines_medicine_medicineId",
+                        name: "FK_perscriptionMedicines_medicine_medicineId",
                         column: x => x.medicineId,
                         principalTable: "medicine",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PerscriptionsMedicines_perscription_perscriptionId",
+                        name: "FK_perscriptionMedicines_perscription_perscriptionId",
                         column: x => x.perscriptionId,
                         principalTable: "perscription",
                         principalColumn: "id",
@@ -111,10 +111,10 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "doctorId", "patientId", "perscriptionId", "booking", "id" },
                 values: new object[,]
                 {
-                    { 1, 2, 2, new DateTime(2025, 7, 13, 15, 35, 3, 423, DateTimeKind.Utc).AddTicks(5181), 2 },
-                    { 3, 1, 1, new DateTime(2024, 11, 16, 12, 51, 9, 423, DateTimeKind.Utc).AddTicks(5113), 1 },
-                    { 4, 3, 3, new DateTime(2024, 10, 17, 21, 27, 30, 423, DateTimeKind.Utc).AddTicks(5189), 3 },
-                    { 4, 4, 1, new DateTime(2025, 5, 30, 1, 35, 25, 423, DateTimeKind.Utc).AddTicks(5193), 4 }
+                    { 1, 3, 3, new DateTime(2025, 1, 21, 17, 29, 19, 64, DateTimeKind.Utc).AddTicks(9854), 3 },
+                    { 2, 4, 4, new DateTime(2024, 10, 21, 10, 38, 53, 64, DateTimeKind.Utc).AddTicks(9857), 4 },
+                    { 4, 1, 1, new DateTime(2025, 3, 30, 1, 2, 35, 64, DateTimeKind.Utc).AddTicks(9753), 1 },
+                    { 4, 2, 2, new DateTime(2024, 10, 23, 5, 30, 53, 64, DateTimeKind.Utc).AddTicks(9848), 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -122,10 +122,10 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "id", "name" },
                 values: new object[,]
                 {
-                    { 1, "Oprah Obama" },
-                    { 2, "Mick Winfrey" },
-                    { 3, "Audrey Jagger" },
-                    { 4, "Mick Hendrix" }
+                    { 1, "Barack Middleton" },
+                    { 2, "Donald Hendrix" },
+                    { 3, "Barack Windsor" },
+                    { 4, "Charles Winfrey" }
                 });
 
             migrationBuilder.InsertData(
@@ -133,10 +133,10 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "id", "instruction", "name", "quantity" },
                 values: new object[,]
                 {
-                    { 1, "Crush and mix with sand", "Ultra Pills", 2 },
-                    { 2, "Swallow with sand", "Good Mold", 8 },
-                    { 3, "Apply on your face and then take some sand", "Super Laxatives", 8 },
-                    { 4, "Inject into arm and then take some cocaine", "Ultra Candy", 5 }
+                    { 1, "Eat with chinese chicken stock", "Blazing Paracetamol", 3 },
+                    { 2, "Apply on your face and then take some air", "Dangerous Paracetamol", 5 },
+                    { 3, "Dilute with cooking Oil", "Super Laxatives", 8 },
+                    { 4, "Eat with cocaine", "Dangerous Mold", 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -144,10 +144,10 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "id", "name" },
                 values: new object[,]
                 {
-                    { 1, "Oprah Winfrey" },
-                    { 2, "Kate Winslet" },
-                    { 3, "Oprah Winfrey" },
-                    { 4, "Jimi Winfrey" }
+                    { 1, "Jimi Trump" },
+                    { 2, "Barack Trump" },
+                    { 3, "Donald Hepburn" },
+                    { 4, "Barack Presley" }
                 });
 
             migrationBuilder.InsertData(
@@ -162,32 +162,29 @@ namespace workshop.wwwapi.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "PerscriptionsMedicines",
+                table: "perscriptionMedicines",
                 columns: new[] { "medicineId", "perscriptionId" },
                 values: new object[,]
                 {
                     { 1, 2 },
-                    { 1, 4 },
+                    { 1, 3 },
                     { 2, 1 },
-                    { 2, 3 },
-                    { 3, 3 },
-                    { 3, 4 },
+                    { 2, 4 },
+                    { 3, 1 },
+                    { 3, 2 },
                     { 4, 1 },
                     { 4, 4 }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PerscriptionsMedicines_perscriptionId",
-                table: "PerscriptionsMedicines",
+                name: "IX_perscriptionMedicines_perscriptionId",
+                table: "perscriptionMedicines",
                 column: "perscriptionId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "PerscriptionsMedicines");
-
             migrationBuilder.DropTable(
                 name: "appointments");
 
@@ -196,6 +193,9 @@ namespace workshop.wwwapi.Migrations
 
             migrationBuilder.DropTable(
                 name: "patients");
+
+            migrationBuilder.DropTable(
+                name: "perscriptionMedicines");
 
             migrationBuilder.DropTable(
                 name: "medicine");

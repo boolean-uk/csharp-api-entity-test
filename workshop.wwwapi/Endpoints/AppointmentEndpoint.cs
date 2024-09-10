@@ -120,7 +120,7 @@ namespace workshop.wwwapi.Endpoints
                 var result = await repository.AddAppointment(appointment);
 
                 //Response
-                return TypedResults.Created($"http://localhost:5045/appointments/", result);
+                return TypedResults.Created($"http://localhost:5045/appointments/{result.appointmentId}", result);
             }
             catch (Exception ex)
             {

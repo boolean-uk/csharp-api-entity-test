@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240910080531_thirdMigration")]
+    partial class thirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,15 +44,8 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnName("booking");
 
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("type");
 
                     b.HasKey("DoctorId", "PatientId", "PerscriptionId");
 
@@ -58,39 +54,35 @@ namespace workshop.wwwapi.Migrations
                     b.HasData(
                         new
                         {
-                            DoctorId = 1,
+                            DoctorId = 4,
                             PatientId = 1,
                             PerscriptionId = 1,
-                            Booking = new DateTime(2025, 7, 12, 20, 8, 3, 38, DateTimeKind.Utc).AddTicks(5600),
-                            Id = 1,
-                            Type = 0
+                            Booking = new DateTime(2025, 3, 30, 1, 2, 35, 64, DateTimeKind.Utc).AddTicks(9753),
+                            Id = 1
                         },
                         new
                         {
-                            DoctorId = 1,
+                            DoctorId = 4,
                             PatientId = 2,
                             PerscriptionId = 2,
-                            Booking = new DateTime(2025, 5, 11, 12, 0, 15, 38, DateTimeKind.Utc).AddTicks(5691),
-                            Id = 2,
-                            Type = 0
+                            Booking = new DateTime(2024, 10, 23, 5, 30, 53, 64, DateTimeKind.Utc).AddTicks(9848),
+                            Id = 2
                         },
                         new
                         {
                             DoctorId = 1,
                             PatientId = 3,
                             PerscriptionId = 3,
-                            Booking = new DateTime(2024, 9, 22, 20, 58, 6, 38, DateTimeKind.Utc).AddTicks(5696),
-                            Id = 3,
-                            Type = 1
+                            Booking = new DateTime(2025, 1, 21, 17, 29, 19, 64, DateTimeKind.Utc).AddTicks(9854),
+                            Id = 3
                         },
                         new
                         {
-                            DoctorId = 1,
+                            DoctorId = 2,
                             PatientId = 4,
                             PerscriptionId = 4,
-                            Booking = new DateTime(2025, 3, 4, 6, 47, 40, 38, DateTimeKind.Utc).AddTicks(5700),
-                            Id = 4,
-                            Type = 1
+                            Booking = new DateTime(2024, 10, 21, 10, 38, 53, 64, DateTimeKind.Utc).AddTicks(9857),
+                            Id = 4
                         });
                 });
 
@@ -116,22 +108,22 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Charles Winslet"
+                            FullName = "Barack Middleton"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Audrey Jagger"
+                            FullName = "Donald Hendrix"
                         },
                         new
                         {
                             Id = 3,
-                            FullName = "Mick Windsor"
+                            FullName = "Barack Windsor"
                         },
                         new
                         {
                             Id = 4,
-                            FullName = "Jimi Obama"
+                            FullName = "Charles Winfrey"
                         });
                 });
 
@@ -166,30 +158,30 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            Instruction = "Apply on your face and then take some alcohol",
-                            Name = "Yummy Mold",
+                            Instruction = "Eat with chinese chicken stock",
+                            Name = "Blazing Paracetamol",
                             Quantity = 3
                         },
                         new
                         {
                             Id = 2,
-                            Instruction = "Swallow with water",
-                            Name = "Bad Paracetamol",
+                            Instruction = "Apply on your face and then take some air",
+                            Name = "Dangerous Paracetamol",
                             Quantity = 5
                         },
                         new
                         {
                             Id = 3,
-                            Instruction = "Inject into arm and then take some air",
-                            Name = "Dangerous Drugs",
-                            Quantity = 7
+                            Instruction = "Dilute with cooking Oil",
+                            Name = "Super Laxatives",
+                            Quantity = 8
                         },
                         new
                         {
                             Id = 4,
-                            Instruction = "Eat with air",
-                            Name = "Super Drugs",
-                            Quantity = 9
+                            Instruction = "Eat with cocaine",
+                            Name = "Dangerous Mold",
+                            Quantity = 3
                         });
                 });
 
@@ -215,22 +207,22 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             Id = 1,
-                            FullName = "Kate Winslet"
+                            FullName = "Jimi Trump"
                         },
                         new
                         {
                             Id = 2,
-                            FullName = "Audrey Winfrey"
+                            FullName = "Barack Trump"
                         },
                         new
                         {
                             Id = 3,
-                            FullName = "Elvis Winslet"
+                            FullName = "Donald Hepburn"
                         },
                         new
                         {
                             Id = 4,
-                            FullName = "Mick Trump"
+                            FullName = "Barack Presley"
                         });
                 });
 
@@ -286,12 +278,17 @@ namespace workshop.wwwapi.Migrations
                         new
                         {
                             MedicineId = 1,
-                            PerscriptionId = 1
+                            PerscriptionId = 3
                         },
                         new
                         {
                             MedicineId = 1,
-                            PerscriptionId = 3
+                            PerscriptionId = 2
+                        },
+                        new
+                        {
+                            MedicineId = 2,
+                            PerscriptionId = 1
                         },
                         new
                         {
@@ -300,13 +297,8 @@ namespace workshop.wwwapi.Migrations
                         },
                         new
                         {
-                            MedicineId = 2,
-                            PerscriptionId = 2
-                        },
-                        new
-                        {
                             MedicineId = 3,
-                            PerscriptionId = 3
+                            PerscriptionId = 1
                         },
                         new
                         {
