@@ -107,5 +107,26 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.SaveChangesAsync();
             return entity;
         }
+
+        public async Task<IEnumerable<Medicine>> GetMedicines()
+        {
+            return await _databaseContext.Medicines
+                .Include(m => m.Prescriptions)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions
+                .Include(p => p.Medicines)
+                .ToListAsync();
+        }
+
+        public async Task<Prescription> CreatePrescription(Prescription entity)
+        {
+            await _databaseContext.AddAsync(entity);
+            await _databaseContext.SaveChangesAsync();
+            return entity;
+        }
     }
 }

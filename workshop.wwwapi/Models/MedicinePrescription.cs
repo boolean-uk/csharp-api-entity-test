@@ -1,19 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
     [Table("medicinePrescription")]
-    [PrimaryKey("Id")]
     public class MedicinePrescription
     {
+        [Key]
         [Column("id")]
         public int Id { get; set; }
 
-        [ForeignKey("medicineId")]
+        [ForeignKey("MedicineId")]
         public int MedicineId { get; set; }
 
-        [ForeignKey("prescriptionId")]
+        [ForeignKey("PrescriptionId")]
         public int PrescriptionId { get; set; }
     }
 }

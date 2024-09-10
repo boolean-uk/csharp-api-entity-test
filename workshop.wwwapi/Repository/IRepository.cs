@@ -23,8 +23,8 @@ namespace workshop.wwwapi.Repository
         // Medicines & Perscriptions
         Task<IEnumerable<Medicine>> GetMedicines();
         Task<IEnumerable<Prescription>> GetPrescriptions();
-        Task<Prescription> CreatePrescription(Prescription prescription);
-        Task<Prescription> AddMedicineToPrescription(int medicineId, int prescriptionId);
-        Task<Appointment> AddPrescriptionToAppointment(int doctorId, int patientId, int prescriptionId);
+        Task<Prescription> CreatePrescription(Prescription entity);
+        //Task<Prescription> AddMedicineToPrescription(int medicineId, int prescriptionId);
+        //Task<Appointment> AddPrescriptionToAppointment(int doctorId, int patientId, int prescriptionId);
     }
 }

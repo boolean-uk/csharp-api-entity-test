@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 namespace workshop.wwwapi.Models
 {
     [Table("medicine")]
-    [PrimaryKey("Id")]
     public class Medicine
     {
+        [Key]
         [Column("id")]
         public int Id { get; set; }
 

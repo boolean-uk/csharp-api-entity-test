@@ -18,5 +18,9 @@ namespace workshop.wwwapi.Models
         [Column("patientId")]
         public int PatientId { get; set; }
         public Patient Patient { get; set; }
+
+        [ForeignKey("prescriptionId")]
+        public int? PrescriptionId { get; set; }
+        public Prescription? Prescription { get; set; }
     }
 }

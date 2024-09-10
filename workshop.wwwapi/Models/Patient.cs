@@ -7,9 +7,9 @@ namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
     [Table("patient")]
-    [PrimaryKey("Id")]
     public class Patient
     {
+        [Key]
         [Column("id")]
         public int Id { get; set; }
 
