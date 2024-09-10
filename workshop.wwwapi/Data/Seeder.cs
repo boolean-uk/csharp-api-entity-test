@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
 using workshop.wwwapi.Models;
+using static workshop.wwwapi.Models.Appointment;
 
 namespace workshop.wwwapi.Data
 {
@@ -25,10 +26,10 @@ namespace workshop.wwwapi.Data
             _doctors.Add(doctor1);
             _doctors.Add(doctor2);
 
-            Appointment appointment1 = new Appointment() { AppointmentDate = DateTime.UtcNow.AddDays(5), DoctorId = 1, PatientId = 2 };
-            Appointment appointment2 = new Appointment() { AppointmentDate = DateTime.UtcNow, DoctorId = 1, PatientId = 1 };
-            Appointment appointment3 = new Appointment() { AppointmentDate = DateTime.UtcNow.AddDays(1), DoctorId = 2, PatientId = 1 };
-            Appointment appointment4 = new Appointment() { AppointmentDate = DateTime.UtcNow.AddDays(2), DoctorId = 2, PatientId = 2 };
+            Appointment appointment1 = new Appointment() { AppointmentDate = DateTime.UtcNow.AddDays(5), DoctorId = 1, PatientId = 2, AppType = Enums.AppointmentType.Clinic };
+            Appointment appointment2 = new Appointment() { AppointmentDate = DateTime.UtcNow, DoctorId = 1, PatientId = 1, AppType = Enums.AppointmentType.Online };
+            Appointment appointment3 = new Appointment() { AppointmentDate = DateTime.UtcNow.AddDays(1), DoctorId = 2, PatientId = 1, AppType = Enums.AppointmentType.Clinic };
+            Appointment appointment4 = new Appointment() { AppointmentDate = DateTime.UtcNow.AddDays(2), DoctorId = 2, PatientId = 2 , AppType = Enums.AppointmentType.Testing };
 
             _appointments.Add(appointment1);
             _appointments.Add(appointment2);

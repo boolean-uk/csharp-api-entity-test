@@ -12,7 +12,7 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240909132518_newMigration")]
+    [Migration("20240910091229_newMigration")]
     partial class newMigration
     {
         /// <inheritdoc />
@@ -35,6 +35,10 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("doctorid");
 
+                    b.Property<int>("AppType")
+                        .HasColumnType("integer")
+                        .HasColumnName("appointmentType");
+
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("appointmentDate");
@@ -50,25 +54,29 @@ namespace workshop.wwwapi.Migrations
                         {
                             PatientId = 2,
                             DoctorId = 1,
-                            AppointmentDate = new DateTime(2024, 9, 14, 13, 25, 17, 378, DateTimeKind.Utc).AddTicks(1968)
+                            AppType = 0,
+                            AppointmentDate = new DateTime(2024, 9, 15, 9, 12, 26, 831, DateTimeKind.Utc).AddTicks(4295)
                         },
                         new
                         {
                             PatientId = 1,
                             DoctorId = 1,
-                            AppointmentDate = new DateTime(2024, 9, 9, 13, 25, 17, 378, DateTimeKind.Utc).AddTicks(1980)
+                            AppType = 1,
+                            AppointmentDate = new DateTime(2024, 9, 10, 9, 12, 26, 831, DateTimeKind.Utc).AddTicks(4315)
                         },
                         new
                         {
                             PatientId = 1,
                             DoctorId = 2,
-                            AppointmentDate = new DateTime(2024, 9, 10, 13, 25, 17, 378, DateTimeKind.Utc).AddTicks(1981)
+                            AppType = 0,
+                            AppointmentDate = new DateTime(2024, 9, 11, 9, 12, 26, 831, DateTimeKind.Utc).AddTicks(4317)
                         },
                         new
                         {
                             PatientId = 2,
                             DoctorId = 2,
-                            AppointmentDate = new DateTime(2024, 9, 11, 13, 25, 17, 378, DateTimeKind.Utc).AddTicks(1983)
+                            AppType = 2,
+                            AppointmentDate = new DateTime(2024, 9, 12, 9, 12, 26, 831, DateTimeKind.Utc).AddTicks(4319)
                         });
                 });
 

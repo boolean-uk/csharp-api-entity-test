@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using workshop.wwwapi.DTOs;
+using workshop.wwwapi.Enums;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 
@@ -49,6 +50,7 @@ namespace workshop.wwwapi.Endpoints
                         Doctor doctor = await repository.GetDoctorById(a.DoctorId);
 
                         appointment.AppointmentDate = a.AppointmentDate;
+                        appointment.AppointmentType = a.AppType.ToString();
                         appointment.Doctor = doctor.FullName;
 
                         response.Appointments.Add(appointment);
@@ -84,6 +86,7 @@ namespace workshop.wwwapi.Endpoints
                     Doctor doctor = await repository.GetDoctorById(a.DoctorId);
 
                     appointment.AppointmentDate = a.AppointmentDate;
+                    appointment.AppointmentType = a.AppType.ToString();
                     appointment.Doctor = doctor.FullName;
 
                     response.Appointments.Add(appointment);
@@ -135,6 +138,7 @@ namespace workshop.wwwapi.Endpoints
                         Patient patient = await repository.GetPatientById(a.PatientId);
 
                         appointment.AppointmentDate = a.AppointmentDate;
+                        appointment.AppointmentType = a.AppType.ToString();
                         appointment.Patient = patient.FullName;
 
                         appointmentResponse.Appointments.Add(appointment);
@@ -171,6 +175,7 @@ namespace workshop.wwwapi.Endpoints
                     Patient patient = await repository.GetPatientById(a.PatientId);
 
                     appointment.AppointmentDate = a.AppointmentDate;
+                    appointment.AppointmentType = a.AppType.ToString();
                     appointment.Patient = patient.FullName;
 
                     response.Appointments.Add(appointment);
@@ -211,6 +216,7 @@ namespace workshop.wwwapi.Endpoints
                 Patient patient = await repository.GetPatientById(a.PatientId);
 
                 appointment.AppointmentDate = a.AppointmentDate;
+                appointment.AppointmentType = a.AppType.ToString();
                 appointment.Doctor = doctor.FullName;
                 appointment.Patient = patient.FullName;
 
@@ -234,6 +240,7 @@ namespace workshop.wwwapi.Endpoints
                 Patient patient = await repository.GetPatientById(patientid);
 
                 appointment.AppointmentDate = results.AppointmentDate;
+                appointment.AppointmentType = results.AppType.ToString();
                 appointment.Doctor = doctor.FullName;
                 appointment.Patient = patient.FullName;
 
@@ -257,6 +264,7 @@ namespace workshop.wwwapi.Endpoints
                 DTOAppointment appointment = new DTOAppointment();
                 Patient patient = await repository.GetPatientById(a.PatientId);
                 appointment.AppointmentDate = a.AppointmentDate;
+                appointment.AppointmentType = a.AppType.ToString();
                 appointment.Doctor = doctor.FullName;
                 appointment.Patient = patient.FullName;
 
@@ -279,6 +287,7 @@ namespace workshop.wwwapi.Endpoints
                 DTOAppointment appointment = new DTOAppointment();
                 Doctor doctor = await repository.GetDoctorById(a.DoctorId);
                 appointment.AppointmentDate = a.AppointmentDate;
+                appointment.AppointmentType = a.AppType.ToString();
                 appointment.Doctor = doctor.FullName;
                 appointment.Patient = patient.FullName;
 
@@ -290,18 +299,19 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> AddAppointment(IRepository repository, int doctorid, int patientid)
+        public static async Task<IResult> AddAppointment(IRepository repository, int doctorid, int patientid, AppointmentType appType)
         {
             Doctor doctor = await repository.GetDoctorById(doctorid);
             Patient patient = await repository.GetPatientById(patientid);
 
             if (doctor != null && patient != null)
             {
-                Appointment appointment = new Appointment() { AppointmentDate = DateTime.UtcNow, DoctorId = doctorid, PatientId = patientid };
+                Appointment appointment = new Appointment() { AppointmentDate = DateTime.UtcNow, DoctorId = doctorid, PatientId = patientid, AppType = appType};
 
                 var results = await repository.AddAppointment(appointment);
                 DTOAppointment newAppointment = new DTOAppointment();
                 newAppointment.AppointmentDate = results.AppointmentDate;
+                newAppointment.AppointmentType = results.AppType.ToString();
                 newAppointment.Patient = patient.FullName;
                 newAppointment.Doctor = doctor.FullName;
                 return TypedResults.Ok(newAppointment);

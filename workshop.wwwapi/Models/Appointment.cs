@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Enums;
 
 namespace workshop.wwwapi.Models
 {
@@ -16,6 +17,10 @@ namespace workshop.wwwapi.Models
         [Column("patientid")]
         [ForeignKey("Patient")]
         public int PatientId { get; set; }
+
+        [Column("appointmentType")]
+        public AppointmentType AppType { get; set; }
+
 
     }
 }

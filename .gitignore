@@ -493,3 +493,4 @@ $RECYCLE.BIN/
 /workshop.wwwapi/Migrations/20240909130701_newMigration.cs
 /workshop.wwwapi/Migrations/DatabaseContextModelSnapshot.cs
 /workshop.wwwapi/Migrations/20240909132518_newMigration.cs
+/workshop.wwwapi/Migrations/20240910091229_newMigration.cs
