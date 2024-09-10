@@ -40,7 +40,7 @@ namespace workshop.wwwapi.Repository
 
         public async Task<Doctor> CreateDoctor(Doctor dct)
         {
-            if(await GetSingleDoctor(dct.DoctorId) != null)
+            if(GetSingleDoctor(dct.DoctorId) != null)
             {
                 return null;
             }

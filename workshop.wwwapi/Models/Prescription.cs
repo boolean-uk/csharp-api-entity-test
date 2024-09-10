@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
@@ -7,6 +8,6 @@ namespace workshop.wwwapi.Models
         [Key]
         public int Id { get; set; }
 
-        List<MedicinOnPrescription> Medicins = new List<MedicinOnPrescription>();
+        public List<MedicinOnPrescription> Medicins = new List<MedicinOnPrescription>();
     }
 }

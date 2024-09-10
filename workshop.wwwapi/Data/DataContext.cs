@@ -28,6 +28,10 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>().HasOne(a => a.Patient)
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId);
+            modelBuilder.Entity<Appointment>().HasOne(a => a.Prescription)
+                .WithOne(p => p.Appointment);
+            modelBuilder.Entity<Prescription>().HasOne(a => a.Appointment)
+                .WithOne(p => p.Prescription);
 
             //TODO: Seed Data Here
 
@@ -59,16 +63,25 @@ namespace workshop.wwwapi.Data
             doctor2.DoctorId = 2;
             doctor2.FullName = "Miah Hagen";
 
+            //Prescription
+            Prescription prescription1 = new Prescription();
+            prescription1.Id = 1;
+
+            Prescription prescription2 = new Prescription();
+            prescription2.Id = 2;
+
             //Appointments
             Appointment appointment1 = new Appointment();
             appointment1.Booking = DateTime.UtcNow;
             appointment1.DoctorId = doctor1.DoctorId;
             appointment1.PatientId = patient1.PatientId;
+            appointment1.PrescriptionId = prescription1.Id;
 
             Appointment appointment2 = new Appointment();
             appointment2.Booking = DateTime.UtcNow;
             appointment2.DoctorId = doctor2.DoctorId;
             appointment2.PatientId = patient2.PatientId;
+            appointment2.PrescriptionId = prescription2.Id;
 
             //Medicin
             Medicin medicin1 = new Medicin();
@@ -78,12 +91,6 @@ namespace workshop.wwwapi.Data
             Medicin medicin2 = new Medicin();
             medicin2.Id = 2;
             medicin2.Name = "Biotics";
-
-            Prescription prescription1 = new Prescription();
-            prescription1.Id = 1;
-
-            Prescription prescription2 = new Prescription();
-            prescription2.Id = 2;
 
             //MedicinOnPrescription
             MedicinOnPrescription MOD1 = new MedicinOnPrescription();
@@ -99,22 +106,37 @@ namespace workshop.wwwapi.Data
             MOD2.Notes = "Take 1 each hour";
 
             MedicinOnPrescription MOD3 = new MedicinOnPrescription();
-            MOD2.MedicinId = 2;
-            MOD2.PrescriptionId = 1;
-            MOD2.Cuantity = 1;
-            MOD2.Notes = "Take 1 each hour";
+            MOD3.MedicinId = 2;
+            MOD3.PrescriptionId = 2;
+            MOD3.Cuantity = 2;
+            MOD3.Notes = "Take 1 each hour";
 
             //Add to lists
             patientList.Add(patient1);
             patientList.Add(patient2);
+
             doctorList.Add(doctor1);
             doctorList.Add(doctor2);
+
             appointments.Add(appointment1);
             appointments.Add(appointment2);
+
+            medicins.Add(medicin1);
+            medicins.Add(medicin2);
+
+            prescriptions.Add(prescription1);
+            prescriptions.Add(prescription2);
+
+            medicinOnPrescriptions.Add(MOD1);
+            medicinOnPrescriptions.Add(MOD2);
+            medicinOnPrescriptions.Add(MOD3);
 
             modelBuilder.Entity<Patient>().HasData(patientList);
             modelBuilder.Entity<Doctor>().HasData(doctorList);
             modelBuilder.Entity<Appointment>().HasData(appointments);
+            modelBuilder.Entity<Medicin>().HasData(medicins);
+            modelBuilder.Entity<Prescription>().HasData(prescriptions);
+            modelBuilder.Entity<MedicinOnPrescription>().HasData(medicinOnPrescriptions);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
