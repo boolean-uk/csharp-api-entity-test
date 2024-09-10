@@ -22,7 +22,7 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapPost("/patients", CreatePatient);
 
             surgeryGroup.MapGet("/doctors", GetDoctors);
-            surgeryGroup.MapGet("/doctors{id:int}", GetSingleDoctor);
+            surgeryGroup.MapGet("/doctors/{id:int}", GetSingleDoctor);
             surgeryGroup.MapPost("/doctors", CreateDoctor);
 
             surgeryGroup.MapGet("/appointmentsByDoctor/{doctorid:int}", GetAppointmentsByDoctor);
@@ -84,11 +84,11 @@ namespace workshop.wwwapi.Endpoints
         public static async Task<IResult> GetSingleDoctor(IRepository repository, int id)
         {
             Doctor doctor = await repository.GetSingleDoctor(id);
-            DoctorDto doctorDto = new DoctorDto(doctor);
             if(doctor == null)
             {
                 return TypedResults.NotFound(error404);
             }
+            DoctorDto doctorDto = new DoctorDto(doctor);
             return TypedResults.Ok(doctorDto);
         }
 
@@ -103,7 +103,7 @@ namespace workshop.wwwapi.Endpoints
                 doctor = await repository.CreateDoctor(doctor);
 
                 DoctorDto doctorDto = new DoctorDto(doctor);
-                return TypedResults.Ok(doctorDto);
+                return TypedResults.Created("", doctorDto);
             }
             catch
             {
