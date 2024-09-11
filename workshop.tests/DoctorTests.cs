@@ -10,7 +10,7 @@ using workshop.wwwapi.Repository;
 
 namespace workshop.tests;
 
-public class PatientTests
+public class DoctorTests
 {
 
     [SetUp]
@@ -20,65 +20,62 @@ public class PatientTests
     }
 
     [Test]
-    public async Task PatientEndpointStatus()
+    public async Task DoctorEndpointStatus()
     {
         // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/surgery/patients");
+        var response = await client.GetAsync("/surgery/doctors");
 
         // Assert
         Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
     }
 
     [Test]
-    public async Task GetPatientResponse()
+    public async Task GetDoctorResponse()
     {
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
-        var expectedPayload = new List<Patient>()
+        var expectedPayload = new List<Doctor>()
             {
-                new Patient { Id = 1, FullName = "May Doe" },
-                new Patient { Id = 2, FullName = "John Smith" },
-                new Patient { Id = 3, FullName = "Henry Johnson" }
+                new Doctor { Id = 1, FullName = "Mr. Dentist" },
+                new Doctor { Id = 2, FullName = "Mrs. Cardiologist" }
             };
 
-        var response = await client.GetAsync("/surgery/patients");
+        var response = await client.GetAsync("/surgery/doctors");
 
-        var responsePayload = response.Content.ReadFromJsonAsync<IEnumerable<Patient>>();
+        var responsePayload = response.Content.ReadFromJsonAsync<IEnumerable<Doctor>>();
 
         // Assert
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
 
 
-        // Assert.That(responsePayload.Result.Count(), Is.EqualTo(3));
+        // Assert.That(responsePayload.Result.Count(), Is.EqualTo(2));
         Assert.That(responsePayload.Result.ElementAtOrDefault(0).Id, Is.EqualTo(expectedPayload[0].Id));
         Assert.That(responsePayload.Result.ElementAtOrDefault(0).FullName, Is.EqualTo(expectedPayload[0].FullName));
 
         Assert.That(responsePayload.Result.ElementAtOrDefault(1).Id, Is.EqualTo(expectedPayload[1].Id));
         Assert.That(responsePayload.Result.ElementAtOrDefault(1).FullName, Is.EqualTo(expectedPayload[1].FullName));
 
-        Assert.That(responsePayload.Result.ElementAtOrDefault(2).Id, Is.EqualTo(expectedPayload[2].Id));
-        Assert.That(responsePayload.Result.ElementAtOrDefault(2).FullName, Is.EqualTo(expectedPayload[2].FullName));
     }
 
     [Test]
-    public async Task GetOnePatientResponse()
+    public async Task GetOneDoctorResponse()
     {
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
-        var expectedPayload = new List<Patient>()
+        var expectedPayload = new List<Doctor>()
             {
-                new Patient { Id = 1, FullName = "May Doe" }
+                new Doctor { Id = 1, FullName = "Mr. Dentist" }
             };
 
-        var response = await client.GetAsync("/surgery/patients/1");
+        var response = await client.GetAsync("/surgery/doctors/1");
 
-        var responsePayload = response.Content.ReadFromJsonAsync<Patient>();
+        var responsePayload = response.Content.ReadFromJsonAsync<Doctor>();
 
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
 
@@ -89,29 +86,30 @@ public class PatientTests
 
 
     [Test]
-    public async Task CreatePatientResponse()
+    public async Task CreateDoctorResponse()
     {
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
-        var res = await client.GetAsync("/surgery/patients");
-        int amount = res.Content.ReadFromJsonAsync<IEnumerable<Patient>>().Result.Count();
 
-        var expectedPayload = new List<Patient>()
+        var resp = await client.GetAsync("/surgery/doctors");
+        int amount = resp.Content.ReadFromJsonAsync<IEnumerable<Doctor>>().Result.Count();
+
+        var expectedPayload = new List<Doctor>()
             {
-                new Patient { Id = amount + 1, FullName = "Gary Way" }
+                new Doctor { Id = amount + 1, FullName = "Jonathan Wu" }
             };
 
         var obj = new
         {
-            FullName = "Gary Way",
+            FullName = "Jonathan Wu",
         };
 
         JsonContent content = JsonContent.Create(obj);
 
-        var response = await client.PostAsync("/surgery/patients", content);
+        var response = await client.PostAsync("/surgery/doctors", content);
 
-        var responsePayload = response.Content.ReadFromJsonAsync<Patient>();
+        var responsePayload = response.Content.ReadFromJsonAsync<Doctor>();
 
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
 
