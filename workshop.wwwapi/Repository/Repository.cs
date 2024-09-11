@@ -49,7 +49,35 @@ namespace workshop.wwwapi.Repository
 
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId == id).ToListAsync();
+            return await _databaseContext.Appointments
+                .Include(x => x.doctor)
+                .Include(x => x.patient)
+                .Where(a => a.DoctorId == id)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAllAppointments()
+        {
+            return await _databaseContext.Appointments
+                .Include(x => x.doctor)
+                .Include(x => x.patient)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatientId(int id)
+        {
+            return await _databaseContext.Appointments
+                .Include(x => x.doctor)
+                .Include(x => x.patient)
+                .Where(x => x.PatientId == id)
+                .ToListAsync(); ;
+        }
+
+        public async Task<Appointment> MakeAppointment(Appointment appointment)
+        {
+            await _databaseContext.Appointments.AddAsync(appointment);
+            await _databaseContext.SaveChangesAsync();
+            return appointment;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 using workshop.wwwapi.DTO;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
@@ -20,8 +21,57 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/doctors/{id}", GetADoctor);
             surgeryGroup.MapPost("/doctors/", CreateADoctor);
 
-            surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
-            
+            surgeryGroup.MapGet("/appointments/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapGet("/appointments", GetAppointments);
+            surgeryGroup.MapGet("/appointments/patient/{id}", GetAppointmentsByPatient);
+            surgeryGroup.MapPost("/appointments/", CreateAnAppointment);
+
+        }
+
+        private static async Task<IResult> CreateAnAppointment(IRepository repository,DTOCreateAppointment dto)
+        {
+            var doctors = await repository.GetDoctors();
+            DateTime now = DateTime.UtcNow;
+            //Patient thisPatient =  await repository.GetAEnitityById(dto.PatientId);
+            //Doctor thisDoctor = await repository.GetDoctorById(dto.DoctorId);
+
+            var result = await repository.MakeAppointment(new Appointment() { Booking = now, DoctorId = dto.DoctorId, PatientId = dto.PatientId});
+            return TypedResults.Created("Created");
+        }
+
+        private static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
+        {
+            GetAppointmentResponse response = new();
+            var result = await repository.GetAppointmentsByPatientId(id);
+            foreach (var appointment in result)
+            {
+                DTOAppointment a = new DTOAppointment();
+                a.PatientName = appointment.patient.FullName;
+                a.DoctorName = appointment.doctor.FullName;
+                a.Booking = appointment.Booking;
+
+                response.Appointments.Add(a);
+            }
+
+            return TypedResults.Ok(response);
+        }
+
+        private static async Task<IResult> GetAppointments(IRepository repository)
+        {
+            GetAppointmentResponse response = new();
+            var results = await repository.GetAllAppointments();
+
+            foreach (var appointment in results)
+            {
+                DTOAppointment a = new DTOAppointment();
+                a.PatientName = appointment.patient.FullName;
+                a.DoctorName = appointment.doctor.FullName;
+                a.Booking = appointment.Booking;
+
+                response.Appointments.Add(a);
+            }
+
+            return TypedResults.Ok(response);
         }
 
         public static async Task<IResult> CreateADoctor(IRepository repository, DTODoctorNoId doctor)
@@ -93,12 +143,27 @@ namespace workshop.wwwapi.Endpoints
 
             return TypedResults.Ok(response.DoctorNoId[0].Name);
         }
-        
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+            var result = await repository.GetAppointmentsByDoctor(id);
+
+            GetAppointmentResponse response = new GetAppointmentResponse();
+
+            foreach (Appointment appointment in result)
+            {
+                DTOAppointment a = new DTOAppointment()
+                {
+                    DoctorName = appointment.doctor.FullName,
+                    PatientName = appointment.patient.FullName,
+                    Booking = appointment.Booking
+                };
+
+                response.Appointments.Add(a);
+            }
+            return TypedResults.Ok(response);
         }
-        
+
     }
 }
