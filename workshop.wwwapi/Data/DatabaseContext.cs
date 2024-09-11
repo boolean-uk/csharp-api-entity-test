@@ -16,11 +16,28 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
-            
 
-            //TODO: Seed Data Here
 
+
+            ////TODO: Seed Data Here
+
+            modelBuilder.Entity<Appointment>().HasKey(i => new { i.DoctorId, i.PatientId, i.PrescriptionId});
+
+            modelBuilder.Entity<PrescriptionMedicine>().HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
+
+            modelBuilder.Entity<PrescriptionMedicine>().HasOne(pm => pm.Medicine).WithMany(p => p.PrescriptionMedicines).HasForeignKey(pm => pm.MedicineId);
+
+            modelBuilder.Entity<PrescriptionMedicine>().HasOne(pm => pm.Prescription).WithMany(p => p.PrescriptionMedicines).HasForeignKey(pm => pm.PrescriptionId);
+
+            // Seed Data Here
+            Seeder seeder = new Seeder();
+            modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
+            modelBuilder.Entity<Patient>().HasData(seeder.Patients);
+            modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
+
+            modelBuilder.Entity<Medicine>().HasData(seeder.Medicines);
+            modelBuilder.Entity<Prescription>().HasData(seeder.Prescriptions);
+            modelBuilder.Entity<PrescriptionMedicine>().HasData(seeder.PrescriptionsMedicines);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,5 +51,9 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionMedicines { get; set; }
+
     }
 }

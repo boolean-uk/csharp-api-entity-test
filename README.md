@@ -45,7 +45,8 @@ Write some basic tests for the get all and create one for each of the controller
 ## Extensions
 
 - Create a Medicines model and a Prescription model;
-  - Add a many-to-many relationship between the Medicines and Prescription models; Each medicine on the prescription should have a quantity, a notes section for instructions on how to take it
+  - Add a many-to-many relationship between the Medicines and Prescription models; 
+  - Each medicine on the prescription should have a quantity, a notes section for instructions on how to take it
   - Each prescription should be associated to an appointment (and hence linked to a Doctor + Patient)
   - Implement the migration, update the database, seed some medicines and prescriptions
   - Create an endpoint controller to get prescriptions, to create prescriptions and attach to an appointment, etc
