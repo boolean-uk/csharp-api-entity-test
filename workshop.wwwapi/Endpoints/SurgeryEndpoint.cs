@@ -14,30 +14,30 @@ namespace workshop.wwwapi.Endpoints
 
             surgeryGroup.MapGet("/patients", GetPatients);
             surgeryGroup.MapGet("/patients/{id}", GetPatientById);
-          //  surgeryGroup.MapPost("/doctors", CreatePatient);
+            surgeryGroup.MapPost("/patients", CreatePatient);
 
             surgeryGroup.MapGet("/doctors", GetDoctors);
             surgeryGroup.MapGet("/doctors/{id}", GetDoctorById);
-            //surgeryGroup.MapPost("/doctors", CreateDoctor);
+            surgeryGroup.MapPost("/doctors", CreateDoctor);
 
             surgeryGroup.MapGet("/appointments", GetAppointments);
             surgeryGroup.MapGet("/appointments/{id}", GetAppointmentById);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
-            //surgeryGroup.MapPost("/appointments", CreateAppointment);
+            surgeryGroup.MapPost("/appointments", CreateAppointment);
 
 
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
-        { 
+        {
             GetPatientsResponse response = new GetPatientsResponse();
             var results = await repository.GetPatients();
 
             foreach (Patient p in results)
             {
 
-                
+
                 PatientAppointmentsDTO patientDTO = new PatientAppointmentsDTO()
                 {
                     Id = p.Id,
@@ -47,7 +47,7 @@ namespace workshop.wwwapi.Endpoints
 
                 foreach (Appointment item in p.Appointments)
                 {
-                    DoctorDTO doctor = new DoctorDTO() { 
+                    DoctorDTO doctor = new DoctorDTO() {
                         Id = item.DoctorId,
                         FullName = item.Doctor.FullName,
                     };
@@ -60,7 +60,7 @@ namespace workshop.wwwapi.Endpoints
 
                     patientDTO.Appointments.Add(dto);
                 }
-              
+
                 response.Patients.Add(patientDTO);
             }
             return TypedResults.Ok(response.Patients);
@@ -79,12 +79,12 @@ namespace workshop.wwwapi.Endpoints
                 FullName = response.FullName
             };
 
-            foreach(Appointment a in response.Appointments)
+            foreach (Appointment a in response.Appointments)
             {
-             DoctorDTO doctorDTO = new DoctorDTO() { 
-                Id = a.DoctorId,
-                FullName = a.Doctor.FullName
-            };
+                DoctorDTO doctorDTO = new DoctorDTO() {
+                    Id = a.DoctorId,
+                    FullName = a.Doctor.FullName
+                };
 
                 GetAppointmentDTO dto = new GetAppointmentDTO()
                 {
@@ -92,13 +92,37 @@ namespace workshop.wwwapi.Endpoints
                     Doctor = doctorDTO,
                 };
 
-                   patientDTO.Appointments.Add(dto); 
+                patientDTO.Appointments.Add(dto);
             }
 
             return TypedResults.Ok(patientDTO);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> CreatePatient(IRepository repository, PatientPostModel model)
+        {
+            try { 
+            var patient = await repository.CreatePatient(new Patient() { FullName = model.FullName });
 
+            var response = await repository.GetPatient(patient.Id);
+
+            PatientDTO patientDTO = new PatientDTO()
+            {
+                Id = patient.Id,
+                FullName = patient.FullName
+            };
+
+
+            return TypedResults.Ok(patientDTO);
+        }catch(Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+
+            }
+
+}
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
@@ -175,6 +199,31 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(doctorDTO);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> CreateDoctor(IRepository repository, DoctorPostModel model)
+        {
+            try
+            {
+                var doctor = await repository.CreateDoctor(new Doctor() { FullName = model.FullName });
+
+                var response = await repository.GetDoctor(doctor.Id);
+
+                DoctorDTO doctorDTO = new DoctorDTO()
+                {
+                    Id = doctor.Id,
+                    FullName = doctor.FullName
+                };
+
+
+                return TypedResults.Ok(doctorDTO);
+            }catch(Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+
+            }
+        }
 
 
 
@@ -292,5 +341,48 @@ namespace workshop.wwwapi.Endpoints
 
             return TypedResults.Ok(response.Appointments);
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> CreateAppointment(IRepository repository, AppointmentPostModel model)
+        {
+
+            try
+            {
+                var appointment = await repository.CreateAppointment(new Appointment() { Booking = model.Booking, DoctorId = model.DoctorId, PatientId = model.PatientId });
+
+                var response = await repository.GetAppointmentById(appointment.PatientId);
+
+
+                PatientDTO patientDTO = new PatientDTO()
+                {
+
+                    Id = appointment.PatientId,
+                    FullName = appointment.Patient.FullName,
+                };
+
+                DoctorDTO doctorDTO = new DoctorDTO()
+                {
+                    Id = appointment.DoctorId,
+                    FullName = appointment.Doctor.FullName,
+                };
+
+
+                AppointmentDTO appointmentDTO = new AppointmentDTO()
+                {
+                    Booking = appointment.Booking,
+                    Doctor = doctorDTO,
+                    Patient = patientDTO
+                };
+            return TypedResults.Ok(appointmentDTO);
+            }catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+
+
+        }
+
     }
 }
