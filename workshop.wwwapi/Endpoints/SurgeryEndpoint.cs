@@ -21,7 +21,7 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/doctors{id}", GetDoctorById);
             surgeryGroup.MapPost("/doctors", CreateDoctor);
             surgeryGroup.MapGet("/appointments", GetAppointments);
-            surgeryGroup.MapGet("/appointments{doctorid, patientid}", GetAppointmentById);
+            surgeryGroup.MapGet("/appointments/{doctorid}/{patientid}", GetAppointmentById);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctorId);
             surgeryGroup.MapGet("/appointmentsbypasient/{id}", GetAppointmentsByPatientId);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
@@ -75,7 +75,7 @@ namespace workshop.wwwapi.Endpoints
             }
         }
 
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public static async Task<IResult> CreatePatient(IRepository repository, PatientPostModel model)
         {
