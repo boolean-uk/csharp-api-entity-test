@@ -32,6 +32,12 @@ namespace workshop.wwwapi.Data
                 new Doctor { Id = 4, FullName = "John Doctor"}
                 
                 );
+
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment { Booking = DateTime.UtcNow, DoctorId = 3, PatientId = 1}, 
+                new Appointment { Booking = DateTime.UtcNow, DoctorId = 4, PatientId = 2}
+                );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

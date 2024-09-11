@@ -2,6 +2,6 @@
 {
     public class GetPatientsResponse
     {
-        public ICollection<PatientDTO> Patients { get; set; } = new List<PatientDTO>();
+        public ICollection<PatientAppointmentsDTO> Patients { get; set; } = new List<PatientAppointmentsDTO>();
     }
 }
