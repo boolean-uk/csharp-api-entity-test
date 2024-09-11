@@ -75,6 +75,4 @@ public class AppointmentTests
         Assert.IsNotNull(appointments);
         Assert.IsTrue(appointments.Count() > 0);
     }
-
-
 }
