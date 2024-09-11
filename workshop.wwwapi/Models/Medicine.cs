@@ -10,6 +10,9 @@ namespace workshop.wwwapi.Models
         [Column("id")]
         public Guid Id { get; set; } = Guid.NewGuid();
 
+        [Column("name")]
+        public string Name { get; set; }
+
         [Column("quantity")]
         public int Quantity { get; set; }
 

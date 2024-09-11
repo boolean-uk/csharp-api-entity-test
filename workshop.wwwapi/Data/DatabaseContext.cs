@@ -55,6 +55,11 @@ namespace workshop.wwwapi.Data
             var doctor1Id = Guid.NewGuid();
             var doctor2Id = Guid.NewGuid();
 
+            var appointment1Id = Guid.NewGuid();
+            var appointment2Id = Guid.NewGuid();
+            var appointment3Id = Guid.NewGuid();
+
+
             // Seed Patients
             modelBuilder.Entity<Patient>().HasData(
                 new Patient { Id = patient1Id, FullName = "John Doe" },
@@ -67,12 +72,28 @@ namespace workshop.wwwapi.Data
                 new Doctor { Id = doctor2Id, FullName = "Dr. Bob Smith" }
             );
 
-            // Seed Appointments using the manually defined Guids
+            // Seed Appointments 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { PatientId = patient1Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 10, 1, 10, 0, 0, DateTimeKind.Utc) },
-                new Appointment { PatientId = patient2Id, DoctorId = doctor2Id, AppointmentDate = new DateTime(2024, 10, 2, 11, 0, 0, DateTimeKind.Utc) },
-                new Appointment { PatientId = patient2Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 11, 5, 11, 0, 0, DateTimeKind.Utc) }
+                new Appointment { Id = appointment1Id, PatientId = patient1Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 10, 1, 10, 0, 0, DateTimeKind.Utc) },
+                new Appointment { Id = appointment2Id ,PatientId = patient2Id, DoctorId = doctor2Id, AppointmentDate = new DateTime(2024, 10, 2, 11, 0, 0, DateTimeKind.Utc) },
+                new Appointment { Id = appointment3Id ,PatientId = patient2Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 11, 5, 11, 0, 0, DateTimeKind.Utc) }
             );
+
+            // Seed Medicine 
+            modelBuilder.Entity<Medicine>().HasData(
+                new Medicine { Id = Guid.NewGuid(), Name = "Aspirin", Quantity = 5, Notes = "Take one tablet daily." },
+                new Medicine { Id = Guid.NewGuid(), Name = "Ibuprofen", Quantity = 20, Notes = "Take one tablet every 6 hours as needed." },
+                new Medicine { Id = Guid.NewGuid(), Name = "Paracetamol", Quantity = 50, Notes = "Take one or two tablets every 4-6 hours as needed." }
+            );
+
+            // Seed Prescriptions 
+            modelBuilder.Entity<Prescription>().HasData(
+                new Prescription { Id = Guid.NewGuid(), AppointmentId = appointment1Id },
+                new Prescription { Id = Guid.NewGuid(), AppointmentId = appointment2Id } 
+            );
+
+
+
 
             base.OnModelCreating(modelBuilder);
         }
@@ -87,5 +108,7 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
     }
 }

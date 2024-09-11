@@ -172,5 +172,27 @@ namespace workshop.wwwapi.Endpoints
 
             return TypedResults.Ok(returnAppointmentDTO);
         }
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> CreatePrescription(CreateAppointmentDTO appointmentDTO, IRepository repository, IMapper mapper)
+        {
+            var doctor = await repository.GetDoctor(appointmentDTO.DoctorId);
+            var patient = await repository.GetPatient(appointmentDTO.PatientId);
+
+            if (doctor == null || patient == null)
+            {
+                return TypedResults.NotFound("Doctor or Patient not found");
+            }
+
+            Appointment appointment = mapper.Map<Appointment>(appointmentDTO);
+
+            await repository.CreateAppointment(appointment);
+
+            var createdAppointment = await repository.GetAppointment(appointmentDTO.PatientId, appointmentDTO.DoctorId);
+            var returnAppointmentDTO = mapper.Map<GetAppointmentDTO>(appointment);
+
+            return TypedResults.Ok(returnAppointmentDTO);
+        }
     }
 }
