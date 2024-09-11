@@ -49,7 +49,7 @@ public class DoctorTests
     [Test]
     public async Task GetDoctor()
     {
-        var doctorId = new Guid("63a45eab-a7b4-4fa3-aa13-ef1297aaf4f3");
+        var doctorId = new Guid("22522dbd-e397-4a86-8e3c-f644835f9a71");
         var requestUrl = $"/surgery/doctors/{doctorId}";
 
         var response = await _client.GetAsync(requestUrl);
@@ -60,7 +60,7 @@ public class DoctorTests
 
         Assert.IsNotNull(doctor);
         Assert.AreEqual(doctorId, doctor.Id);
-        Assert.AreEqual("Dr. Bob Smith", doctor.FullName);
+        Assert.AreEqual("Dr. Who", doctor.FullName);
     }
 
     [Test]

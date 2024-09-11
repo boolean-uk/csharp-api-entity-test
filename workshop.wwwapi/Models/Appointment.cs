@@ -6,6 +6,10 @@ namespace workshop.wwwapi.Models
     [Table("appointments")]
     public class Appointment
     {
+        [Key]
+        [Column("id")]
+        public Guid Id { get; set; } = Guid.NewGuid();
+
         [Column("patient_id")]
         public Guid PatientId { get; set; }
 
@@ -21,6 +25,8 @@ namespace workshop.wwwapi.Models
 
         [ForeignKey("DoctorId")]
         public Doctor Doctor { get; set; }
+
+        public ICollection<Prescription> Prescriptions { get; set; }
 
     }
 }

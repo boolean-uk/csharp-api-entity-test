@@ -18,10 +18,13 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
+            modelBuilder.Entity<Appointment>()
+                .HasKey(a => a.Id);
+
             // Composite key for Appointment
             modelBuilder.Entity<Appointment>()
-                .HasKey(a => new { a.PatientId, a.DoctorId });
-
+                .HasAlternateKey(a => new { a.PatientId, a.DoctorId });
+            
             //Configure appointment patient relation
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Patient)
@@ -34,10 +37,18 @@ namespace workshop.wwwapi.Data
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.DoctorId);
 
+            //Configure prescription relations
+            modelBuilder.Entity<Prescription>()
+                .HasMany(p => p.Medicines)
+                .WithMany(m => m.Prescriptions)
+                .UsingEntity(j => j.ToTable("PrescriptionMedicine"));
 
+            modelBuilder.Entity<Prescription>()
+                .HasOne(p => p.Appointment)
+                .WithMany(a => a.Prescriptions)
+                .HasForeignKey(p => p.AppointmentId);
 
             //TODO: Seed Data Here
-
             var patient1Id = Guid.NewGuid();
             var patient2Id = Guid.NewGuid();
 

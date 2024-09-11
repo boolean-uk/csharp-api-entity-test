@@ -48,18 +48,18 @@ public class PatientTests
     [Test]
     public async Task GetPatient()
     {
-        var patientId = new Guid("5457a2b2-c98b-403d-9ca7-6ddd2de5144a"); 
+        var patientId = new Guid("7cc0db48-d38c-4400-8c90-7bb75c54434b"); 
         var requestUrl = $"/surgery/patients/{patientId}";
 
         var response = await _client.GetAsync(requestUrl);
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-        var patient = await response.Content.ReadFromJsonAsync<Patient>();
+        var patient = await response.Content.ReadFromJsonAsync<GetPatientDTO>();
 
         Assert.IsNotNull(patient);
         Assert.AreEqual(patientId, patient.Id);
-        Assert.AreEqual("Jane Smith", patient.FullName);
+        Assert.AreEqual("James Bond", patient.FullName);
     }
 
     [Test]

@@ -19,7 +19,6 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore()) // Ignore Id property
             .ForMember(dest => dest.Appointments, opt => opt.Ignore()); // Ignore navigation property
 
-
         //Get doctor/-s endpoint
         CreateMap<Appointment, GetDoctorAppDTO>()
             .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.FullName));
@@ -40,7 +39,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.Doctor.Id));
 
         //Create appointment
-        CreateMap<CreateAppointmentDTO,Appointment>();
+        CreateMap<CreateAppointmentDTO, Appointment>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
 
 

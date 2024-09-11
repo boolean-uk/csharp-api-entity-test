@@ -48,7 +48,7 @@ public class AppointmentTests
     public async Task GetAppointmentsByDoctor()
     {
        
-        var doctorId = new Guid("63a45eab-a7b4-4fa3-aa13-ef1297aaf4f3");
+        var doctorId = new Guid("dab46f4b-eeb2-4fd9-a76c-330fa1fdb537");
 
         var response = await _client.GetAsync($"/surgery/appointmentsbydoctor/{doctorId}");
 
@@ -64,7 +64,7 @@ public class AppointmentTests
     public async Task GetAppointmentsByPatient()
     {
 
-        var patientId = new Guid("5457a2b2-c98b-403d-9ca7-6ddd2de5144a");
+        var patientId = new Guid("33b8ff19-ca60-4f49-a79b-33071b196a04");
 
         var response = await _client.GetAsync($"/surgery/appointmentsbypatient/{patientId}");
 
