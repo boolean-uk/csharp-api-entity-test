@@ -13,6 +13,9 @@ namespace workshop.wwwapi.Models
 
         public List<Medicine> Medicines { get; set; } = new List<Medicine>();
 
+        [ForeignKey("Appointment")]
+        [Column("AppointmentId")]
+        public int AppointmentId { get; set; }
         public Appointment Appointment { get; set; }
     }
 }

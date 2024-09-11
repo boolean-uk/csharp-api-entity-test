@@ -20,7 +20,7 @@ namespace workshop.wwwapi.Data
             Seeder seeder = new Seeder();
 
             //TODO: Appointment Key etc.. Add Here
-            modelBuilder.Entity<Appointment>().HasKey(a => new { a.Booking, a.PatientId, a.DoctorId });
+            modelBuilder.Entity<Appointment>().HasKey(a => new { a.Id, a.PatientId, a.DoctorId });
 
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Doctor)
@@ -32,31 +32,36 @@ namespace workshop.wwwapi.Data
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId);
 
-            //modelBuilder.Entity<Appointment>()
-            //    .HasOne(a => a.Prescription)
-            //    .WithOne(p => p.Appointment)
-            //    .HasForeignKey<Appointment>(a => a.PrescriptionId);
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Prescription)
+                .WithOne(p => p.Appointment)
+                .HasForeignKey<Appointment>(a => a.PrescriptionId);
 
-            //modelBuilder.Entity<Prescription>()
-            //    .HasMany(p => p.Medicines)
-            //    .WithMany(m => m.Prescriptions)
-            //    .UsingEntity(mp => mp.ToTable("medicinePrescription"));
+            modelBuilder.Entity<Prescription>()
+                .HasOne(p => p.Appointment)
+                .WithOne(a => a.Prescription)
+                .HasForeignKey<Prescription>(a => a.AppointmentId);
 
-            //modelBuilder.Entity<Medicine>()
-            //    .HasMany(m => m.Prescriptions)
-            //    .WithMany(p => p.Medicines)
-            //    .UsingEntity(mp => mp.ToTable("medicinePrescription"));
+            modelBuilder.Entity<Prescription>()
+                .HasMany(p => p.Medicines)
+                .WithMany(m => m.Prescriptions)
+                .UsingEntity<MedicinePrescription>(mp => mp.ToTable("medicinePrescription"));
 
-            //modelBuilder.Entity<MedicinePrescription>()
-            //    .HasKey(mp => mp.Id);
+            modelBuilder.Entity<Medicine>()
+                .HasMany(m => m.Prescriptions)
+                .WithMany(p => p.Medicines)
+                .UsingEntity<MedicinePrescription>(mp => mp.ToTable("medicinePrescription"));
+
+            modelBuilder.Entity<MedicinePrescription>()
+                .HasKey(mp => mp.Id);
 
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(seeder.Patients);
             modelBuilder.Entity<Doctor>().HasData(seeder.Doctors);
             modelBuilder.Entity<Appointment>().HasData(seeder.Appointments);
-            //modelBuilder.Entity<Medicine>().HasData(seeder.Medicines);
-            //modelBuilder.Entity<Prescription>().HasData(seeder.Prescriptions);
-            //modelBuilder.Entity<MedicinePrescription>().HasData(seeder.MedicinesPrescriptions);
+            modelBuilder.Entity<Medicine>().HasData(seeder.Medicines);
+            modelBuilder.Entity<Prescription>().HasData(seeder.Prescriptions);
+            modelBuilder.Entity<MedicinePrescription>().HasData(seeder.MedicinesPrescriptions);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

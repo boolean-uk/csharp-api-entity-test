@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
@@ -6,6 +7,9 @@ namespace workshop.wwwapi.Models
     [Table("appointment")]
     public class Appointment
     {
+        [Column("id")]
+        public int Id { get; set; }
+
         [Column("booking")]
         public DateTime Booking { get; set; }
 
@@ -19,7 +23,8 @@ namespace workshop.wwwapi.Models
         public int PatientId { get; set; }
         public Patient Patient { get; set; }
 
-        [ForeignKey("prescriptionId")]
+        [ForeignKey("Prescription")]
+        [Column("prescriptionId")]
         public int? PrescriptionId { get; set; }
         public Prescription? Prescription { get; set; }
     }

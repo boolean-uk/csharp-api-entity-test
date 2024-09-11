@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using workshop.wwwapi.DTOs;
@@ -26,6 +27,13 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointments/{id}", GetAppointmentById);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
+            //surgeryGroup.MapPut("/appointments", AddPrescriptionToAppointment);
+
+            surgeryGroup.MapGet("/medicines", GetMedicines);
+            //surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            //surgeryGroup.MapPost("/medicines", CreateMedicine);
+            //surgeryGroup.MapPost("/prescriptions", CreatePrescription);
+            //surgeryGroup.MapPut("/prescriptions/{id}", AddMedicineToPrescription);
         }
 
         // Patients
@@ -347,7 +355,60 @@ namespace workshop.wwwapi.Endpoints
             responseAppointment.DoctorFullName = appointment.Doctor.FullName;
             responseAppointment.PatientId = appointment.PatientId;
             responseAppointment.PatientFullName = appointment.Patient.FullName;
+            responseAppointment.PrescriptionId = appointment.PrescriptionId;
             return responseAppointment;
+        }
+
+        // Medicines & Prescriptions
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public static async Task<IResult> GetMedicines(IRepository repository)
+        {
+            var results = await repository.GetMedicines();
+            List<Medicine> medicines = results.ToList();
+            if (medicines.Count <= 0)
+            {
+                return TypedResults.NoContent();
+            }
+
+            List<ResponseMedicineDTO> responseMedicines = new List<ResponseMedicineDTO>();
+
+            foreach (Medicine m in medicines)
+            {
+                responseMedicines.Add(CreateResponseMedicineDTO(m));
+            }
+
+            return TypedResults.Ok(responseMedicines);
+        }
+
+
+        public static ResponseMedicineDTO CreateResponseMedicineDTO(Medicine medicine)
+        {
+            ResponseMedicineDTO responseMedicine = new ResponseMedicineDTO();
+
+            responseMedicine.Id = medicine.Id;
+            responseMedicine.Name = medicine.Name;
+            responseMedicine.Quantity = medicine.Quantity;
+            responseMedicine.Instructions = medicine.Instructions;
+
+            foreach (Prescription p in medicine.Prescriptions)
+            {
+                ResponsePrescriptionDTOMedicineLess responsePrescription = new ResponsePrescriptionDTOMedicineLess();
+                responsePrescription.Id = p.Id;
+                if (p.Appointment is not null)
+                {
+                    ResponseAppointmentDTOPrescriptionLess responseAppointment = new ResponseAppointmentDTOPrescriptionLess();
+                    responseAppointment.Booking = p.Appointment.Booking;
+                    responseAppointment.DoctorId = p.Appointment.DoctorId;
+                    responseAppointment.DoctorFullName = p.Appointment.Doctor.FullName;
+                    responseAppointment.PatientId = p.Appointment.PatientId;
+                    responseAppointment.PatientFullName = p.Appointment.Patient.FullName;
+                    responsePrescription.Appointment = responseAppointment;
+                }
+                responseMedicine.Prescriptions.Add(responsePrescription);
+            }
+
+            return responseMedicine;
         }
     }
 }

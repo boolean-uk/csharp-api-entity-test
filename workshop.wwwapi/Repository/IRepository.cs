@@ -24,7 +24,8 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<Medicine>> GetMedicines();
         Task<IEnumerable<Prescription>> GetPrescriptions();
         Task<Prescription> CreatePrescription(Prescription entity);
-        //Task<Prescription> AddMedicineToPrescription(int medicineId, int prescriptionId);
-        //Task<Appointment> AddPrescriptionToAppointment(int doctorId, int patientId, int prescriptionId);
+        Task<Medicine> CreateMedicine(Medicine entity);
+        Task<Prescription> AddMedicineToPrescription(int medicineId, int prescriptionId);
+        Task<Appointment> AddPrescriptionToAppointment(DateTime booking, int doctorId, int patientId, int prescriptionId);
     }
 }

@@ -78,6 +78,7 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
+                .Include(a => a.Prescription)
                 .Where(a => a.DoctorId==id)
                 .ToListAsync();
         }
@@ -87,6 +88,7 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
+                .Include(a => a.Prescription)
                 .Where(a => a.PatientId == id)
                 .ToListAsync();
         }
@@ -96,6 +98,7 @@ namespace workshop.wwwapi.Repository
             return await _databaseContext.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
+                .Include(a => a.Prescription)
                 .FirstOrDefaultAsync(a => a.Booking.Equals(booking) && 
                                           a.DoctorId == doctorId && 
                                           a.PatientId == patientId);
@@ -108,6 +111,7 @@ namespace workshop.wwwapi.Repository
             return entity;
         }
 
+        // Medicines & Perscriptions
         public async Task<IEnumerable<Medicine>> GetMedicines()
         {
             return await _databaseContext.Medicines
@@ -119,6 +123,7 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Prescriptions
                 .Include(p => p.Medicines)
+                .Include(p => p.Appointment)
                 .ToListAsync();
         }
 
@@ -127,6 +132,93 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.AddAsync(entity);
             await _databaseContext.SaveChangesAsync();
             return entity;
+        }
+
+        public async Task<Medicine> CreateMedicine(Medicine entity)
+        {
+            await _databaseContext.AddAsync(entity);
+            await _databaseContext.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<Prescription> AddMedicineToPrescription(int medicineId, int prescriptionId)
+        {
+            var medicine = await _databaseContext.Medicines
+                .Include(m => m.Prescriptions)
+                .FirstOrDefaultAsync(m => m.Id == medicineId);
+
+            if (medicine == null)
+            {
+                return null;
+            }
+
+            var prescription = await _databaseContext.Prescriptions
+                .Include(p => p.Medicines)
+                .FirstOrDefaultAsync(p => p.Id == prescriptionId);
+
+            if (prescription == null)
+            {
+                return null;
+            }
+
+            if (prescription.Medicines.Contains(medicine))
+            {
+                prescription.Medicines.FirstOrDefault(m => m.Id == medicineId).Quantity += 1;
+                //int medicineIndex = prescription.Medicines.IndexOf(medicine);
+                //prescription.Medicines[medicineIndex].Quantity += 1;
+            }
+            else
+            {
+                prescription.Medicines.Add(medicine);
+            }
+
+            if (!medicine.Prescriptions.Contains(prescription))
+            {
+                medicine.Prescriptions.Add(prescription);
+            }
+
+            _databaseContext.Attach(medicine).State = EntityState.Modified;
+            _databaseContext.Attach(prescription).State = EntityState.Modified;
+            await _databaseContext.SaveChangesAsync();
+
+            return prescription;
+        }
+
+        public async Task<Appointment> AddPrescriptionToAppointment(DateTime booking, int doctorId, int patientId, int prescriptionId)
+        {
+            var appointment = await _databaseContext.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .Include(a => a.Prescription)
+                .FirstOrDefaultAsync(a => a.Booking.Equals(booking) &&
+                                          a.DoctorId == doctorId &&
+                                          a.PatientId == patientId);
+
+            if (appointment == null)
+            {
+                return null;
+            }
+
+            var prescription = await _databaseContext.Prescriptions
+                .Include(p => p.Medicines)
+                .Include(p => p.Appointment)
+                .FirstOrDefaultAsync(p => p.Id == prescriptionId);
+
+            if (prescription == null)
+            {
+                return null;
+            }
+
+            appointment.PrescriptionId = prescriptionId;
+            appointment.Prescription = prescription;
+
+            prescription.Appointment = appointment;
+
+            _databaseContext.Attach(prescription).State = EntityState.Modified;
+            _databaseContext.Attach(appointment).State = EntityState.Modified;
+            await _databaseContext.SaveChangesAsync();
+
+            return appointment;
         }
     }
 }
