@@ -19,25 +19,25 @@ namespace workshop.wwwapi.Repository
 
         public async Task<Appointment> GetAppointment(int doctorId, int patientId)
         {
-            var appointment = await _dbContext.Appointments.Where(x =>  x.DoctorId == doctorId && x.PatientId == patientId).FirstOrDefaultAsync();
+            var appointment = await _dbContext.Appointments.Include(d => d.Doctor).Include(d => d.Patient).Where(x =>  x.DoctorId == doctorId && x.PatientId == patientId).FirstOrDefaultAsync();
             return appointment;
         }
 
         public async Task<IEnumerable<Appointment>> GetAppointmentByDoctor(int doctorId)
         {
-            var appointment = await _dbContext.Appointments.Where(x => x.DoctorId == doctorId).ToListAsync();
+            var appointment = await _dbContext.Appointments.Include(d => d.Doctor).Include(d => d.Patient).Where(d => d.DoctorId == doctorId).ToListAsync();
             return appointment;
         }
 
         public async Task<IEnumerable<Appointment>> GetAppointmentByPatient(int patientId)
         {
-            var appointment = await _dbContext.Appointments.Where(x => x.PatientId == patientId).ToListAsync();
+            var appointment = await _dbContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.PatientId == patientId).ToListAsync();
             return appointment;
         }
 
         public async Task<IEnumerable<Appointment>> GetAppointments()
         {
-            return await _dbContext.Appointments.ToListAsync();
+            return await _dbContext.Appointments.Include(d => d.Doctor).Include(d => d.Patient).ToListAsync();
         }
     }
 }

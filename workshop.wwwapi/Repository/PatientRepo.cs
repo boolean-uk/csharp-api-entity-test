@@ -21,13 +21,13 @@ namespace workshop.wwwapi.Repository
 
         public async Task<Patient> GetPatient(int id)
         {
-            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == id);
+            var patient = await _dbContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).FirstOrDefaultAsync(p => p.Id == id);
             return patient;
         }
 
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            return await _dbContext.Patients.ToListAsync();
+            return await _dbContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).ToListAsync();
         }
     }
 }

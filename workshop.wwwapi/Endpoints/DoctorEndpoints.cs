@@ -21,13 +21,22 @@ namespace workshop.wwwapi.Endpoints
             try
             {
                 var doctors = await doctorRepo.GetDoctors();
-                List<PatientDTO> DTOs = new List<PatientDTO>();
-                foreach (var p in doctors)
-                {
+                List<GenericDTO> DTOs = new List<GenericDTO>();
 
-                    PatientDTO patientDTO = new PatientDTO();
-                    patientDTO.Name = p.FullName;
-                    DTOs.Add(patientDTO);
+                foreach (var d in doctors)
+                {
+                    GenericDTO doctorDTO = new GenericDTO();
+                    doctorDTO.Name = d.FullName;
+                    doctorDTO.Appointments = new List<GenericAppointmentDTO>();
+                    foreach (var ap in d.Appointments)
+                    {
+                        GenericAppointmentDTO appointmentDTO = new GenericAppointmentDTO();
+                        appointmentDTO.Booking = ap.Booking;
+
+                        appointmentDTO.Name = ap.Patient.FullName;
+                        doctorDTO.Appointments.Add(appointmentDTO);
+                    }
+                    DTOs.Add(doctorDTO);
                 }
                 return TypedResults.Ok(DTOs);
             }
@@ -44,9 +53,19 @@ namespace workshop.wwwapi.Endpoints
             try
             {
                 var doctor = await doctorRepo.GetDoctor(id);
-                PatientDTO patientDTO = new PatientDTO();
-                patientDTO.Name = doctor.FullName;
-                return TypedResults.Ok(patientDTO);
+                GenericDTO doctorDTO = new GenericDTO();
+                doctorDTO.Name = doctor.FullName;
+                doctorDTO.Appointments = new List<GenericAppointmentDTO>();
+                foreach (var ap in doctor.Appointments)
+                {
+                    GenericAppointmentDTO appointmentDTO = new GenericAppointmentDTO();
+                    appointmentDTO.Booking = ap.Booking;
+
+                    appointmentDTO.Name = ap.Patient.FullName;
+                    doctorDTO.Appointments.Add(appointmentDTO);
+                }
+                
+                return TypedResults.Ok(doctorDTO);
             }
             catch (Exception ex)
             {

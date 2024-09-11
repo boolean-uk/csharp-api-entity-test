@@ -1,7 +1,9 @@
 ﻿namespace workshop.wwwapi.DTOs
 {
-    public class GenericDto
+    public class GenericDTO
     {
         public string Name { get; set; }
+
+        public List<GenericAppointmentDTO> Appointments { get; set; }
     }
 }

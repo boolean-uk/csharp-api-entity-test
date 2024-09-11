@@ -23,12 +23,24 @@ namespace workshop.wwwapi.Endpoints
             try
             {
                 var patients = await patientRepo.GetPatients();
-                List<PatientDTO> DTOs = new List<PatientDTO>();
+                List<GenericDTO> DTOs = new List<GenericDTO>();
+                
                 foreach (var p in patients)
                 {
-
-                    PatientDTO patientDTO = new PatientDTO();
+                    GenericDTO patientDTO = new GenericDTO();
                     patientDTO.Name = p.FullName;
+                    patientDTO.Appointments = new List<GenericAppointmentDTO>();
+
+                    
+                    foreach(var ap in p.Appointments)
+                    {
+                        GenericAppointmentDTO appointmentDTO = new GenericAppointmentDTO();
+                        appointmentDTO.Booking = ap.Booking;
+                        
+                        appointmentDTO.Name = ap.Doctor.FullName;
+                        patientDTO.Appointments.Add(appointmentDTO);
+                    }
+                    
                     DTOs.Add(patientDTO);
                 }
                 return TypedResults.Ok(DTOs);
@@ -46,8 +58,17 @@ namespace workshop.wwwapi.Endpoints
             try
             {
                 var patient = await patientRepo.GetPatient(id);
-                PatientDTO patientDTO = new PatientDTO();
+                GenericDTO patientDTO = new GenericDTO();
                 patientDTO.Name = patient.FullName;
+                patientDTO.Appointments = new List<GenericAppointmentDTO>();
+                foreach(var ap in patient.Appointments)
+                {
+                    GenericAppointmentDTO appointmentDTO = new GenericAppointmentDTO();
+                    appointmentDTO.Booking = ap.Booking;
+
+                    appointmentDTO.Name = ap.Doctor.FullName;
+                    patientDTO.Appointments.Add(appointmentDTO);
+                }
                 return TypedResults.Ok(patientDTO);
             }
             catch (Exception ex)

@@ -12,8 +12,8 @@ namespace workshop.wwwapi.Endpoints
             var appointment = app.MapGroup("/appointments");
             appointment.MapGet("", getAppointments);
             appointment.MapGet("/{doctorId}/{patientId}", getAppointment);
-            appointment.MapGet("/{doctorId}", getAppointmentByDoctor);
-            appointment.MapGet("/{patientId}", getAppointmentByPatient);
+            appointment.MapGet("/doctor/{id}", getAppointmentByDoctor);
+            appointment.MapGet("/patient/{id}", getAppointmentByPatient);
             appointment.MapPost("", createAppointment);
         }
 
@@ -24,18 +24,21 @@ namespace workshop.wwwapi.Endpoints
             {
                 var appointments = await appointmentRepo.GetAppointments();
                 List<AppointmentDTO> DTOs = new List<AppointmentDTO>();
-                foreach (var p in appointments)
+                foreach (var ap in appointments)
                 {
 
                     AppointmentDTO appointmentDTO = new AppointmentDTO();
 
                     DoctorDTO doctorDTO = new DoctorDTO();
                     PatientDTO patientDTO = new PatientDTO();
+                    
+                    
+                    doctorDTO.Name = ap.Doctor.FullName;
+                    patientDTO.Name = ap.Patient.FullName;
 
-                    appointmentDTO.Booking = p.Booking;
-                    appointmentDTO.Patient = p.Patient;
-                    appointmentDTO.Doctor = p.Doctor;
-
+                    appointmentDTO.Booking = ap.Booking;
+                    appointmentDTO.Doctor = doctorDTO;
+                    appointmentDTO.Patient = patientDTO;
                     DTOs.Add(appointmentDTO);
                 }
                 return TypedResults.Ok(DTOs);
@@ -55,8 +58,18 @@ namespace workshop.wwwapi.Endpoints
                 var appointment = await appointmentRepo.GetAppointment(doctorId, patientId);
                 AppointmentDTO appointmentDTO = new AppointmentDTO();
                 appointmentDTO.Booking = appointment.Booking;
+                DoctorDTO doctorDTO = new DoctorDTO();
+                PatientDTO patientDTO = new PatientDTO();
+
+
+                doctorDTO.Name = appointment.Doctor.FullName;
+                patientDTO.Name = appointment.Patient.FullName;
+                appointmentDTO.Doctor = doctorDTO;
+                appointmentDTO.Patient = patientDTO;
+                /*
                 appointmentDTO.PatientName = appointment.Patient.FullName;
                 appointmentDTO.DoctorName = appointment.Doctor.FullName;
+                */
                 return TypedResults.Ok(appointmentDTO);
             }
             catch (Exception ex)
@@ -67,16 +80,17 @@ namespace workshop.wwwapi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
 
-        private static async Task<IResult> createAppointment(IAppointmentRepo appointmentRepo, AppointmentDTO appointment)
+        private static async Task<IResult> createAppointment(IAppointmentRepo appointmentRepo, AppointmentCreateDTO appointment)
         {
             try
             {
-                AppointmentDTO DTO = new AppointmentDTO();
-                var result = await appointmentRepo.CreateAppointment(new Appointment() { Booking = appointment.Booking });
+                var result = await appointmentRepo.CreateAppointment(new Appointment() { Booking = appointment.Booking, DoctorId = appointment.doctorID, PatientId = appointment.patientID });
 
-                DTO.DoctorName = result.Doctor.FullName;
-                DTO.PatientName = result.Patient.FullName;
+                var createdAppointment = await appointmentRepo.GetAppointment(result.DoctorId, result.PatientId);
 
+                AppointmentDTO DTO = new AppointmentDTO() { Booking = createdAppointment.Booking, Doctor = new DoctorDTO() { Name = createdAppointment.Doctor.FullName }, Patient = new PatientDTO() { Name = createdAppointment.Patient.FullName } };
+                
+                
                 return TypedResults.Ok(DTO);
             }
             catch (Exception ex)
@@ -86,24 +100,34 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        private static async Task<IResult> getAppointmentByDoctor(IAppointmentRepo appointmentRepo, int doctorId)
+        private static async Task<IResult> getAppointmentByDoctor(IAppointmentRepo appointmentRepo, int id)
         {
             try
             {
-                var appointments = await appointmentRepo.GetAppointmentByDoctor(doctorId);
+                var appointments = await appointmentRepo.GetAppointmentByDoctor(id);
                 List<AppointmentDTO> DTOs = new List<AppointmentDTO>();
 
-                foreach (var appointment in appointments)
+                foreach (var ap in appointments)
                 {
+
                     AppointmentDTO appointmentDTO = new AppointmentDTO();
-                    appointmentDTO.Booking = appointment.Booking;
-                    appointmentDTO.PatientName = appointment.Patient.FullName;
-                    appointmentDTO.DoctorName = appointment.Doctor.FullName;
+
+                    DoctorDTO doctorDTO = new DoctorDTO();
+                    PatientDTO patientDTO = new PatientDTO();
+
+
+                    doctorDTO.Name = ap.Doctor.FullName;
+                    patientDTO.Name = ap.Patient.FullName;
+
+                    appointmentDTO.Booking = ap.Booking;
+                    appointmentDTO.Doctor = doctorDTO;
+                    appointmentDTO.Patient = patientDTO;
                     DTOs.Add(appointmentDTO);
                 }
-                
-                return TypedResults.Ok(appointmentDTO);
+
+                return TypedResults.Ok(DTOs);
             }
             catch (Exception ex)
             {
@@ -112,17 +136,34 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        private static async Task<IResult> getAppointmentByPatient(IAppointmentRepo appointmentRepo, int patientId)
+        private static async Task<IResult> getAppointmentByPatient(IAppointmentRepo appointmentRepo, int id)
         {
             try
             {
-                var appointment = await appointmentRepo.GetAppointmentByPatient(patientId);
-                AppointmentDTO appointmentDTO = new AppointmentDTO();
-                appointmentDTO.Booking = appointment.Booking;
-                appointmentDTO.PatientName = appointment.Patient.FullName;
-                appointmentDTO.DoctorName = appointment.Doctor.FullName;
-                return TypedResults.Ok(appointmentDTO);
+                var appointments = await appointmentRepo.GetAppointmentByPatient(id);
+                
+                List<AppointmentDTO> DTOs = new List<AppointmentDTO>();
+
+                foreach (var ap in appointments)
+                {
+
+                    AppointmentDTO appointmentDTO = new AppointmentDTO();
+
+                    DoctorDTO doctorDTO = new DoctorDTO();
+                    PatientDTO patientDTO = new PatientDTO(); 
+
+
+                    doctorDTO.Name = ap.Doctor.FullName;
+                    patientDTO.Name = ap.Patient.FullName;
+
+                    appointmentDTO.Booking = ap.Booking;
+                    appointmentDTO.Doctor = doctorDTO;
+                    appointmentDTO.Patient = patientDTO;
+                    DTOs.Add(appointmentDTO);
+                }
+                return TypedResults.Ok(DTOs);
             }
             catch (Exception ex)
             {

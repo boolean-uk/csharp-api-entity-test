@@ -48,6 +48,8 @@ namespace workshop.wwwapi.Data
                 new Appointment() { Booking = DateTime.UtcNow, DoctorId = 2, PatientId = 2 },
                 new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(30), DoctorId = 1, PatientId = 2 },
                 new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(60), DoctorId = 2, PatientId = 3 },
+                new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(60), DoctorId = 2, PatientId = 1 },
+                new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(60), DoctorId = 1, PatientId = 1 },
                 new Appointment() { Booking = DateTime.UtcNow + TimeSpan.FromMinutes(45), DoctorId = 2, PatientId = 4 }
                 );
         }
