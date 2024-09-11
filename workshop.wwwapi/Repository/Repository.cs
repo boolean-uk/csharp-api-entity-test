@@ -259,7 +259,7 @@ namespace workshop.wwwapi.Repository
             var per = await _databaseContext.Prescriptions.Include(p => p.PrescriptionMedicines).ThenInclude(pm => pm.Medicine).Where(p => p.Id == _databaseContext.Prescriptions.Count()).FirstOrDefaultAsync();
             var app = await _databaseContext.Appointments.Where(a => a.Id == appointmentId).FirstOrDefaultAsync();
 
-            _databaseContext.Remove(app);
+            _databaseContext.Appointments.Remove(app);
             await _databaseContext.SaveChangesAsync();
 
             app.PrescriptionId = per.Id;
