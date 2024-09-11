@@ -74,9 +74,9 @@ namespace workshop.wwwapi.Data
 
             // Seed Appointments 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { Id = appointment1Id, PatientId = patient1Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 10, 1, 10, 0, 0, DateTimeKind.Utc) },
-                new Appointment { Id = appointment2Id ,PatientId = patient2Id, DoctorId = doctor2Id, AppointmentDate = new DateTime(2024, 10, 2, 11, 0, 0, DateTimeKind.Utc) },
-                new Appointment { Id = appointment3Id ,PatientId = patient2Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 11, 5, 11, 0, 0, DateTimeKind.Utc) }
+                new Appointment { Id = appointment1Id, AppointmentType = Enums.AppointmentType.Online, PatientId = patient1Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 10, 1, 10, 0, 0, DateTimeKind.Utc) },
+                new Appointment { Id = appointment2Id , AppointmentType = Enums.AppointmentType.InPerson, PatientId = patient2Id, DoctorId = doctor2Id, AppointmentDate = new DateTime(2024, 10, 2, 11, 0, 0, DateTimeKind.Utc) },
+                new Appointment { Id = appointment3Id , AppointmentType = Enums.AppointmentType.Online, PatientId = patient2Id, DoctorId = doctor1Id, AppointmentDate = new DateTime(2024, 11, 5, 11, 0, 0, DateTimeKind.Utc) }
             );
 
             // Seed Medicine 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Enums;
 
 namespace workshop.wwwapi.Models
 {
@@ -18,6 +19,9 @@ namespace workshop.wwwapi.Models
 
         [Column("appointment_date")]
         public DateTime AppointmentDate { get; set; }
+
+        [Column("appointment_type")]
+        public AppointmentType AppointmentType { get; set; }
 
         // Navigation properties
         [ForeignKey("PatientId")]
