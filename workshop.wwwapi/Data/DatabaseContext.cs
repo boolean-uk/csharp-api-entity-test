@@ -25,6 +25,13 @@ namespace workshop.wwwapi.Data
                 new Patient {Id = 2, FullName = "Jane Smith" }
                 
                 );
+
+            modelBuilder.Entity<Doctor>().HasData(
+
+                new Doctor { Id = 3, FullName = "Meredith Grey"}, 
+                new Doctor { Id = 4, FullName = "John Doctor"}
+                
+                );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -12,7 +12,7 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240911072829_FirstMigration")]
+    [Migration("20240911081243_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -34,28 +34,45 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("booking");
 
                     b.HasKey("PatientId", "DoctorId");
 
-                    b.ToTable("Appointments");
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("appointments");
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("doctors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            FullName = "Meredith Grey"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FullName = "John Doctor"
+                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
@@ -87,6 +104,35 @@ namespace workshop.wwwapi.Migrations
                             Id = 2,
                             FullName = "Jane Smith"
                         });
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
+                {
+                    b.HasOne("workshop.wwwapi.Models.Doctor", "Doctor")
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workshop.wwwapi.Models.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }
