@@ -4,17 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly    
-    [Table("doctor")]
-    public class Doctor
+    [Table("medicinePrescription")]
+    public class MedicinePrescription
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("name")]
-        public string FullName { get; set; }
+        [ForeignKey("MedicineId")]
+        public int MedicineId { get; set; }
 
-        public List<Appointment> Appointments { get; set; } = new List<Appointment>();
+        [ForeignKey("PrescriptionId")]
+        public int PrescriptionId { get; set; }
     }
 }
