@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Models.AppointmentDTOs;
@@ -26,6 +27,10 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointments/", CreateAppointment);
+            surgeryGroup.MapGet("/prescriptions/", GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptions/{id}", GetPrescription);
+            surgeryGroup.MapPost("/prescriptions/", CreatePrescription);
+            surgeryGroup.MapPatch("/prescriptions/", AddMedicineToPrescription);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository, IMapper mapper)
@@ -175,24 +180,60 @@ namespace workshop.wwwapi.Endpoints
 
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> CreatePrescription(CreateAppointmentDTO appointmentDTO, IRepository repository, IMapper mapper)
+        public static async Task<IResult> GetPrescriptions(IRepository repository, IMapper mapper)
         {
-            var doctor = await repository.GetDoctor(appointmentDTO.DoctorId);
-            var patient = await repository.GetPatient(appointmentDTO.PatientId);
+            var prescriptions = await repository.GetPrescriptions();
+            var prescriptionDTOs = mapper.Map<IEnumerable<GetPrescriptionDTO>>(prescriptions);
 
-            if (doctor == null || patient == null)
+            return TypedResults.Ok(prescriptionDTOs);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetPrescription(IRepository repository, IMapper mapper, Guid id)
+        {
+
+            Prescription prescription = null;
+
+            try
             {
-                return TypedResults.NotFound("Doctor or Patient not found");
+                prescription = await repository.GetPrescription(id);
+            }
+            catch (Exception ex)
+            {
+                TypedResults.NotFound(ex.Message);
+            }
+            
+            var prescriptionDTO = mapper.Map<GetPrescriptionDTO>(prescription);
+
+            return TypedResults.Ok(prescriptionDTO);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> CreatePrescription(CreatePrescriptionDTO prescriptionDTO, IRepository repository, IMapper mapper)
+        {
+
+            Prescription prescription = mapper.Map<Prescription>(prescriptionDTO);
+
+            await repository.CreatePrescription(prescription);
+
+            return TypedResults.Ok();
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> AddMedicineToPrescription(Guid medicineId, Guid prescriptionId, IRepository repository, IMapper mapper)
+        {
+            var medicine = await repository.GetMedicine(medicineId);
+            var prescription = await repository.GetPrescription(prescriptionId);
+
+            if (medicine == null || prescription == null)
+            {
+                return TypedResults.NotFound("Medicine or prescription not found");
             }
 
-            Appointment appointment = mapper.Map<Appointment>(appointmentDTO);
+            await repository.AddMedicineToPrescription(medicineId, prescriptionId);
 
-            await repository.CreateAppointment(appointment);
-
-            var createdAppointment = await repository.GetAppointment(appointmentDTO.PatientId, appointmentDTO.DoctorId);
-            var returnAppointmentDTO = mapper.Map<GetAppointmentDTO>(appointment);
-
-            return TypedResults.Ok(returnAppointmentDTO);
+            return TypedResults.Ok();
         }
     }
 }

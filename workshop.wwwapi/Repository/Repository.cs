@@ -89,7 +89,64 @@ namespace workshop.wwwapi.Repository
 
         public async Task<IEnumerable<Prescription>> GetPrescriptions()
         {
-            return await _databaseContext.Prescriptions.Include(p => p.Medicines).Include(p => p.Appointment).ToListAsync();
+            return await _databaseContext
+                .Prescriptions.Include(p => p.Medicines)
+                .Include(p => p.Appointment)
+                    .ThenInclude(p => p.Doctor)
+                .Include(p => p.Appointment)
+                    .ThenInclude(p => p.Patient)
+                .ToListAsync();
+        }
+
+        public async Task<Prescription> GetPrescription(Guid id)
+
+        {
+            Prescription prescription = await _databaseContext
+                .Prescriptions.Include(p => p.Medicines)
+                .Include(p => p.Appointment)
+                    .ThenInclude(p => p.Doctor)
+                .Include(p => p.Appointment)
+                    .ThenInclude(p => p.Patient)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (prescription == null)
+                throw new Exception("Prescription not found");
+
+            return prescription;
+        }
+
+        public async Task CreatePrescription(Prescription prescription)
+        {
+            _databaseContext.Prescriptions.Add(prescription);
+            await _databaseContext.SaveChangesAsync();
+        }
+
+        public async Task<Medicine> GetMedicine(Guid id)
+        {
+            Medicine medicine = await _databaseContext.Medicines.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (medicine == null)
+                throw new Exception("Medicine not found");
+
+            return medicine;
+        }
+
+        public async Task AddMedicineToPrescription(Guid medicineId, Guid prescriptionId)
+        {
+
+            var prescription = await _databaseContext.Prescriptions
+                .Include(p => p.Medicines) 
+                .FirstOrDefaultAsync(p => p.Id == prescriptionId);
+
+            var medicine = await _databaseContext.Medicines
+                .FirstOrDefaultAsync(m => m.Id == medicineId);
+
+            if (!prescription.Medicines.Contains(medicine))
+            {
+                prescription.Medicines.Add(medicine);
+            }
+
+            await _databaseContext.SaveChangesAsync();
         }
     }
 }

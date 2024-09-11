@@ -42,7 +42,16 @@ public class MappingProfile : Profile
         CreateMap<CreateAppointmentDTO, Appointment>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
+        //Get doctor/-s endpoint
+        CreateMap<Prescription, GetPrescriptionDTO>()
+            .ForMember(dest => dest.Appointment, opt => opt.MapFrom(src => src.Appointment))
+            .ForMember(dest => dest.Medicines, opt => opt.MapFrom(src => src.Medicines));
 
+        // Get medicine 
+        CreateMap<Medicine, GetMedicineDTO>();
 
+        //Create appointment
+        CreateMap<CreatePrescriptionDTO, Prescription>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }
