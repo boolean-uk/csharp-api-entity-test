@@ -25,12 +25,23 @@ namespace workshop.wwwapi.Endpoints
             {
                 var patients = await patientRepository.GetAllPatients();
 
-                List<PatientDTO> ps = new List<PatientDTO>();
+                List<GenericDTO> ps = new List<GenericDTO>();
 
                 foreach (var p in patients)
                 {
-                    PatientDTO patientDTO = new PatientDTO();
-                    patientDTO.Name = p.FullName;
+                    GenericDTO patientDTO = new GenericDTO();
+                    patientDTO.FullName = p.FullName;
+                    patientDTO.Appointments = new List<GenericAppointmentDTO>();
+                    
+                    foreach (var ap in p.Appointments) {
+
+                        GenericAppointmentDTO apDTO = new GenericAppointmentDTO();
+                        apDTO.appointmentDate = ap.ApointementDate;
+                      
+                        apDTO.FullName = ap.Doctor.FullName;
+                        patientDTO.Appointments.Add(apDTO);
+                    }
+
                     ps.Add(patientDTO);
                 }
 
@@ -49,11 +60,22 @@ namespace workshop.wwwapi.Endpoints
         {
             try
             {
-                Patient target = await patientRepository.GetPatientById(id);
+                var target = await patientRepository.GetPatientById(id);
 
-                PatientDTO patientDTO = new PatientDTO();
+                GenericDTO patientDTO = new GenericDTO();
 
-                patientDTO.Name = target.FullName;
+                patientDTO.FullName = target.FullName;
+
+                patientDTO.Appointments = new List<GenericAppointmentDTO>();
+
+                foreach (var ap in target.Appointments)
+                {
+                    GenericAppointmentDTO apDTO = new GenericAppointmentDTO();
+                    apDTO.appointmentDate = ap.ApointementDate;
+
+                    apDTO.FullName = ap.Doctor.FullName;
+                    patientDTO.Appointments.Add(apDTO);
+                }
 
                 return TypedResults.Ok(patientDTO);
             }
@@ -71,9 +93,9 @@ namespace workshop.wwwapi.Endpoints
             {
                 PatientDTO patientDTO = new PatientDTO();
 
-                var result = await patientRepository.CreatePatient(new Patient { FullName=newPatient.Name });
+                var result = await patientRepository.CreatePatient(new Patient { FullName=newPatient.FullName });
                 
-                patientDTO.Name = result.FullName;
+                patientDTO.FullName = result.FullName;
 
                 return TypedResults.Ok(patientDTO);
             }

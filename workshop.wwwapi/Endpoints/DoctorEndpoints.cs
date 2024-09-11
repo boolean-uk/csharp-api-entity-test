@@ -24,12 +24,23 @@ namespace workshop.wwwapi.Endpoints
             {
                 var doctors = await doctorRepository.GetAllDoctors();
 
-                List<DoctorDTO> ds = new List<DoctorDTO>();
+                List<GenericDTO> ds = new List<GenericDTO>();
 
                 foreach (var d in doctors)
                 {
-                    DoctorDTO doctorDTO = new DoctorDTO();
-                    doctorDTO.Name = d.FullName;
+                    GenericDTO doctorDTO = new GenericDTO();
+                    doctorDTO.FullName = d.FullName;
+                    doctorDTO.Appointments = new List<GenericAppointmentDTO>();
+
+                    foreach (var ap in d.Appointments)
+                    {
+                        GenericAppointmentDTO apDTO = new GenericAppointmentDTO();
+                        apDTO.appointmentDate = ap.ApointementDate;
+                      
+                        apDTO.FullName = ap.Patient.FullName;
+                        doctorDTO.Appointments.Add(apDTO);
+                    }
+
                     ds.Add(doctorDTO);
                 }
 
@@ -50,9 +61,20 @@ namespace workshop.wwwapi.Endpoints
             {
                 var target = await doctorRepository.GetDoctorById(id);
 
-                DoctorDTO doctorDTO = new DoctorDTO();
+                GenericDTO doctorDTO = new GenericDTO();
 
-                doctorDTO.Name = target.FullName;
+                doctorDTO.FullName = target.FullName;
+
+                doctorDTO.Appointments = new List<GenericAppointmentDTO>();
+
+                foreach (var ap in target.Appointments)
+                {
+                    GenericAppointmentDTO apDTO = new GenericAppointmentDTO();
+                    apDTO.appointmentDate = ap.ApointementDate;
+
+                    apDTO.FullName = ap.Patient.FullName;
+                    doctorDTO.Appointments.Add(apDTO);
+                }
 
                 return TypedResults.Ok(doctorDTO);
             }
@@ -70,9 +92,9 @@ namespace workshop.wwwapi.Endpoints
             {
                 DoctorDTO doctorDTO = new DoctorDTO();
 
-                var result = await doctorRepository.CreateDoctor(new Doctor { FullName = newDoctor.Name });
+                var result = await doctorRepository.CreateDoctor(new Doctor { FullName = newDoctor.FullName });
 
-                doctorDTO.Name = result.FullName;
+                doctorDTO.FullName = result.FullName;
 
                 return TypedResults.Ok(doctorDTO);
             }

@@ -21,12 +21,12 @@ namespace workshop.wwwapi.Repository
 
         public async Task<IEnumerable<Doctor>> GetAllDoctors()
         {
-            return await _databaseContext.Doctors.ToListAsync();
+            return await _databaseContext.Doctors.Include(d => d.Appointments).ThenInclude(a => a.Patient).ToListAsync();
         }
 
         public async Task<Doctor> GetDoctorById(int id)
         {
-            return await _databaseContext.Doctors.FindAsync(id);
+            return await _databaseContext.Doctors.Include(d => d.Appointments).ThenInclude(a => a.Patient).FirstOrDefaultAsync(d => d.Id == id);
         }
     }
 }
