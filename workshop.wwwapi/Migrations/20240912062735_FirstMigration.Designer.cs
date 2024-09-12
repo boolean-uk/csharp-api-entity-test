@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240912062735_FirstMigration")]
+    partial class FirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -360,78 +363,6 @@ namespace workshop.wwwapi.Migrations
                             Instructions = "Take as needed",
                             MedicineName = "Compilex",
                             PrescriptionId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Amount = 1,
-                            Instructions = "Take 1 after deployment",
-                            MedicineName = "Bugfixol",
-                            PrescriptionId = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Amount = 1,
-                            Instructions = "Take 1 daily",
-                            MedicineName = "Patchorix",
-                            PrescriptionId = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Amount = 2,
-                            Instructions = "Take as reward when writing lambda functions",
-                            MedicineName = "LambdaRelief",
-                            PrescriptionId = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Amount = 1,
-                            Instructions = "Take 1 when forgetting LINQ syntax",
-                            MedicineName = "Syntaxol",
-                            PrescriptionId = 3
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Amount = 2,
-                            Instructions = "Take 2 when compiling fails",
-                            MedicineName = "Compilex",
-                            PrescriptionId = 3
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Amount = 1,
-                            Instructions = "Take with food, or drink, or rub on skin",
-                            MedicineName = "PolyMorphix",
-                            PrescriptionId = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Amount = 1,
-                            Instructions = "Take as reward when writing lambda functions",
-                            MedicineName = "LambdaRelief",
-                            PrescriptionId = 4
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Amount = 2,
-                            Instructions = "Take 2 when using abstract classes",
-                            MedicineName = "Inheritex",
-                            PrescriptionId = 4
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Amount = 1,
-                            Instructions = "Take 1 and brace for frontend week!",
-                            MedicineName = "Reactabool Forte",
-                            PrescriptionId = 4
                         });
                 });
 

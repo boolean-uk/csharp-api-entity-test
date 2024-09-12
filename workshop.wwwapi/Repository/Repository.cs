@@ -70,5 +70,10 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.SaveChangesAsync();
             return appointment;
         }
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions.Include(p => p.PrescribedMedicineList).ToListAsync();
+        }
     }
 }
