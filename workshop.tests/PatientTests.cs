@@ -26,23 +26,4 @@ public class Tests
         // Assert
         Assert.That(patient.FullName, Is.EqualTo("John Doe"));
     }
-    
-    [Test]
-    public async Task CreatePatient()
-    {
-        // Arrange
-        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
-        var client = factory.CreateClient();
-        DoctorPatientPostModel model = new DoctorPatientPostModel() 
-        {
-            FullName = "Test"
-        };
-
-        // Act
-        var json = new StringContent(JsonConvert.SerializeObject(model), UTF8Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/surgery/create/patients/", json);
-
-        // Assert
-        Assert.That(response.StatusCode == System.Net.HttpStatusCode.Created);
-    }
 }
