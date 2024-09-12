@@ -75,5 +75,25 @@ namespace workshop.wwwapi.Repository
         {
             return await _databaseContext.Prescriptions.Include(p => p.PrescribedMedicineList).ToListAsync();
         }
+
+        public async Task<Prescription> CreatePrescription(Prescription prescription)
+        {
+            await _databaseContext.AddAsync(prescription);
+            await _databaseContext.SaveChangesAsync();
+            return prescription;
+        }
+
+        public async Task<bool> GetMedicineByName(string name)
+        {
+            var check = await _databaseContext.Medicines.FirstOrDefaultAsync(m => m.Name == name);
+            if (check != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
