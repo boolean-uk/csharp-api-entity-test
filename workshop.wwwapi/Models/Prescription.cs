@@ -3,7 +3,6 @@
 public class Prescription
 {
     public int Id { get; set; } // Primary Key
-
     public int DoctorId { get; set; } // Foreign Key to Doctor
     public int PatientId { get; set; } // Foreign Key to Patient
 

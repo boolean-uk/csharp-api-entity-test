@@ -85,14 +85,8 @@ namespace workshop.wwwapi.Data
                 new Appointment { Booking = new DateTime(2024, 09, 14, 16, 30, 00).ToUniversalTime(), DoctorId = 3, PatientId = 2 }
             };
 
-            // Seeding
-            modelBuilder.Entity<Patient>().HasData(patients);
-            modelBuilder.Entity<Doctor>().HasData(doctors);
-            modelBuilder.Entity<Appointment>().HasData(appointments);
-            modelBuilder.Entity<Medicine>().HasData(medicines);
-
-
-            modelBuilder.Entity<PrescribedMedicine>().HasData(
+            List<PrescribedMedicine> prescribedMedicines = new List<PrescribedMedicine>
+            {
                 new PrescribedMedicine { Id = 1, MedicineName = "Patchorix", Instructions = "Take 1 before each TestRun", Amount = 2, PrescriptionId = 1 },
                 new PrescribedMedicine { Id = 2, MedicineName = "Syntaxol", Instructions = "Take 2 before and 5 after deploying patch. Double amount if its friday", Amount = 1, PrescriptionId = 1 },
                 new PrescribedMedicine { Id = 3, MedicineName = "Compilex", Instructions = "Take as needed", Amount = 1, PrescriptionId = 1 },
@@ -108,15 +102,23 @@ namespace workshop.wwwapi.Data
                 new PrescribedMedicine { Id = 10, MedicineName = "LambdaRelief", Instructions = "Take as reward when writing lambda functions", Amount = 1, PrescriptionId = 4 },
                 new PrescribedMedicine { Id = 11, MedicineName = "Inheritex", Instructions = "Take 2 when using abstract classes", Amount = 2, PrescriptionId = 4 },
                 new PrescribedMedicine { Id = 12, MedicineName = "Reactabool Forte", Instructions = "Take 1 and brace for frontend week!", Amount = 1, PrescriptionId = 4 }
-            );
+            };
 
-            modelBuilder.Entity<Prescription>().HasData(
+            List<Prescription> prescriptions = new List<Prescription>
+            {
                 new Prescription { Id = 1, DoctorId = 1, PatientId = 2 },
                 new Prescription { Id = 2, DoctorId = 1, PatientId = 1 },
                 new Prescription { Id = 3, DoctorId = 1, PatientId = 3 },
                 new Prescription { Id = 4, DoctorId = 2, PatientId = 1 }
-            );
+            };
 
+            // Seeding
+            modelBuilder.Entity<Patient>().HasData(patients);
+            modelBuilder.Entity<Doctor>().HasData(doctors);
+            modelBuilder.Entity<Appointment>().HasData(appointments);
+            modelBuilder.Entity<Medicine>().HasData(medicines);
+            modelBuilder.Entity<PrescribedMedicine>().HasData(prescribedMedicines);
+            modelBuilder.Entity<Prescription>().HasData(prescriptions);
         }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
