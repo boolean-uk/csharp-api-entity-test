@@ -104,7 +104,7 @@ namespace workshop.wwwapi.Endpoints
             }
         }
 
-        /*
+        
             [ProducesResponseType(StatusCodes.Status200OK)]
             [ProducesResponseType(StatusCodes.Status400BadRequest)]
             public static async Task<IResult> CreatePrescription(IPrescriptionRepository prescriptionRepository, PrescriptionCreateDTO newPrescription)
@@ -113,18 +113,61 @@ namespace workshop.wwwapi.Endpoints
             {
                 List<MedicinePrescription> meds = new List<MedicinePrescription>();
 
-                MedicinePrescription medicinePrescription = new MedicinePrescription() {  };
-                meds.Add(new)
+                MedicinePrescription medicinePrescription = new MedicinePrescription() 
+                { 
+                    MedicineId = newPrescription.medicinePrescription.medicineId,
+                    Quantity = newPrescription.medicinePrescription.quantity,
+                    Notes = newPrescription.medicinePrescription.notes
+                };
+                
+                meds.Add(medicinePrescription);
 
-                var np = new Prescription() { DoctorId = newPrescription.doctorId, PatientId = newPrescription.patientId, MedicinePrescriptions = new List<MedicinePrescription>() };
+                var np = new Prescription() 
+                { 
+                    DoctorId = newPrescription.doctorId, 
+                    PatientId = newPrescription.patientId, 
+                    MedicinePrescriptions = meds 
+                };
+
+                var result = await prescriptionRepository.CreatePrescription(np);
+
+                var targetPrescription = await prescriptionRepository.GetPrescriptionById(result.Id);
+
+                
+                AppointmentDTO appointmentDTO = new AppointmentDTO()
+                {
+                    appointmentDate = targetPrescription.Appointment.ApointementDate,
+                    doctor = new DoctorDTO() { FullName = targetPrescription.Appointment.Doctor.FullName },
+                    patient = new PatientDTO { FullName = targetPrescription.Appointment.Patient.FullName }
+                };
+                
+
+                PrescriptionDTO prescriptionDTO = new PrescriptionDTO()
+                {
+                    Appointment = appointmentDTO,
+                    MedecinePerscriptions = new List<PMedicinePrescriptionDTO>()
+                };
+
+                foreach (var mp in targetPrescription.MedicinePrescriptions)
+                {
+                    PMedicinePrescriptionDTO pmpDTO = new PMedicinePrescriptionDTO()
+                    {
+                        medicineName = mp.Medicine.Name,
+                        notes = mp.Notes,
+                        quantity = mp.Quantity
+                    };
+
+                    prescriptionDTO.MedecinePerscriptions.Add(pmpDTO);
+                }
+
+                return TypedResults.Ok(prescriptionDTO);
 
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.StackTrace);
                 return TypedResults.BadRequest(ex.Message);
             } 
-            }
-        */
+        }
     }
 }
