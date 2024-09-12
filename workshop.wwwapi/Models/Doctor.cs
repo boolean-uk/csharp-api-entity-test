@@ -18,5 +18,7 @@ namespace workshop.wwwapi.Models
         public string FirstName { get => _firstname; set => _firstname = value; }
         public string LastName { get => _lastname; set => _lastname = value; }
         public List<Appointment> Appointments { get => _appointments; set => _appointments = value; }
+        public string Name => $"{_firstname} {_lastname}";
+
     }
 }

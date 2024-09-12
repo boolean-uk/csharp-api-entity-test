@@ -25,6 +25,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseHttpsRedirection();
 app.ConfigurePatientEndpoint();
+app.ConfigurePrescriptionEndpoint();
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore
