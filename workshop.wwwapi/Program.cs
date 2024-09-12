@@ -13,6 +13,7 @@ builder.Services.AddScoped<IRepository,Repository>();
 builder.Services.AddScoped<IPatientRepo, PatientRepo>();
 builder.Services.AddScoped<IDoctorRepo, DoctorRepo>();
 builder.Services.AddScoped<IAppointmentRepo, AppointmentRepo>();
+builder.Services.AddScoped<IPrescriptionRepo, PrescriptionRepo>();  
 builder.Services.AddDbContext<DatabaseContext>();
 var app = builder.Build();
 
@@ -27,6 +28,7 @@ app.UseHttpsRedirection();
 app.ConfigurePatientEndpoints();
 app.ConfigureDoctorEndpoints();
 app.ConfigureAppointmentEndpoints();
+app.ConfigurePrescriptionEndpoints();
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore
