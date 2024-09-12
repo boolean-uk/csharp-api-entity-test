@@ -66,16 +66,16 @@ namespace workshop.wwwapi.Endpoints
             }
             var newprescription = await repository.CreatePrescription(new Prescription() { DoctorId = pmodel.DoctorId, PatientId = pmodel.PatientId, PrescribedMedicineList = prescribedmeds});
 
-            CreatePrescriptionDTO thisone = new CreatePrescriptionDTO();
-            List<PrescribedMedicineDTO> newprescriptionDTO = new List<PrescribedMedicineDTO>();
-            thisone.DoctorId = pmodel.DoctorId;
-            thisone.PatientId = pmodel.PatientId;
+            CreatePrescriptionDTO thisNewPrescription = new CreatePrescriptionDTO();
+            List<PrescribedMedicineDTO> medicineList = new List<PrescribedMedicineDTO>();
+            thisNewPrescription.DoctorId = pmodel.DoctorId;
+            thisNewPrescription.PatientId = pmodel.PatientId;
             foreach (var item in prescribedmeds)
             {
-                newprescriptionDTO.Add(new PrescribedMedicineDTO() { Instruction = item.Instructions, Amount = item.Amount, MedicineName = item.MedicineName });
+                medicineList.Add(new PrescribedMedicineDTO() { Instruction = item.Instructions, Amount = item.Amount, MedicineName = item.MedicineName });
             }
-            thisone.PrescribedMedicines = newprescriptionDTO;
-            return TypedResults.Ok(thisone);
+            thisNewPrescription.PrescribedMedicines = medicineList;
+            return TypedResults.Ok(thisNewPrescription);
         }
     }
 }
