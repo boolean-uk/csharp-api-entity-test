@@ -12,8 +12,8 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240909134240_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20240911091229_SecondMigration")]
+    partial class SecondMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,28 +34,59 @@ namespace workshop.wwwapi.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Booking")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("booking");
 
                     b.HasKey("PatientId", "DoctorId");
 
-                    b.ToTable("Appointments");
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            PatientId = 2,
+                            DoctorId = 1,
+                            Booking = new DateTime(2024, 9, 15, 9, 15, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            PatientId = 1,
+                            DoctorId = 2,
+                            Booking = new DateTime(2024, 11, 1, 13, 0, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("full_name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("doctors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FullName = "Ben Doyle"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FullName = "Adam Chase"
+                        });
                 });
 
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
@@ -86,7 +117,37 @@ namespace workshop.wwwapi.Migrations
                         {
                             Id = 2,
                             FullName = "Emily Axford"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FullName = "Lou Wilson"
                         });
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Appointment", b =>
+                {
+                    b.HasOne("workshop.wwwapi.Models.Doctor", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workshop.wwwapi.Models.Patient", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }

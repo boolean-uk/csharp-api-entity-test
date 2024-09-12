@@ -1,6 +1,6 @@
 ﻿namespace workshop.wwwapi.ViewModels
 {
-    public class PatientPostModel
+    public class PersonPostModel
     {
         public string Name { get; set; }
     }

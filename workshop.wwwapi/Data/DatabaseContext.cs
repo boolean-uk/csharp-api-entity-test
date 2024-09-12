@@ -12,7 +12,6 @@ namespace workshop.wwwapi.Data
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,7 +21,18 @@ namespace workshop.wwwapi.Data
             //TODO: Seed Data Here
             modelBuilder.Entity<Patient>().HasData(
                 new Patient() { Id = 1, FullName = "Brian Murphy" },
-                new Patient() { Id = 2, FullName = "Emily Axford" }
+                new Patient() { Id = 2, FullName = "Emily Axford" },
+                new Patient() { Id = 3, FullName = "Lou Wilson"}
+                );
+
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor() { Id = 1, FullName = "Ben Doyle" },
+                new Doctor() { Id = 2, FullName = "Adam Chase" }
+                );
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment() { Booking = new DateTime(2024, 9, 15, 9, 15, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 2 },
+                new Appointment() { Booking = new DateTime(2024, 11, 1, 13, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 1 }
                 );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

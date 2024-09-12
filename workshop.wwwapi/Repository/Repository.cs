@@ -11,14 +11,16 @@ namespace workshop.wwwapi.Repository
         {
             _databaseContext = db;
         }
+
+
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            return await _databaseContext.Patients.ToListAsync();
+            return await _databaseContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).ToListAsync();
         }
 
         public async Task<Patient> GetPatientById(int id)
         {
-            return await _databaseContext.Patients.FirstOrDefaultAsync(p => p.Id == id);
+            return await _databaseContext.Patients.Include(p => p.Appointments).ThenInclude(a => a.Doctor).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Patient> AddPatient(Patient patient)
@@ -27,13 +29,53 @@ namespace workshop.wwwapi.Repository
             await _databaseContext.SaveChangesAsync();
             return patient;
         }
+
+
+
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
-            return await _databaseContext.Doctors.ToListAsync();
+            return await _databaseContext.Doctors.Include(p => p.Appointments).ThenInclude(a => a.Patient).ToListAsync();
         }
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
+
+        public async Task<Doctor> GetDoctorById(int id)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            return await _databaseContext.Doctors.Include(p => p.Appointments).ThenInclude(a => a.Patient).FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        public async Task<Doctor> AddDoctor(Doctor doctor)
+        {
+            await _databaseContext.AddAsync(doctor);
+            await _databaseContext.SaveChangesAsync();
+            return doctor;
+        }
+
+
+
+        public async Task<IEnumerable<Appointment>> GetAppointments()
+        {
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).ToListAsync();
+        }
+
+        public async Task<Appointment> GetAppointmentById(int doctorId, int patientId)
+        {
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).FirstOrDefaultAsync(a => a.DoctorId == doctorId && a.PatientId == patientId);
+        }
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int doctorId)
+        {
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.DoctorId == doctorId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int patientId)
+        {
+            return await _databaseContext.Appointments.Include(a => a.Doctor).Include(a => a.Patient).Where(a => a.PatientId == patientId).ToListAsync();
+        }
+
+        public async Task<Appointment> AddAppointment(Appointment appointment)
+        {
+            await _databaseContext.AddAsync(appointment);
+            await _databaseContext.SaveChangesAsync();
+            return appointment;
+        }
+
     }
 }
