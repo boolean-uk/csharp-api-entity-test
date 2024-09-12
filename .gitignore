@@ -489,4 +489,4 @@ $RECYCLE.BIN/
 */**/bin/Release   
 */**/obj/Debug   
 */**/obj/Release   
-/workshop.wwwapi/Migrations/20240909131328_FirstMigration.cs
+/workshop.wwwapi/Migrations/
