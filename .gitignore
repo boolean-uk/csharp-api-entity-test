@@ -484,7 +484,7 @@ $RECYCLE.BIN/
 *.swp
 
 /workshop.wwwapi/appsettings.json
-/workshop.wwwapi/appsettings.Development.json
+/workshop.wwwapi/appsettings.development.json
 */**/bin/Debug   
 */**/bin/Release   
 */**/obj/Debug   
