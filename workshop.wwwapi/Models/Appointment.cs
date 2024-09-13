@@ -7,8 +7,12 @@ namespace workshop.wwwapi.Models
     [Table("appointments")]
     public class Appointment
     {
+        [Column("id")]
+        public int Id { get; set; }
         [Column("booking")]
         public DateTime Booking { get; set; }
+        [Column("type")]
+        public AppointmentType Type { get; set; }
         [ForeignKey("doctor")]
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
@@ -16,5 +20,12 @@ namespace workshop.wwwapi.Models
         public int PatientId { get; set; }
         public Patient Patient { get; set; }
 
+    }
+
+    public enum AppointmentType
+    {
+        InPerson, 
+        Online,
+        Double
     }
 }

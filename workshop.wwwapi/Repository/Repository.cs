@@ -77,5 +77,25 @@ namespace workshop.wwwapi.Repository
             return appointment;
         }
 
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        {
+            return await _databaseContext.Prescriptions.Include(p => p.Appointment).ThenInclude(a => a.Doctor).Include(p => p.Appointment).ThenInclude(a => a.Patient).Include(p => p.medicines).ThenInclude(m => m.medicine).ToListAsync();
+        }
+
+        public async Task<Prescription> GetPrescriptionById(int id)
+        {
+            return await _databaseContext.Prescriptions.Include(p => p.Appointment).ThenInclude(a => a.Doctor).Include(p => p.Appointment).ThenInclude(a => a.Patient).Include(p => p.medicines).ThenInclude(m => m.medicine).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Prescription> AddPrescription(Prescription prescription, MedicineOnPrescription medicineOnPrescription)
+        {
+            await _databaseContext.AddAsync(prescription);
+            medicineOnPrescription.PrescriptionId = prescription.Id;
+            prescription.medicines.Add(medicineOnPrescription);
+            await _databaseContext.SaveChangesAsync();
+            return prescription;
+
+        }
     }
 }

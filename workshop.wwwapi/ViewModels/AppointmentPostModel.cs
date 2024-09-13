@@ -9,6 +9,7 @@ namespace workshop.wwwapi.ViewModels
         public int day { get; set; }
         public int hour { get; set; }
         public int minute { get; set; }
+        public int typeCode { get; set; }
         public int doctorId { get; set; }
         public int patientId { get; set; }
     }

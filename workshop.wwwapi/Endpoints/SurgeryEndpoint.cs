@@ -10,7 +10,6 @@ namespace workshop.wwwapi.Endpoints
 {
     public static class SurgeryEndpoint
     {
-        //TODO:  add additional endpoints in here according to the requirements in the README.md 
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
             var surgeryGroup = app.MapGroup("surgery");
@@ -28,10 +27,14 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbydoctor/{doctorId}", GetAppointmentsByDoctor);
             surgeryGroup.MapGet("/appointmentsbypatient/{patientId}", GetAppointmentsByPatient);
             surgeryGroup.MapPost("/appointments", AddAppointment);
+
+            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptions/{id}", GetPrescriptionsById);
+            surgeryGroup.MapPost("/prescriptions", AddPrescription);
         }
 
 
-
+        //PATIENTS
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
         {
@@ -78,6 +81,8 @@ namespace workshop.wwwapi.Endpoints
 
 
 
+
+        //DOCTORS
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
@@ -124,6 +129,8 @@ namespace workshop.wwwapi.Endpoints
 
 
 
+
+        //APPOINTMENTS
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointments(IRepository repository)
         {
@@ -207,10 +214,11 @@ namespace workshop.wwwapi.Endpoints
                     return TypedResults.NotFound(new Message() { Information = "Doctor does not exists in database" });
                 }
 
-                Appointment appointment = await repository.AddAppointment(new Appointment() { 
+                Appointment appointment = await repository.AddAppointment(new Appointment() {
                     Booking = new DateTime(model.year, model.month, model.day, model.hour, model.minute, 0, DateTimeKind.Utc),
-                    DoctorId = model.doctorId, 
-                    PatientId = model.patientId 
+                    Type = (AppointmentType)model.typeCode,
+                    DoctorId = model.doctorId,
+                    PatientId = model.patientId
                 });
 
                 return TypedResults.Created("", _getDtoAppointment(appointment));
@@ -223,13 +231,91 @@ namespace workshop.wwwapi.Endpoints
 
 
 
+
+
+        //PRESCRIPTIONS
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            GetAllResponse<DTOPrescription> prescriptionsResponse = new GetAllResponse<DTOPrescription>();
+            var prescriptions = await repository.GetPrescriptions();
+
+            foreach (Prescription prescription in prescriptions)
+            {
+                prescriptionsResponse.Response.Add(_getDtoPrescription(prescription));
+            }
+            return TypedResults.Ok(prescriptionsResponse);
+        }
+
+        [Route("prescriptions/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetPrescriptionsById(IRepository repository, int id)
+        {
+            Prescription prescription = await repository.GetPrescriptionById(id);
+
+            if (prescription != null)
+            {
+                return TypedResults.Ok(_getDtoPrescription(prescription));
+            }
+            return TypedResults.NotFound(new Message());
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> AddPrescription(IRepository repository, PrescriptionPostModel model)
+        {
+            try
+            {
+                if (await repository.GetPatientById(model.PatientId) == null)
+                {
+                    return TypedResults.NotFound(new Message() { Information = "Patient does not exists in database" });
+                }
+                if (await repository.GetDoctorById(model.DoctorId) == null)
+                {
+                    return TypedResults.NotFound(new Message() { Information = "Doctor does not exists in database" });
+                }
+
+                Appointment appointment = await repository.GetAppointmentById(model.PatientId, model.DoctorId);
+
+                if (appointment == null)
+                {
+                    return TypedResults.NotFound(new Message() { Information = "Appointment does not exists in database" });
+                }
+
+                Prescription prescription = new Prescription() { AppointmentId = appointment.Id };
+                MedicineOnPrescription medicineOnPrescription = new MedicineOnPrescription() { MedicineId = model.MedicineId, PrescriptionId = prescription.Id, DoseInMg = model.DoseInMg, Instruction = model.Instruction };
+               
+                Prescription created = await repository.AddPrescription(prescription, medicineOnPrescription);
+
+                return TypedResults.Created("", _getDtoPrescription(await repository.GetPrescriptionById(prescription.Id)));
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.BadRequest(ex.Message);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
         private static DTOPatient _getDtoPatient(Patient patient) 
         {
             DTOPatient dtoPatient = new DTOPatient() { ID = patient.Id, Name = patient.FullName };
             foreach (Appointment appointment in patient.Appointments)
             {
                 DTODoctorWithoutAppointment dtoDoctor = new DTODoctorWithoutAppointment() { ID = appointment.DoctorId, Name = appointment.Doctor.FullName };
-                DTOAppointmentWithoutPatient dtoAppointment = new DTOAppointmentWithoutPatient() { Booking = appointment.Booking.ToString("hh:mm dd.MM.yyyy"), Doctor = dtoDoctor };
+                DTOAppointmentWithoutPatient dtoAppointment = new DTOAppointmentWithoutPatient() { Booking = appointment.Booking.ToString("hh:mm dd.MM.yyyy"), Type = appointment.Type.ToString(), Doctor = dtoDoctor };
                 dtoPatient.Appointments.Add(dtoAppointment);
             }
             return dtoPatient;
@@ -240,7 +326,7 @@ namespace workshop.wwwapi.Endpoints
             foreach (Appointment appointment in doctor.Appointments)
             {
                 DTOPatientWithoutAppointment dtoPatient = new DTOPatientWithoutAppointment() { ID = appointment.PatientId, Name = appointment.Patient.FullName };
-                DTOAppointmentWithoutDoctor dtoAppointment = new DTOAppointmentWithoutDoctor() { Booking = appointment.Booking.ToString("hh:mm dd.MM.yyyy"), Patient = dtoPatient };
+                DTOAppointmentWithoutDoctor dtoAppointment = new DTOAppointmentWithoutDoctor() { Booking = appointment.Booking.ToString("hh:mm dd.MM.yyyy"), Type = appointment.Type.ToString(), Patient = dtoPatient };
                 dtoDoctor.Appointments.Add(dtoAppointment);
             }
             return dtoDoctor;
@@ -251,7 +337,23 @@ namespace workshop.wwwapi.Endpoints
             DTOPatientWithoutAppointment dtoPatient = new DTOPatientWithoutAppointment() { ID = appointment.PatientId, Name = appointment.Patient.FullName };
             DTODoctorWithoutAppointment dtoDoctor = new DTODoctorWithoutAppointment() { ID = appointment.DoctorId, Name = appointment.Doctor.FullName };
             
-            return new DTOAppointment { Booking = appointment.Booking.ToString("hh:mm dd.MM.yyyy"), Doctor = dtoDoctor, Patient = dtoPatient};
+            return new DTOAppointment { Booking = appointment.Booking.ToString("hh:mm dd.MM.yyyy"), Type = appointment.Type.ToString(), Doctor = dtoDoctor, Patient = dtoPatient};
+        }
+
+        private static DTOPrescription _getDtoPrescription(Prescription prescription)
+        {
+            DTOPrescription dtoPrescription = new DTOPrescription() { ID = prescription.Id, Appointment = _getDtoAppointment(prescription.Appointment) };
+            foreach (MedicineOnPrescription pMedicine in prescription.medicines)
+            {
+                dtoPrescription.Medicines.Add(new DTOMedicineOnPrescription()
+                {
+                    MedicneID = pMedicine.MedicineId,
+                    Name = pMedicine.medicine.Name,
+                    DoseInMg = pMedicine.DoseInMg,
+                    Instruction = pMedicine.Instruction
+                });
+            }
+            return dtoPrescription;
         }
     }
 }

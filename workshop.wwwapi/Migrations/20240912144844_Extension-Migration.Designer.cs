@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using workshop.wwwapi.Data;
@@ -11,9 +12,11 @@ using workshop.wwwapi.Data;
 namespace workshop.wwwapi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240912144844_Extension-Migration")]
+    partial class ExtensionMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,10 +44,6 @@ namespace workshop.wwwapi.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("type");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
@@ -59,16 +58,14 @@ namespace workshop.wwwapi.Migrations
                             Id = 1,
                             Booking = new DateTime(2024, 9, 15, 9, 15, 0, 0, DateTimeKind.Utc),
                             DoctorId = 1,
-                            PatientId = 2,
-                            Type = 0
+                            PatientId = 2
                         },
                         new
                         {
                             Id = 2,
                             Booking = new DateTime(2024, 11, 1, 13, 0, 0, 0, DateTimeKind.Utc),
                             DoctorId = 2,
-                            PatientId = 1,
-                            Type = 1
+                            PatientId = 1
                         });
                 });
 
@@ -272,7 +269,7 @@ namespace workshop.wwwapi.Migrations
                         .IsRequired();
 
                     b.HasOne("workshop.wwwapi.Models.Prescription", "prescription")
-                        .WithMany("medicines")
+                        .WithMany()
                         .HasForeignKey("PrescriptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -301,11 +298,6 @@ namespace workshop.wwwapi.Migrations
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
                 {
                     b.Navigation("Appointments");
-                });
-
-            modelBuilder.Entity("workshop.wwwapi.Models.Prescription", b =>
-                {
-                    b.Navigation("medicines");
                 });
 #pragma warning restore 612, 618
         }
