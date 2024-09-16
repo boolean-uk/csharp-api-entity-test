@@ -3,15 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
-    [Table("doctors")]
-    public class Doctor : IEntity
+    [Table("prescriptions")]
+    public class Prescription : IEntity
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("name")]
-        [Required]
-        public string Name { get; set; }
+        [Column("medicine_id")]
+        public List<Medicine> Medicines { get; set; }
     }
 }
