@@ -117,9 +117,14 @@ namespace workshop.wwwapi.Endpoints
         {
             var appointments = await repository.GetAppointmentsByDoctor(doctorid);
             List<AppointmentDto> appointmentDtos = new List<AppointmentDto>();
+
             foreach(Appointment a in appointments)
             {
-                appointmentDtos.Add(new AppointmentDto(a));
+                AppointmentDto appointmentDto = new AppointmentDto(a);
+                appointmentDto.PatientName = a.Patient.FirstName + " " + a.Patient.LastName;
+                appointmentDto.DoctorName = a.Doctor.FullName;
+                appointmentDto.PrescriptionId = a.PrescriptionId;
+                appointmentDtos.Add(appointmentDto);
             }
             return TypedResults.Ok(appointmentDtos);
         }
@@ -132,7 +137,11 @@ namespace workshop.wwwapi.Endpoints
             List<AppointmentDto> appointmentDtos = new List<AppointmentDto>();
             foreach(Appointment a in appointments)
             {
-                appointmentDtos.Add(new AppointmentDto(a));
+                AppointmentDto appointmentDto = new AppointmentDto(a);
+                appointmentDto.PatientName = a.Patient.FirstName + " " + a.Patient.LastName;
+                appointmentDto.DoctorName = a.Doctor.FullName;
+                appointmentDto.PrescriptionId = a.PrescriptionId;
+                appointmentDtos.Add(appointmentDto);
             }
             return TypedResults.Ok(appointmentDtos);
         }
