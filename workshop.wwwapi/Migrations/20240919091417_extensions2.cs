@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace workshop.wwwapi.Migrations
 {
     /// <inheritdoc />
-    public partial class Extension : Migration
+    public partial class extensions2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -73,8 +73,8 @@ namespace workshop.wwwapi.Migrations
                     DoctorId = table.Column<int>(type: "integer", nullable: false),
                     PatientId = table.Column<int>(type: "integer", nullable: false),
                     Booking = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PrescriptionId = table.Column<int>(type: "integer", nullable: false),
-                    Location = table.Column<int>(type: "integer", nullable: false)
+                    PrescriptionId = table.Column<int>(type: "integer", nullable: true),
+                    Location = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -95,8 +95,7 @@ namespace workshop.wwwapi.Migrations
                         name: "FK_Appointments_Prescription_PrescriptionId",
                         column: x => x.PrescriptionId,
                         principalTable: "Prescription",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -166,8 +165,8 @@ namespace workshop.wwwapi.Migrations
                 columns: new[] { "DoctorId", "PatientId", "Booking", "Location", "PrescriptionId" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 9, 10, 12, 31, 36, 306, DateTimeKind.Utc).AddTicks(3729), 0, 1 },
-                    { 2, 2, new DateTime(2024, 9, 10, 12, 31, 36, 306, DateTimeKind.Utc).AddTicks(3733), 0, 2 }
+                    { 1, 1, new DateTime(2024, 9, 19, 9, 14, 15, 644, DateTimeKind.Utc).AddTicks(5463), null, 1 },
+                    { 2, 2, new DateTime(2024, 9, 19, 9, 14, 15, 644, DateTimeKind.Utc).AddTicks(5466), null, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -188,8 +187,7 @@ namespace workshop.wwwapi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_PrescriptionId",
                 table: "Appointments",
-                column: "PrescriptionId",
-                unique: true);
+                column: "PrescriptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicinOnPrescription_PrescriptionId",

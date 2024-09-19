@@ -23,10 +23,10 @@ namespace workshop.wwwapi.Models
         [ForeignKey("PatientId")]
         public Patient Patient { get; set; }
 
-        public int PrescriptionId { get; set; }
+        public int? PrescriptionId { get; set; }
 
         [ForeignKey("PrescriptionId")]
         public Prescription Prescription { get; set; }
-        public Location Location { get; set; }
+        public Location? Location { get; set; }
     }
 }

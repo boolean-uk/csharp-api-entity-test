@@ -28,10 +28,6 @@ namespace workshop.wwwapi.Data
             modelBuilder.Entity<Appointment>().HasOne(a => a.Patient)
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId);
-            modelBuilder.Entity<Appointment>().HasOne(a => a.Prescription)
-                .WithOne(p => p.Appointment);
-            modelBuilder.Entity<Prescription>().HasOne(a => a.Appointment)
-                .WithOne(p => p.Prescription);
 
             //TODO: Seed Data Here
 

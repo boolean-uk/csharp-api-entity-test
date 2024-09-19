@@ -21,6 +21,7 @@ namespace workshop.wwwapi.Repository
         Task<IEnumerable<Appointment>> GetAppointmentsByPatient(int id);
         Task<Appointment> GetSingleAppointment(int doctorId, int patientId);
         Task<Appointment> CreateAppointment(Appointment appointment);
+        Task<Appointment> UpdateAppointment(Appointment appointment);
 
     }
 }

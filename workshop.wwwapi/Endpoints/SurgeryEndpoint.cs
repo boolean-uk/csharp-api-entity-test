@@ -29,6 +29,7 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsByPatient/{patientid:int}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointments/{patientid:int}/{doctorid:int}", GetSingleAppointment);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
+            surgeryGroup.MapPost("/appointments/prescription/{patientId:int}/{doctorId:int}/{prescriptionid:int}", AttachPrescriptionToAppointment);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
@@ -168,17 +169,48 @@ namespace workshop.wwwapi.Endpoints
                 appointment.Booking = DateTime.UtcNow;
                 appointment.DoctorId = doctorId;
                 appointment.PatientId = patientId;
-                appointment.Doctor = doctor;
-                appointment.Patient = patient;
 
                 appointment = await repository.CreateAppointment(appointment);
                 AppointmentDto appointmentDto = new AppointmentDto(appointment);
+                appointmentDto.PatientName = appointment.Patient.FirstName + " " + appointment.Patient.LastName;
+                appointmentDto.DoctorName = appointment.Doctor.FullName;
+
                 return TypedResults.Ok(appointmentDto);
             }
-            catch
+            catch(Exception ex)
             {
-                return TypedResults.BadRequest(error400);
+                return TypedResults.BadRequest(ex.Message);
             }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> AttachPrescriptionToAppointment(IRepository repository, int doctorId, int patientId, int prescriptionId)
+        {
+            try
+            {
+                Appointment appointment = await repository.GetSingleAppointment(doctorId, patientId);
+                if(appointment == null)
+                {
+                    return TypedResults.NotFound(error404);
+                }
+                appointment.PrescriptionId = prescriptionId;
+                await repository.UpdateAppointment(appointment);
+
+                AppointmentDto appointmentDto = new AppointmentDto(appointment);
+                appointmentDto.PatientName = appointment.Patient.FirstName + " " + appointment.Patient.LastName;
+                appointmentDto.DoctorName = appointment.Doctor.FullName;
+                appointmentDto.PrescriptionId = appointment.PrescriptionId;
+
+                return TypedResults.Ok(appointmentDto);
+            }
+            catch(Exception ex)
+            {
+                return TypedResults.BadRequest(ex.Message);
+            }
+            
+
         }
     }
 }

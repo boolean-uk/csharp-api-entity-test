@@ -35,18 +35,17 @@ namespace workshop.wwwapi.Migrations
                     b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Location")
+                    b.Property<int?>("Location")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PrescriptionId")
+                    b.Property<int?>("PrescriptionId")
                         .HasColumnType("integer");
 
                     b.HasKey("DoctorId", "PatientId");
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("PrescriptionId")
-                        .IsUnique();
+                    b.HasIndex("PrescriptionId");
 
                     b.ToTable("Appointments");
 
@@ -55,16 +54,14 @@ namespace workshop.wwwapi.Migrations
                         {
                             DoctorId = 1,
                             PatientId = 1,
-                            Booking = new DateTime(2024, 9, 10, 12, 31, 36, 306, DateTimeKind.Utc).AddTicks(3729),
-                            Location = 0,
+                            Booking = new DateTime(2024, 9, 19, 9, 14, 15, 644, DateTimeKind.Utc).AddTicks(5463),
                             PrescriptionId = 1
                         },
                         new
                         {
                             DoctorId = 2,
                             PatientId = 2,
-                            Booking = new DateTime(2024, 9, 10, 12, 31, 36, 306, DateTimeKind.Utc).AddTicks(3733),
-                            Location = 0,
+                            Booking = new DateTime(2024, 9, 19, 9, 14, 15, 644, DateTimeKind.Utc).AddTicks(5466),
                             PrescriptionId = 2
                         });
                 });
@@ -245,10 +242,8 @@ namespace workshop.wwwapi.Migrations
                         .IsRequired();
 
                     b.HasOne("workshop.wwwapi.Models.Prescription", "Prescription")
-                        .WithOne("Appointment")
-                        .HasForeignKey("workshop.wwwapi.Models.Appointment", "PrescriptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("PrescriptionId");
 
                     b.Navigation("Doctor");
 
@@ -284,12 +279,6 @@ namespace workshop.wwwapi.Migrations
             modelBuilder.Entity("workshop.wwwapi.Models.Patient", b =>
                 {
                     b.Navigation("Appointments");
-                });
-
-            modelBuilder.Entity("workshop.wwwapi.Models.Prescription", b =>
-                {
-                    b.Navigation("Appointment")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -70,8 +70,19 @@ namespace workshop.wwwapi.Repository
             {
                 return null;
             }
+            if(appointment.PrescriptionId == 0)
+            {
 
+            }
             await _db.AddAsync(appointment);
+            await _db.SaveChangesAsync();
+            return appointment;
+        }
+
+        public async Task<Appointment> UpdateAppointment(Appointment appointment)
+        {
+            _db.Appointments.Attach(appointment);
+            _db.Entry(appointment).State = EntityState.Modified;
             await _db.SaveChangesAsync();
             return appointment;
         }
