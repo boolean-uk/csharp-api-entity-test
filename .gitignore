@@ -488,4 +488,11 @@ $RECYCLE.BIN/
 */**/bin/Debug   
 */**/bin/Release   
 */**/obj/Debug   
-*/**/obj/Release   
+*/**/obj/Release
+
+*/**/appsettings.json
+*/**/appsettings.Development.json
+*/**/bin/Debug   
+*/**/bin/Release   
+*/**/obj/Debug   
+*/**/obj/Release
