@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Domain;
+using workshop.wwwapi.Models.Domain.Junctions;
 
 namespace workshop.wwwapi.Data
 {
@@ -16,23 +17,21 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
-            
-
-            //TODO: Seed Data Here
-
+            modelBuilder.Entity<PrescriptionMedicine>().HasKey(pm => new {pm.PrescriptionID, pm.MedicineID});
+            modelBuilder.Entity<Appointment>().Property(a => a.Type).HasConversion<string>();
+            modelBuilder.SeedDatabase();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
-            
         }
-
-
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionMedicines { get; set; }
     }
 }
