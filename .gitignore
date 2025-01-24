@@ -490,3 +490,6 @@ $RECYCLE.BIN/
 */**/obj/Debug   
 */**/obj/Release   
 */Migrations
+
+appsettings.Example.json
+/workshop.wwwapi/appsettings.Example.json
