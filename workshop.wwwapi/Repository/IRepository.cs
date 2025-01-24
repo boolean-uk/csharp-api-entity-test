@@ -1,13 +1,25 @@
-﻿using workshop.wwwapi.Models;
+﻿using System.Linq.Expressions;
 
 namespace workshop.wwwapi.Repository
 {
-    public interface IRepository
+    // CRUD = Create, Read, Update, Delete
+    public interface IRepository<T>
     {
-        Task<IEnumerable<Patient>> GetPatients();
-        Task<IEnumerable<Doctor>> GetDoctors();
-        Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id);
+        // Create
+        Task<T> Insert(T entity);
 
+        // Read
+        Task<IEnumerable<T>> Get();
+        Task<T> GetById(int id);
+        Task<IEnumerable<T>> GetWithIncludes(params Expression<Func<T, object>>[] includes);
 
+        // Update
+        Task<T> Update(T entity);
+
+        // Delete
+        Task<T> Delete(object id);
+
+        // Save
+        Task Save();
     }
 }
