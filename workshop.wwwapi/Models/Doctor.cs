@@ -3,13 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly    
+    //TODO: decorate class/columns accordingly
+    //
+    [Table("doctor")]
     public class Doctor
     {
         [Key]
         public int Id { get; set; }
 
-        [Required]
         [Column("name")]
         public string FullName { get; set; }
 

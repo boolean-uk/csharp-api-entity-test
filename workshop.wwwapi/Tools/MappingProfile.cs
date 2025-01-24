@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using workshop.wwwapi.DTO.Responses;
+using workshop.wwwapi.DTO;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Tools
@@ -8,9 +8,9 @@ namespace workshop.wwwapi.Tools
     {
         public MappingProfile()
         {
-            CreateMap<Person, PersonDTO>();
-            CreateMap<Course, CourseDTO>();
-            CreateMap<Office, OfficeDTO>();
+            CreateMap<Patient, PatientDTO>();
+            CreateMap<Doctor, DoctorDTO>();
+            CreateMap<Appointment, AppointmentDTO>();
             
         }
     }

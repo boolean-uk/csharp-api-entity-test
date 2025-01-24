@@ -39,6 +39,17 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(response);
         }
 
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointments(IRepository<Appointment> doctorRepository, IMapper mapper)
+        {
+            var people = await doctorRepository.GetWithIncludes(p => p.Booking, p => p.Patient, p => p.Doctor);
+
+            var response = mapper.Map<List<PatientDTO>>(people);
+
+            return TypedResults.Ok(response);
+        }
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository<Doctor> doctorRepository, IMapper mapper, int id)
         {

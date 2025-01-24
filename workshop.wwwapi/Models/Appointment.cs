@@ -4,19 +4,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly
+    [Table("appointment")]
     public class Appointment
     {
 
-        [Key]
-        public int Id { get; set; }
-
-        [Required]
+        [Column("date", TypeName = "timestamp")]
         public DateTime Booking { get; set; }
 
-        [ForeignKey("Doctor")]
+        [Column("doctor_id")]
+        [ForeignKey("doctor")]
         public int DoctorId { get; set; }
 
-        [ForeignKey("Patient")]
+        [Column("patient_id")]
+        [ForeignKey("patient")]
         public int PatientId { get; set; }
 
         public virtual Doctor Doctor { get; set; }

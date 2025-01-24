@@ -11,9 +11,9 @@ namespace workshop.wwwapi.Data
         private string _connectionString;
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
-            this.Database.EnsureCreated();
+            //var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            //_connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
+            //this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,8 +42,8 @@ namespace workshop.wwwapi.Data
             );
 
             modelBuilder.Entity<Appointment>().HasData(
-                new Appointment { DoctorId = 1, PatientId = 1, Booking = DateTime.Now.AddDays(1) },
-                new Appointment { DoctorId = 2, PatientId = 2, Booking = DateTime.Now.AddDays(2) }
+                new Appointment { Booking = new DateTime(2025, 1, 15, 10, 0, 0), DoctorId = 1, PatientId = 2 },
+                new Appointment { Booking = new DateTime(2025, 1, 21, 10, 0, 0), DoctorId = 2, PatientId = 2 }
             );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

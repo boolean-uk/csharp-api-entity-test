@@ -5,12 +5,13 @@ using System.Data;
 namespace workshop.wwwapi.Models
 {
     //TODO: decorate class/columns accordingly    
+
+    [Table("patient")]
     public class Patient
     {
         [Key]
         public int Id { get; set; }
 
-        [Required]
         [Column("name")]
         public string FullName { get; set; }
 
@@ -18,4 +19,4 @@ namespace workshop.wwwapi.Models
         public virtual List<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }
-}
+
