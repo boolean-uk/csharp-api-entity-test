@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Repository;
@@ -10,6 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IRepository,Repository>();
+
+// Stop looping cycles
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
