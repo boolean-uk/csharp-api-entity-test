@@ -7,5 +7,7 @@ namespace workshop.wwwapi.Models
     {        
         public int Id { get; set; }        
         public string FullName { get; set; }
+        public IEnumerable<Appointment> Appointments { get; set; } = new List<Appointment>();
+
     }
 }
