@@ -1,20 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace workshop.wwwapi.Models
+﻿namespace workshop.wwwapi.DTO
 {
-    //TODO: decorate class/columns accordingly
-    [Table("appointments")]
-    public class Appointment
+    public class GetAppointmentsDTO
     {
-        [Column("appointmentDate")]
         private DateTime _booking;
-        [Column("doctorId")]
         private int _doctorid;
-        [Column("patientId")]
+        private string _doctorname;
         private int _patientid;
+        private string _patientname;
 
         public DateTime Booking { get => _booking; set => _booking = value; }
         public int DoctorId { get => _doctorid; set => _doctorid = value; }
+        public string DoctorName { get => _doctorname; set => _doctorname = value; }
         public int PatientId { get => _patientid; set => _patientid = value; }
+        public string Patientname { get => _patientname; set => _patientname = value; }
     }
 }
