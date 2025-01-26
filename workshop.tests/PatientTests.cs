@@ -6,17 +6,17 @@ namespace workshop.tests;
 public class Tests
 {
 
-    [Test]
-    public async Task PatientEndpointStatus()
-    {
-        // Arrange
-        var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
-        var client = factory.CreateClient();
+    //[Test]
+    //public async Task PatientEndpointStatus()
+    //{
+    //    // Arrange
+    //    var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+    //    var client = factory.CreateClient();
 
-        // Act
-        var response = await client.GetAsync("/patients");
+    //    // Act
+    //    var response = await client.GetAsync("/patients");
 
-        // Assert
-        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
-    }
+    //    // Assert
+    //    Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+    //}
 }

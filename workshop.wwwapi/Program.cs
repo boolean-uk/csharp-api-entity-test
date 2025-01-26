@@ -1,5 +1,8 @@
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +11,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.AddDbContext<DataContext>();
+builder.Services.AddScoped<IRepository<Doctor>, Repository<Doctor>>();
+builder.Services.AddScoped<IRepository<Patient>, Repository<Patient>>();
+builder.Services.AddScoped<IRepository<Appointment>, Repository<Appointment>>();
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionString"));
+    options.LogTo(message => Debug.WriteLine(message));
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
