@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using workshop.wwwapi.Models;
+//To ecport : dotnet ef migrations add InitialCreate
 
 namespace workshop.wwwapi.Data
 {
@@ -11,15 +13,71 @@ namespace workshop.wwwapi.Data
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
+            _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnection")!;
+            this.Database.SetConnectionString(_connectionString);
             this.Database.EnsureCreated();
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override async void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
-            
+            //defining primary keys
+            modelBuilder.Entity<Appointment>()
+                .HasKey(a => new { a.PatientId, a.DoctorId, a.Booking });
+
+            modelBuilder.Entity<Doctor>()
+                .HasKey(d => d.Id);
+
+            modelBuilder.Entity<Patient>()
+                .HasKey(p => p.Id);
+
+            //defining relations
+            modelBuilder.Entity<Appointment>()
+                 .HasOne(a => a.Patient)
+                 .WithMany(a => a.Appointments)
+                 .HasForeignKey(a => a.PatientId);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Doctor)
+                .WithMany(a => a.Appointments)
+                .HasForeignKey(a => a.DoctorId)
+                .IsRequired();
+
+            modelBuilder.Entity<Doctor>()
+                .HasMany(a => a.Appointments)
+                .WithOne(a => a.Doctor)
+                .HasForeignKey(a => a.DoctorId);
+
+            modelBuilder.Entity<Patient>()
+                .HasMany(a => a.Appointments)
+                .WithOne(a => a.Patient)
+                .HasForeignKey(a => a.PatientId);
 
             //TODO: Seed Data Here
+
+            modelBuilder.Entity<Patient>()
+            .HasData(
+                new List<Patient>
+                {
+                    new Patient { Id = 1, FullName = "bob" },
+                    new Patient { Id = 2, FullName = "Son of bob" }
+                }
+
+             );
+            modelBuilder.Entity<Doctor>()
+           .HasData(
+           new List<Doctor>
+           {
+                new Doctor { Id = 1, FullName= "John the ripper" },
+                new Doctor { Id = 2, FullName = "Dexter" }
+            }
+           );
+            modelBuilder.Entity<Appointment>()
+            .HasData(
+            new List<Appointment>
+            {
+                    new Appointment { Booking = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc), DoctorId=1, PatientId=2 },
+                    new Appointment { Booking = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc), DoctorId=2, PatientId=1}
+            }
+            );
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
