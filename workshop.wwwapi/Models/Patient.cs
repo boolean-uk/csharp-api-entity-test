@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly    
     public class Patient
-    {        
-        public int Id { get; set; }        
+    {
+        public int Id { get; set; }
         public string FullName { get; set; }
+        public List<Appointment> Appointments { get; set; }
     }
 }
