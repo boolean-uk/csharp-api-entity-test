@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace workshop.wwwapi.Models;
 
-namespace workshop.wwwapi.Models
+public class Doctor
 {
-    //TODO: decorate class/columns accordingly    
-    public class Doctor
-    {        
-        public int Id { get; set; }        
-        public string FullName { get; set; }
-    }
+    public int Id { get; set; }
+    public string FullName { get; set; }
+    public virtual List<Appointment>? Appointments { get; set; }
 }

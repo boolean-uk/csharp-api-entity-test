@@ -1,12 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace workshop.wwwapi.Models
+namespace workshop.wwwapi.Models;
+
+//TODO: decorate class/columns accordingly   
+[Table("patients")]
+[PrimaryKey("Id")]
+public class Patient
 {
-    //TODO: decorate class/columns accordingly    
-    public class Patient
-    {        
-        public int Id { get; set; }        
-        public string FullName { get; set; }
-    }
+    // Update the Patient model to include decorators for the table name, primary key and column names. Make sure to use good naming conventions for postgres.
+
+    [Column("id")] public int Id { get; set; }
+
+    [Column("full_name")] public string FullName { get; set; }
+    
+    public virtual List<Appointment>? Appointments { get; set; }
 }

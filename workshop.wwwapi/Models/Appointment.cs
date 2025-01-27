@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using workshop.wwwapi.Enums;
 
-namespace workshop.wwwapi.Models
+namespace workshop.wwwapi.Models;
+
+public class Appointment
 {
-    //TODO: decorate class/columns accordingly
-    public class Appointment
-    {
-        
-        public DateTime Booking { get; set; }
-        public int DoctorId { get; set; }
-        public int PatientId { get; set; }
-
-    }
+    public int Id { get; set; }
+    public AppointmentType Type { get; set; }
+    public DateTime Booking { get; set; }
+    public int DoctorId { get; set; }
+    public virtual Doctor? Doctor { get; set; }
+    public int PatientId { get; set; }
+    public virtual Patient Patient { get; set; }
+    public virtual List<Prescription>? Prescriptions { get; set; }
 }
