@@ -1,27 +1,111 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository
 {
-    public class Repository : IRepository
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private DatabaseContext _databaseContext;
-        public Repository(DatabaseContext db)
+        DataContext _context;
+
+        public Repository(DataContext context)
         {
-            _databaseContext = db;
+            _context = context;
         }
-        public async Task<IEnumerable<Patient>> GetPatients()
+
+        public async Task<TEntity> Add(TEntity entity)
         {
-            return await _databaseContext.Patients.ToListAsync();
+            await _context.Set<TEntity>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
-        public async Task<IEnumerable<Doctor>> GetDoctors()
+
+        public async Task<TEntity> Delete(TEntity entity)
         {
-            return await _databaseContext.Doctors.ToListAsync();
+            _context.Set<TEntity>().Remove(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctor(int id)
+
+        public async Task<IEnumerable<TEntity>> FindAll(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            return await _databaseContext.Appointments.Where(a => a.DoctorId==id).ToListAsync();
+            IQueryable<TEntity> query = _context.Set<TEntity>();
+
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            return await query.Where(predicate).ToListAsync();
+        }
+
+        public async Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>();
+
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            return await query.FirstOrDefaultAsync(predicate);
+        }
+
+        // For thenincludes
+        public async Task<TEntity> GetWithCustomQuery(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> include)
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>();
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            return await query.FirstOrDefaultAsync(predicate);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllWithCustomQuery(Func<IQueryable<TEntity>, IQueryable<TEntity>> include)
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>();
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            return await query.ToListAsync();
+        }
+
+
+        public async Task<IEnumerable<TEntity>> GetAll(params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>();
+
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            return await query.ToListAsync();
+        }
+
+
+        public async Task<TEntity> Update(TEntity entity)
+        {
+            _context.Set<TEntity>().Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
     }
 }
