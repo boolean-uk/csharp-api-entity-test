@@ -16,8 +16,8 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Appointment>()
+                .HasKey(a => new { a.DoctorId, a.PatientId, a.AppointmentDate });
 
             //TODO: Seed Data Here
 
