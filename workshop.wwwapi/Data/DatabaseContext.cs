@@ -11,20 +11,37 @@ namespace workshop.wwwapi.Data
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnectionString")!;
+            _connectionString = configuration.GetValue<string>("ConnectionStrings:DefaultConnection")!;
             this.Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Doctor>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Patient>()
+                .HasKey(x => x.Id);
+            modelBuilder.Entity<Appointment>()
+                .HasKey(x => x.id);
+
+            modelBuilder.Entity<Doctor>()
+                .HasMany(d => d.Appointments)
+                .WithOne(a => a.Doctor)
+                .HasForeignKey(d => d.DoctorId);
+            modelBuilder.Entity<Patient>()
+                .HasMany(d => d.Appointments)
+                .WithOne(p => p.Patient)
+                .HasForeignKey(d => d.PatientId);
 
             //TODO: Seed Data Here
+            modelBuilder.Entity<Doctor>().HasData(Seeder.Doctors);
+            modelBuilder.Entity<Patient>().HasData(Seeder.Patients);
+            modelBuilder.Entity<Appointment>().HasData(Seeder.Appointments);
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
             
