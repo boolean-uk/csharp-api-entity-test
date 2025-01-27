@@ -17,11 +17,24 @@ namespace workshop.wwwapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Appointment>()
+            .HasKey(a => new { a.DoctorId, a.PatientId });
 
-            //TODO: Seed Data Here
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient() { Id = 1, FullName = "Jonas Berlin" },
+                new Patient() { Id = 2, FullName = "Timmy Smith" }
+                );
+
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor() { Id = 1, FullName = "Jan Thingsaker" },
+                new Doctor() { Id = 2, FullName = "Ragnhild Ilnas" });
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment() { Booking = new DateTime(2024, 9, 15, 9, 15, 0, DateTimeKind.Utc), DoctorId = 1, PatientId = 2 },
+                new Appointment() { Booking = new DateTime(2024, 11, 1, 13, 0, 0, DateTimeKind.Utc), DoctorId = 2, PatientId = 1 });
 
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
