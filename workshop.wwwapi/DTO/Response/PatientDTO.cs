@@ -4,17 +4,10 @@ using System.Data;
 
 namespace workshop.wwwapi.Models
 {
-    [Table("patients")]
-    public class Patient
+    public class PatientDTO
     {
-        [Key]
-        [Column("id")]
         public int Id { get; set; }
-
-        [Required]
-        [Column("name")] 
         public string FullName { get; set; }
-        public List<Appointment> Appointments { get; set; } = new List<Appointment>();
-
+        public List<AppointmentPatientDTO> Appointments { get; set; } = new List<AppointmentPatientDTO>();
     }
 }
