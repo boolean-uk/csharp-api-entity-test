@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Repository;
@@ -10,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.Configure<JsonOptions>(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +24,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.ConfigurePatientEndpoint();
+app.ConfigureDoctorEndpoint();
+app.ConfigureAppointmentEndpoint();
+app.ConfigurePrescriptionEndpoint();
+
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore
