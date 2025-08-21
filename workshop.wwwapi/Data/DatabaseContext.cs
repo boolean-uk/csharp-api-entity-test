@@ -16,8 +16,20 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Appointment>().HasKey(aKey => new {aKey.PatientId, aKey.DoctorId});
             //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient { Id = 1, FullName = "Ola Nordmann" },
+                new Patient { Id = 2, FullName = "Kari Nordmann" });
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor { Id = 1, FullName = "Kari Doctor" },
+                new Doctor { Id = 2, FullName = "Jens Doctor" }
+                );
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment { Booking = DateTime.Parse("2025-08-20 14:21:37").ToUniversalTime(), DoctorId = 1, PatientId = 1},
+                new Appointment { Booking = DateTime.Parse("2025-08-20 14:21:37").ToUniversalTime(), DoctorId = 2, PatientId = 1 },
+                new Appointment { Booking = DateTime.Parse("2025-08-20 14:21:37").ToUniversalTime(), DoctorId = 2, PatientId = 2 });
 
             //TODO: Seed Data Here
 
