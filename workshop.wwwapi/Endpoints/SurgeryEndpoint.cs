@@ -1,33 +1,219 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.DTOs;
+using workshop.wwwapi.DTOs.AppointmentDTO;
+using workshop.wwwapi.DTOs.DoctorDTO;
+using workshop.wwwapi.DTOs.PatientDTO;
+using workshop.wwwapi.DTOs.PrescriptionDTO;
+using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
 {
     public static class SurgeryEndpoint
     {
-        //TODO:  add additional endpoints in here according to the requirements in the README.md 
         public static void ConfigurePatientEndpoint(this WebApplication app)
         {
-            var surgeryGroup = app.MapGroup("surgery");
+            var surgeryGroup = app.MapGroup("");
 
             surgeryGroup.MapGet("/patients", GetPatients);
+            surgeryGroup.MapGet("/patients/{id}", GetPatientById);
+            surgeryGroup.MapPost("/patients", CreatePatient);
+
             surgeryGroup.MapGet("/doctors", GetDoctors);
+            surgeryGroup.MapGet("/doctors/{id}", GetDoctorById);
+            surgeryGroup.MapPost("/doctors", CreateDoctor);
+
+            surgeryGroup.MapGet("/appointments", GetAppointments);
+            surgeryGroup.MapGet("/appointments/{id}", GetAppointmentById);
+            surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
+            surgeryGroup.MapPost("/appointments", CreateAppointment);
+
+            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptions/{id}", GetPrescriptionById);
+            surgeryGroup.MapPost("/prescriptions", CreatePrescription);
+            surgeryGroup.MapPut("/prescriptions", SetAppointmentToPrescription);
         }
+
+        // Patients
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetPatients(IRepository repository)
-        { 
-            return TypedResults.Ok(await repository.GetPatients());
+        {
+            List<PatientGet> result = new List<PatientGet>();
+            var entities = await repository.GetPatients();
+            foreach (var entity in entities)
+            {
+                result.Add(entity.ToDTO());
+            }
+            return TypedResults.Ok(result);
         }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetPatientById(IRepository repository, int id)
+        {
+            var entity = await repository.GetPatientById(id);
+            if (entity == null) return TypedResults.NotFound(new { Error = $"Found no patient with id '{id}'." });
+
+            return TypedResults.Ok(entity.ToDTO());
+        }
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreatePatient(IRepository repository, PatientPost model)
+        {
+            Patient newPatient = new Patient();
+            newPatient.FullName = model.FullName;
+
+            var entity = await repository.CreatePatient(newPatient);
+            return TypedResults.Created($"{entity.ToDTO()}");
+        }
+
+        // Doctors
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetDoctors(IRepository repository)
         {
-            return TypedResults.Ok(await repository.GetPatients());
+            var entities = await repository.GetDoctors();
+            List<DoctorGet> result = new List<DoctorGet>();
+            foreach (var entity in entities)
+            {
+                result.Add(entity.ToDTO());
+            }
+
+            return TypedResults.Ok(result);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetDoctorById(IRepository repository, int id)
+        {
+            var entity = await repository.GetDoctorById(id);
+            if (entity == null) return TypedResults.NotFound(new { Error = $"Found no doctor with id '{id}'." });
+
+            return TypedResults.Ok(entity.ToDTO());
+        }
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreateDoctor(IRepository repository, DoctorPost model)
+        {
+            Doctor newDoctor = new Doctor();
+            newDoctor.FullName = model.FullName;
+
+            var entity = await repository.CreateDoctor(newDoctor);
+            return TypedResults.Created($"{entity.ToDTO()}");
+        }
+
+
+        // Appointments
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetAppointments(IRepository repository)
+        {
+            var entities = await repository.GetAppointments();
+            List<AppointmentGet> result = new List<AppointmentGet>();
+            foreach (var entity in entities)
+            {
+                result.Add(entity.ToDTO());
+            }
+
+            return TypedResults.Ok(result);
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetAppointmentById(IRepository repository, int id)
+        {
+            var entity = await repository.GetAppointmentById(id);
+            if (entity == null) return TypedResults.NotFound(new { Error = $"Found no appointment with id '{id}'." });
+
+            return TypedResults.Ok(entity.ToDTO());
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> GetAppointmentsByDoctor(IRepository repository, int id)
         {
-            return TypedResults.Ok(await repository.GetAppointmentsByDoctor(id));
+            var entities = await repository.GetAppointmentsByDoctor(id);
+            List<AppointmentGet> result = new List<AppointmentGet>();
+            foreach (var entity in entities)
+            {
+                result.Add(entity.ToDTO());
+            }
+
+            return TypedResults.Ok(result);
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetAppointmentsByPatient(IRepository repository, int id)
+        {
+            var entities = await repository.GetAppointmentsByPatient(id);
+            List<AppointmentGet> result = new List<AppointmentGet>();
+            foreach (var entity in entities)
+            {
+                result.Add(entity.ToDTO());
+            }
+
+            return TypedResults.Ok(result);
+        }
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreateAppointment(IRepository repository, AppointmentPost model)
+        {
+            Appointment newAppointment = new Appointment();
+            newAppointment.Booking = model.Booking;
+            newAppointment.DoctorId = model.DoctorId;
+            newAppointment.PatientId = model.PatientId;
+
+            var entity = await repository.CreateAppointment(newAppointment);
+            return TypedResults.Created($"", new 
+            {
+                Id = entity.Id,
+                Booking = entity.Booking,
+                DoctorId = entity.DoctorId,
+                PatientId = entity.PatientId
+            });
+        }
+
+        // Prescriptions
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            var entities = await repository.GetPrescriptions();
+            List<PrescriptionGet> result = new List<PrescriptionGet>();
+            foreach (var entity in entities)
+            {
+                result.Add(entity.ToDTO());
+            }
+            return TypedResults.Ok(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetPrescriptionById(IRepository repository, int id)
+        {
+            var entity = await repository.GetPrescriptionById(id);
+            if (entity == null) return TypedResults.NotFound(new { Error = $"Did not find a prescription with Id '{id}'." });
+
+            return TypedResults.Ok(entity.ToDTO());
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, PrescriptionPost model)
+        {
+            Prescription prescription = new Prescription();
+            prescription.Name = model.Name;
+            prescription.AppointmentId = model.AppointmentId;
+
+            var entity = await repository.CreatePrescription(prescription);
+            return TypedResults.Created($"", new
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                AppointmentId = entity.AppointmentId
+            });
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> SetAppointmentToPrescription(IRepository repository, int id, int appointmentId)
+        {
+            var entity = await repository.SetAppointmentToPrescription(id, appointmentId);
+            return TypedResults.Created("Updated", new
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                AppointmentId = entity.AppointmentId
+            });
         }
     }
 }
