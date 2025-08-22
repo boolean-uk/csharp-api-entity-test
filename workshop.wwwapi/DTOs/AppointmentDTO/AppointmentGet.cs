@@ -1,11 +1,14 @@
-﻿namespace workshop.wwwapi.DTOs.AppointmentDTO
+﻿using workshop.wwwapi.Enums;
+
+namespace workshop.wwwapi.DTOs.AppointmentDTO
 {
     public class AppointmentGet
     {
         public int Id { get; set; }
         public DateTime Booking { get; set; }
-        public DoctorGet Doctor { get; set; } // = new DoctorGet();
-        public PatientGet Patient { get; set; } // = new PatientGet();
+        public AppointmentType Type { get; set; }
+        public DoctorGet Doctor { get; set; } = new DoctorGet();
+        public PatientGet Patient { get; set; } = new PatientGet();
 
         public class PatientGet
         {

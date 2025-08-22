@@ -3,6 +3,7 @@ using workshop.wwwapi.DTOs;
 using workshop.wwwapi.DTOs.AppointmentDTO;
 using workshop.wwwapi.DTOs.DoctorDTO;
 using workshop.wwwapi.DTOs.PatientDTO;
+using workshop.wwwapi.DTOs.PrescriptionDTO;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 
@@ -27,6 +28,10 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/appointmentsbypatient/{id}", GetAppointmentsByPatient);
             surgeryGroup.MapGet("/appointmentsbydoctor/{id}", GetAppointmentsByDoctor);
             surgeryGroup.MapPost("/appointments", CreateAppointment);
+
+            surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
+            surgeryGroup.MapGet("/prescriptions/{id}", GetPrescriptionById);
+            surgeryGroup.MapPost("/prescriptions", CreatePrescription);
         }
 
         // Patients
@@ -157,6 +162,45 @@ namespace workshop.wwwapi.Endpoints
                 Booking = entity.Booking,
                 DoctorId = entity.DoctorId,
                 PatientId = entity.PatientId
+            });
+        }
+
+        // Prescriptions
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetPrescriptions(IRepository repository)
+        {
+            var entities = await repository.GetPrescriptions();
+            List<PrescriptionGet> result = new List<PrescriptionGet>();
+            foreach (var entity in entities)
+            {
+                result.Add(entity.ToDTO());
+            }
+            return TypedResults.Ok(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetPrescriptionById(IRepository repository, int id)
+        {
+            var entity = await repository.GetPrescriptionById(id);
+            if (entity == null) return TypedResults.NotFound(new { Error = $"Did not find a prescription with Id '{id}'." });
+
+            return TypedResults.Ok(entity.ToDTO());
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> CreatePrescription(IRepository repository, PrescriptionPost model)
+        {
+            Prescription prescription = new Prescription();
+            prescription.Name = model.Name;
+            prescription.AppointmentId = model.AppointmentId;
+
+            var entity = await repository.CreatePrescription(prescription);
+            return TypedResults.Created($"", new
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                AppointmentId = entity.AppointmentId
             });
         }
     }

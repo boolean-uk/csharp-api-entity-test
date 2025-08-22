@@ -31,6 +31,26 @@ namespace workshop.wwwapi.Data
             //    .WithMany(d => d.Appointments)
             //    .HasForeignKey(a => a.DoctorId);
 
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasKey(pm => new { pm.PrescriptionId, pm.MedicineId });
+
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasOne(pm => pm.Medicine)
+                .WithMany(m => m.PrescriptionMedicines)
+                .HasForeignKey(pm => pm.MedicineId);
+
+            modelBuilder.Entity<PrescriptionMedicine>()
+                .HasOne(pm => pm.Prescription)
+                .WithMany(p => p.PrescriptionMedicines)
+                .HasForeignKey(pm => pm.PrescriptionId);
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(p => p.Appointment)
+                .WithMany(a => a.Prescriptions)
+                .HasForeignKey(x => x.AppointmentId);
+
+
+
             //TODO: Seed Data Here
             Patient patient = new Patient{ Id = 1, FullName = "Jonatan" };
             Patient patient2 = new Patient { Id = 2, FullName = "Hans" };
@@ -44,7 +64,7 @@ namespace workshop.wwwapi.Data
             {
                 Id = 1,
                 Booking = DateTime.UtcNow.AddDays(2),
-                PatientId = patient.Id,
+                PatientId = patient2.Id,
                 DoctorId = doctor.Id,
             };
 
@@ -52,13 +72,47 @@ namespace workshop.wwwapi.Data
             {
                 Id = 2,
                 Booking = DateTime.UtcNow.AddDays(3),
-                PatientId = patient2.Id,
+                PatientId = patient.Id,
                 DoctorId = doctor2.Id,
+            };
+
+            Medicine medicine = new Medicine { Id = 1, Name = "Pinex Forte" };
+            Medicine medicine2 = new Medicine { Id = 2, Name = "Zyrtec" };
+            Medicine medicine3 = new Medicine { Id = 3, Name = "Loratadine" };
+
+            Prescription prescription = new Prescription { Id = 1, Name = "Pollenallergi", AppointmentId = appointment2.Id };
+            Prescription prescription2 = new Prescription { Id = 2, Name = "Brukket Kragebein", AppointmentId = appointment.Id };
+
+            PrescriptionMedicine pm = new PrescriptionMedicine
+            {
+                MedicineId = medicine.Id,
+                PrescriptionId = prescription2.Id,
+                Quantity = 20,
+                Notes = "Ta ved plagende smerter. Maks 2 hver 24. time."
+            };
+
+            PrescriptionMedicine pm2 = new PrescriptionMedicine
+            {
+                MedicineId = medicine2.Id,
+                PrescriptionId = prescription.Id,
+                Quantity = 15,
+                Notes = "En tablett hver kveld."
+            };
+
+            PrescriptionMedicine pm3 = new PrescriptionMedicine
+            {
+                MedicineId = medicine3.Id,
+                PrescriptionId = prescription.Id,
+                Quantity = 10,
+                Notes = "En hver morgen og kveld. 2 om dagen."
             };
 
             modelBuilder.Entity<Patient>().HasData([patient, patient2, patient3, patient4]);
             modelBuilder.Entity<Doctor>().HasData([doctor, doctor2]);
             modelBuilder.Entity<Appointment>().HasData([appointment, appointment2]);
+            modelBuilder.Entity<Medicine>().HasData([medicine, medicine2, medicine3]);
+            modelBuilder.Entity<Prescription>().HasData([prescription, prescription2]);
+            modelBuilder.Entity<PrescriptionMedicine>().HasData([pm, pm2, pm3]);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -72,5 +126,8 @@ namespace workshop.wwwapi.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<PrescriptionMedicine> PrescriptionsMedicines { get; set; }
     }
 }

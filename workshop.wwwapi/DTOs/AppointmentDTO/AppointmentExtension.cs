@@ -10,10 +10,11 @@ namespace workshop.wwwapi.DTOs.AppointmentDTO
             AppointmentGet appointment = new AppointmentGet();
             appointment.Id = entity.Id;
             appointment.Booking = entity.Booking;
-            appointment.Doctor = new AppointmentGet.DoctorGet();
+            appointment.Type = entity.Type;
+            //appointment.Doctor = new AppointmentGet.DoctorGet();
             appointment.Doctor.DoctorId = entity.DoctorId;
             appointment.Doctor.DoctorName = entity.Doctor.FullName;
-            appointment.Patient = new AppointmentGet.PatientGet();
+            //appointment.Patient = new AppointmentGet.PatientGet();
             appointment.Patient.PatientId = entity.PatientId;
             appointment.Patient.PatientName = entity.Patient.FullName;
             return appointment;

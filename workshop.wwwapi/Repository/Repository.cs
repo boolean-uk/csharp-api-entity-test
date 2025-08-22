@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
+using workshop.wwwapi.DTOs.PrescriptionDTO;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository
@@ -83,6 +84,34 @@ namespace workshop.wwwapi.Repository
         public async Task<Appointment> CreateAppointment(Appointment model)
         {
             await _db.Appointments.AddAsync(model);
+            await _db.SaveChangesAsync();
+            return model;
+        }
+
+        // Prescriptions
+        public async Task<ICollection<Prescription>> GetPrescriptions()
+        {
+            return await _db.Prescriptions
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                .ToListAsync();
+        }
+
+        public async Task<Prescription> GetPrescriptionById(int id)
+        {
+            return await _db.Prescriptions
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Prescription> CreatePrescription(Prescription model)
+        {
+            await _db.Prescriptions.AddAsync(model);
             await _db.SaveChangesAsync();
             return model;
         }

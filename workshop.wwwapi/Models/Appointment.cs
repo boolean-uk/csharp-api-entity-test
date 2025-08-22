@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workshop.wwwapi.Enums;
 
 namespace workshop.wwwapi.Models
 {
@@ -11,6 +12,7 @@ namespace workshop.wwwapi.Models
         public int Id { get; set; }
         [Column("booking")]
         public DateTime Booking { get; set; }
+        public AppointmentType Type { get; set; }
         [Column("doctor_id")]
         [ForeignKey("Doctor")]
         public int DoctorId { get; set; }
@@ -20,5 +22,6 @@ namespace workshop.wwwapi.Models
         public int PatientId { get; set; }
         [ForeignKey(nameof(PatientId))]
         public Patient Patient { get; set; }
+        public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
     }
 }
