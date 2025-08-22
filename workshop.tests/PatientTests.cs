@@ -3,20 +3,16 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace workshop.tests;
 
-public class Tests
+public class PatientTests
 {
-
     [Test]
-    public async Task PatientEndpointStatus()
+    public async Task PatientGetAllReturnsALlPatients()
     {
-        // Arrange
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
         var client = factory.CreateClient();
 
-        // Act
-        var response = await client.GetAsync("/patients");
+        var response = await client.GetAsync("/surgery/patients");
 
-        // Assert
-        Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
     }
 }

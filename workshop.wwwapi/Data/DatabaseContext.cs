@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using System.Security.Cryptography.Xml;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Data
@@ -16,10 +17,29 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Appointment Key etc.. Add Here
-            
+            modelBuilder.Entity<Appointment>().HasKey(a => a.Id);
 
-            //TODO: Seed Data Here
+            modelBuilder.Entity<Appointment>().HasOne(a => a.Patient)
+                .WithMany(p => p.Appointments).HasForeignKey(a => a.PatientId);
+
+            modelBuilder.Entity<Appointment>().HasOne(a => a.Doctor)
+                .WithMany(d => d.Appointments).HasForeignKey(a => a.DoctorId);
+
+            //Seed Data Here
+            modelBuilder.Entity<Patient>().HasData(
+                new Patient { Id = 1, FullName = "Bob Bobbington" },
+                new Patient { Id = 2, FullName = "Super Man" }
+            );
+
+            modelBuilder.Entity<Doctor>().HasData(
+                new Doctor { Id = 1, FullName = "" },
+                new Doctor { Id = 2, FullName = " " }
+            );
+
+            modelBuilder.Entity<Appointment>().HasData(
+                new Appointment { PatientId = 1, DoctorId = 1, Booking = DateTime.Now, Type = AppointmentType.Person },
+                new Appointment { PatientId = 2, DoctorId = 2, Booking = DateTime.Now.AddDays(1), Type = AppointmentType.Online }
+            );
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,7 +47,7 @@ namespace workshop.wwwapi.Data
             //optionsBuilder.UseInMemoryDatabase(databaseName: "Database");
             optionsBuilder.UseNpgsql(_connectionString);
             optionsBuilder.LogTo(message => Debug.WriteLine(message)); //see the sql EF using in the console
-            
+
         }
 
 
