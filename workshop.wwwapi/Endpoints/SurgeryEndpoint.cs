@@ -32,6 +32,7 @@ namespace workshop.wwwapi.Endpoints
             surgeryGroup.MapGet("/prescriptions", GetPrescriptions);
             surgeryGroup.MapGet("/prescriptions/{id}", GetPrescriptionById);
             surgeryGroup.MapPost("/prescriptions", CreatePrescription);
+            surgeryGroup.MapPut("/prescriptions", SetAppointmentToPrescription);
         }
 
         // Patients
@@ -197,6 +198,17 @@ namespace workshop.wwwapi.Endpoints
 
             var entity = await repository.CreatePrescription(prescription);
             return TypedResults.Created($"", new
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                AppointmentId = entity.AppointmentId
+            });
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> SetAppointmentToPrescription(IRepository repository, int id, int appointmentId)
+        {
+            var entity = await repository.SetAppointmentToPrescription(id, appointmentId);
+            return TypedResults.Created("Updated", new
             {
                 Id = entity.Id,
                 Name = entity.Name,

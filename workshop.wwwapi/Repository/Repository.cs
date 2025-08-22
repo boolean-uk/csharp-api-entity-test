@@ -108,12 +108,18 @@ namespace workshop.wwwapi.Repository
                     .ThenInclude(a => a.Patient)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
-
         public async Task<Prescription> CreatePrescription(Prescription model)
         {
             await _db.Prescriptions.AddAsync(model);
             await _db.SaveChangesAsync();
             return model;
+        }
+        public async Task<Prescription> SetAppointmentToPrescription(int id, int appointmentId)
+        {
+            var entity = await GetPrescriptionById(id);
+            entity.AppointmentId = appointmentId;
+            await _db.SaveChangesAsync();
+            return entity;
         }
     }
 }

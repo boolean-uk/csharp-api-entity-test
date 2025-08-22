@@ -25,7 +25,7 @@ namespace workshop.wwwapi.Repository
         Task<ICollection<Prescription>> GetPrescriptions();
         Task<Prescription> GetPrescriptionById(int id);
         Task<Prescription> CreatePrescription(Prescription prescription);
-        //Task<Prescription> SetAppointmentToPrescription(int appointmentId);
+        Task<Prescription> SetAppointmentToPrescription(int id, int appointmentId);
 
         // Medicines
         //Task<Medicine> GetMedicineById(int id);
