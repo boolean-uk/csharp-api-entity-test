@@ -1,12 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace workshop.wwwapi.Models
+namespace workshop.wwwapi.Models;
+
+[Table("Patient")]
+public class Patient
 {
-    //TODO: decorate class/columns accordingly    
-    public class Patient
-    {        
-        public int Id { get; set; }        
-        public string FullName { get; set; }
-    }
+    [Key] public int Id { get; set; }
+
+    [Required] public required string FullName { get; set; }
+
+    [Column("appointments")] 
+    [JsonIgnore]
+    public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 }
