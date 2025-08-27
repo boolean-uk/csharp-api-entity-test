@@ -21,6 +21,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.ConfigurePatientEndpoint();
+app.MapGet("/db-ping", async (workshop.wwwapi.Data.DatabaseContext db) =>
+{
+    var ok = await db.Database.CanConnectAsync();
+    return ok ? Results.Ok(new { status = "ok" })
+              : Results.Problem("database not reachable");
+});
 app.Run();
 
 public partial class Program { } // needed for testing - please ignore
