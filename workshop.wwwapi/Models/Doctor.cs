@@ -2,10 +2,15 @@
 
 namespace workshop.wwwapi.Models
 {
-    //TODO: decorate class/columns accordingly    
     public class Doctor
-    {        
-        public int Id { get; set; }        
+    {    
+        [Column("id", TypeName = "int")]
+        public int Id { get; set; }     
+        
+        [Column("name", TypeName = "varchar(100)")]
         public string FullName { get; set; }
+        
+        [Column("appointments")]
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }
